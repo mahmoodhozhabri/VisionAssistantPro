@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VisionAssistantPro (Визуальный Помощник Pro)</title>
+<style>
+    body { font-family: "Segoe UI", Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fcfcfc; }
+    h1 { color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; }
+    h2 { color: #34495e; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+    dt { font-weight: bold; color: #2980b9; margin-top: 10px; font-size: 1.1em; }
+    dd { margin-left: 20px; margin-bottom: 10px; }
+    code { background-color: #eee; padding: 2px 6px; border-radius: 4px; font-family: Consolas, monospace; color: #c0392b; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background-color: #f8f9fa; color: #333; }
+    .note { background-color: #e8f6f3; border-left: 5px solid #1abc9c; padding: 10px; margin: 15px 0; }
+</style>
+</head>
+<body>
+<h1>Vision Assistant Pro (Визуальный помощник Pro)</h1>
+<p><strong>Vision Assistant Pro</strong> — это комплексное дополнение доступности для NVDA, интегрирующее модели искусственного интеллекта Google Gemini. Оно предоставляет набор инструментов, предназначенных для помощи незрячим и слабовидящим пользователям в повседневных цифровых задачах — от распознавания изображений до продвинутого перевода и обработки документов.</p>
+<p><em>Примечание: Этот проект был изначально выпущен для сообщества в честь <strong>Международного дня людей с ограниченными возможностями</strong> с целью использования искусственного интеллекта для достижения большей цифровой независимости.</em></p>
+<h2>Ключевые возможности</h2>
+<ul>
+<li><strong>Умный перевод:</strong> Автоматически определяет языки и переводит текст. Включает специальный режим работы с буфером обмена для лучшей совместимости с веб-браузерами.</li>
+<li><strong>Умный диктант:</strong> Инструмент голосового ввода, который слушает речь, исправляет грамматику/пунктуацию и вводит текст прямо в активное приложение.</li>
+<li><strong>Визуальный анализ:</strong> Описывает объект под курсором навигатора или всё содержимое экрана. Поддерживает интерактивные уточняющие вопросы через диалоговое окно чата.</li>
+<li><strong>Решение CAPTCHA:</strong> Распознаёт изображения CAPTCHA с экрана и автоматически вводит результат.</li>
+<li><strong>Анализ документов:</strong> Позволяет пользователям выбирать документы (PDF, изображения, текст) и задавать вопросы об их содержимом.</li>
+<li><strong>Обработка текста:</strong> Утилита в меню для обобщения, объяснения или исправления грамматики выделенного текста.</li>
+<li><strong>Расшифровка аудио:</strong> Преобразует аудиофайлы (MP3, WAV, OGG) в текст.</li>
+<li><strong>Автообновление:</strong> Автоматически проверяет наличие новых версий и устанавливает их.</li>
+</ul>
+<h2>Установка</h2>
+<ol>
+<li>Скачайте последний файл <code>.nvda-addon</code> со страницы <strong><a href="https://github.com/mahmoodhozhabri/VisionAssistantPro/releases/latest" rel="noopener" target="_blank">Последних релизов</a></strong>.</li>
+<li>Откройте файл, чтобы запустить установщик дополнений NVDA.</li>
+<li>Подтвердите установку и перезапустите NVDA.</li>
+</ol>
+<h2>Настройка</h2>
+<ol>
+<li>Перейдите в <strong>Меню NVDA &gt; Параметры &gt; Настройки &gt; Vision Assistant Pro</strong>.</li>
+<li><strong>Ключ API:</strong> Введите ваш ключ Google Gemini API (можно получить в Google AI Studio).</li>
+<li><strong>Модель:</strong> Выберите желаемую модель ИИ (например, <code>gemini-2.5-flash-lite</code>).</li>
+<li><strong>Языки:</strong> Настройте исходный, целевой язык и язык ответов ИИ.</li>
+</ol>
+<h2>Сочетания клавиш</h2>
+<p>Во избежание конфликтов с системными раскладками или раскладками ноутбуков, все сочетания используют <strong>NVDA+Control+Shift</strong>:</p>
+<ul>
+<li><code>NVDA+Ctrl+Shift+T</code>: Перевести текст/объект</li>
+<li><code>NVDA+Ctrl+Shift+Y</code>: Перевести из буфера обмена (рекомендуется для браузеров)</li>
+<li><code>NVDA+Ctrl+Shift+S</code>: Умный диктант (переключение)</li>
+<li><code>NVDA+Ctrl+Shift+V</code>: Описать объект навигатора</li>
+<li><code>NVDA+Ctrl+Shift+O</code>: Описать весь экран</li>
+<li><code>NVDA+Ctrl+Shift+C</code>: Решить CAPTCHA</li>
+<li><code>NVDA+Ctrl+Shift+R</code>: Меню обработки текста</li>
+<li><code>NVDA+Ctrl+Shift+D</code>: Анализ документа</li>
+<li><code>NVDA+Ctrl+Shift+F</code>: Распознавание текста из файла (OCR)</li>
+<li><code>NVDA+Ctrl+Shift+A</code>: Расшифровать аудиофайл</li>
+<li><code>NVDA+Ctrl+Shift+L</code>: Прочитать последний перевод</li>
+<li><code>NVDA+Ctrl+Shift+U</code>: Проверить обновления</li>
+</ul>
+<h2>Участие в разработке</h2>
+<p>Мы приветствуем вклад от сообщества! Независимо от того, хотите ли вы сообщить об ошибке, предложить новую функцию или улучшить код — ваша помощь приветствуется.</p>
+<p>Не стесняйтесь создать форк репозитория и отправить Pull Request на <strong><a href="https://github.com/mahmoodhozhabri/VisionAssistantPro" rel="noopener" target="_blank">GitHub</a></strong>.</p>
+<h2>Лицензия</h2>
+<p>Этот проект с открытым исходным кодом распространяется под лицензией MIT.</p>
+</body>
+</html>
