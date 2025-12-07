@@ -471,7 +471,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 file_data = f.read()
                 
             req = request.Request(upload_url, data=file_data, headers=headers, method="POST")
-            with request.urlopen(req, timeout=120) as response:
+            with request.urlopen(req, timeout=600) as response:
                 if response.status == 200:
                     res_json = json.loads(response.read().decode('utf-8'))
                     return res_json.get('file', {}).get('uri')
@@ -532,7 +532,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         for attempt in range(max_retries + 1):
             try:
                 req = request.Request(url, data=json.dumps(data).encode('utf-8'), headers=headers)
-                with request.urlopen(req, timeout=120) as response:
+                with request.urlopen(req, timeout=600) as response:
                     if response.status == 200:
                         res = json.loads(response.read().decode('utf-8'))
                         text = res['candidates'][0]['content']['parts'][0]['text'].strip()
