@@ -1,0 +1,447 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2025-12-07 12:42+0200\n"
+"PO-Revision-Date: 2025-12-08 20:58+0200\n"
+"Last-Translator: Volodymyr Pyrih <vp88.mobile@gmail.com>\n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: GitHub/VisionAssistantPro/globalPlugins\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: visionAssistant/__init__.py:91
+msgid "Vision Assistant Error"
+msgstr "Помилка Vision Assistant"
+
+#: visionAssistant/__init__.py:170
+msgid "Update found but no .nvda-addon file in release."
+msgstr "Оновлення знайдено, але у випуску немає файлу .nvda-addon."
+
+#: visionAssistant/__init__.py:174
+msgid "You have the latest version."
+msgstr "У вас остання версія."
+
+#: visionAssistant/__init__.py:179
+#, python-brace-format
+msgid "Update check failed: {error}"
+msgstr "Не вдалося перевірити оновлення: {error}"
+
+#: visionAssistant/__init__.py:192
+#, python-brace-format
+msgid ""
+"A new version ({version}) of Vision Assistant is available.\n"
+"\n"
+"Changes:\n"
+"{changes}\n"
+"\n"
+"Download and Install?"
+msgstr ""
+"Доступна нова версія ({version}) Vision Assistant.\n"
+"\n"
+"Зміни:\n"
+"{changes}\n"
+"\n"
+"Завантажити та встановити?"
+
+#: visionAssistant/__init__.py:194
+msgid "Update Available"
+msgstr "Доступне оновлення"
+
+#: visionAssistant/__init__.py:203
+msgid "Downloading update..."
+msgstr "Завантаження оновлення..."
+
+#: visionAssistant/__init__.py:214
+#, python-brace-format
+msgid "Download failed: {error}"
+msgstr "Помилка завантаження: {error}"
+
+#: visionAssistant/__init__.py:229 visionAssistant/__init__.py:384
+msgid "AI Response:"
+msgstr "Відповідь ШІ:"
+
+#: visionAssistant/__init__.py:237 visionAssistant/__init__.py:295
+#, python-brace-format
+msgid "AI: {text}\n"
+msgstr "ШІ: {text}\n"
+
+#: visionAssistant/__init__.py:244
+msgid "Ask:"
+msgstr "Запитати:"
+
+#: visionAssistant/__init__.py:252
+msgid "Send"
+msgstr "Надіслати"
+
+#: visionAssistant/__init__.py:254
+msgid "Save Chat"
+msgstr "Зберегти чат"
+
+#: visionAssistant/__init__.py:256 visionAssistant/__init__.py:329
+msgid "Close"
+msgstr "Закрити"
+
+#: visionAssistant/__init__.py:274
+#, python-brace-format
+msgid ""
+"\n"
+"You: {text}\n"
+msgstr ""
+"\n"
+"Ви: {text}\n"
+
+#: visionAssistant/__init__.py:278
+msgid "Thinking..."
+msgstr "Думаю..."
+
+#: visionAssistant/__init__.py:302
+msgid "Save Chat Log"
+msgstr "Зберегти журнал чату"
+
+#: visionAssistant/__init__.py:309 visionAssistant/__init__.py:347
+msgid "Saved."
+msgstr "Збережено."
+
+#: visionAssistant/__init__.py:311 visionAssistant/__init__.py:349
+#, python-brace-format
+msgid "Save failed: {error}"
+msgstr "Не вдалося зберегти: {error}"
+
+#: visionAssistant/__init__.py:325
+msgid "Save to File"
+msgstr "Зберегти у файл"
+
+#: visionAssistant/__init__.py:340
+msgid "Save Result"
+msgstr "Зберегти результат"
+
+#: visionAssistant/__init__.py:355
+msgid "Vision Assistant Pro"
+msgstr "Vision Assistant Pro"
+
+#: visionAssistant/__init__.py:360
+msgid "Gemini API Key:"
+msgstr "Ключ API Gemini:"
+
+#: visionAssistant/__init__.py:364
+msgid "AI Model:"
+msgstr "Модель ШІ:"
+
+#: visionAssistant/__init__.py:369
+msgid "Proxy URL:"
+msgstr "URL проксі:"
+
+#: visionAssistant/__init__.py:372
+msgid "--- Languages ---"
+msgstr "--- Мови ---"
+
+#: visionAssistant/__init__.py:374
+msgid "Source:"
+msgstr "Початкова мова:"
+
+#: visionAssistant/__init__.py:379
+msgid "Target:"
+msgstr "Мова для перекладу:"
+
+#: visionAssistant/__init__.py:389
+msgid "Smart Swap"
+msgstr "Розумна зміна"
+
+#: visionAssistant/__init__.py:392
+msgid "--- CAPTCHA Mode ---"
+msgstr "--- Режим CAPTCHA ---"
+
+#: visionAssistant/__init__.py:394
+msgid "Capture Method:"
+msgstr "Метод захоплення:"
+
+#: visionAssistant/__init__.py:394
+msgid "Navigator Object"
+msgstr "Об'єкт навігатора"
+
+#: visionAssistant/__init__.py:394
+msgid "Full Screen"
+msgstr "Весь екран"
+
+#: visionAssistant/__init__.py:398
+msgid "--- Custom Prompts (Name:Content) ---"
+msgstr "--- Спеціальні підказки (Назва:Вміст) ---"
+
+#: visionAssistant/__init__.py:418
+msgid "Vision Assistant"
+msgstr "Vision Assistant"
+
+#: visionAssistant/__init__.py:480
+#, python-brace-format
+msgid "Upload Connection Error: {reason}"
+msgstr "Помилка з’єднання під час відвантаження: {reason}"
+
+#: visionAssistant/__init__.py:484
+#, python-brace-format
+msgid "Upload Server Error {code}: {reason}"
+msgstr "Помилка сервера відвантаження {code}: {reason}"
+
+#: visionAssistant/__init__.py:488
+#, python-brace-format
+msgid "File Upload Error: {error}"
+msgstr "Помилка відвантаження файлу: {error}"
+
+#: visionAssistant/__init__.py:499
+msgid "API Key missing."
+msgstr "Ключ API відсутній."
+
+#: visionAssistant/__init__.py:558
+#, python-brace-format
+msgid "Connection Error: {reason}"
+msgstr "Помилка з’єднання: {reason}"
+
+#: visionAssistant/__init__.py:563
+msgid "Error 400: Bad Request (Check API Key Format)"
+msgstr "Помилка 400: неправильний запит (перевірте формат ключа API)"
+
+#: visionAssistant/__init__.py:566
+msgid "Error 403: Forbidden (Check Region/Permission)"
+msgstr "Помилка 403: заборонено (перевірте регіон/дозвіл)"
+
+#: visionAssistant/__init__.py:569
+msgid "Error 429: Quota Exceeded (Try later)"
+msgstr "Помилка 429: перевищено квоту (спробуйте пізніше)"
+
+#: visionAssistant/__init__.py:572
+#, python-brace-format
+msgid "Server Error {code}: {reason}"
+msgstr "Помилка сервера {code}: {reason}"
+
+#: visionAssistant/__init__.py:576
+#, python-brace-format
+msgid "Error: {error}"
+msgstr "Помилка: {error}"
+
+#: visionAssistant/__init__.py:581
+msgid "Records voice, transcribes it using AI, and types the result."
+msgstr "Записує голос, транскрибує його за допомогою штучного інтелекту та друкує результат."
+
+#: visionAssistant/__init__.py:590
+msgid "Listening..."
+msgstr "Слухаю..."
+
+#: visionAssistant/__init__.py:594
+#, python-brace-format
+msgid "Audio Hardware Error: {error}"
+msgstr "Помилка аудіообладнання: {error}"
+
+#: visionAssistant/__init__.py:604
+msgid "Typing..."
+msgstr "Друкую..."
+
+#: visionAssistant/__init__.py:609
+#, python-brace-format
+msgid "Save Recording Error: {error}"
+msgstr "Помилка збереження запису: {error}"
+
+#: visionAssistant/__init__.py:623
+msgid "No speech recognized or Error."
+msgstr "Мовлення не розпізнано або сталася помилка."
+
+#: visionAssistant/__init__.py:638
+#, python-brace-format
+msgid "Typed: {text}"
+msgstr "Надруковано: {text}"
+
+#: visionAssistant/__init__.py:642
+msgid "Translates the selected text or navigator object."
+msgstr "Перекладає вибраний текст або об'єкт навігатора."
+
+#: visionAssistant/__init__.py:648
+msgid "No text found."
+msgstr "Текст не знайдено."
+
+#: visionAssistant/__init__.py:653
+msgid "Translating..."
+msgstr "Переклад..."
+
+#: visionAssistant/__init__.py:685
+#, python-brace-format
+msgid "Translated: {text}"
+msgstr "Перекладено: {text}"
+
+#: visionAssistant/__init__.py:717
+msgid "Opens a menu to Explain, Summarize, or Fix the selected text."
+msgstr "Відкриває меню для пояснення, підсумовування або виправлення вибраного тексту."
+
+#: visionAssistant/__init__.py:723
+msgid "Opening menu..."
+msgstr "Відкриття меню..."
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:751
+msgid "Summarize"
+msgstr "Підсумувати"
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:752
+msgid "Fix Grammar"
+msgstr "Виправити граматику"
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:753
+msgid "Fix Grammar & Translate"
+msgstr "Виправити граматику та перекласти"
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:754
+msgid "Explain"
+msgstr "Пояснити"
+
+#: visionAssistant/__init__.py:743
+msgid "Choose action:"
+msgstr "Вибрати дію:"
+
+#: visionAssistant/__init__.py:743
+msgid "Refine"
+msgstr "Уточнити"
+
+#: visionAssistant/__init__.py:772
+msgid "Select File"
+msgstr "Виберіть Файл"
+
+#: visionAssistant/__init__.py:773
+msgid "Select Image/PDF/TIFF for OCR"
+msgstr "Виберіть «Зображення/PDF/TIFF» для OCR"
+
+#: visionAssistant/__init__.py:781
+msgid "Processing..."
+msgstr "Обробка..."
+
+#: visionAssistant/__init__.py:826
+msgid "Uploading file..."
+msgstr "Відвантаження файлу..."
+
+#: visionAssistant/__init__.py:858 visionAssistant/__init__.py:1069
+msgid "Analyzing..."
+msgstr "Аналіз..."
+
+#: visionAssistant/__init__.py:899
+msgid "Vision Assistant - Refine Result"
+msgstr "Vision Assistant - уточнення результату"
+
+#: visionAssistant/__init__.py:903
+msgid "Recognizes text from a selected image or PDF file."
+msgstr "Розпізнає текст із вибраного зображення або PDF-файлу."
+
+#: visionAssistant/__init__.py:906
+msgid "Select a file for OCR..."
+msgstr "Виберіть файл для OCR..."
+
+#: visionAssistant/__init__.py:912
+msgid "Select Image or PDF"
+msgstr "Виберіть зображення або PDF"
+
+#: visionAssistant/__init__.py:920
+msgid "Uploading & Extracting..."
+msgstr "Відвантаження & видобування..."
+
+#: visionAssistant/__init__.py:936
+msgid "Allows asking questions about a selected document (PDF/Text/Image)."
+msgstr "Дозволяє ставити запитання про вибраний документ (PDF/Текст/Зображення)."
+
+#: visionAssistant/__init__.py:939
+msgid "Select a document..."
+msgstr "Виберіть документ..."
+
+#: visionAssistant/__init__.py:945
+msgid "Select Document to Analyze"
+msgstr "Виберіть документ для аналізу"
+
+#: visionAssistant/__init__.py:953
+msgid "Uploading & Analyzing..."
+msgstr "Відвантаження & аналіз..."
+
+#: visionAssistant/__init__.py:962
+msgid "Document ready. Ask your question."
+msgstr "Документ готовий. Поставте своє запитання."
+
+#: visionAssistant/__init__.py:989
+msgid "Vision Assistant - Chat"
+msgstr "Vision Assistant - Чат"
+
+#: visionAssistant/__init__.py:993
+msgid "Performs OCR and description on the entire screen."
+msgstr "Виконує оптичне розпізнавання та опис для всього екрана."
+
+#: visionAssistant/__init__.py:998
+msgid "Describes the current object (Navigator Object)."
+msgstr "Описує поточний об'єкт (об'єкт навігатора)."
+
+#: visionAssistant/__init__.py:1007
+msgid "Scanning..."
+msgstr "Сканування..."
+
+#: visionAssistant/__init__.py:1012 visionAssistant/__init__.py:1101
+msgid "Capture failed."
+msgstr "Захоплення не вдалося."
+
+#: visionAssistant/__init__.py:1041
+msgid "Vision Assistant - Image Analysis"
+msgstr "Vision Assistant - аналіз зображень"
+
+#: visionAssistant/__init__.py:1045
+msgid "Transcribes a selected audio file."
+msgstr "Транскрибує вибраний аудіофайл."
+
+#: visionAssistant/__init__.py:1048
+msgid "Select an audio file..."
+msgstr "Виберіть аудіофайл..."
+
+#: visionAssistant/__init__.py:1054
+msgid "Select Audio File to Transcribe"
+msgstr "Виберіть аудіофайл для транскрибування"
+
+#: visionAssistant/__init__.py:1061
+msgid "Uploading..."
+msgstr "Відвантаження..."
+
+#: visionAssistant/__init__.py:1082
+msgid "Attempts to solve a CAPTCHA on the screen or navigator object."
+msgstr "Спроби вирішити CAPTCHA на екрані або в об'єкті навігатора."
+
+#: visionAssistant/__init__.py:1096
+msgid "Solving..."
+msgstr "Вирішення..."
+
+#: visionAssistant/__init__.py:1110
+msgid "Failed."
+msgstr "Не вдалося."
+
+#: visionAssistant/__init__.py:1116
+#, python-brace-format
+msgid "Captcha: {text}"
+msgstr "Captcha: {text}"
+
+#: visionAssistant/__init__.py:1120
+msgid "Checks for updates manually."
+msgstr "Перевіряє наявність оновлень вручну."
+
+#: visionAssistant/__init__.py:1123
+msgid "Checking for updates..."
+msgstr "Перевірка оновлень..."
+
+#: visionAssistant/__init__.py:1150
+msgid "Announces the last received translation."
+msgstr "Промовляє останній отриманий переклад."
+
+#: visionAssistant/__init__.py:1155
+msgid "No history."
+msgstr "Історія відсутня."
+
+#: visionAssistant/__init__.py:1158
+msgid "Translates the text currently in the clipboard."
+msgstr "Перекладає текст, який зараз знаходиться в буфері обміну."
+
+#: visionAssistant/__init__.py:1163
+msgid "Translating Clipboard..."
+msgstr "Переклад буфера обміну..."
+
+#: visionAssistant/__init__.py:1168
+msgid "Clipboard empty."
+msgstr "Буфер обміну порожній."
