@@ -30,7 +30,7 @@ Features:
     addon_licenseURL="https://www.gnu.org/licenses/gpl-2.0.html",
 )
 
-pythonSources: list[str] = []
+pythonSources: list[str] = ["addon/globalPlugins/visionAssistant/*.py"]
 i18nSources = pythonSources + ["buildVars.py"]
 excludedFiles: list[str] = []
 
