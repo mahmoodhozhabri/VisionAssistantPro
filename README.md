@@ -58,3 +58,47 @@ Create commands in Settings: `Name:Prompt Text` (separate with `|` or new lines)
 - **Code Debugger:** `Debug:Find bugs in this code and explain them: [selection]`
 
 **Note:** File uploads limited to 15MB. Internet required. Multi-page TIFFs supported.
+
+## Changes for 2.7
+* Migrated project structure to the official NV Access Add-on Template for better standards compliance.
+* Implemented automatic retry logic for HTTP 429 (Rate Limit) errors to ensure reliability during high traffic.
+* Optimized translation prompts for higher accuracy and better "Smart Swap" logic handling.
+* Updated Russian translation.
+
+## Changes for 2.6
+* Added Russian translation support (Thanks to nvda-ru).
+* Updated error messages to provide more descriptive feedback regarding connectivity.
+* Changed default target language to English.
+
+## Changes for 2.5
+* Added Native File OCR Command (NVDA+Control+Shift+F).
+* Added "Save Chat" button to result dialogs.
+* Implemented full localization support (i18n).
+* Migrated audio feedback to NVDA's native tones module.
+* Switched to Gemini File API for better handling of PDF and audio files.
+* Fixed crash when translating text containing curly braces.
+
+## Changes for 2.1.1
+* Fixed an issue where the [file_ocr] variable was not functioning correctly within Custom Prompts.
+
+## Changes for 2.1
+* Standardized all shortcuts to use NVDA+Control+Shift to eliminate conflicts with NVDA's Laptop layout and system hotkeys.
+
+## Changes for 2.0
+* Implemented built-in Auto-Update system.
+* Added Smart Translation Cache for instant retrieval of previously translated text.
+* Added Conversation Memory to contextually refine results in chat dialogs.
+* Added Dedicated Clipboard Translation command (NVDA+Control+Shift+Y).
+* Optimized AI prompts to strictly enforce target language output.
+* Fixed crash caused by special characters in input text.
+
+## Changes for 1.5
+* Added support for over 20 new languages.
+* Implemented Interactive Refine Dialog for follow-up questions.
+* Added Native Smart Dictation feature.
+* Added "Vision Assistant" category to NVDA's Input Gestures dialog.
+* Fixed COMError crashes in specific applications like Firefox and Word.
+* Added automatic retry mechanism for server errors.
+
+## Changes for 1.0
+* Initial release.

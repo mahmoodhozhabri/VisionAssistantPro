@@ -1,1 +1,10 @@
-Use this file to explain what has changed in your add-on since the previous release. This will be included automatically in the release description when used with GitHub actions.
+\## Changes for 2.7
+
+\* Migrated project structure to the official NV Access Add-on Template for better standards compliance.
+
+\* Implemented automatic retry logic for HTTP 429 (Rate Limit) errors to ensure reliability during high traffic.
+
+\* Optimized translation prompts for higher accuracy and better "Smart Swap" logic handling.
+
+\* Updated Russian translation.
+

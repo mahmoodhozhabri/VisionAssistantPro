@@ -122,16 +122,29 @@ def process_tiff_pages(path):
     return pages_data
 
 PROMPT_TRANSLATE = """
-Role: Translator.
-Directives:
-1. Translate text inside "===" to {target_lang}.
-2. IF SmartSwap={smart_swap} AND input is {target_lang} THEN translate to {swap_target}.
-3. Output ONLY the translation.
+Role: Translation Logic Engine.
 
-Text:
+Parameters:
+- Primary Target Language: "{target_lang}"
+- Auto-Swap Enabled: {smart_swap}
+- Fallback Language (Swap Target): "{swap_target}"
+
+Input Text:
 ===
 {text_content}
 ===
+
+Algorithm:
+1. DETECT the language of the Input Text.
+2. DECIDE the output language based on these rules:
+   - IF (Auto-Swap is True) AND (Detected Language is {target_lang}):
+     -> Output Language = {swap_target}
+   - ELSE:
+     -> Output Language = {target_lang}
+
+3. EXECUTE translation:
+   - Translate the Input Text to the decided Output Language.
+   - Return ONLY the translation. No notes, no explanations.
 """
 
 PROMPT_UI_LOCATOR = "Analyze UI (Size: {width}x{height}). Request: '{query}'. Output JSON: {{\"x\": int, \"y\": int, \"found\": bool}}."
@@ -495,7 +508,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         model = config.conf["VisionAssistant"]["model_name"]
         
         if not api_key:
-            # Translators: Message when API Key is missing
             msg = _("API Key missing.")
             wx.CallAfter(ui.message, msg)
             return None
@@ -528,7 +540,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         }
         if json_mode: data["generationConfig"]["response_mime_type"] = "application/json"
 
-        max_retries = 2
+        max_retries = 10
         for attempt in range(max_retries + 1):
             try:
                 req = request.Request(url, data=json.dumps(data).encode('utf-8'), headers=headers)
@@ -538,8 +550,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                         text = res['candidates'][0]['content']['parts'][0]['text'].strip()
                         return text if json_mode else clean_markdown(text)
             except error.HTTPError as e:
-                if e.code == 503 and attempt < max_retries:
-                    time.sleep(1)
+                if (e.code == 503 or e.code == 429) and attempt < max_retries:
+                    time.sleep(2)
                     continue
                 log.error(f"Gemini HTTP Error: {e.code} - {e.reason}")
                 if raise_errors: raise e
