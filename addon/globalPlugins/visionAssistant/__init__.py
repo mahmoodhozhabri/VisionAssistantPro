@@ -90,7 +90,7 @@ def get_mime_type(path):
 
 def show_error_dialog(message):
     # Translators: Title of the error dialog box
-    title = _("Vision Assistant Error")
+    title = _("{name} Error").format(name=ADDON_NAME)
     wx.CallAfter(gui.messageBox, message, title, wx.OK | wx.ICON_ERROR)
 
 def send_ctrl_v():
@@ -204,7 +204,7 @@ class UpdateManager:
 
     def _prompt_update(self, version, url, changes):
         # Translators: Message asking user to update. {version} is version number.
-        msg = _("A new version ({version}) of Vision Assistant is available.\n\nChanges:\n{changes}\n\nDownload and Install?").format(version=version, changes=changes)
+        msg = _("A new version ({version}) of {name} is available.\n\nChanges:\n{changes}\n\nDownload and Install?").format(version=version, name=ADDON_NAME, changes=changes)
         # Translators: Title of update confirmation dialog
         title = _("Update Available")
         dlg = wx.MessageDialog(gui.mainFrame, msg, title, wx.YES_NO | wx.ICON_INFORMATION)
@@ -930,7 +930,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         context = (attachments, original_text)
         has_file_context = any('file_uri' in a for a in attachments)
         # Translators: Title of Refine Result dialog
-        dlg = VisionQADialog(gui.mainFrame, _("Vision Assistant - Refine Result"), result_text, context, refine_callback, extra_info={'file_context': has_file_context, 'skip_init_history': False})
+        dlg = VisionQADialog(gui.mainFrame, _("{name} - Refine Result").format(name=ADDON_NAME), result_text, context, refine_callback, extra_info={'file_context': has_file_context, 'skip_init_history': False})
         dlg.Show()
 
     # Translators: Script description for Input Gestures dialog
@@ -1020,7 +1020,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 return self._call_gemini_safe(messages), None
             
         # Translators: Dialog title for a Chat dialog
-        dlg = VisionQADialog(gui.mainFrame, _("Vision Assistant - Chat"), init_msg, initial_attachments, doc_callback, extra_info={'skip_init_history': True})
+        dlg = VisionQADialog(gui.mainFrame, _("{name} - Chat").format(name=ADDON_NAME), init_msg, initial_attachments, doc_callback, extra_info={'skip_init_history': True})
         dlg.Show()
 
     # Translators: Script description for Input Gestures dialog
@@ -1072,7 +1072,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             return self._call_gemini_safe(messages), None
             
         # Translators: Dialog title for Image Analysis
-        dlg = VisionQADialog(gui.mainFrame, _("Vision Assistant - Image Analysis"), text, atts, cb, None)
+        dlg = VisionQADialog(gui.mainFrame, _("{name} - Image Analysis").format(name=ADDON_NAME), text, atts, cb, None)
         dlg.Show()
 
     # Translators: Script description for Input Gestures dialog
