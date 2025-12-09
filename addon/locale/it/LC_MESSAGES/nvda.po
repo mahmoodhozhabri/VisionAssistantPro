@@ -1,0 +1,447 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2025-12-07 12:42+0200\n"
+"PO-Revision-Date: 2025-12-09 10:31+0100\n"
+"Last-Translator: Simone Dal Maso <simone.dalmaso@gmail.com>\n"
+"Language-Team: Simone Dal Maso Nvda Italia\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: GitHub/VisionAssistantPro/globalPlugins\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: visionAssistant/__init__.py:91
+msgid "Vision Assistant Error"
+msgstr "Errore in Vision Assistant"
+
+#: visionAssistant/__init__.py:170
+msgid "Update found but no .nvda-addon file in release."
+msgstr "Aggiornamento trovato ma nessun file .nvda-addon nel rilascio."
+
+#: visionAssistant/__init__.py:174
+msgid "You have the latest version."
+msgstr "Hai l'ultima versione."
+
+#: visionAssistant/__init__.py:179
+#, python-brace-format
+msgid "Update check failed: {error}"
+msgstr "Controllo aggiornamento fallito: {error}"
+
+#: visionAssistant/__init__.py:192
+#, python-brace-format
+msgid ""
+"A new version ({version}) of Vision Assistant is available.\n"
+"\n"
+"Changes:\n"
+"{changes}\n"
+"\n"
+"Download and Install?"
+msgstr ""
+"È disponibile una nuova versione ({version}) di Vision Assistant.\n"
+"\n"
+"Cambiamenti:\n"
+"{changes}\n"
+"\n"
+"Scaricarla e installarla?"
+
+#: visionAssistant/__init__.py:194
+msgid "Update Available"
+msgstr "Aggiornamento disponibile"
+
+#: visionAssistant/__init__.py:203
+msgid "Downloading update..."
+msgstr "Download aggiornamento in corso..."
+
+#: visionAssistant/__init__.py:214
+#, python-brace-format
+msgid "Download failed: {error}"
+msgstr "Download fallito: {error}"
+
+#: visionAssistant/__init__.py:229 visionAssistant/__init__.py:384
+msgid "AI Response:"
+msgstr "Risposta IA:"
+
+#: visionAssistant/__init__.py:237 visionAssistant/__init__.py:295
+#, python-brace-format
+msgid "AI: {text}\n"
+msgstr "IA: {text}\n"
+
+#: visionAssistant/__init__.py:244
+msgid "Ask:"
+msgstr "Chiedi:"
+
+#: visionAssistant/__init__.py:252
+msgid "Send"
+msgstr "Invia"
+
+#: visionAssistant/__init__.py:254
+msgid "Save Chat"
+msgstr "Salva chat"
+
+#: visionAssistant/__init__.py:256 visionAssistant/__init__.py:329
+msgid "Close"
+msgstr "Chiudi"
+
+#: visionAssistant/__init__.py:274
+#, python-brace-format
+msgid ""
+"\n"
+"You: {text}\n"
+msgstr ""
+"\n"
+"Tu: {text}\n"
+
+#: visionAssistant/__init__.py:278
+msgid "Thinking..."
+msgstr "Sto pensando..."
+
+#: visionAssistant/__init__.py:302
+msgid "Save Chat Log"
+msgstr "Salva il log della chat"
+
+#: visionAssistant/__init__.py:309 visionAssistant/__init__.py:347
+msgid "Saved."
+msgstr "Salvato."
+
+#: visionAssistant/__init__.py:311 visionAssistant/__init__.py:349
+#, python-brace-format
+msgid "Save failed: {error}"
+msgstr "Salvataggio fallito: {error}"
+
+#: visionAssistant/__init__.py:325
+msgid "Save to File"
+msgstr "Salva nel file"
+
+#: visionAssistant/__init__.py:340
+msgid "Save Result"
+msgstr "Salva risultato"
+
+#: visionAssistant/__init__.py:355
+msgid "Vision Assistant Pro"
+msgstr "Vision Assistant Pro"
+
+#: visionAssistant/__init__.py:360
+msgid "Gemini API Key:"
+msgstr "Chiave API Gemini:"
+
+#: visionAssistant/__init__.py:364
+msgid "AI Model:"
+msgstr "Modello AI:"
+
+#: visionAssistant/__init__.py:369
+msgid "Proxy URL:"
+msgstr "URL proxy:"
+
+#: visionAssistant/__init__.py:372
+msgid "--- Languages ---"
+msgstr "---Lingue---"
+
+#: visionAssistant/__init__.py:374
+msgid "Source:"
+msgstr "Sorgente:"
+
+#: visionAssistant/__init__.py:379
+msgid "Target:"
+msgstr "Destinazione:"
+
+#: visionAssistant/__init__.py:389
+msgid "Smart Swap"
+msgstr "Scambio lingue automatico"
+
+#: visionAssistant/__init__.py:392
+msgid "--- CAPTCHA Mode ---"
+msgstr "--- Modalità CAPTCHA ---"
+
+#: visionAssistant/__init__.py:394
+msgid "Capture Method:"
+msgstr "Metodo di cattura:"
+
+#: visionAssistant/__init__.py:394
+msgid "Navigator Object"
+msgstr "Oggetto del navigatore"
+
+#: visionAssistant/__init__.py:394
+msgid "Full Screen"
+msgstr "Schermo intero"
+
+#: visionAssistant/__init__.py:398
+msgid "--- Custom Prompts (Name:Content) ---"
+msgstr "--- Prompt personalizzati (Name:Content) ---"
+
+#: visionAssistant/__init__.py:418
+msgid "Vision Assistant"
+msgstr "Vision Assistant"
+
+#: visionAssistant/__init__.py:480
+#, python-brace-format
+msgid "Upload Connection Error: {reason}"
+msgstr "Errore di connessione durante il caricamento: {reason}"
+
+#: visionAssistant/__init__.py:484
+#, python-brace-format
+msgid "Upload Server Error {code}: {reason}"
+msgstr "Errore del server di caricamento {code}: {reason}"
+
+#: visionAssistant/__init__.py:488
+#, python-brace-format
+msgid "File Upload Error: {error}"
+msgstr "Errore di caricamento file: {error}"
+
+#: visionAssistant/__init__.py:499
+msgid "API Key missing."
+msgstr "Chiave API mancante."
+
+#: visionAssistant/__init__.py:558
+#, python-brace-format
+msgid "Connection Error: {reason}"
+msgstr "Errore di connessione: {reason}"
+
+#: visionAssistant/__init__.py:563
+msgid "Error 400: Bad Request (Check API Key Format)"
+msgstr "Errore 400: Richiesta errata (Controlla il formato della chiave API)"
+
+#: visionAssistant/__init__.py:566
+msgid "Error 403: Forbidden (Check Region/Permission)"
+msgstr "Errore 403: Forbidden (Controlla regione e permessi)"
+
+#: visionAssistant/__init__.py:569
+msgid "Error 429: Quota Exceeded (Try later)"
+msgstr "Errore 429: Quota superata (Prova più tardi)"
+
+#: visionAssistant/__init__.py:572
+#, python-brace-format
+msgid "Server Error {code}: {reason}"
+msgstr "Errore del server {code}: {reason}"
+
+#: visionAssistant/__init__.py:576
+#, python-brace-format
+msgid "Error: {error}"
+msgstr "Errore: {error}"
+
+#: visionAssistant/__init__.py:581
+msgid "Records voice, transcribes it using AI, and types the result."
+msgstr "Registra la voce, la trascrive usando l'IA e scrive il risultato."
+
+#: visionAssistant/__init__.py:590
+msgid "Listening..."
+msgstr "Ascolto..."
+
+#: visionAssistant/__init__.py:594
+#, python-brace-format
+msgid "Audio Hardware Error: {error}"
+msgstr "Errore hardware audio: {error}"
+
+#: visionAssistant/__init__.py:604
+msgid "Typing..."
+msgstr "Sta scrivendo..."
+
+#: visionAssistant/__init__.py:609
+#, python-brace-format
+msgid "Save Recording Error: {error}"
+msgstr "Errore nel salvataggio della registrazione: {error}"
+
+#: visionAssistant/__init__.py:623
+msgid "No speech recognized or Error."
+msgstr "Nessuna voce riconosciuta o errore."
+
+#: visionAssistant/__init__.py:638
+#, python-brace-format
+msgid "Typed: {text}"
+msgstr "Digitato: {text}"
+
+#: visionAssistant/__init__.py:642
+msgid "Translates the selected text or navigator object."
+msgstr "Traduce il testo selezionato o l'oggetto del navigatore."
+
+#: visionAssistant/__init__.py:648
+msgid "No text found."
+msgstr "Nessun testo trovato."
+
+#: visionAssistant/__init__.py:653
+msgid "Translating..."
+msgstr "Traduzione in corso..."
+
+#: visionAssistant/__init__.py:685
+#, python-brace-format
+msgid "Translated: {text}"
+msgstr "Tradotto: {text}"
+
+#: visionAssistant/__init__.py:717
+msgid "Opens a menu to Explain, Summarize, or Fix the selected text."
+msgstr "Apre un menu per spiegare, riassumere o correggere il testo selezionato."
+
+#: visionAssistant/__init__.py:723
+msgid "Opening menu..."
+msgstr "Apro il menu..."
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:751
+msgid "Summarize"
+msgstr "Riassumi"
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:752
+msgid "Fix Grammar"
+msgstr "Correggi la grammatica"
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:753
+msgid "Fix Grammar & Translate"
+msgstr "Correggi la grammatica e traduci"
+
+#: visionAssistant/__init__.py:729 visionAssistant/__init__.py:754
+msgid "Explain"
+msgstr "Spiega"
+
+#: visionAssistant/__init__.py:743
+msgid "Choose action:"
+msgstr "Scegli l'azione:"
+
+#: visionAssistant/__init__.py:743
+msgid "Refine"
+msgstr "Migliora"
+
+#: visionAssistant/__init__.py:772
+msgid "Select File"
+msgstr "Seleziona file"
+
+#: visionAssistant/__init__.py:773
+msgid "Select Image/PDF/TIFF for OCR"
+msgstr "Seleziona immagine/PDF/TIFF per OCR"
+
+#: visionAssistant/__init__.py:781
+msgid "Processing..."
+msgstr "Elaborazione..."
+
+#: visionAssistant/__init__.py:826
+msgid "Uploading file..."
+msgstr "Caricamento file..."
+
+#: visionAssistant/__init__.py:858 visionAssistant/__init__.py:1069
+msgid "Analyzing..."
+msgstr "Analisi in corso..."
+
+#: visionAssistant/__init__.py:899
+msgid "Vision Assistant - Refine Result"
+msgstr "Vision Assistant - Miglioramento risultati"
+
+#: visionAssistant/__init__.py:903
+msgid "Recognizes text from a selected image or PDF file."
+msgstr "Riconosce il testo da un'immagine o file PDF selezionato."
+
+#: visionAssistant/__init__.py:906
+msgid "Select a file for OCR..."
+msgstr "Seleziona un file per l'OCR..."
+
+#: visionAssistant/__init__.py:912
+msgid "Select Image or PDF"
+msgstr "Seleziona immagine o PDF"
+
+#: visionAssistant/__init__.py:920
+msgid "Uploading & Extracting..."
+msgstr "Caricamento ed estrazione..."
+
+#: visionAssistant/__init__.py:936
+msgid "Allows asking questions about a selected document (PDF/Text/Image)."
+msgstr "Permette di porre domande su un documento selezionato (PDF/Testo/Immagine)."
+
+#: visionAssistant/__init__.py:939
+msgid "Select a document..."
+msgstr "Seleziona un documento..."
+
+#: visionAssistant/__init__.py:945
+msgid "Select Document to Analyze"
+msgstr "Seleziona Documento da Analizzare"
+
+#: visionAssistant/__init__.py:953
+msgid "Uploading & Analyzing..."
+msgstr "Caricamento e analisi..."
+
+#: visionAssistant/__init__.py:962
+msgid "Document ready. Ask your question."
+msgstr "Documento pronto. Fai la tua domanda."
+
+#: visionAssistant/__init__.py:989
+msgid "Vision Assistant - Chat"
+msgstr "Vision Assistant - Chat"
+
+#: visionAssistant/__init__.py:993
+msgid "Performs OCR and description on the entire screen."
+msgstr "Esegue OCR e descrizione su tutto lo schermo."
+
+#: visionAssistant/__init__.py:998
+msgid "Describes the current object (Navigator Object)."
+msgstr "Descrive l'oggetto corrente (Oggetto del Navigatore)."
+
+#: visionAssistant/__init__.py:1007
+msgid "Scanning..."
+msgstr "Scansione..."
+
+#: visionAssistant/__init__.py:1012 visionAssistant/__init__.py:1101
+msgid "Capture failed."
+msgstr "Cattura fallita."
+
+#: visionAssistant/__init__.py:1041
+msgid "Vision Assistant - Image Analysis"
+msgstr "Vision Assistant - Analisi Immagine"
+
+#: visionAssistant/__init__.py:1045
+msgid "Transcribes a selected audio file."
+msgstr "Trascrive un file audio selezionato."
+
+#: visionAssistant/__init__.py:1048
+msgid "Select an audio file..."
+msgstr "Seleziona un file audio..."
+
+#: visionAssistant/__init__.py:1054
+msgid "Select Audio File to Transcribe"
+msgstr "Seleziona file audio da trascrivere"
+
+#: visionAssistant/__init__.py:1061
+msgid "Uploading..."
+msgstr "Caricamento,.. "
+
+#: visionAssistant/__init__.py:1082
+msgid "Attempts to solve a CAPTCHA on the screen or navigator object."
+msgstr "Cerca di risolvere un CAPTCHA sullo schermo o sull'oggetto navigatore."
+
+#: visionAssistant/__init__.py:1096
+msgid "Solving..."
+msgstr "Risolvo..."
+
+#: visionAssistant/__init__.py:1110
+msgid "Failed."
+msgstr "Fallito."
+
+#: visionAssistant/__init__.py:1116
+#, python-brace-format
+msgid "Captcha: {text}"
+msgstr "Captcha: {text}"
+
+#: visionAssistant/__init__.py:1120
+msgid "Checks for updates manually."
+msgstr "Cerca aggiornamenti manualmente."
+
+#: visionAssistant/__init__.py:1123
+msgid "Checking for updates..."
+msgstr "Ricerca aggiornamenti"
+
+#: visionAssistant/__init__.py:1150
+msgid "Announces the last received translation."
+msgstr "Annuncia l'ultima traduzione ricevuta."
+
+#: visionAssistant/__init__.py:1155
+msgid "No history."
+msgstr "Nessuna cronologia."
+
+#: visionAssistant/__init__.py:1158
+msgid "Translates the text currently in the clipboard."
+msgstr "Traduce il testo presente negli appunti."
+
+#: visionAssistant/__init__.py:1163
+msgid "Translating Clipboard..."
+msgstr "Traduzione appunti..."
+
+#: visionAssistant/__init__.py:1168
+msgid "Clipboard empty."
+msgstr "Appunti vuoti."
