@@ -26,6 +26,8 @@ from urllib import request, error
 log = logging.getLogger(__name__)
 addonHandler.initTranslation()
 
+ADDON_NAME = addonHandler.getCodeAddon().manifest["summary"]
+
 # --- Configuration ---
 
 MODELS = [
@@ -365,8 +367,7 @@ class ResultDialog(wx.Dialog):
         fd.Destroy()
 
 class SettingsPanel(gui.settingsDialogs.SettingsPanel):
-    # Translators: Settings panel title
-    title = _("Vision Assistant Pro")
+    title = ADDON_NAME
     def makeSettings(self, settingsSizer):
         sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
         
@@ -432,7 +433,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     # Translators: Name of the add-on category in Input Gestures
-    scriptCategory = _("Vision Assistant")
+    scriptCategory = ADDON_NAME
     
     last_translation = "" 
     is_recording = False
