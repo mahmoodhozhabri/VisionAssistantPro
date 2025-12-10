@@ -3,7 +3,7 @@ from site_scons.site_tools.NVDATool.typings import AddonInfo, BrailleTables, Sym
 from site_scons.site_tools.NVDATool.utils import _
 
 addon_info = AddonInfo(
-    addon_name="VisionAssistant",
+    addon_name="Vision Assistant Pro",
     # Add-on summary/title, usually the user visible name of the add-on
     # Translators: Summary/title for this add-on
     # to be shown on installation and add-on information found in add-on store

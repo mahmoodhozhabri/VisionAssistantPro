@@ -60,7 +60,8 @@ confspec = {
     "ai_response_language": "string(default='English')",
     "smart_swap": "boolean(default=True)",
     "captcha_mode": "string(default='navigator')",
-    "custom_prompts": "string(default='')"
+    "custom_prompts": "string(default='')",
+    "check_update_startup": "boolean(default=False)"
 }
 
 GITHUB_REPO = "mahmoodhozhabri/VisionAssistantPro"
@@ -328,95 +329,103 @@ class VisionQADialog(wx.Dialog):
                 show_error_dialog(msg)
         fd.Destroy()
 
-class ResultDialog(wx.Dialog):
-    def __init__(self, parent, title, content):
-        super().__init__(parent, title=title, size=(600, 400), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        clean_content = clean_markdown(content)
-        self.text_ctrl = wx.TextCtrl(self, value=clean_content, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH)
-        sizer.Add(self.text_ctrl, 1, wx.EXPAND | wx.ALL, 10)
-        
-        btn_sizer = wx.StdDialogButtonSizer()
-        # Translators: Button to save content
-        self.saveBtn = wx.Button(self, label=_("Save to File"))
-        self.saveBtn.Bind(wx.EVT_BUTTON, self.onSave)
-        
-        # Translators: Close button label
-        closeBtn = wx.Button(self, wx.ID_OK, label=_("Close"))
-        
-        btn_sizer.AddButton(self.saveBtn)
-        btn_sizer.AddButton(closeBtn)
-        btn_sizer.Realize()
-        sizer.Add(btn_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 10)
-        self.SetSizer(sizer)
-        self.Centre()
-
-    def onSave(self, event):
-        # Translators: Save dialog title
-        fd = wx.FileDialog(self, _("Save Result"), wildcard="Text files (*.txt)|*.txt", style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
-        if fd.ShowModal() == wx.ID_OK:
-            path = fd.GetPath()
-            try:
-                with open(path, "w", encoding="utf-8") as f:
-                    f.write(self.text_ctrl.GetValue())
-                # Translators: Message on successful save
-                ui.message(_("Saved."))
-            except Exception as e:
-                msg = _("Save failed: {error}").format(error=e)
-                show_error_dialog(msg)
-        fd.Destroy()
 
 class SettingsPanel(gui.settingsDialogs.SettingsPanel):
     title = ADDON_NAME
     def makeSettings(self, settingsSizer):
-        sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
-        
+        # --- Connection Group ---
+        # Translators: Title of the settings group for connection and updates
+        groupLabel = _("Connection")
+        connectionBox = wx.StaticBox(self, label=groupLabel)
+        connectionSizer = wx.StaticBoxSizer(connectionBox, wx.VERTICAL)
+        # Fix: Use connectionBox as parent for controls so NVDA reads group correctly
+        cHelper = gui.guiHelper.BoxSizerHelper(connectionBox, sizer=connectionSizer)
+
         # Translators: Label for API Key input
-        self.apiKey = sHelper.addLabeledControl(_("Gemini API Key:"), wx.TextCtrl)
+        self.apiKey = cHelper.addLabeledControl(_("Gemini API Key:"), wx.TextCtrl)
         self.apiKey.Value = config.conf["VisionAssistant"]["api_key"]
         
         # Translators: Label for Model selection
-        self.model = sHelper.addLabeledControl(_("AI Model:"), wx.Choice, choices=MODELS)
+        self.model = cHelper.addLabeledControl(_("AI Model:"), wx.Choice, choices=MODELS)
         try: self.model.SetSelection(MODELS.index(config.conf["VisionAssistant"]["model_name"]))
         except: self.model.SetSelection(0)
 
         # Translators: Label for Proxy URL input
-        self.proxyUrl = sHelper.addLabeledControl(_("Proxy URL:"), wx.TextCtrl)
+        self.proxyUrl = cHelper.addLabeledControl(_("Proxy URL:"), wx.TextCtrl)
         self.proxyUrl.Value = config.conf["VisionAssistant"]["proxy_url"]
-        
-        # Translators: Label for a section in the settings panel
-        sHelper.addItem(wx.StaticText(self, label=_("--- Languages ---")))
+
+        # Translators: Checkbox to enable/disable automatic update checks on NVDA startup
+        self.checkUpdateStartup = cHelper.addItem(wx.CheckBox(connectionBox, label=_("Check for updates on startup")))
+        self.checkUpdateStartup.Value = config.conf["VisionAssistant"]["check_update_startup"]
+
+        settingsSizer.Add(connectionSizer, 0, wx.EXPAND | wx.ALL, 5)
+
+        # --- Translation Languages Group ---
+        # Translators: Title of the settings group for translation languages configuration
+        groupLabel = _("Translation Languages")
+        langBox = wx.StaticBox(self, label=groupLabel)
+        langSizer = wx.StaticBoxSizer(langBox, wx.VERTICAL)
+        # Fix: Use langBox as parent
+        lHelper = gui.guiHelper.BoxSizerHelper(langBox, sizer=langSizer)
+
         # Translators: Label for Source Language selection
-        self.sourceLang = sHelper.addLabeledControl(_("Source:"), wx.Choice, choices=SOURCE_NAMES)
+        self.sourceLang = lHelper.addLabeledControl(_("Source:"), wx.Choice, choices=SOURCE_NAMES)
         try: self.sourceLang.SetSelection(SOURCE_NAMES.index(config.conf["VisionAssistant"]["source_language"]))
         except: self.sourceLang.SetSelection(0)
         
         # Translators: Label for Target Language selection
-        self.targetLang = sHelper.addLabeledControl(_("Target:"), wx.Choice, choices=TARGET_NAMES)
+        self.targetLang = lHelper.addLabeledControl(_("Target:"), wx.Choice, choices=TARGET_NAMES)
         try: self.targetLang.SetSelection(TARGET_NAMES.index(config.conf["VisionAssistant"]["target_language"]))
         except: self.targetLang.SetSelection(0)
         
         # Translators: Label for AI Response Language selection
-        self.aiResponseLang = sHelper.addLabeledControl(_("AI Response:"), wx.Choice, choices=TARGET_NAMES)
+        self.aiResponseLang = lHelper.addLabeledControl(_("AI Response:"), wx.Choice, choices=TARGET_NAMES)
         try: self.aiResponseLang.SetSelection(TARGET_NAMES.index(config.conf["VisionAssistant"]["ai_response_language"]))
         except: self.aiResponseLang.SetSelection(0)
 
         # Translators: Checkbox for Smart Swap feature
-        self.smartSwap = sHelper.addItem(wx.CheckBox(self, label=_("Smart Swap")))
+        self.smartSwap = lHelper.addItem(wx.CheckBox(langBox, label=_("Smart Swap")))
         self.smartSwap.Value = config.conf["VisionAssistant"]["smart_swap"]
 
-        # Translators: Label for a section in the settings panel
-        sHelper.addItem(wx.StaticText(self, label=_("--- CAPTCHA Mode ---")))
-        # Translators: Radio box for CAPTCHA capture method
-        self.captchaMode = wx.RadioBox(self, label=_("Capture Method:"), choices=[_("Navigator Object"), _("Full Screen")], style=wx.RA_SPECIFY_COLS)
-        self.captchaMode.SetSelection(0 if config.conf["VisionAssistant"]["captcha_mode"] == 'navigator' else 1)
-        sHelper.addItem(self.captchaMode)
+        settingsSizer.Add(langSizer, 0, wx.EXPAND | wx.ALL, 5)
 
-        # Translators: Label for a section in the settings panel
-        sHelper.addItem(wx.StaticText(self, label=_("--- Custom Prompts (Name:Content) ---")))
-        self.customPrompts = wx.TextCtrl(self, style=wx.TE_MULTILINE, size=(-1, 100))
+        # --- CAPTCHA Group ---
+        # Translators: Title of the settings group for CAPTCHA options
+        groupLabel = _("CAPTCHA")
+        capBox = wx.StaticBox(self, label=groupLabel)
+        capSizer = wx.StaticBoxSizer(capBox, wx.VERTICAL)
+        capHelper = gui.guiHelper.BoxSizerHelper(capBox, sizer=capSizer)
+
+        # Translators: Label for CAPTCHA capture method selection
+        self.captchaMode = capHelper.addLabeledControl(
+            _("Capture Method:"), 
+            wx.Choice, 
+            choices=[
+                # Translators: A choice for capture method. Captures only the specific object under the NVDA navigator cursor.
+                _("Navigator Object"),
+                # Translators: A choice for capture method. Captures the entire visible screen area.
+                _("Full Screen")
+            ]
+        )
+        self.captchaMode.SetSelection(0 if config.conf["VisionAssistant"]["captcha_mode"] == 'navigator' else 1)
+
+        settingsSizer.Add(capSizer, 0, wx.EXPAND | wx.ALL, 5)
+
+        # --- Custom Prompts Group ---
+        # Translators: Title of the settings group for custom prompts
+        groupLabel = _("Custom Prompts")
+        promptsBox = wx.StaticBox(self, label=groupLabel)
+        promptsSizer = wx.StaticBoxSizer(promptsBox, wx.VERTICAL)
+        # Fix: Use promptsBox as parent
+        pHelper = gui.guiHelper.BoxSizerHelper(promptsBox, sizer=promptsSizer)
+
+        # Translators: Helper text explaining the format for custom prompts
+        pHelper.addItem(wx.StaticText(promptsBox, label=_("Format: Name:Content")))
+        self.customPrompts = wx.TextCtrl(promptsBox, style=wx.TE_MULTILINE, size=(-1, 100))
         self.customPrompts.Value = config.conf["VisionAssistant"]["custom_prompts"]
-        sHelper.addItem(self.customPrompts)
+        pHelper.addItem(self.customPrompts)
+
+        settingsSizer.Add(promptsSizer, 1, wx.EXPAND | wx.ALL, 5)
 
     def onSave(self):
         config.conf["VisionAssistant"]["api_key"] = self.apiKey.Value.strip()
@@ -426,6 +435,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         config.conf["VisionAssistant"]["target_language"] = TARGET_NAMES[self.targetLang.GetSelection()]
         config.conf["VisionAssistant"]["ai_response_language"] = TARGET_NAMES[self.aiResponseLang.GetSelection()]
         config.conf["VisionAssistant"]["smart_swap"] = self.smartSwap.Value
+        config.conf["VisionAssistant"]["check_update_startup"] = self.checkUpdateStartup.Value
         config.conf["VisionAssistant"]["captcha_mode"] = 'navigator' if self.captchaMode.GetSelection() == 0 else 'fullscreen'
         config.conf["VisionAssistant"]["custom_prompts"] = self.customPrompts.Value.strip()
 
@@ -450,7 +460,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         gui.settingsDialogs.NVDASettingsDialog.categoryClasses.append(SettingsPanel)
         
         self.updater = UpdateManager(GITHUB_REPO)
-        self.update_timer = wx.CallLater(10000, self.updater.check_for_updates, True)
+        
+        if config.conf["VisionAssistant"]["check_update_startup"]:
+            self.update_timer = wx.CallLater(10000, self.updater.check_for_updates, True)
 
     def terminate(self):
         try: gui.settingsDialogs.NVDASettingsDialog.categoryClasses.remove(SettingsPanel)
@@ -546,7 +558,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         }
         if json_mode: data["generationConfig"]["response_mime_type"] = "application/json"
 
-        max_retries = 10
+        max_retries = 3
         for attempt in range(max_retries + 1):
             try:
                 req = request.Request(url, data=json.dumps(data).encode('utf-8'), headers=headers)
@@ -633,10 +645,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             with open(self.temp_audio_file, "rb") as f:
                 audio_data = base64.b64encode(f.read()).decode('utf-8')
             
-            p = "Transcribe speech. Use native script. No Fingilish. Fix stutters."
+            p = 'Transcribe speech. Use native script. Fix stutters. If there is no speech, silence, or background noise only, write exactly: [[[NOSPEECH]]]'
             
             res = self._call_gemini_safe(p, attachments=[{'mime_type': 'audio/wav', 'data': audio_data}])
-            if res: wx.CallAfter(self._paste_text, res)
+            
+            if res:
+                clean_res = res.strip()
+                if "[[[NOSPEECH]]]" in clean_res:
+                    # Translators: Message reported when the AI detects silence or empty speech
+                    msg = _("No speech detected.")
+                    wx.CallAfter(ui.message, msg)
+                else:
+                    wx.CallAfter(self._paste_text, res)
             else: 
                 # Translators: Message reported while trying dictation.
                 msg = _("No speech recognized or Error.")
@@ -744,18 +764,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         wx.CallLater(200, self._open_refine_dialog, text)
 
     def _open_refine_dialog(self, text):
-        choices = [
+        options = [
             # Translators: A choice in the menu of the text refinement command
-            _("Summarize"),
+            (_("Summarize"), "[summarize]"),
             # Translators: A choice in the menu of the text refinement command
-            _("Fix Grammar"),
+            (_("Fix Grammar"), "[fix_grammar]"),
             # Translators: A choice in the menu of the text refinement command
-            _("Fix Grammar & Translate"),
+            (_("Fix Grammar & Translate"), "[fix_translate]"),
             # Translators: A choice in the menu of the text refinement command
-            _("Explain"),
+            (_("Explain"), "[explain]"),
         ]
+        
         custom_raw = config.conf["VisionAssistant"]["custom_prompts"]
-        custom_dict = {}
         if custom_raw:
             for line in custom_raw.split('|'):
                 if ':' in line:
@@ -763,8 +783,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     name = parts[0].strip()
                     content = parts[1].strip()
                     if name and content:
-                        choices.append(f"Custom: {name}")
-                        custom_dict[f"Custom: {name}"] = content
+                        options.append((f"Custom: {name}", content))
+        
+        display_choices = [opt[0] for opt in options]
         
         dlg = wx.SingleChoiceDialog(
             gui.mainFrame,
@@ -772,19 +793,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             _("Choose action:"),
             # Translators: main message of the Refine dialog
             _("Refine"),
-            choices,
+            display_choices,
         )
         if dlg.ShowModal() == wx.ID_OK:
-            sel_str = dlg.GetStringSelection()
-            custom_content = ""
-            
-            if sel_str in custom_dict:
-                custom_content = custom_dict[sel_str]
-            else:
-                if sel_str == _("Summarize"): custom_content = "[summarize]"
-                elif sel_str == _("Fix Grammar"): custom_content = "[fix_grammar]"
-                elif sel_str == _("Fix Grammar & Translate"): custom_content = "[fix_translate]"
-                elif sel_str == _("Explain"): custom_content = "[explain]"
+            selection_index = dlg.GetSelection()
+            custom_content = options[selection_index][1]
 
             file_path = None
             needs_file = False
