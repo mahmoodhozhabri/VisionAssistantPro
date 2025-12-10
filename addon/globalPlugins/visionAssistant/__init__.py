@@ -328,44 +328,6 @@ class VisionQADialog(wx.Dialog):
                 show_error_dialog(msg)
         fd.Destroy()
 
-class ResultDialog(wx.Dialog):
-    def __init__(self, parent, title, content):
-        super().__init__(parent, title=title, size=(600, 400), style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        clean_content = clean_markdown(content)
-        self.text_ctrl = wx.TextCtrl(self, value=clean_content, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH)
-        sizer.Add(self.text_ctrl, 1, wx.EXPAND | wx.ALL, 10)
-        
-        btn_sizer = wx.StdDialogButtonSizer()
-        # Translators: Button to save content
-        self.saveBtn = wx.Button(self, label=_("Save to File"))
-        self.saveBtn.Bind(wx.EVT_BUTTON, self.onSave)
-        
-        # Translators: Close button label
-        closeBtn = wx.Button(self, wx.ID_OK, label=_("Close"))
-        
-        btn_sizer.AddButton(self.saveBtn)
-        btn_sizer.AddButton(closeBtn)
-        btn_sizer.Realize()
-        sizer.Add(btn_sizer, 0, wx.ALIGN_RIGHT | wx.ALL, 10)
-        self.SetSizer(sizer)
-        self.Centre()
-
-    def onSave(self, event):
-        # Translators: Save dialog title
-        fd = wx.FileDialog(self, _("Save Result"), wildcard="Text files (*.txt)|*.txt", style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
-        if fd.ShowModal() == wx.ID_OK:
-            path = fd.GetPath()
-            try:
-                with open(path, "w", encoding="utf-8") as f:
-                    f.write(self.text_ctrl.GetValue())
-                # Translators: Message on successful save
-                ui.message(_("Saved."))
-            except Exception as e:
-                msg = _("Save failed: {error}").format(error=e)
-                show_error_dialog(msg)
-        fd.Destroy()
-
 class SettingsPanel(gui.settingsDialogs.SettingsPanel):
     title = ADDON_NAME
     def makeSettings(self, settingsSizer):
