@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 'VisionAssistant' '2.7.0'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2025-12-12 16:38+0100\n"
-"PO-Revision-Date: 2025-12-12 17:30+0100\n"
+"PO-Revision-Date: 2025-12-12 23:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -401,7 +401,7 @@ msgstr "Choisir une action :"
 #. Translators: main message of the Refine dialog
 #: addon\globalPlugins\visionAssistant\__init__.py:915
 msgid "Refine"
-msgstr "Affiner"
+msgstr "Assistant de texte"
 
 #. Translators: Title of a file selection dialog when calling refine command
 #: addon\globalPlugins\visionAssistant\__init__.py:938
@@ -433,7 +433,7 @@ msgstr "Analyse en cours..."
 #: addon\globalPlugins\visionAssistant\__init__.py:1068
 #, python-brace-format
 msgid "{name} - Refine Result"
-msgstr "{name} - Résultat de l'affinage"
+msgstr "{name} - Résultat de l'assistant de texte"
 
 #. Translators: Script description for Input Gestures dialog
 #: addon\globalPlugins\visionAssistant\__init__.py:1079
@@ -621,7 +621,7 @@ msgstr ""
 "Fonctionnalités :\n"
 "- Traducteur intelligent (NVDA+Ctrl+Maj+T/Y)\n"
 "- Dictée intelligente (NVDA+Ctrl+Maj+S)\n"
-"- Affineur de texte (NVDA+Ctrl+Maj+R)\n"
+"- Assistant de texte (NVDA+Ctrl+Maj+R)\n"
 "- Analyse de la vision et de l'écran (NVDA+Ctrl+Shift+V/O)\n"
 "- Questions/réponses sur les documents (NVDA+Ctrl+Maj+D)\n"
 "- Résolution de CAPTCHAs (NVDA+Ctrl+Maj+C)\n"
