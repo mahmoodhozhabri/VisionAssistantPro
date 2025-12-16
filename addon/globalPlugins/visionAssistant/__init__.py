@@ -2,22 +2,9 @@
 
 import sys
 import os
-cur_dir = os.path.dirname(__file__)
-lib_dir = os.path.join(cur_dir, "lib")
-if lib_dir not in sys.path:
-    sys.path.insert(0, lib_dir)
-import addonHandler
-import globalPluginHandler
-import config
-import gui
-import wx
 import json
 import threading
-import ui
-import api
 import logging
-import textInfos
-import os
 import base64
 import io
 import ctypes
@@ -26,12 +13,34 @@ import tempfile
 import time
 import wave
 import gc
+from contextlib import contextmanager
+from urllib import request, error
+from urllib.parse import quote
+
+@contextmanager
+def scoped_import():
+    lib_dir = os.path.join(os.path.dirname(__file__), "lib")
+    sys.path.insert(0, lib_dir)
+    try:
+        yield
+    finally:
+        if lib_dir in sys.path:
+            sys.path.remove(lib_dir)
+
+with scoped_import():
+    import markdown
+
+import addonHandler
+import globalPluginHandler
+import config
+import gui
+import wx
+import ui
+import api
+import textInfos
 import tones
 import NVDAObjects.behaviors
 import scriptHandler
-import markdown
-from urllib import request, error
-from urllib.parse import quote
 
 log = logging.getLogger(__name__)
 addonHandler.initTranslation()
@@ -1048,7 +1057,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     name = parts[0].strip()
                     content = parts[1].strip()
                     if name and content:
-                        options.append((f"Custom: {name}", content))
+                        # Translators: Prefix for custom prompts in the Refine menu                        options.append((_("Custom: ") + name, content))
         
         display_choices = [opt[0] for opt in options]
         
