@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VisionAssistant\n"
-"POT-Creation-Date: 2025-12-15 10:32+0300\n"
-"PO-Revision-Date: 2025-12-15 10:41+0300\n"
+"POT-Creation-Date: 2025-12-17 21:10+0300\n"
+"PO-Revision-Date: 2025-12-17 21:33+0300\n"
 "Last-Translator: nvda.ru\n"
 "Language-Team: nvda.ru <kagiz@yandex.ru>\n"
 "Language: ru_RU\n"
@@ -11,31 +11,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.6\n"
 "X-Poedit-Basepath: ../../../..\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: addon\n"
 "X-Poedit-SearchPath-1: buildVars.py\n"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:132
+#: addon/globalPlugins/visionAssistant/__init__.py:55 addon/globalPlugins/visionAssistant/__init__.py:56
+msgid "[Auto]"
+msgstr "[Авто]"
+
+#: addon/globalPlugins/visionAssistant/__init__.py:55 addon/globalPlugins/visionAssistant/__init__.py:56
+msgid "(Latest)"
+msgstr "(Последняя)"
+
+#: addon/globalPlugins/visionAssistant/__init__.py:60 addon/globalPlugins/visionAssistant/__init__.py:61
+msgid "[Free]"
+msgstr "[Бесплатная]"
+
+#: addon/globalPlugins/visionAssistant/__init__.py:65 addon/globalPlugins/visionAssistant/__init__.py:66
+msgid "[Pro]"
+msgstr "[Про]"
+
+#: addon/globalPlugins/visionAssistant/__init__.py:65
+msgid "(Preview)"
+msgstr "(Предпросмотр)"
+
+#: addon/globalPlugins/visionAssistant/__init__.py:70 addon/globalPlugins/visionAssistant/__init__.py:71
+msgid "[Legacy]"
+msgstr "[Устаревшая]"
+
+#: addon/globalPlugins/visionAssistant/__init__.py:164
 #, python-brace-format
 msgid "{name} Error"
 msgstr "Ошибка {name}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:226
+#: addon/globalPlugins/visionAssistant/__init__.py:253
 msgid "Update found but no .nvda-addon file in release."
 msgstr "Обновление найдено, но в выпуске отсутствует файл .nvda-addon."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:230
+#: addon/globalPlugins/visionAssistant/__init__.py:257
 msgid "You have the latest version."
 msgstr "У вас установлена последняя версия."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:235
+#: addon/globalPlugins/visionAssistant/__init__.py:262
 #, python-brace-format
 msgid "Update check failed: {error}"
 msgstr "Не удалось проверить обновления: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:248
+#: addon/globalPlugins/visionAssistant/__init__.py:275
 #, python-brace-format
 msgid ""
 "A new version ({version}) of {name} is available.\n"
@@ -52,57 +76,54 @@ msgstr ""
 "\n"
 "Загрузить и установить?"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:250
+#: addon/globalPlugins/visionAssistant/__init__.py:277
 msgid "Update Available"
 msgstr "Доступно обновление"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:259
+#: addon/globalPlugins/visionAssistant/__init__.py:286
 msgid "Downloading update..."
 msgstr "Загрузка обновления..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:270
+#: addon/globalPlugins/visionAssistant/__init__.py:297
 #, python-brace-format
 msgid "Download failed: {error}"
 msgstr "Не удалось загрузить: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:287
-#: addon/globalPlugins/visionAssistant/__init__.py:510
+#: addon/globalPlugins/visionAssistant/__init__.py:314 addon/globalPlugins/visionAssistant/__init__.py:544
 msgid "AI Response:"
 msgstr "Ответ ИИ:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:298
-#: addon/globalPlugins/visionAssistant/__init__.py:379
-#: addon/globalPlugins/visionAssistant/__init__.py:398
+#: addon/globalPlugins/visionAssistant/__init__.py:325 addon/globalPlugins/visionAssistant/__init__.py:406
+#: addon/globalPlugins/visionAssistant/__init__.py:425
 #, python-brace-format
 msgid "AI: {text}\n"
 msgstr "ИИ: {text}\n"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:305
+#: addon/globalPlugins/visionAssistant/__init__.py:332
 msgid "Ask:"
 msgstr "Запрос:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:313
+#: addon/globalPlugins/visionAssistant/__init__.py:340
 msgid "Send"
 msgstr "Отправить"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:316
+#: addon/globalPlugins/visionAssistant/__init__.py:343
 msgid "View Formatted"
-msgstr "Форматированный просмотр"
+msgstr "Просмотр с форматированием"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:320
+#: addon/globalPlugins/visionAssistant/__init__.py:347
 msgid "Save Content"
 msgstr "Сохранить содержимое"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:324
+#: addon/globalPlugins/visionAssistant/__init__.py:351
 msgid "Save Chat"
 msgstr "Сохранить чат"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:326
+#: addon/globalPlugins/visionAssistant/__init__.py:353
 msgid "Close"
 msgstr "Закрыть"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:352
-#: addon/globalPlugins/visionAssistant/__init__.py:396
+#: addon/globalPlugins/visionAssistant/__init__.py:379 addon/globalPlugins/visionAssistant/__init__.py:423
 #, python-brace-format
 msgid ""
 "\n"
@@ -111,379 +132,371 @@ msgstr ""
 "\n"
 "Вы: {text}\n"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:356
+#: addon/globalPlugins/visionAssistant/__init__.py:383
 msgid "Thinking..."
 msgstr "Обработка..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:420
+#: addon/globalPlugins/visionAssistant/__init__.py:447
 msgid "Formatted Conversation"
 msgstr "Форматированный диалог"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:423
+#: addon/globalPlugins/visionAssistant/__init__.py:450
 #, python-brace-format
 msgid "Error displaying content: {error}"
 msgstr "Ошибка при отображении содержимого: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:428
+#: addon/globalPlugins/visionAssistant/__init__.py:455
 msgid "Save Chat Log"
 msgstr "Сохранить журнал чата"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:435
-#: addon/globalPlugins/visionAssistant/__init__.py:452
+#: addon/globalPlugins/visionAssistant/__init__.py:462 addon/globalPlugins/visionAssistant/__init__.py:479
 msgid "Saved."
 msgstr "Сохранено."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:438
-#: addon/globalPlugins/visionAssistant/__init__.py:455
+#: addon/globalPlugins/visionAssistant/__init__.py:465 addon/globalPlugins/visionAssistant/__init__.py:482
 #, python-brace-format
 msgid "Save failed: {error}"
 msgstr "Не удалось сохранить: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:444
+#: addon/globalPlugins/visionAssistant/__init__.py:471
 msgid "Save Result"
 msgstr "Сохранить результат"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:464
+#: addon/globalPlugins/visionAssistant/__init__.py:491
 msgid "Connection"
-msgstr "Соединение"
+msgstr "Подключение"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:470
+#: addon/globalPlugins/visionAssistant/__init__.py:497
 msgid "Gemini API Key:"
 msgstr "Ключ API Gemini:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:474
+#: addon/globalPlugins/visionAssistant/__init__.py:503
 msgid "AI Model:"
 msgstr "Модель ИИ:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:479
+#: addon/globalPlugins/visionAssistant/__init__.py:513
 msgid "Proxy URL:"
 msgstr "URL прокси:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:483
+#: addon/globalPlugins/visionAssistant/__init__.py:517
 msgid "Check for updates on startup"
 msgstr "Проверять обновления при запуске"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:487
+#: addon/globalPlugins/visionAssistant/__init__.py:521
 msgid "Clean Markdown in Chat"
-msgstr "Очистить Markdown в чате"
+msgstr "Очищать Markdown в чате"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:494
+#: addon/globalPlugins/visionAssistant/__init__.py:528
 msgid "Translation Languages"
 msgstr "Языки перевода"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:500
+#: addon/globalPlugins/visionAssistant/__init__.py:534
 msgid "Source:"
 msgstr "Исходный язык:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:505
+#: addon/globalPlugins/visionAssistant/__init__.py:539
 msgid "Target:"
 msgstr "Целевой язык:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:515
+#: addon/globalPlugins/visionAssistant/__init__.py:549
 msgid "Smart Swap"
 msgstr "Автопереключение языка"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:522
+#: addon/globalPlugins/visionAssistant/__init__.py:556
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:529
+#: addon/globalPlugins/visionAssistant/__init__.py:563
 msgid "Capture Method:"
 msgstr "Метод захвата:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:533
+#: addon/globalPlugins/visionAssistant/__init__.py:567
 msgid "Navigator Object"
-msgstr "Объект навигатора (фокус)"
+msgstr "Объект навигатора"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:535
+#: addon/globalPlugins/visionAssistant/__init__.py:569
 msgid "Full Screen"
 msgstr "Весь экран"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:544
+#: addon/globalPlugins/visionAssistant/__init__.py:578
 msgid "Custom Prompts"
 msgstr "Пользовательские подсказки"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:550
+#: addon/globalPlugins/visionAssistant/__init__.py:584
 msgid "Format: Name:Content"
 msgstr "Формат: Имя:Содержимое"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:586
-#: addon/globalPlugins/visionAssistant/__init__.py:632
-#: addon/globalPlugins/visionAssistant/__init__.py:1105
-#: addon/globalPlugins/visionAssistant/__init__.py:1183
-#: addon/globalPlugins/visionAssistant/__init__.py:1186
-#: addon/globalPlugins/visionAssistant/__init__.py:1212
-#: addon/globalPlugins/visionAssistant/__init__.py:1215
-#: addon/globalPlugins/visionAssistant/__init__.py:1284
-#: addon/globalPlugins/visionAssistant/__init__.py:1287
-#: addon/globalPlugins/visionAssistant/__init__.py:1345
-#: addon/globalPlugins/visionAssistant/__init__.py:1359
-#: addon/globalPlugins/visionAssistant/__init__.py:1362
-#: addon/globalPlugins/visionAssistant/__init__.py:1367
-#: addon/globalPlugins/visionAssistant/__init__.py:1399
-#: addon/globalPlugins/visionAssistant/__init__.py:1405
+#: addon/globalPlugins/visionAssistant/__init__.py:620 addon/globalPlugins/visionAssistant/__init__.py:666
+#: addon/globalPlugins/visionAssistant/__init__.py:1198 addon/globalPlugins/visionAssistant/__init__.py:1284
+#: addon/globalPlugins/visionAssistant/__init__.py:1293 addon/globalPlugins/visionAssistant/__init__.py:1319
+#: addon/globalPlugins/visionAssistant/__init__.py:1322 addon/globalPlugins/visionAssistant/__init__.py:1408
+#: addon/globalPlugins/visionAssistant/__init__.py:1411 addon/globalPlugins/visionAssistant/__init__.py:1469
+#: addon/globalPlugins/visionAssistant/__init__.py:1483 addon/globalPlugins/visionAssistant/__init__.py:1486
+#: addon/globalPlugins/visionAssistant/__init__.py:1491 addon/globalPlugins/visionAssistant/__init__.py:1523
+#: addon/globalPlugins/visionAssistant/__init__.py:1529
 msgid "Idle"
 msgstr "Бездействие"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:629
+#: addon/globalPlugins/visionAssistant/__init__.py:663
 msgid "Announces the current status of the add-on."
 msgstr "Озвучивает текущий статус дополнения."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:638
+#: addon/globalPlugins/visionAssistant/__init__.py:672 addon/globalPlugins/visionAssistant/__init__.py:1096
+#: addon/globalPlugins/visionAssistant/__init__.py:1260
 msgid "Open"
 msgstr "Открыть"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:672
+#: addon/globalPlugins/visionAssistant/__init__.py:710
 #, python-brace-format
 msgid "Upload Connection Error: {reason}"
 msgstr "Ошибка подключения при загрузке: {reason}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:677
+#: addon/globalPlugins/visionAssistant/__init__.py:715
 #, python-brace-format
 msgid "Upload Server Error {code}: {reason}"
 msgstr "Ошибка сервера {code} при загрузке: {reason}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:682
+#: addon/globalPlugins/visionAssistant/__init__.py:720
 #, python-brace-format
 msgid "File Upload Error: {error}"
 msgstr "Ошибка загрузки файла: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:694
+#: addon/globalPlugins/visionAssistant/__init__.py:732
 msgid "API Key missing."
 msgstr "Отсутствует ключ API."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:747
+#: addon/globalPlugins/visionAssistant/__init__.py:785
 msgid "Error: Response blocked by AI safety filters."
-msgstr "Ошибка: ответ заблокирован фильтрами безопасности AI."
+msgstr "Ошибка: ответ заблокирован фильтрами безопасности ИИ."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:777
+#: addon/globalPlugins/visionAssistant/__init__.py:815
 msgid "Error 400: Bad Request (Check API Key Format)"
 msgstr "Ошибка 400: Неверный запрос (проверьте формат ключа API)"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:780
+#: addon/globalPlugins/visionAssistant/__init__.py:818
 msgid "Error 403: Forbidden (Check Region/Permission)"
 msgstr "Ошибка 403: Доступ запрещён (проверьте регион/разрешения)"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:783
+#: addon/globalPlugins/visionAssistant/__init__.py:821
 msgid "Error 429: Quota Exceeded (Try later)"
 msgstr "Ошибка 429: Превышена квота (попробуйте позже)"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:786
+#: addon/globalPlugins/visionAssistant/__init__.py:824
 #, python-brace-format
 msgid "Server Error {code}: {reason}"
 msgstr "Ошибка сервера {code}: {reason}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:791
+#: addon/globalPlugins/visionAssistant/__init__.py:829
 #, python-brace-format
 msgid "Connection Error: {reason}"
 msgstr "Ошибка соединения: {reason}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:796
+#: addon/globalPlugins/visionAssistant/__init__.py:834
 #, python-brace-format
 msgid "Error: {error}"
 msgstr "Ошибка: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:802
+#: addon/globalPlugins/visionAssistant/__init__.py:840
 msgid "Records voice, transcribes it using AI, and types the result."
 msgstr "Записывает голос, расшифровывает его с помощью ИИ и вводит результат."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:811
+#: addon/globalPlugins/visionAssistant/__init__.py:849
 msgid "Listening..."
 msgstr "Прослушивание..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:815
+#: addon/globalPlugins/visionAssistant/__init__.py:853
 #, python-brace-format
 msgid "Audio Hardware Error: {error}"
 msgstr "Ошибка аудиооборудования: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:825
+#: addon/globalPlugins/visionAssistant/__init__.py:863
 msgid "Typing..."
 msgstr "Ввод..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:830
+#: addon/globalPlugins/visionAssistant/__init__.py:868
 #, python-brace-format
 msgid "Save Recording Error: {error}"
 msgstr "Ошибка сохранения записи: {error}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:847
+#: addon/globalPlugins/visionAssistant/__init__.py:883 addon/globalPlugins/visionAssistant/__init__.py:902
 msgid "No speech detected."
 msgstr "Речь не обнаружена."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:854
+#: addon/globalPlugins/visionAssistant/__init__.py:909
 msgid "No speech recognized or Error."
 msgstr "Речь не распознана или произошла ошибка."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:869
+#: addon/globalPlugins/visionAssistant/__init__.py:924
 #, python-brace-format
 msgid "Typed: {text}"
 msgstr "Введено: {text}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:873
+#: addon/globalPlugins/visionAssistant/__init__.py:928
 msgid "Translates the selected text or navigator object."
 msgstr "Переводит выделенный текст или объект навигатора."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:879
+#: addon/globalPlugins/visionAssistant/__init__.py:934
 msgid "No text found."
 msgstr "Текст не найден."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:884
+#: addon/globalPlugins/visionAssistant/__init__.py:939
 msgid "Translating..."
 msgstr "Перевод..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:917
+#: addon/globalPlugins/visionAssistant/__init__.py:972
 #, python-brace-format
 msgid "Translated: {text}"
-msgstr "Перевод: {text}"
+msgstr "Переведено: {text}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:949
+#: addon/globalPlugins/visionAssistant/__init__.py:1027
 msgid "Opens a menu to Explain, Summarize, or Fix the selected text."
-msgstr ""
-"Открывает меню для объяснения, обобщения или исправления выделенного текста."
+msgstr "Открывает меню для объяснения, обобщения или исправления выделенного текста."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:964
+#: addon/globalPlugins/visionAssistant/__init__.py:1042
 msgid "Summarize"
 msgstr "Обобщить"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:966
+#: addon/globalPlugins/visionAssistant/__init__.py:1044
 msgid "Fix Grammar"
 msgstr "Исправить грамматику"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:968
+#: addon/globalPlugins/visionAssistant/__init__.py:1046
 msgid "Fix Grammar & Translate"
 msgstr "Исправить грамматику и перевести"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:970
+#: addon/globalPlugins/visionAssistant/__init__.py:1048
 msgid "Explain"
 msgstr "Объяснить"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:988
+#: addon/globalPlugins/visionAssistant/__init__.py:1060
+msgid "Custom: "
+msgstr "Пользовательское: "
+
+#: addon/globalPlugins/visionAssistant/__init__.py:1067
 msgid "Choose action:"
 msgstr "Выберите действие:"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:990
+#: addon/globalPlugins/visionAssistant/__init__.py:1069
 msgid "Refine"
 msgstr "Улучшить текст"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1021
+#: addon/globalPlugins/visionAssistant/__init__.py:1104
 msgid "Processing..."
 msgstr "Обработка..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1068
+#: addon/globalPlugins/visionAssistant/__init__.py:1155
 msgid "Uploading file..."
 msgstr "Загрузка файла..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1100
-#: addon/globalPlugins/visionAssistant/__init__.py:1349
+#: addon/globalPlugins/visionAssistant/__init__.py:1193 addon/globalPlugins/visionAssistant/__init__.py:1473
 msgid "Analyzing..."
 msgstr "Анализ..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1148
+#: addon/globalPlugins/visionAssistant/__init__.py:1241
 #, python-brace-format
 msgid "{name} - Refine Result"
 msgstr "{name} — Уточнение результата"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1160
+#: addon/globalPlugins/visionAssistant/__init__.py:1253
 msgid "Recognizes text from a selected image or PDF file."
 msgstr "Распознаёт текст из выбранного изображения или PDF-файла."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1172
+#: addon/globalPlugins/visionAssistant/__init__.py:1271
 msgid "Uploading & Extracting..."
 msgstr "Загрузка и извлечение..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1189
+#: addon/globalPlugins/visionAssistant/__init__.py:1296
 msgid "Allows asking questions about a selected document (PDF/Text/Image)."
-msgstr ""
-"Позволяет задавать вопросы о выбранном документе (PDF, текст, изображение)."
+msgstr "Позволяет задавать вопросы о выбранном документе (PDF, текст, изображение)."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1201
+#: addon/globalPlugins/visionAssistant/__init__.py:1308
 msgid "Uploading & Analyzing..."
 msgstr "Загрузка и анализ..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1210
+#: addon/globalPlugins/visionAssistant/__init__.py:1317
 msgid "Document ready. Ask your question."
 msgstr "Документ готов. Задайте ваш вопрос."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1244
+#: addon/globalPlugins/visionAssistant/__init__.py:1361
 #, python-brace-format
 msgid "{name} - Chat"
 msgstr "{name} — Чат"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1256
+#: addon/globalPlugins/visionAssistant/__init__.py:1373
 msgid "Performs OCR and description on the entire screen."
 msgstr "Выполняет распознавание текста (OCR) и описание всего экрана."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1261
+#: addon/globalPlugins/visionAssistant/__init__.py:1378
 msgid "Describes the current object (Navigator Object)."
 msgstr "Описывает текущий объект (объект навигатора)."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1270
+#: addon/globalPlugins/visionAssistant/__init__.py:1387
 msgid "Scanning..."
 msgstr "Сканирование..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1275
-#: addon/globalPlugins/visionAssistant/__init__.py:1389
+#: addon/globalPlugins/visionAssistant/__init__.py:1392 addon/globalPlugins/visionAssistant/__init__.py:1513
 msgid "Capture failed."
 msgstr "Не удалось выполнить захват."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1314
+#: addon/globalPlugins/visionAssistant/__init__.py:1438
 #, python-brace-format
 msgid "{name} - Image Analysis"
 msgstr "{name} — Анализ изображения"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1326
+#: addon/globalPlugins/visionAssistant/__init__.py:1450
 msgid "Transcribes a selected audio file."
 msgstr "Расшифровывает выбранный аудиофайл."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1339
+#: addon/globalPlugins/visionAssistant/__init__.py:1463
 msgid "Uploading..."
 msgstr "Загрузка..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1365
+#: addon/globalPlugins/visionAssistant/__init__.py:1489
 msgid "Error processing audio."
 msgstr "Ошибка обработки аудио."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1370
+#: addon/globalPlugins/visionAssistant/__init__.py:1494
 msgid "Attempts to solve a CAPTCHA on the screen or navigator object."
 msgstr "Пытается решить CAPTCHA на экране или объекте навигатора."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1384
+#: addon/globalPlugins/visionAssistant/__init__.py:1508
 msgid "Solving..."
 msgstr "Решение..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1403
+#: addon/globalPlugins/visionAssistant/__init__.py:1527
 msgid "Failed."
 msgstr "Не удалось."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1411
+#: addon/globalPlugins/visionAssistant/__init__.py:1535
 #, python-brace-format
 msgid "Captcha: {text}"
 msgstr "CAPTCHA: {text}"
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1415
+#: addon/globalPlugins/visionAssistant/__init__.py:1539
 msgid "Checks for updates manually."
 msgstr "Проверяет обновления вручную."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1418
+#: addon/globalPlugins/visionAssistant/__init__.py:1542
 msgid "Checking for updates..."
 msgstr "Проверка обновлений..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1445
+#: addon/globalPlugins/visionAssistant/__init__.py:1569
 msgid "Announces the last received translation."
 msgstr "Озвучивает последний полученный перевод."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1450
+#: addon/globalPlugins/visionAssistant/__init__.py:1574
 msgid "No history."
 msgstr "История отсутствует."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1454
+#: addon/globalPlugins/visionAssistant/__init__.py:1578
 msgid "Translates the text currently in the clipboard."
 msgstr "Переводит текст, находящийся в буфере обмена."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1459
+#: addon/globalPlugins/visionAssistant/__init__.py:1583
 msgid "Translating Clipboard..."
 msgstr "Перевод из буфера обмена..."
 
-#: addon/globalPlugins/visionAssistant/__init__.py:1464
+#: addon/globalPlugins/visionAssistant/__init__.py:1588
 msgid "Clipboard empty."
 msgstr "Буфер обмена пуст."
 
@@ -505,341 +518,34 @@ msgid ""
 "- File Selection & OCR (NVDA+Ctrl+Shift+F)\n"
 "- Status Reporting (NVDA+Ctrl+Shift+I)"
 msgstr ""
-"Дополнение VisionAssistant - это продвинутый ИИ-помощник для NVDA, "
-"использующий модели Gemini.\n"
+"Дополнение VisionAssistant - это продвинутый ИИ-помощник для NVDA, использующий модели Gemini.\n"
 "Возможности:\n"
-"- Умный переводчик (NVDA+Ctrl+Shift+T/Y)\n"
-"- Умная диктовка (NVDA+Ctrl+Shift+S)\n"
-"- Улучшение текста (NVDA+Ctrl+Shift+R)\n"
-"- Анализ изображений и экрана (NVDA+Ctrl+Shift+V/O)\n"
-"- Вопрос-ответ по документам (NVDA+Ctrl+Shift+D)\n"
-"- Решение CAPTCHA (NVDA+Ctrl+Shift+C)\n"
-"- Расшифровка аудио (NVDA+Ctrl+Shift+A)\n"
-"- Выбор файла и распознавание текста (OCR) (NVDA+Ctrl+Shift+F)\n"
-"- Отчёт о состоянии (NVDA+Ctrl+Shift+I)"
+"Умный переводчик (NVDA+Ctrl+Shift+T/Y).\n"
+"Умная диктовка (NVDA+Ctrl+Shift+S).\n"
+"Улучшение текста (NVDA+Ctrl+Shift+R).\n"
+"Анализ изображений и экрана (NVDA+Ctrl+Shift+V/O).\n"
+"Вопрос-ответ по документам (NVDA+Ctrl+Shift+D).\n"
+"Решение CAPTCHA (NVDA+Ctrl+Shift+C).\n"
+"Расшифровка аудио (NVDA+Ctrl+Shift+A).\n"
+"Выбор файла и распознавание текста (OCR) (NVDA+Ctrl+Shift+F).\n"
+"Отчёт о состоянии (NVDA+Ctrl+Shift+I)."
 
 #: buildVars.py:27
 msgid ""
-"## Changes for 2.9\n"
-"*   **Added French and Turkish translations.**\n"
-"*   **Formatted View:** Added a \"View Formatted\" button to view chat with "
-"HTML styling.\n"
-"*   **Markdown Setting:** Added \"Clean Markdown in Chat\" option to view "
-"raw output.\n"
-"*   **Dialog Management:** Fixed focus issues and prevented duplicate "
-"windows.\n"
-"*   **UX Improvements:** Standardized file dialogs and removed redundant "
-"speech messages."
+"## Changes for 3.0.2\n"
+"*   **Batch OCR:** Added support for selecting and processing multiple images or PDF files simultaneously. The "
+"files are now processed in alphabetical order.\n"
+"*   **Compatibility Fix:** Bundled the `markdown` library within the add-on to resolve startup errors "
+"(ModuleNotFoundError) on NVDA 2024.3+ and ensure stability across all versions.\n"
+"*   **Code Safety:** Implemented a safer import mechanism to prevent conflicts with other add-ons or NVDA's "
+"internal libraries.\n"
+"*   **Translation:** Fixed an issue where the \"Custom:\" prefix in the Refine menu was not translatable."
 msgstr ""
-"## Изменения в версии 2.9\n"
-"*   **Добавлены французский и турецкий переводы.**\n"
-"*   **Форматированный просмотр:** Добавлена кнопка \"Просмотр с "
-"форматированием\" для отображения чата со стилями HTML.\n"
-"*   **Настройка Markdown:** Добавлена опция \"Очищать Markdown в чате\" для "
-"просмотра необработанного вывода.\n"
-"*   **Управление диалогами:** Исправлены проблемы с фокусом и предотвращено "
-"появление дублирующихся окон.\n"
-"*   **Улучшения UX:** Стандартизированы диалоги выбора файлов и удалены "
-"избыточные речевые сообщения."
-
-#~ msgid "Opening menu..."
-#~ msgstr "Открытие меню..."
-
-#~ msgid "Select File"
-#~ msgstr "Выбрать файл"
-
-#~ msgid "Select Image/PDF/TIFF for OCR"
-#~ msgstr "Выберите изображение, PDF или TIFF для распознавания текста (OCR)"
-
-#~ msgid "Select a file for OCR..."
-#~ msgstr "Выберите файл для распознавания текста (OCR)..."
-
-#~ msgid "Select Image or PDF"
-#~ msgstr "Выберите изображение, PDF или TIFF для распознавания"
-
-#~ msgid "Select a document..."
-#~ msgstr "Выберите документ для анализа..."
-
-#~ msgid "Select Document to Analyze"
-#~ msgstr "Выберите документ для анализа"
-
-#~ msgid "Select an audio file..."
-#~ msgstr "Выберите аудиофайл для расшифровки..."
-
-#~ msgid "Select Audio File to Transcribe"
-#~ msgstr "Выберите аудиофайл для расшифровки"
-
-#~ msgid ""
-#~ "## Changes for 2.8\n"
-#~ "*   **Added Italian translation.**\n"
-#~ "*   **Status Reporting:** Added a new command (`NVDA+Control+Shift+I`) to "
-#~ "announce the current status.\n"
-#~ "*   **HTML Export:** \"Save Content\" now saves as formatted HTML.\n"
-#~ "*   **Settings UI:** Improved layout with accessible grouping.\n"
-#~ "*   **New Models:** Added `gemini-flash-latest` and `gemini-flash-lite-"
-#~ "latest`.\n"
-#~ "*   **Languages:** Added **Nepali**.\n"
-#~ "*   **Refine Menu Logic:** Fixed a bug where commands failed in non-"
-#~ "English interfaces.\n"
-#~ "*   **Dictation:** Improved silence detection.\n"
-#~ "*   **Update Settings:** Auto-update check is now disabled by default.\n"
-#~ "*   **Code Cleanup.**"
-#~ msgstr ""
-#~ "## Изменения в версии 2.8\n"
-#~ "*   **Добавлен итальянский перевод.**\n"
-#~ "*   **Отчёт о состоянии:** Добавлена новая команда (`NVDA+Control+Shift"
-#~ "+I`) для озвучивания текущего статуса.\n"
-#~ "*   **Экспорт в HTML:** \"Сохранить содержимое\" теперь сохраняет в виде "
-#~ "форматированного HTML.\n"
-#~ "*   **Интерфейс настроек:** Улучшена компоновка с доступной "
-#~ "группировкой.\n"
-#~ "*   **Новые модели:** Добавлены `gemini-flash-latest` и `gemini-flash-"
-#~ "lite-latest`.\n"
-#~ "*   **Языки:** Добавлен **непальский**.\n"
-#~ "*   **Логика меню улучшения:** Исправлена ошибка, из-за которой команды "
-#~ "не работали в неанглийских интерфейсах.\n"
-#~ "*   **Диктовка:** Улучшено определение тишины.\n"
-#~ "*   **Настройки обновлений:** Автопроверка обновлений теперь по умолчанию "
-#~ "отключена.\n"
-#~ "*   **Рефакторинг кода.**"
-
-#~ msgid "Vision Assistant Error"
-#~ msgstr "Ошибка Vision Assistant"
-
-#~ msgid "Save to File"
-#~ msgstr "Сохранить в файл..."
-
-#~ msgid "--- Languages ---"
-#~ msgstr "--- Языки ---"
-
-#~ msgid "--- CAPTCHA Mode ---"
-#~ msgstr "--- Режим CAPTCHA ---"
-
-#~ msgid "--- Custom Prompts (Name:Content) ---"
-#~ msgstr "--- Пользовательские подсказки (Имя:Содержимое) ---"
-
-#~ msgid "Vision Assistant"
-#~ msgstr "Vision Assistant"
-
-#~ msgid "Vision Assistant - Chat"
-#~ msgstr "Vision Assistant — Чат"
-
-#~ msgid ""
-#~ "• Added Russian translation support. (Thanks to nvda-ru)\n"
-#~ "• Updated error messages to provide more descriptive feedback regarding "
-#~ "connectivity.\n"
-#~ "• Added File Selection & OCR (NVDA+Ctrl+Shift+Insert+F)"
-#~ msgstr ""
-#~ "• Добавлена поддержка русского перевода. (Спасибо nvda-ru)\n"
-#~ "• Обновлены сообщения об ошибках для более детальной обратной связи о "
-#~ "подключении.\n"
-
-#~ msgid "Critical Dictation Failure."
-#~ msgstr "Критический сбой диктовки."
-
-#~ msgid "Translation failed. Check your API Key or Internet."
-#~ msgstr ""
-#~ "Не удалось выполнить перевод. Проверьте ключ API или подключение к "
-#~ "Интернету."
-
-#~ msgid "File upload failed."
-#~ msgstr "Не удалось загрузить файл."
-
-#~ msgid "Error processing document."
-#~ msgstr "Ошибка обработки документа."
-
-#~ msgid "Vision analysis failed."
-#~ msgstr "Не удалось выполнить анализ изображения."
-
-#~ msgid "Transcription failed."
-#~ msgstr "Не удалось выполнить расшифровку."
-
-#~ msgid "Audio processing error."
-#~ msgstr "Ошибка обработки аудио."
-
-#~ msgid "Auto-detect"
-#~ msgstr "Автоопределение"
-
-#~ msgid ""
-#~ "\n"
-#~ "Role: Translator.\n"
-#~ "Directives:\n"
-#~ "1. Translate text inside \"===\" to {target_lang}.\n"
-#~ "2. IF SmartSwap={smart_swap} AND input is {target_lang} THEN translate to "
-#~ "{swap_target}.\n"
-#~ "3. Output ONLY the translation.\n"
-#~ "\n"
-#~ "Text:\n"
-#~ "===\n"
-#~ "{text_content}\n"
-#~ "===\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Роль: Переводчик.\n"
-#~ "Директивы:\n"
-#~ "1. Переведите текст внутри \"===\" на {target_lang}.\n"
-#~ "2. ЕСЛИ SmartSwap={smart_swap} И исходный текст на {target_lang}, ТО "
-#~ "переведите на {swap_target}.\n"
-#~ "3. Выводите ТОЛЬКО перевод.\n"
-#~ "\n"
-#~ "Текст:\n"
-#~ "===\n"
-#~ "{text_content}\n"
-#~ "===\n"
-
-#~ msgid ""
-#~ "Analyze UI (Size: {width}x{height}). Request: '{query}'. Output JSON: "
-#~ "{{\"x\": int, \"y\": int, \"found\": bool}}."
-#~ msgstr ""
-#~ "Проанализируйте интерфейс (размер: {width}x{height}). Запрос: '{query}'. "
-#~ "Вывод JSON: {{\"x\": int, \"y\": int, \"found\": bool}}."
-
-#~ msgid ""
-#~ "\n"
-#~ "You: {question}\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Вы: {question}\n"
-
-#~ msgid "Transcribe speech. Use native script. No Fingilish. Fix stutters."
-#~ msgstr ""
-#~ "Расшифруйте речь. Используйте родную письменность. Без транслитерации. "
-#~ "Исправляйте запинки."
-
-#~ msgid "Dictation Error."
-#~ msgstr "Ошибка диктовки."
-
-#~ msgid "Typed: {preview}"
-#~ msgstr "Введено: {preview}"
-
-#~ msgid "Custom: {name}"
-#~ msgstr "Пользовательский: {name}"
-
-#~ msgid "Files|*.*"
-#~ msgstr "Файлы|*.*"
-
-#~ msgid "Images/PDF/TIFF|*.png;*.jpg;*.webp;*.pdf;*.tif;*.tiff"
-#~ msgstr "Изображения/PDF/TIFF|*.png;*.jpg;*.webp;*.pdf;*.tif;*.tiff"
-
-#~ msgid "Documents|*.txt;*.py;*.md;*.html;*.pdf;*.tif;*.tiff"
-#~ msgstr "Документы|*.txt;*.py;*.md;*.html;*.pdf;*.tif;*.tiff"
-
-#~ msgid "Audio|*.mp3;*.wav;*.ogg"
-#~ msgstr "Аудио|*.mp3;*.wav;*.ogg"
-
-#~ msgid "If text is in {lang}, translate to {fallback}."
-#~ msgstr "Если текст на {lang}, переведите на {fallback}."
-
-#~ msgid ""
-#~ "Fix grammar and translate to {lang}. {swap_instr} Output ONLY the result."
-#~ msgstr ""
-#~ "Исправьте грамматику и переведите на {lang}. {swap_instr} Выводите ТОЛЬКО "
-#~ "результат."
-
-#~ msgid "Summarize the text below in {lang}."
-#~ msgstr "Обобщите текст ниже на {lang}."
-
-#~ msgid "Explain the text below in {lang}."
-#~ msgstr "Объясните текст ниже на {lang}."
-
-#~ msgid "Extract text."
-#~ msgstr "Извлеките текст."
-
-#~ msgid ""
-#~ "\n"
-#~ "File Content:\n"
-#~ "{txt}\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Содержимое файла:\n"
-#~ "{txt}\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "---\n"
-#~ "Input Text:\n"
-#~ "{text}\n"
-#~ "---\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "---\n"
-#~ "Исходный текст:\n"
-#~ "{text}\n"
-#~ "---\n"
-
-#~ msgid ""
-#~ "Context Text: {orig}\n"
-#~ "\n"
-#~ "Task: Answer questions."
-#~ msgstr ""
-#~ "Текст контекста: {orig}\n"
-#~ "\n"
-#~ "Задача: Ответить на вопросы."
-
-#~ msgid "Doc|*.pdf;*.tif;*.tiff;*.txt;*.py;*.md"
-#~ msgstr "Документы|*.pdf;*.tif;*.tiff;*.txt;*.py;*.md"
-
-#~ msgid "Loading..."
-#~ msgstr "Загрузка..."
-
-#~ msgid "TIFF loaded ({pages} pages)."
-#~ msgstr "TIFF загружен ({pages} страниц)."
-
-#~ msgid "Binary"
-#~ msgstr "Бинарные данные"
-
-#~ msgid "{question} (STRICTLY Respond in {lang})"
-#~ msgstr "{question} (ОБЯЗАТЕЛЬНО отвечайте на {lang})"
-
-#~ msgid ""
-#~ "Document Content:\n"
-#~ "{doc_text}\n"
-#~ "\n"
-#~ "Task: Analyze. Language: {lang}."
-#~ msgstr ""
-#~ "Содержимое документа:\n"
-#~ "{doc_text}\n"
-#~ "\n"
-#~ "Задача: Проанализировать. Язык: {lang}."
-
-#~ msgid "Analyze this file. Respond in {lang}."
-#~ msgstr "Проанализируйте этот файл. Отвечайте на {lang}."
-
-#~ msgid ""
-#~ "Analyze this image and describe it. Language: {lang}. Ensure the response "
-#~ "is strictly in {lang}."
-#~ msgstr ""
-#~ "Проанализируйте это изображение и опишите его. Язык: {lang}. Убедитесь, "
-#~ "что ответ строго на {lang}."
-
-#~ msgid "{question} (Answer strictly in {lang})"
-#~ msgstr "{question} (Отвечайте строго на {lang})"
-
-#~ msgid "Image Context. Target Language: {lang}"
-#~ msgstr "Контекст изображения. Целевой язык: {lang}"
-
-#~ msgid "Transcribe in {lang}."
-#~ msgstr "Расшифруйте на {lang}."
-
-#~ msgid "Vision Assistant - Audio Transcript"
-#~ msgstr "Vision Assistant — Расшифровка аудио"
-
-#~ msgid "Error."
-#~ msgstr "Ошибка."
-
-#~ msgid "پنجره ملی خدمات دولت هوشمند"
-#~ msgstr "پنجره ملی خدمات دولت هوشمند"
-
-#~ msgid "Blind user. Return CAPTCHA code only."
-#~ msgstr "Невидящий пользователь. Верните только код CAPTCHA."
-
-#~ msgid " Read 5 Persian digits, convert to English."
-#~ msgstr " Прочтите 5 персидских цифр, преобразуйте в английские."
-
-#~ msgid " Convert to English digits."
-#~ msgstr " Преобразуйте в английские цифры."
-
-#~ msgid "Last: {text}"
-#~ msgstr "Последний перевод: {text}"
+"## Изменения в версии 3.0.2\n"
+"*   **Пакетное распознавание текста:** Добавлена поддержка выбора и обработки нескольких изображений или PDF-"
+"файлов одновременно. Файлы теперь обрабатываются в алфавитном порядке.\n"
+"*   **Исправление совместимости:** Библиотека `markdown` включена в состав дополнения для устранения ошибок "
+"запуска (ModuleNotFoundError) в NVDA 2024.3+ и обеспечения стабильности во всех версиях.\n"
+"*   **Безопасность кода:** Реализован более безопасный механизм импорта для предотвращения конфликтов с "
+"другими дополнениями или внутренними библиотеками NVDA.\n"
+"*   **Перевод:** Исправлена проблема, из-за которой префикс \"Custom:\" в меню улучшения текста не переводился."
