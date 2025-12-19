@@ -60,6 +60,11 @@ tạo lệnh trong cài đặt: `Name:Prompt Text` (tách biệt với `|` hoặ
 
 **Lưu ý:** File tải lên giới hạn đến 15MB. yêu cầu internet. Nhiều-trang TIFFs hỗ trợ.
 
+## Thay đổi cho 3.1.0
+
+*   **Chế độ đầu ra trực tiếp:** Đã thêm tùy chọn bỏ qua hộp thoại trò chuyện và nghe phản hồi AI trực tiếp qua giọng nói để có trải nghiệm nhanh hơn và liền mạch hơn.
+*   **Tích hợp bộ nhớ tạm:** Đã thêm cài đặt mới để tự động sao chép phản hồi AI vào bảng nhớ tạm.
+
 ## THAY ĐỔI CHO 3.0
 
 *   **NGÔN NGỮ MỚI:** đã thêm bản dịch  **Persian** VÀ **Vietnamese** 
