@@ -11,7 +11,7 @@ _Add-on ini dirilis untuk komunitas sebagai penghormatan terhadap Hari Internasi
 Buka **Menu NVDA > Preferensi > Pengaturan > Vision Assistant Pro**.
 
 - **API Key (Kunci API):** Wajib. Kolom ini disembunyikan secara default demi keamanan (gunakan "Show API Key" untuk melihat isinya). Dapatkan kunci gratis dari [Google AI Studio](https://aistudio.google.com/).
-- **Model:** Pilih model Gemini Flash terbaru.
+- **Model:** Pilih antara model **Flash** (Tercepat/Gratis) atau **Pro** (Kecerdasan Tinggi) berdasarkan kebutuhan Anda.
 - **Languages (Bahasa):** Atur bahasa Sumber, Target, dan Respon AI.
 - **Smart Swap:** Secara otomatis menukar bahasa jika teks sumber cocok dengan bahasa target.
 - **Direct Output (Output Langsung):** Melewati jendela obrolan dan membacakan respon langsung melalui suara (speech).
