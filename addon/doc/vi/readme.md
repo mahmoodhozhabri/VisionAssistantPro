@@ -8,32 +8,37 @@ _Tiện ích bổ sung này được phát hành ra cộng đồng để vinh da
 
 ## 1. Cài đặt & Cấu hình
 
-đi đến **NVDA Menu > Preferences > Settings > Vision Assistant Pro**.
+đi đến **NVDA Trình đơn > Tùy Chọn > Cài Đặt > Vision Assistant Pro**.
 
 - **API Key:** Yêu cầu. Nhận khóa miễn phí từ [Google AI Studio](https://aistudio.google.com/).
-- **Mô hình:** Chọn `gemini-2.5-flash-lite` (Nhanh nhất) hoặc các mẫu Flash tiêu chuẩn.
+- **Mô hình:** Chọn giữa các mẫu **Flash** (Nhanh nhất/Miễn phí) hoặc **Pro** (Thông minh cao) dựa trên nhu cầu của bạn.
 - **Ngôn ngữ:** Đặt ngôn ngữ Nguồn, đích và Phản hồi AI.
 - **Chuyển đổi thông minh:** Tự động hoán đổi ngôn ngữ nếu văn bản nguồn khớp với ngôn ngữ đích.
+- **Đầu ra trực tiếp:** Bỏ qua cửa sổ trò chuyện và thông báo phản hồi trực tiếp qua lời nói.
+- **Tích hợp bộ nhớ tạm:** Tự động sao chép phản hồi AI vào bộ nhớ tạm.
 
-## 2. Phím tắt chung
+## 2. Lớp lệnh và phím tắt
 
-Để đảm bảo khả năng tương thích tối đa với bố cục máy tính xách tay, tất cả các phím tắt đều sử dụng **NVDA + Control + Shift**.
+Để tránh xung đột bàn phím, tiện ích bổ sung này sử dụng **Lớp lệnh**.
+
+1. Nhấn **NVDA + Shift + V** (Master Key) để kích hoạt lớp (bạn sẽ nghe thấy tiếng bíp).
+2. Nhả phím, sau đó nhấn một trong các phím đơn sau:
 
 | phím tắt                    | chức năng             | mô tả                                                                 |
 |-----------------------------|----------------------|-----------------------------------------------------------------------------|
-| NVDA+Ctrl+Shift+T           | trình dịch thông minh     | Dịch văn bản dưới con trỏ điều hướng. Ưu tiên lựa chọn.      |
-| NVDA+Ctrl+Shift+Y           | Dịch từ bộ nhớ | dịch nội dng trong bộ nhớ. **khuyên dùng cho trình duyệt web**.            |
-| NVDA+Ctrl+Shift+S           | Đọc chính tả thông minh       | Chuyển đổi lời nói thành văn bản. Nhấn một lần để bắt đầu, một lần nữa để dừng và gõ.       |
-| NVDA+Ctrl+Shift+R           | Tinh chỉnh văn bản         | Tóm tắt, sửa lỗi ngữ pháp, giải thích hoặc chạy **Prompts Tùy chỉnh**.                 |
-| NVDA+Ctrl+Shift+C           | Giải CAPTCHA        | Tự động chụp và giải CAPTCHA.                                 |
-| NVDA+Ctrl+Shift+V           | nhìn đối tượng        | Mô tả đối tượng điều hướng với cuộc trò chuyện tiếp theo.                         |
-| NVDA+Ctrl+Shift+O           | nhìn toàn màn hình    | Phân tích toàn bộ bố cục và nội dung màn hình.                                  |
-| NVDA+Ctrl+Shift+D           | Hỏi đáp tài liệu     | Trò chuyện với PDF/TXT/MD/PY files.                                              |
-| NVDA+Ctrl+Shift+F           | File OCR             | OCR trực tiếp từ image/PDF file.                                             |
-| NVDA+Ctrl+Shift+A           |Phiên âm âm thanh    | phiên âm MP3/WAV/OGG files.                                               |
-| NVDA+Ctrl+Shift+L           | bản dịch cuối cùng     | đọc-lại bản dịch cuối cùng không có API.                                      |
-| NVDA+Ctrl+Shift+U           | kiểm tra cập nhật         | Kiểm tra GitHub cho phiên bản mới nhất.                                            |
-| NVDA+Ctrl+Shift+I           | Đọc trạng thái     | Thông báo tình trạng hiện tại (e.g., "Đang tải lên...", "Idle").                |
+| **T**           | trình dịch thông minh     | Dịch văn bản dưới con trỏ điều hướng. Ưu tiên lựa chọn.      |
+| **Shift + T**           | Dịch từ bộ nhớ | dịch nội dng trong bộ nhớ. **khuyên dùng cho trình duyệt web**.            |
+| **S**           | Đọc chính tả thông minh       | Chuyển đổi lời nói thành văn bản. Nhấn một lần để bắt đầu, một lần nữa để dừng và gõ.       |
+| **R**           | Tinh chỉnh văn bản         | Tóm tắt, sửa lỗi ngữ pháp, giải thích hoặc chạy **Prompts Tùy chỉnh**.                 |
+| **C**           | Giải CAPTCHA        | Tự động chụp và giải CAPTCHA.                                 |
+| **V**           | hỗ trợ nhìn đối tượng        | Mô tả đối tượng điều hướng với cuộc trò chuyện tiếp theo.                         |
+| **O**           | hỗ trợ nhìn toàn màn hình    | Phân tích toàn bộ bố cục và nội dung màn hình.                                  |
+| **Shift + V** | Phân tích video trực tuyến | Phân tích video **YouTube** hoặc **Instagram** qua URL.                        |
+| **D**           | Hỏi đáp tài liệu     | Trò chuyện với PDF/TXT/MD/PY files.                                              |
+| **F**           | File OCR             | OCR trực tiếp từ image/PDF file.                                             |
+| **A**           |Phiên âm âm thanh    | phiên âm MP3/WAV/OGG files.                                               |
+| **L**         | Báo cáo trạng thái | Thông báo trạng thái hiện tại (ví dụ: "Đang tải lên...", "Không hoạt động").                |
+| **U**           | kiểm tra cập nhật         | Kiểm tra GitHub cho phiên bản mới nhất.                                            |
 
 ## 3. tùy chỉnh Prompts & biến
 
@@ -58,7 +63,12 @@ tạo lệnh trong cài đặt: `Name:Prompt Text` (tách biệt với `|` hoặ
 - **Analyze Audio:** `Summarize Audio:Listen to this recording and summarize the main points. [file_audio]`
 - **Code Debugger:** `Debug:Find bugs in this code and explain them: [selection]`
 
-**Lưu ý:** File tải lên giới hạn đến 15MB. yêu cầu internet. Nhiều-trang TIFFs hỗ trợ.
+**Lưu ý:** Cần có kết nối internet hoạt động cho tất cả các tính năng AI. TIFF nhiều trang được xử lý tự động.
+
+## Thay đổi cho 3.5.0
+
+*   **Lớp lệnh:** Giới thiệu hệ thống Lớp Lệnh (mặc định: `NVDA+Shift+V`) để nhóm các phím tắt dưới một phím chính duy nhất. Ví dụ, thay vì nhấn `NVDA+Control+Shift+T` để dịch, bây giờ bạn nhấn `NVDA+Shift+V` theo sau là `T`.
+*   **Phân tích video trực tuyến:** Đã thêm một tính năng mới để phân tích video YouTube và Instagram trực tiếp bằng cách cung cấp URL.
 
 ## Thay đổi cho 3.1.0
 

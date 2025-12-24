@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: VisionAssistant 3.1.0\n"
+"Project-Id-Version: VisionAssistant 3.5.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2025-12-14 14:22+0000\n"
-"PO-Revision-Date: 2025-12-19 19:01+0700\n"
+"PO-Revision-Date: 2025-12-24 08:14+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -322,7 +322,12 @@ msgstr "Định dạng: Tên: Nội dung"
 #: addon/globalPlugins/visionAssistant/__init__.py:1399
 #: addon/globalPlugins/visionAssistant/__init__.py:1405
 msgid "Idle"
-msgstr "Idle"
+msgstr "Không hoạt động"
+
+#. Translators: Script description for Input Gestures dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:764
+msgid "Activates the Command Layer for quick access to all features."
+msgstr "Kích hoạt lớp lệnh để truy cập nhanh tất cả các tính năng."
 
 #. Translators: Script description for Input Gestures dialog
 #: addon/globalPlugins/visionAssistant/__init__.py:629
@@ -604,6 +609,46 @@ msgstr "Đang tải lên..."
 msgid "Error processing audio."
 msgstr "Lỗi xử lý âm thanh."
 
+#. Translators: Script description for Input Gestures dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:1725
+msgid "Analyzes a YouTube video URL."
+msgstr "Phân tích URL video YouTube."
+
+#. Translators: Title for the YouTube URL entry dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:1732
+msgid "YouTube / Instagram Analysis"
+msgstr "Phân tích YouTube / Instagram"
+
+#. Translators: Label for the text entry in YouTube dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:1734
+msgid "Enter Video URL (YouTube/Instagram):"
+msgstr "Nhập URL video (YouTube/Instagram):"
+
+#. Translators: Message reported when processing YouTube link
+#: addon\globalPlugins\visionAssistant\__init__.py:1745
+msgid "Processing Video..."
+msgstr "Đang sử lí video..."
+
+#. Translators: Error message when Instagram video link cannot be found
+#: addon\globalPlugins\visionAssistant\__init__.py:1757
+msgid "Error: Could not extract Instagram video."
+msgstr "Lỗi: Không thể giải nén video Instagram."
+
+#. Translators: Message reported when downloading Instagram video
+#: addon\globalPlugins\visionAssistant\__init__.py:1761
+msgid "Downloading Video..."
+msgstr "Đang tải video..."
+
+#. Translators: Error message when video download fails
+#: addon\globalPlugins\visionAssistant\__init__.py:1766
+msgid "Error: Download failed."
+msgstr "Lỗi: Tải thất bại."
+
+#. Translators: Message reported when uploading video to AI
+#: addon\globalPlugins\visionAssistant\__init__.py:1770
+msgid "Uploading to AI..."
+msgstr "Đang tải đến AI..."
+
 #. Reset status on failure
 #. Translators: Script description for Input Gestures dialog
 #: addon/globalPlugins/visionAssistant/__init__.py:1370
@@ -673,41 +718,47 @@ msgstr "Vision Assistant Pro"
 #: buildVars.py:13
 msgid ""
 "An advanced AI assistant for NVDA using Gemini models.\n"
-"Features:\n"
-"- Smart Translator (NVDA+Ctrl+Shift+T/Y)\n"
-"- Smart Dictation (NVDA+Ctrl+Shift+S)\n"
-"- Text Refiner (NVDA+Ctrl+Shift+R)\n"
-"- Vision & Screen Analysis (NVDA+Ctrl+Shift+V/O)\n"
-"- Document QA (NVDA+Ctrl+Shift+D)\n"
-"- CAPTCHA Solver (NVDA+Ctrl+Shift+C)\n"
-"- Audio Transcription (NVDA+Ctrl+Shift+A)\n"
-"- File Selection & OCR (NVDA+Ctrl+Shift+F)\n"
-"- Status Reporting (NVDA+Ctrl+Shift+I)"
+"Command Layer: Press NVDA+Shift+V, then:\n"
+"- Smart Translator (T) / Clipboard (Shift+T)\n"
+"- Text Refiner (R)\n"
+"- Describe Object (V) / Full Screen (O)\n"
+"- Online Video Analysis (Shift+V)\n"
+"- Document QA (D)\n"
+"- File OCR (F)\n"
+"- CAPTCHA Solver (C)\n"
+"- Audio Transcription (A)\n"
+"- Smart Dictation (S)\n"
+"- Announce Status (L)\n"
+"- Check Update (U)"
 msgstr ""
-"Trợ lý AI nâng cao dành cho NVDA sử dụng mô hình Gemini.\n"
-"Tính năng:\n"
-"- Dịch thông minh (NVDA+Ctrl+Shift+T/Y)\n"
-"- Chuyển đổi chính tả thông minh (NVDA+Ctrl+Shift+S)\n"
-"- Tinh chỉnh văn bản (NVDA+Ctrl+Shift+R)\n"
-"- Phân tích hình ảnh & màn hình (NVDA+Ctrl+Shift+V/O)\n"
-"- Hỏi đáp tài liệu (NVDA+Ctrl+Shift+D)\n"
-"- Giải CAPTCHA (NVDA+Ctrl+Shift+C)\n"
-"- Phiên âm âm thanh (NVDA+Ctrl+Shift+A)\n"
-"- Chọn file & OCR (NVDA+Ctrl+Shift+F)\n"
-"- Đọc trạng thái (NVDA+Ctrl+Shift+I)"
+"Một trợ lí AI nâng cao dành cho NVDA sử dngj mô hình Gemini.\n"
+"Lớp lệnh: Nhấn NVDA+shift+v sau đó:\n"
+"- Dịch thông minh (T) / Bộ nhớ  (Shift+T)\n"
+"- Tinh chỉnh văn bản (R)\n"
+"- Mô tả đối tượng (V) / toàn màn hình (O)\n"
+"- phân tích video trực tuyến (Shift+V)\n"
+"- Hỏi đáp tài liệu (D)\n"
+"- File OCR (F)\n"
+"- giải CAPTCHA (C)\n"
+"- Phiên âm âm thanh (A)\n"
+"- Đọc chính tả thông minh (S)\n"
+"- Thông báo trạng thái (L)\n"
+"- kiểm tra cập nhật (U)"
 
 #. Brief changelog for this version
 #. Translators: what's new content for the add-on version to be shown in the add-on store
-#: buildVars.py:27
+#: buildVars.py:29
 msgid ""
-"Changes for 3.1.0\n"
-"⦁\tDirect Output Mode: Added an option to skip the chat dialog and hear AI "
-"responses directly via speech for a faster and more seamless experience.\n"
-"⦁\tClipboard Integration: Added a new setting to automatically copy AI responses to "
-"the clipboard."
+"## Changes for 3.5.0\n"
+"*   **Command Layer:** Introduced a Command Layer system (default: `NVDA+Shift+V`) to group "
+"shortcuts under a single master key. For example, instead of pressing "
+"`NVDA+Control+Shift+T` for translation, you now press `NVDA+Shift+V` followed by `T`.\n"
+"*   **Online Video Analysis:** Added a new feature to analyze YouTube and Instagram videos "
+"directly by providing a URL."
 msgstr ""
-"Thay đổi cho3.1.0\n"
-"⦁\tChế độ đầu ra trực tiếp: Đã thêm tùy chọn bỏ qua hộp thoại trò chuyện và nghe AI "
-"phản hồi trực tiếp qua lời nói để có trải nghiệm nhanh hơn và liền mạch hơn.\n"
-"⦁\tTích hợp bộ nhớ tạm: Đã thêm cài đặt mới để tự động sao chép AI Phản hồi vạo bộ "
-"nhớ tạm."
+"## Thay đổi cho 3.5.0\n"
+"*   **Lớp lệnh:** Giới thiệu hệ thống Lớp Lệnh (mặc định: `NVDA+Shift+V`) để nhóm các phím "
+"tắt dưới một phím chính duy nhất. Ví dụ, thay vì nhấn `NVDA+Control+Shift+T` để dịch, bây "
+"giờ bạn nhấn `NVDA+Shift+V` theo sau là `T`.\n"
+"*   **Phân tích video trực tuyến:** Đã thêm một tính năng mới để phân tích video YouTube và "
+"Instagram trực tiếp bằng cách cung cấp URL."
