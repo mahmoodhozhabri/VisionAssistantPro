@@ -12,6 +12,8 @@ Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**.
 
 - **API Key:** Required. The field is masked by default for security (use "Show API Key" to view). Get a free key from [Google AI Studio](https://aistudio.google.com/).
 - **Model:** Choose between **Flash** (Fastest/Free) or **Pro** (High Intelligence) models based on your needs.
+- **Proxy URL:** Optional. Use this if Google is blocked in your region. You need a server address (URL) that receives your requests and forwards them to the Gemini API.
+  > **Note:** This is **not** for standard VPN/SOCKS proxies (like `127.0.0.1:1080`). It must be a web address (e.g., `https://my-custom-proxy.com`) that acts as a bridge to Google.
 - **Languages:** Set Source, Target, and AI Response languages.
 - **Smart Swap:** Automatically swaps languages if the source text matches the target language.
 - **Direct Output:** Skips the chat window and announces the response directly via speech.
@@ -64,7 +66,7 @@ Create commands in Settings: `Name:Prompt Text` (separate with `|` or new lines)
 
 **Note:** An active internet connection is required for all AI features. Multi-page TIFFs are automatically processed.
 
-\## Changes for 3.5.0
+## Changes for 3.5.0
 \*   \*\*Command Layer:\*\* Introduced a Command Layer system (default: `NVDA+Shift+V`) to group shortcuts under a single master key. For example, instead of pressing `NVDA+Control+Shift+T` for translation, you now press `NVDA+Shift+V` followed by `T`.
 \*   \*\*Online Video Analysis:\*\* Added a new feature to analyze YouTube and Instagram videos directly by providing a URL.
 
