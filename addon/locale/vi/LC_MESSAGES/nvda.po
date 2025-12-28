@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: VisionAssistant 3.5.0\n"
+"Project-Id-Version: VisionAssistant 3.6.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2025-12-14 14:22+0000\n"
-"PO-Revision-Date: 2025-12-24 08:14+0700\n"
+"PO-Revision-Date: 2025-12-28 07:00+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -17,6 +17,77 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.8\n"
+
+#. Translators: Label for the button to copy the TON cryptocurrency wallet address.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:17
+msgid "Copy TON Address"
+msgstr "sao chép địa chỉ TON"
+
+#. Translators: Label for the button to copy the USDT (TRC20 network) wallet address.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:19
+msgid "Copy USDT (TRC20) Address"
+msgstr "Sao chép địa chỉ USDT (TRC20)"
+
+#. Translators: Button to dismiss the donation dialog without taking any action.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:25
+msgid "Maybe Later"
+msgstr "để sau"
+
+#. Translators: Success message shown after a wallet address is copied to the clipboard.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:36
+msgid ""
+"Address copied to clipboard! If you'd like, you can now proceed to your wallet "
+"and donate any amount you can. Your support is greatly appreciated!"
+msgstr ""
+"Đã sao chép địa chỉ vào bộ nhớ! Nếu muốn, bây giờ bạn có thể chuyển tới ví của "
+"mình và quyên góp bất kỳ số tiền nào bạn muốn. Sự hỗ trợ của bạn được đánh giá "
+"rất cao!"
+
+#. Translators: Title for the success message box.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:38
+msgid "Success"
+msgstr "Thành công"
+
+#. Translators: Title of the donation request dialog.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:49
+#, python-brace-format
+msgid "Support the Future of {name}"
+msgstr "Hỗ trợ tương lai của {name}"
+
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:53
+#, python-brace-format
+msgid ""
+"{name} is a project born from a personal vision to bridge the gap between AI "
+"and true accessibility. The initial concept and many of the features you enjoy "
+"were created from my own ideas to solve real challenges and provide a new "
+"level of digital independence.\n"
+"\n"
+"I take great pride in thinking through every detail and turning both my own "
+"innovations and your valuable requests into reality. Ensuring this tool "
+"remains fast, stable, and constantly evolving is a continuous creative journey "
+"that I am passionate about pursuing.\n"
+"\n"
+"If this assistant has brought value to your daily life, your support is a "
+"wonderful way to show appreciation for the original work and the dedication "
+"behind it. It provides the extra motivation to keep the inspiration alive and "
+"ensures we can continue to push the boundaries together. Thank you for being "
+"part of this mission!"
+msgstr ""
+"{name} là một dự án ra đời từ tầm nhìn cá nhân nhằm thu hẹp khoảng cách giữa "
+"AI và khả năng tiếp cận thực sự. Ý tưởng ban đầu và nhiều tính năng mà bạn yêu "
+"thích được tạo ra từ ý tưởng của riêng tôi nhằm giải quyết những thách thức "
+"thực sự và mang lại mức độ độc lập kỹ thuật số mới.\n"
+"\v\n"
+"\vTôi rất tự hào khi suy nghĩ thấu đáo từng chi tiết và biến những đổi mới của "
+"riêng tôi cũng như những yêu cầu có giá trị của bạn thành hiện thực. Đảm bảo "
+"công cụ này hoạt động nhanh, ổn định và không ngừng phát triển là một hành "
+"trình sáng tạo không ngừng mà tôi đam mê theo đuổi.\n"
+"\v\n"
+"\vNếu trợ lý này đã mang lại giá trị cho cuộc sống hàng ngày của bạn thì sự hỗ "
+"trợ của bạn là một cách tuyệt vời để thể hiện sự đánh giá cao đối với công "
+"việc ban đầu và sự cống hiến đằng sau nó. Nó cung cấp thêm động lực để duy trì "
+"nguồn cảm hứng và đảm bảo chúng ta có thể tiếp tục cùng nhau vượt qua các ranh "
+"giới. Cảm ơn bạn đã là một phần của sứ mệnh này!"
 
 #. --- 1. Recommended (Auto-Updating) ---
 #. Translators: AI Model info. [Auto] = Automatic updates. (Latest) = Newest version.
@@ -609,20 +680,35 @@ msgstr "Đang tải lên..."
 msgid "Error processing audio."
 msgstr "Lỗi xử lý âm thanh."
 
-#. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1725
-msgid "Analyzes a YouTube video URL."
-msgstr "Phân tích URL video YouTube."
+#. Translators: Message reported when analyzing YouTube video
+#: addon\globalPlugins\visionAssistant\__init__.py:1876
+msgid "Analyzing YouTube..."
+msgstr "Đang phân tích YouTube"
 
-#. Translators: Title for the YouTube URL entry dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1732
-msgid "YouTube / Instagram Analysis"
-msgstr "Phân tích YouTube / Instagram"
+#. Translators: Title for the video URL entry dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:1794
+msgid "YouTube / Instagram / Twitter Analysis"
+msgstr "Phân tích YouTube / Instagram / Twitter"
 
 #. Translators: Label for the text entry in YouTube dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1734
-msgid "Enter Video URL (YouTube/Instagram):"
-msgstr "Nhập URL video (YouTube/Instagram):"
+#. Translators: Label for the text entry in video dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:1796
+msgid "Enter Video URL (YouTube/Instagram/Twitter):"
+msgstr "Nhập URL video (YouTube/Instagram/Twitter):"
+
+#. Translators: Error message when the URL is invalid
+#: addon\globalPlugins\visionAssistant\__init__.py:1811
+#: addon\globalPlugins\visionAssistant\__init__.py:1814
+msgid "Error: Invalid URL."
+msgstr "Lỗi: URL không hợp lệ."
+
+#. Translators: Error message when the platform is not supported
+#: addon\globalPlugins\visionAssistant\__init__.py:1823
+msgid ""
+"Error: Unsupported platform. Only YouTube, Instagram, and Twitter are "
+"supported."
+msgstr ""
+"Lỗi: Nền tảng không được hỗ trợ. Chỉ hỗ trợ YouTube, Instagram và Twitter."
 
 #. Translators: Message reported when processing YouTube link
 #: addon\globalPlugins\visionAssistant\__init__.py:1745
@@ -633,6 +719,11 @@ msgstr "Đang sử lí video..."
 #: addon\globalPlugins\visionAssistant\__init__.py:1757
 msgid "Error: Could not extract Instagram video."
 msgstr "Lỗi: Không thể giải nén video Instagram."
+
+#. Translators: Error message for Twitter extraction failure
+#: addon\globalPlugins\visionAssistant\__init__.py:1842
+msgid "Error: Could not extract Twitter video."
+msgstr "Lỗi: Không thể giải nén video Twitter."
 
 #. Translators: Message reported when downloading Instagram video
 #: addon\globalPlugins\visionAssistant\__init__.py:1761
@@ -675,6 +766,16 @@ msgstr "Captcha: {text}"
 #: addon/globalPlugins/visionAssistant/__init__.py:1415
 msgid "Checks for updates manually."
 msgstr "Kiểm tra cập nhật bằng tay."
+
+#: addon\globalPlugins\visionAssistant\__init__.py:866
+msgid "Shows a list of available commands in the layer."
+msgstr "Hiển thị danh sách các lệnh có sẵn trong lớp."
+
+#. Translators: Title of the help dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:870
+#, python-brace-format
+msgid "{name} Help"
+msgstr "{name} Trợ giúp"
 
 #. Translators: Message reported when calling the update command
 #: addon/globalPlugins/visionAssistant/__init__.py:1418
@@ -749,16 +850,21 @@ msgstr ""
 #. Translators: what's new content for the add-on version to be shown in the add-on store
 #: buildVars.py:29
 msgid ""
-"## Changes for 3.5.0\n"
-"*   **Command Layer:** Introduced a Command Layer system (default: `NVDA+Shift+V`) to group "
-"shortcuts under a single master key. For example, instead of pressing "
-"`NVDA+Control+Shift+T` for translation, you now press `NVDA+Shift+V` followed by `T`.\n"
-"*   **Online Video Analysis:** Added a new feature to analyze YouTube and Instagram videos "
-"directly by providing a URL."
+"## Changes for 3.6.0\n"
+"*   **Help System:** Added a help command (`H`) within the Command Layer to "
+"provide an easy-to-access list of all shortcuts and their functions.\n"
+"*   **Online Video Analysis:** Expanded support to include **Twitter (X)** "
+"videos. Also improved URL detection and stability for a more reliable "
+"experience.\n"
+"*   **Project Contribution:** Added an optional donation dialog for users who "
+"wish to support the project’s future updates and continuous growth."
 msgstr ""
-"## Thay đổi cho 3.5.0\n"
-"*   **Lớp lệnh:** Giới thiệu hệ thống Lớp Lệnh (mặc định: `NVDA+Shift+V`) để nhóm các phím "
-"tắt dưới một phím chính duy nhất. Ví dụ, thay vì nhấn `NVDA+Control+Shift+T` để dịch, bây "
-"giờ bạn nhấn `NVDA+Shift+V` theo sau là `T`.\n"
-"*   **Phân tích video trực tuyến:** Đã thêm một tính năng mới để phân tích video YouTube và "
-"Instagram trực tiếp bằng cách cung cấp URL."
+"## thay đổi cho 3.6.0\\n\n"
+"*   **Hệ thống trợ giúp:** Đã thêm lệnh trợ giúp (`H`) trong Lớp lệnh để cung "
+"cấp danh sách dễ truy cập gồm tất cả các phím tắt và chức năng của chúng.\\n\n"
+"*   **Phân tích video trực tuyến:** Hỗ trợ mở rộng để bao gồm các video "
+"**Twitter (X)**. Đồng thời cải thiện khả năng phát hiện và độ ổn định của URL "
+"để có trải nghiệm đáng tin cậy hơn.\\n\n"
+"*   **Đóng góp cho dự án:** Đã thêm tùy chọn  quyên góp hộp thoại cho những "
+"người dùng muốn hỗ trợ các bản cập nhật trong tương lai và sự phát triển liên "
+"tục của dự án."
