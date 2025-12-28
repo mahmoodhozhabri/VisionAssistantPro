@@ -12,6 +12,8 @@ _Tiện ích bổ sung này được phát hành ra cộng đồng để vinh da
 
 - **API Key:** Yêu cầu. Nhận khóa miễn phí từ [Google AI Studio](https://aistudio.google.com/).
 - **Mô hình:** Chọn giữa các mẫu **Flash** (Nhanh nhất/Miễn phí) hoặc **Pro** (Thông minh cao) dựa trên nhu cầu của bạn.
+- **Proxy URL:** Không bắt buộc. Sử dụng điều này nếu Google bị chặn trong khu vực của bạn. Bạn cần một địa chỉ máy chủ (URL) nhận yêu cầu của bạn và chuyển tiếp chúng đến API Gemini.
+  > **Lưu ý:** Điều này **không** dành cho proxy VPN/SOCKS tiêu chuẩn (như `127.0.0.1:1080`). Đó phải là một địa chỉ web (ví dụ: `https://my-custom-proxy.com`) đóng vai trò là cầu nối với Google.
 - **Ngôn ngữ:** Đặt ngôn ngữ Nguồn, đích và Phản hồi AI.
 - **Chuyển đổi thông minh:** Tự động hoán đổi ngôn ngữ nếu văn bản nguồn khớp với ngôn ngữ đích.
 - **Đầu ra trực tiếp:** Bỏ qua cửa sổ trò chuyện và thông báo phản hồi trực tiếp qua lời nói.
@@ -39,6 +41,7 @@ _Tiện ích bổ sung này được phát hành ra cộng đồng để vinh da
 | **A**           |Phiên âm âm thanh    | phiên âm MP3/WAV/OGG files.                                               |
 | **L**         | Báo cáo trạng thái | Thông báo trạng thái hiện tại (ví dụ: "Đang tải lên...", "Không hoạt động").                |
 | **U**           | kiểm tra cập nhật         | Kiểm tra GitHub cho phiên bản mới nhất.                                            |
+| **H** | Lệnh trợ giúp | Hiển thị danh sách đầy đủ tất cả các phím tắt có sẵn và mô tả của chúng trong lớp lệnh. |
 
 ## 3. tùy chỉnh Prompts & biến
 
@@ -64,6 +67,12 @@ tạo lệnh trong cài đặt: `Name:Prompt Text` (tách biệt với `|` hoặ
 - **Code Debugger:** `Debug:Find bugs in this code and explain them: [selection]`
 
 **Lưu ý:** Cần có kết nối internet hoạt động cho tất cả các tính năng AI. TIFF nhiều trang được xử lý tự động.
+
+## thay đổi cho 3.6.0
+
+*   **Hệ thống trợ giúp:** Đã thêm lệnh trợ giúp (`H`) trong Lớp lệnh để cung cấp danh sách dễ truy cập gồm tất cả các phím tắt và chức năng của chúng.
+*   **Phân tích video trực tuyến:** Hỗ trợ mở rộng để bao gồm các video **Twitter (X)**. Đồng thời cải thiện khả năng phát hiện và độ ổn định của URL để có trải nghiệm đáng tin cậy hơn.
+*   **Đóng góp cho dự án:** Đã thêm tùy chọn  quyên góp hộp thoại cho những người dùng muốn hỗ trợ các bản cập nhật trong tương lai và sự phát triển liên tục của dự án.
 
 ## Thay đổi cho 3.5.0
 
