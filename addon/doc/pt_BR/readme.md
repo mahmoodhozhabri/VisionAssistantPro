@@ -79,122 +79,111 @@ Você pode criar comandos personalizados poderosos de IA nas Configurações usa
 
 **Nota:** É necessária uma conexão ativa com a internet para todos os recursos de IA. Documentos com várias páginas e arquivos TIFF são processados automaticamente.
 
-## Alterações na versão 4.0
+## Alterações na versão 4.0.1
 
 - **Leitor Avançado de Documentos:** Novo visualizador poderoso para PDFs e imagens, com seleção de intervalo de páginas, processamento em segundo plano e navegação fluida com `Ctrl+PageUp/Down`.
-
 - **Novo Submenu de Ferramentas:** Adicionado um submenu dedicado "Vision Assistant" no menu Ferramentas do NVDA para acesso mais rápido aos recursos principais, configurações e documentação.
 - **Personalização Flexível:** Agora é possível escolher o motor de OCR e a voz TTS preferidos diretamente no painel de configurações.
-- **Suporte a Múltiplas Chaves de API:** Adicionado suporte a várias chaves de API do Gemini para garantir serviço contínuo.
-- **Motor OCR Alternativo:** Introduzido um novo motor de OCR para garantir reconhecimento confiável mesmo ao atingir limites de cota da API Gemini.
-- **Rotação Inteligente de Chaves de API:** Alterna automaticamente para a chave de API mais rápida disponível.
-- **Documento para Áudio:** Capacidade integrada de gerar e salvar arquivos de áudio (WAV) de alta qualidade a partir de páginas de documentos.
-- **Diálogo de Atualização Redesenhado:** Nova interface acessível com caixa de texto rolável para leitura clara das alterações.
-- **Status Unificado e UX:** Padronização dos diálogos de arquivo e melhoria do comando `L` para relatar progresso em tempo real.
+- **Suporte a Múltiplas Chaves de API:** Adicionado suporte a várias chaves de API do Gemini. Você pode inserir uma chave por linha ou separá-las por vírgulas nas configurações.
+- **Motor de OCR Alternativo:** Introduzido um novo motor de OCR para garantir reconhecimento confiável mesmo ao atingir limites de cota da API Gemini.
+- **Rotação Inteligente de Chaves de API:** Alterna automaticamente e memoriza a chave de API mais rápida em funcionamento para contornar limites de cota.
+- **Documento para MP3/WAV:** Capacidade integrada de gerar e salvar arquivos de áudio de alta qualidade nos formatos MP3 (128 kbps) e WAV diretamente no leitor.
+- **Suporte a Stories do Instagram:** Adicionada a capacidade de descrever e analisar Stories do Instagram usando suas URLs.
+- **Suporte ao TikTok:** Introduzido suporte a vídeos do TikTok, permitindo descrição visual completa e transcrição de áudio dos clipes.
+- **Diálogo de Atualização Redesenhado:** Nova interface acessível com caixa de texto rolável para leitura clara das alterações antes da instalação.
+- **Status Unificado e UX:** Padronização dos diálogos de arquivo em todo o complemento e melhoria do comando `L` para relatar progresso em tempo real.
 
 ## Alterações na versão 3.6.0
 
-- **Sistema de Ajuda:** Adicionado comando de ajuda (`H`) dentro da Camada de Comandos.
-
-- **Análise de Vídeo Online:** Suporte expandido para vídeos do **Twitter (X)**.
-- **Contribuição para o Projeto:** Adicionado diálogo opcional de doação.
+- **Sistema de Ajuda:** Adicionado um comando de ajuda (`H`) dentro da Camada de Comandos para acesso rápido à lista de atalhos e funções.
+- **Análise de Vídeo Online:** Suporte expandido para vídeos do **Twitter (X)**, com melhorias na detecção de URLs e estabilidade.
+- **Contribuição para o Projeto:** Adicionado um diálogo opcional de doação para apoiar futuras atualizações e o crescimento contínuo do projeto.
 
 ## Alterações na versão 3.5.0
 
-- **Camada de Comandos:** Introdução do sistema de Camada de Comandos (padrão: `NVDA+Shift+V`).
-
-- **Análise de Vídeo Online:** Novo recurso para analisar vídeos do YouTube e Instagram via URL.
+\* **Camada de Comandos:** Introdução do sistema de Camada de Comandos (padrão: `NVDA+Shift+V`) para agrupar atalhos sob uma única tecla mestra. \* **Análise de Vídeo Online:** Novo recurso para analisar vídeos do YouTube e Instagram diretamente por URL.
 
 ## Alterações na versão 3.1.0
 
-- **Modo de Saída Direta:** Opção para ouvir respostas da IA diretamente por fala.
-
-- **Integração com a Área de Transferência:** Cópia automática das respostas da IA.
+- **Modo de Saída Direta:** Opção para ignorar o diálogo de chat e ouvir as respostas da IA diretamente por fala.
+- **Integração com a Área de Transferência:** Nova configuração para copiar automaticamente as respostas da IA para a área de transferência.
 
 ## Alterações na versão 3.0
 
 - **Novos Idiomas:** Adicionadas traduções para **Persa** e **Vietnamita**.
-
-- **Modelos de IA Expandidos:** Reorganização da lista de modelos e suporte ao **Gemini 3.0 Pro** e **Gemini 2.0 Flash Lite**.
-- **Estabilidade do Ditado:** Melhorias significativas no Ditado Inteligente.
-- **Manipulação de Arquivos:** Correção de falhas ao enviar arquivos com nomes não ingleses.
-- **Otimização de Prompts:** Melhorias na lógica de tradução e nos resultados de visão.
+- **Modelos de IA Expandidos:** Reorganização da lista de modelos com prefixos claros (`[Free]`, `[Pro]`, `[Auto]`) e suporte ao **Gemini 3.0 Pro** e **Gemini 2.0 Flash Lite**.
+- **Estabilidade do Ditado:** Melhorias significativas no Ditado Inteligente, com verificação de segurança para ignorar áudios menores que 1 segundo.
+- **Manipulação de Arquivos:** Correção de falha ao enviar arquivos com nomes não ingleses.
+- **Otimização de Prompts:** Melhoria da lógica de tradução e estruturação dos resultados de Visão.
 
 ## Alterações na versão 2.9
 
 - **Adicionadas traduções em Francês e Turco.**
-
-- **Visualização Formatada:** Botão "Ver Formatado" nos diálogos de chat.
-- **Configuração de Markdown:** Opção "Limpar Markdown no Chat".
-- **Gerenciamento de Diálogos:** Correções de foco e abertura múltipla.
-- **Melhorias de UX:** Padronização de títulos de diálogos e remoção de anúncios redundantes.
+- **Visualização Formatada:** Botão "Ver Formatado" nos diálogos de chat para exibir a conversa com estilo adequado.
+- **Configuração de Markdown:** Nova opção "Limpar Markdown no Chat" nas Configurações.
+- **Gerenciamento de Diálogos:** Correção de problemas de abertura múltipla e foco.
+- **Melhorias de UX:** Padronização dos títulos dos diálogos e remoção de anúncios de fala redundantes.
 
 ## Alterações na versão 2.8
 
 - Tradução para Italiano adicionada.
-
-- **Relatório de Status:** Novo comando para anunciar o status atual.
-- **Exportação HTML:** Salvamento de conteúdo formatado em HTML.
-- **Interface de Configurações:** Layout melhorado com agrupamentos acessíveis.
+- **Relatório de Status:** Novo comando para anunciar o status atual do complemento.
+- **Exportação HTML:** O botão "Salvar Conteúdo" agora salva a saída como HTML formatado.
+- **Interface de Configurações:** Layout do painel de configurações aprimorado com agrupamentos acessíveis.
 - **Novos Modelos:** Suporte a gemini-flash-latest e gemini-flash-lite-latest.
 - **Idiomas:** Adicionado Nepali.
-- **Lógica do Menu Refinar:** Correção de erro crítico.
-- **Ditado:** Melhoria na detecção de silêncio.
-- **Configurações de Atualização:** Verificação automática desativada por padrão.
+- **Lógica do Menu Refinar:** Correção de um erro crítico quando o idioma da interface do NVDA não era inglês.
+- **Ditado:** Melhoria na detecção de silêncio para evitar saída incorreta.
+- **Configurações de Atualização:** A verificação de atualizações na inicialização agora vem desativada por padrão.
 - Limpeza de código.
 
 ## Alterações na versão 2.7
 
 - Migração da estrutura do projeto para o modelo oficial de complementos da NV Access.
-
-- Implementação de nova lógica de repetição automática para erros HTTP 429.
-- Otimização dos prompts de tradução.
+- Implementação de lógica de repetição automática para erros HTTP 429 (limite de taxa).
+- Otimização dos prompts de tradução para maior precisão e melhor lógica de "Troca Inteligente".
 - Tradução russa atualizada.
 
 ## Alterações na versão 2.6
 
-- Adicionado suporte à tradução russa.
-
-- Mensagens de erro mais descritivas.
+- Adicionado suporte à tradução russa (agradecimentos ao nvda-ru).
+- Mensagens de erro atualizadas com feedback mais descritivo sobre conectividade.
 - Idioma de destino padrão alterado para inglês.
 
 ## Alterações na versão 2.5
 
-- Adicionado comando nativo de OCR de arquivos.
-
+- Adicionado comando nativo de OCR de arquivos (NVDA+Control+Shift+F).
 - Botão "Salvar Chat" nos diálogos de resultado.
-- Suporte completo à localização (i18n).
+- Implementado suporte completo à localização (i18n).
 - Migração do feedback de áudio para o módulo nativo de tons do NVDA.
-- Uso da API de arquivos do Gemini.
-- Correção de falha ao traduzir texto com chaves.
+- Uso da API de Arquivos do Gemini para melhor manuseio de PDFs e áudios.
+- Correção de falha ao traduzir texto contendo chaves.
 
 ## Alterações na versão 2.1.1
 
-- Correção de falha na variável [file_ocr] em Prompts Personalizados.
+- Correção de um problema em que a variável [file_ocr] não funcionava corretamente em Prompts Personalizados.
 
 ## Alterações na versão 2.1
 
-- Padronização de todos os atalhos para NVDA+Control+Shift.
+- Padronização de todos os atalhos para NVDA+Control+Shift, eliminando conflitos com o layout Laptop do NVDA e atalhos do sistema.
 
 ## Alterações na versão 2.0
 
 - Sistema de atualização automática integrado.
-
-- Cache inteligente de tradução.
-- Memória de conversas.
-- Comando dedicado de tradução da área de transferência.
-- Otimização rigorosa dos prompts de idioma.
-- Correção de falhas com caracteres especiais.
+- Cache inteligente de tradução para recuperação instantânea.
+- Memória de conversas para refinar resultados contextualmente.
+- Comando dedicado de tradução da área de transferência (NVDA+Control+Shift+Y).
+- Otimização dos prompts de IA para impor rigorosamente o idioma de saída.
+- Correção de falha causada por caracteres especiais no texto de entrada.
 
 ## Alterações na versão 1.5
 
 - Suporte a mais de 20 novos idiomas.
-
-- Diálogo interativo de refinamento.
-- Ditado inteligente nativo.
-- Categoria "Vision Assistant" nos gestos de entrada do NVDA.
-- Correção de falhas COMError.
-- Mecanismo automático de repetição para erros de servidor.
+- Implementação de diálogo interativo de refinamento para perguntas de acompanhamento.
+- Adicionado recurso nativo de Ditado Inteligente.
+- Categoria "Vision Assistant" adicionada aos gestos de entrada do NVDA.
+- Correção de falhas COMError em aplicativos específicos como Firefox e Word.
+- Adicionado mecanismo automático de repetição para erros de servidor.
 
 ## Alterações na versão 1.0
 
