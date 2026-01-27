@@ -75,7 +75,7 @@ Anda dapat membuat perintah AI kustom yang hebat di Pengaturan menggunakan forma
 ***
 **Catatan:** Koneksi internet aktif diperlukan untuk semua fitur AI. Dokumen multi-halaman dan TIFF diproses secara otomatis.
 
-## Perubahan untuk 4.0
+## Perubahan untuk 4.0.1
 *   **Pembaca Dokumen Tingkat Lanjut:** Penampil baru yang canggih untuk PDF dan gambar dengan pemilihan rentang halaman, pemrosesan latar belakang, dan navigasi `Ctrl+PageUp/Down` yang mulus.
 *   **Submenu Alat Baru:** Menambahkan submenu khusus "Vision Assistant" di bawah menu Alat NVDA untuk akses lebih cepat ke fitur inti, pengaturan, dan dokumentasi.
 *   **Kustomisasi Fleksibel:** Kini Anda dapat memilih mesin OCR dan suara TTS pilihan Anda langsung dari panel pengaturan.
@@ -83,6 +83,8 @@ Anda dapat membuat perintah AI kustom yang hebat di Pengaturan menggunakan forma
 *   **Mesin OCR Alternatif:** Memperkenalkan mesin OCR baru untuk memastikan pengenalan teks yang andal bahkan saat mencapai batas kuota API Gemini.
 *   **Rotasi Kunci API Cerdas:** Secara otomatis beralih ke dan mengingat kunci API yang bekerja paling cepat untuk melewati batas kuota tanpa intervensi manual.
 *   **Dokumen ke Audio:** Kemampuan terintegrasi untuk menghasilkan dan menyimpan file audio berkualitas tinggi (WAV) dari halaman dokumen langsung di dalam pembaca.
+*   **Dukungan untuk Instagram Stories:** Menambahkan kemampuan untuk mendeskripsikan dan menganalisis Instagram Stories melalui URL.
+*   **Dukungan Deskripsi video TikTok:** Memperkenalkan dukungan untuk video TikTok, memungkinkan deskripsi visual lengkap dan transkripsi audio klip.
 *   **Dialog Pembaruan yang Didesain Ulang:** Menampilkan antarmuka baru yang mudah diakses dengan kotak teks yang dapat digulir untuk membaca perubahan versi dengan jelas sebelum menginstal.
 *   **Status & UX Terpadu:** Menstandarisasi dialog file di seluruh add-on dan meningkatkan perintah 'L' untuk melaporkan kemajuan waktu nyata untuk semua tugas latar belakang.
 
