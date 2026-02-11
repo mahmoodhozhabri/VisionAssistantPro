@@ -183,12 +183,6 @@ Input Text:
 PROMPT_UI_LOCATOR = "Analyze UI (Size: {width}x{height}). Request: '{query}'. Output JSON: {{\"x\": int, \"y\": int, \"found\": bool}}."
 
 REFINE_PROMPT_KEYS = ("summarize", "fix_grammar", "fix_translate", "explain")
-ADVANCED_PROMPT_KEYS = {
-    "document_chat_ack",
-    "vision_followup_context",
-    "vision_followup_suffix",
-    "refine_files_only",
-}
 
 LEGACY_REFINER_TOKENS = {
     "summarize": "[summarize]",
@@ -244,6 +238,7 @@ DEFAULT_SYSTEM_PROMPTS = (
         "key": "document_chat_ack",
         "section": _("Advanced"),
         "label": _("Document Chat Bootstrap Reply"),
+        "internal": True,
         "prompt": "Context received. Ready for questions.",
     },
     {
@@ -274,12 +269,14 @@ DEFAULT_SYSTEM_PROMPTS = (
         "key": "vision_followup_context",
         "section": _("Advanced"),
         "label": _("Vision Follow-up Context"),
+        "internal": True,
         "prompt": "Image Context. Target Language: {response_lang}",
     },
     {
         "key": "vision_followup_suffix",
         "section": _("Advanced"),
         "label": _("Vision Follow-up Answer Rule"),
+        "internal": True,
         "prompt": "Answer strictly in {response_lang}",
     },
     {
@@ -342,6 +339,7 @@ DEFAULT_SYSTEM_PROMPTS = (
         "key": "captcha_solver_base",
         "section": _("CAPTCHA"),
         "label": _("CAPTCHA Solver"),
+        "internal": True,
         "prompt": (
             "Blind user. Return CAPTCHA code only. If NO CAPTCHA is detected in the image, "
             "strictly return: [[[NO_CAPTCHA]]].{captcha_extra}"
@@ -351,6 +349,7 @@ DEFAULT_SYSTEM_PROMPTS = (
         "key": "refine_files_only",
         "section": _("Advanced"),
         "label": _("Refine Files-Only Fallback"),
+        "internal": True,
         "prompt": "Analyze these files.",
     },
 )
@@ -376,6 +375,7 @@ def get_builtin_default_prompts():
             "section": item["section"],
             "label": item["label"],
             "display_label": f"{item['section']} - {item['label']}",
+            "internal": bool(item.get("internal")),
             "prompt": p,
             "default": p,
         })
@@ -562,15 +562,12 @@ def get_configured_default_prompts():
     prompt_map = get_configured_default_prompt_map()
     items = []
     for item in DEFAULT_SYSTEM_PROMPTS:
+        if item.get("internal"):
+            continue
         key = item["key"]
         if key in prompt_map:
             items.append(dict(prompt_map[key]))
-    items.sort(
-        key=lambda item: (
-            item.get("key", "") in ADVANCED_PROMPT_KEYS,
-            item.get("display_label", "").casefold(),
-        )
-    )
+    items.sort(key=lambda item: item.get("display_label", "").casefold())
     return items
 
 def get_prompt_text(prompt_key):
