@@ -1,4 +1,4 @@
-# Vision Assistant Pro — Dokumentacja
+# Vision Assistant Pro - Dokumentacja
 
 **Vision Assistant Pro** to zaawansowany, wielomodalny asystent AI dla NVDA. Wykorzystuje modele Gemini od Google, zapewniając inteligentne odczytywanie ekranu, tłumaczenie, głosowe dyktowanie oraz analizę dokumentów.
 
@@ -36,7 +36,7 @@ Aby zapobiec konfliktom klawiszy, ten dodatek wykorzystuje warstwę poleceń (Co
 | **F** | OCR pliku | Bezpośrednie rozpoznawanie tekstu z wybranych plików graficznych, PDF lub TIFF. |
 | **A** | Transkrypcja audio | Transkrybuje pliki MP3, WAV lub OGG na tekst. |
 | **C** | Rozwiązywanie CAPTCHA | Przechwytuje i rozwiązuje CAPTCHA na ekranie lub obiekcie nawigatora. |
-| **S** | Inteligentne dyktowanie | Zamienia mowę na tekst. Naciśnij, aby rozpocząć nagrywanie; ponownie — aby zatrzymać i wpisać. |
+| **S** | Inteligentne dyktowanie | Zamienia mowę na tekst. Naciśnij, aby rozpocząć nagrywanie; naciśnij ponownie, aby zatrzymać i wpisać. |
 | **L** | Raport stanu | Odczytuje bieżący postęp (np. „Skanowanie...", „Bezczynny"). |
 | **U** | Sprawdzanie aktualizacji | Ręcznie sprawdza GitHub pod kątem najnowszej wersji dodatku. |
 | **H** | Pomoc dotycząca poleceń | Wyświetla listę wszystkich dostępnych skrótów w warstwie poleceń. |
