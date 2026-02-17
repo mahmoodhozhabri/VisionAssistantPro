@@ -187,28 +187,6 @@ confspec = {
 
 config.conf.spec["VisionAssistant"] = confspec
 
-PROMPT_TRANSLATE = """
-Task: Translate the text below to "{target_lang}".
-
-Configuration:
-- Target Language: "{target_lang}"
-- Swap Language: "{swap_target}"
-- Smart Swap: {smart_swap}
-
-Rules:
-1. DEFAULT: Translate the input strictly to "{target_lang}".
-2. MIXED CONTENT: If the text contains mixed languages (e.g., Arabic content with English UI terms like 'Reply', 'From', 'Forwarded'), translate EVERYTHING to "{target_lang}".
-3. EXCEPTION: If (and ONLY if) the input is already completely in "{target_lang}" AND "Smart Swap" is True, then translate to "{swap_target}".
-
-Constraints:
-- Output ONLY the translation.
-- Do NOT translate actual programming code (Python, C++, etc.) or URLs.
-- Translate ALL UI elements, menus, and interface labels.
-
-Input Text:
-{text_content}
-"""
-
 PROMPT_UI_LOCATOR = "Analyze UI (Size: {width}x{height}). Request: '{query}'. Output JSON: {{\"x\": int, \"y\": int, \"found\": bool}}."
 
 REFINE_PROMPT_KEYS = ("summarize", "fix_grammar", "fix_translate", "explain")
@@ -263,7 +241,29 @@ DEFAULT_SYSTEM_PROMPTS = (
         # Translators: Feature name used in guarded prompt warnings for smart translation.
         "guardedFeatureLabel": _("Smart Translation"),
         "requiredMarkers": ["{target_lang}", "{swap_target}", "{smart_swap}", "{text_content}"],
-        "prompt": PROMPT_TRANSLATE.strip(),
+        "prompt": (
+            """
+Task: Translate the text below to "{target_lang}".
+
+Configuration:
+- Target Language: "{target_lang}"
+- Swap Language: "{swap_target}"
+- Smart Swap: {smart_swap}
+
+Rules:
+1. DEFAULT: Translate the input strictly to "{target_lang}".
+2. MIXED CONTENT: If the text contains mixed languages (e.g., Arabic content with English UI terms like 'Reply', 'From', 'Forwarded'), translate EVERYTHING to "{target_lang}".
+3. EXCEPTION: If (and ONLY if) the input is already completely in "{target_lang}" AND "Smart Swap" is True, then translate to "{swap_target}".
+
+Constraints:
+- Output ONLY the translation.
+- Do NOT translate actual programming code (Python, C++, etc.) or URLs.
+- Translate ALL UI elements, menus, and interface labels.
+
+Input Text:
+{text_content}
+"""
+        ).strip(),
     },
     {
         "key": "translate_quick",
