@@ -315,7 +315,7 @@ class PromptManagerDialog(wx.Dialog):
             required_items.append(required_item)
         lines = [
             # Translators: Validation message shown when required text is missing in a guarded prompt.
-            _("This prompt is used by '{feature}'. To save it, add the required text below:").format(feature=feature),
+            _("This prompt is used by {feature}. To save it, add the required text below:").format(feature=feature),
             "",
         ]
         lines.extend([f"- {required_item}" for required_item in required_items])
@@ -335,7 +335,7 @@ class PromptManagerDialog(wx.Dialog):
         feature = self._get_guarded_feature_label(item)
         # Translators: Confirmation message shown before saving a guarded prompt.
         msg = _(
-            "You are editing a prompt used by '{feature}'.\n\nIf this prompt is changed, this feature may not work correctly.\n\nDo you understand the risk and want to save anyway?"
+            "You are editing a prompt used by {feature}.\n\nIf this prompt is changed, this feature may not work correctly.\n\nDo you understand the risk and want to save anyway?"
         ).format(feature=feature)
         # Translators: Title of confirmation dialog shown before saving guarded prompts.
         title = _("Confirm")
