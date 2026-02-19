@@ -2465,6 +2465,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.doc_dlg = None
         self.translation_dlg = None
         self.toggling = False
+        self._last_result_data = None
         
         if config.conf["VisionAssistant"]["check_update_startup"]:
             self.update_timer = wx.CallLater(10000, self.updater.check_for_updates, True)
@@ -2570,17 +2571,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.current_status = msg
         ui.message(msg)
 
-    def _handle_direct_output(self, text, raw_text=None):
-        if not config.conf["VisionAssistant"]["skip_chat_dialog"]:
-            return False
-            
-        if config.conf["VisionAssistant"]["copy_to_clipboard"]:
-            api.copyToClip(raw_text if raw_text else text)
-            
-        cleaned = clean_markdown(text)
-        ui.message(cleaned)
-        return True
-
     def script_showHelp(self, gesture):
         if self.toggling: self.finish()
         help_msg = (
@@ -2597,6 +2587,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             "S: " + _("Records voice, transcribes it using AI, and types the result.") + "\n" + \
             "L: " + _("Announces the current status of the add-on.") + "\n" + \
             "U: " + _("Checks for updates manually.") + "\n" + \
+            "Space: " + _("Shows the last AI response in a chat dialog for review or follow-up questions.") + "\n" + \
             "H: " + _("Shows a list of available commands in the layer.")
 )
         # Translators: Title of the help dialog
@@ -2938,16 +2929,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             wx.CallAfter(self._announce_translation, clean_res)
 
     def _announce_translation(self, text):
-        if config.conf["VisionAssistant"]["copy_to_clipboard"] and not config.conf["VisionAssistant"]["skip_chat_dialog"]:
-            api.copyToClip(text)
         # Translators: Message reported when calling translation command
         msg = _("Translated: {text}").format(text=text)
         self.report_status(msg)
-        if self._handle_direct_output(text):
-            return
         wx.CallAfter(self._open_translation_dialog, text)
 
-    def _open_translation_dialog(self, text):
+    def _open_translation_dialog(self, text, force_show=False):
+        self._last_result_data = (self._open_translation_dialog, (text,))
+        
+        if config.conf["VisionAssistant"]["copy_to_clipboard"]:
+            api.copyToClip(text)
+            
+        if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
+            return
+            
         if self.translation_dlg:
             try: self.translation_dlg.Destroy()
             except: pass
@@ -3202,10 +3197,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         
         if res:
              self.current_status = _("Idle")
-             if not self._handle_direct_output(res):
-                 wx.CallAfter(self._open_refine_result_dialog, res, attachments, captured_text, prompt_text)
+             wx.CallAfter(self._open_refine_result_dialog, res, attachments, captured_text, prompt_text)
 
-    def _open_refine_result_dialog(self, result_text, attachments, original_text, initial_prompt):
+    def _open_refine_result_dialog(self, result_text, attachments, original_text, initial_prompt, force_show=False):
+        self._last_result_data = (self._open_refine_result_dialog, (result_text, attachments, original_text, initial_prompt))
+        
+        if config.conf["VisionAssistant"]["copy_to_clipboard"]:
+            api.copyToClip(result_text)
+
+        if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
+            ui.message(clean_markdown(result_text))
+            return
+
         if self.refine_dlg:
             try: self.refine_dlg.Destroy()
             except: pass
@@ -3214,9 +3217,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             atts, orig, first_p = ctx
             parts = [{"text": q}]
             current_user_msg = {"role": "user", "parts": parts}
-            
             messages = []
-            
             if len(history) <= 1: 
                 sys_parts = [{"text": first_p}]
                 for att in atts:
@@ -3224,12 +3225,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                         sys_parts.append({"file_data": {"mime_type": att['mime_type'], "file_uri": att['file_uri']}})
                     elif 'data' in att:
                         sys_parts.append({"inline_data": {"mime_type": att['mime_type'], "data": att['data']}})
-                
                 messages.append({"role": "user", "parts": sys_parts})
                 if history: messages.append(history[0])
             else:
                 messages.extend(history)
-            
             messages.append(current_user_msg)
             return self._call_gemini_safe(messages), None
 
@@ -3323,10 +3322,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 return
             
             self.current_status = _("Idle")
-            if not self._handle_direct_output(full_text):
-                wx.CallAfter(self._open_doc_chat_dialog, full_text, [], full_text, full_text)
+            wx.CallAfter(self._open_doc_chat_dialog, full_text, [], full_text, full_text)
                 
-        else: # Gemini Engine
+        else:
             upload_path = v_doc.create_merged_pdf(start_page, end_page)
             if not upload_path:
                 # Translators: Error message if PDF creation fails
@@ -3357,8 +3355,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 return
 
             if res:
-                if not self._handle_direct_output(res):
-                    wx.CallAfter(self._open_doc_chat_dialog, res, attachments, res, res)
+                wx.CallAfter(self._open_doc_chat_dialog, res, attachments, res, res)
             else:
                 self.current_status = _("Idle")
 
@@ -3368,7 +3365,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         if self.toggling: self.finish()
         wx.CallAfter(self._open_document_reader)
 
-    def _open_doc_chat_dialog(self, init_msg, initial_attachments, doc_text, raw_text_for_save=None):
+    def _open_doc_chat_dialog(self, init_msg, initial_attachments, doc_text, raw_text_for_save=None, force_show=False):
+        self._last_result_data = (self._open_doc_chat_dialog, (init_msg, initial_attachments, doc_text, raw_text_for_save))
+        
+        if config.conf["VisionAssistant"]["copy_to_clipboard"]:
+            api.copyToClip(raw_text_for_save if raw_text_for_save else init_msg)
+
+        if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
+            ui.message(clean_markdown(init_msg))
+            return
+
         if self.doc_dlg:
             try: 
                 self.doc_dlg.Destroy()
@@ -3449,12 +3455,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         res = self._call_gemini_safe(p, attachments=att)
         if res:
             self.current_status = _("Idle")
-            if not self._handle_direct_output(res):
-                wx.CallAfter(self._open_vision_dialog, res, att, None)
+            wx.CallAfter(self._open_vision_dialog, res, att, None)
         else:
             self.current_status = _("Idle")
         
-    def _open_vision_dialog(self, text, atts, size):
+    def _open_vision_dialog(self, text, atts, size, force_show=False):
+        self._last_result_data = (self._open_vision_dialog, (text, atts, size))
+        
+        if config.conf["VisionAssistant"]["copy_to_clipboard"]:
+            api.copyToClip(text)
+
+        if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
+            ui.message(clean_markdown(text))
+            return
+
         if self.vision_dlg:
             try: self.vision_dlg.Destroy()
             except: pass
@@ -3531,8 +3545,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             
             if res:
                 self.current_status = _("Idle")
-                if not self._handle_direct_output(res):
-                    wx.CallAfter(self._open_doc_chat_dialog, res, att, res, res)
+                wx.CallAfter(self._open_doc_chat_dialog, res, att, res, res)
             else:
                 self.current_status = _("Idle")
         except: 
@@ -3626,11 +3639,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     res = self._call_gemini_safe(p, attachments=chat_attachments)
                     if res:
                         self.current_status = _("Idle")
-                        if not self._handle_direct_output(res):
-                            wx.CallAfter(self._open_doc_chat_dialog, res, chat_attachments, res, res)
+                        wx.CallAfter(self._open_doc_chat_dialog, res, chat_attachments, res, res)
             finally:
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
+
 
         elif is_youtube:
             # Translators: Message reported when analyzing YouTube video
@@ -3639,8 +3652,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             res = self._call_gemini_safe(p, attachments=chat_attachments)
             if res:
                 self.current_status = _("Idle")
-                if not self._handle_direct_output(res):
-                    wx.CallAfter(self._open_doc_chat_dialog, res, chat_attachments, res, res)
+                wx.CallAfter(self._open_doc_chat_dialog, res, chat_attachments, res, res)
             else:
                 self.current_status = _("Idle")
 
@@ -3744,6 +3756,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             msg = _("Clipboard empty.")
             self.report_status(msg)
 
+    # Translators: Script description for Input Gestures dialog
+    @scriptHandler.script(description=_("Shows the last AI response in a chat dialog for review or follow-up questions."))
+    def script_showLastResult(self, gesture):
+        if self.toggling: self.finish()
+        if not self._last_result_data:
+            # Translators: Message reported when the user tries to show the last result but none is stored.
+            ui.message(_("No previous result to show."))
+            return
+        
+        func, args = self._last_result_data
+        wx.CallAfter(func, *args, force_show=True)
+
     def on_settings_click(self, event):
         instance = getattr(gui.settingsDialogs.NVDASettingsDialog, "instance", None)
         if instance:
@@ -3808,5 +3832,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         "kb:u": "checkUpdate",
         "kb:shift+t": "translateClipboard",
         "kb:shift+v": "analyzeOnlineVideo",
+        "kb:space": "showLastResult",
         "kb:h": "showHelp",
     }
