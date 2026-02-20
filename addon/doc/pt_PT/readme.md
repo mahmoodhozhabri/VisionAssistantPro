@@ -1,189 +1,242 @@
 # Documentação do Vision Assistant Pro
 
-**Vision Assistant Pro** é um assistente de IA avançado e multimodal para o NVDA. Utiliza os modelos Gemini da Google para fornecer leitura inteligente do ecrã, tradução, ditado por voz e capacidades de análise de documentos.
+**Vision Assistant Pro** é um assistente de IA avançado e multimodal para o NVDA. Utiliza os modelos Gemini do Google para fornecer capacidades inteligentes de leitura de ecrã, tradução, ditado por voz e análise de documentos.
 
-_Este complemento foi disponibilizado à comunidade em homenagem ao Dia Internacional das Pessoas com Deficiência._
+_Este add-on foi lançado para a comunidade em homenagem ao Dia Internacional da Pessoa com Deficiência._
 
-## 1. Instalação e Configuração
+## 1. Configuração & Ajustes
 
-Aceda a **Menu do NVDA > Preferências > Definições > Vision Assistant Pro**.
+Vá a **Menu NVDA > Preferências > Configurações > Vision Assistant Pro**.
 
-- **Chave de API:** Obrigatória. Pode introduzir várias chaves (separadas por vírgulas ou por novas linhas). O assistente alternará automaticamente entre elas se for atingido um limite de quota.
-- **Modelo de IA:** Escolha entre os modelos **Flash** (Mais rápido/Gratuito), **Lite** ou **Pro** (Alta Inteligência).
-- **URL de Proxy:** Opcional. Utilize esta opção se a Google estiver bloqueada na sua região. Deve ser um endereço web que funcione como ponte para a API do Gemini.
-- **Motor de OCR:** Escolha entre **Chrome (Rápido)** para resultados imediatos ou **Gemini (Formatado)** para melhor preservação do layout e reconhecimento de tabelas.
-- **Voz TTS:** Selecione o estilo de voz preferido para gerar ficheiros de áudio a partir das páginas dos documentos.
-- **Troca Inteligente:** Alterna automaticamente os idiomas se o texto de origem corresponder ao idioma de destino.
-- **Saída Direta:** Ignora a janela de chat e anuncia a resposta da IA diretamente por voz.
-- **Integração com a Área de Transferência:** Copia automaticamente a resposta da IA para a área de transferência.
+- **Chave API:** Obrigatória. Pode inserir múltiplas chaves (separadas por vírgulas ou linhas). O assistente alternará automaticamente entre elas se for atingido um limite de cota.
+- **Modelo de IA:** Escolha entre os modelos **Flash** (Mais rápido/Gratuito), **Lite**, ou **Pro** (Alta Inteligência).
+- **URL do Proxy:** Opcional. Utilize se o Google estiver bloqueado na sua região. Deve ser um endereço web que funcione como ponte para a API Gemini.
+- **Motor OCR:** Escolha entre **Chrome (Rápido)** para resultados rápidos ou **Gemini (Formatado)** para melhor preservação de layout e reconhecimento de tabelas.
+- **Voz TTS:** Selecione o estilo de voz preferido para gerar ficheiros de áudio a partir das páginas de documentos.
+- **Troca Inteligente:** Alterna automaticamente idiomas se o texto de origem coincidir com o idioma de destino.
+- **Saída Direta:** Ignora a janela de chat e anuncia a resposta da IA diretamente via voz. **Nota:** Mesmo neste modo, pode pressionar **Espaço** na camada de comando para reabrir o último resultado num diálogo de chat.
+- **Integração com Área de Transferência:** Copia automaticamente a resposta da IA para a área de transferência.
 
-## 2. Camada de Comandos e Atalhos
+## 2. Camada de Comando & Atalhos
 
-Para evitar conflitos de teclado, este complemento utiliza uma **Camada de Comandos**.
+Para evitar conflitos de teclado, este add-on utiliza uma **Camada de Comando**.
 
-1. Prima **NVDA + Shift + V** (Tecla Mestra) para ativar a camada (irá ouvir um sinal sonoro).
-2. Solte as teclas e, de seguida, prima uma das seguintes teclas individuais:
+1. Pressione **NVDA + Shift + V** (Tecla Mestre) para ativar a camada (ouvirá um bip).
+2. Solte as teclas e pressione uma das seguintes teclas únicas:
 
-| Tecla         | Função                            | Descrição                                                                                |
-| ------------- | --------------------------------- | ---------------------------------------------------------------------------------------- |
-| **T**         | Tradutor Inteligente              | Traduz o texto sob o cursor de navegação ou a seleção.                                   |
-| **Shift + T** | Tradutor da Área de Transferência | Traduz o conteúdo atualmente na área de transferência.                                   |
-| **R**         | Refinador de Texto                | Resumir, corrigir gramática, explicar ou executar **Prompts Personalizados**.            |
-| **V**         | Visão de Objetos                  | Descreve o objeto atual do navegador.                                                    |
-| **O**         | Visão de Ecrã Completo            | Analisa todo o layout e conteúdo do ecrã.                                                |
-| **Shift + V** | Análise de Vídeo Online           | Analisa vídeos do **YouTube**, **Instagram** ou **Twitter (X)** através de URL.          |
-| **D**         | Leitor de Documentos              | Leitor avançado para PDF e imagens com seleção de intervalo de páginas.                  |
-| **F**         | OCR de Ficheiros                  | Reconhecimento direto de texto a partir de imagens, PDFs ou ficheiros TIFF selecionados. |
-| **A**         | Transcrição de Áudio              | Transcreve ficheiros MP3, WAV ou OGG para texto.                                         |
-| **C**         | Resolvedor de CAPTCHA             | Captura e resolve CAPTCHAs no ecrã ou no objeto do navegador.                            |
-| **S**         | Ditado Inteligente                | Converte fala em texto. Prima para iniciar a gravação e novamente para parar/escrever.   |
-| **L**         | Relatório de Estado               | Anuncia o progresso atual (ex.: "A analisar...", "Inativo").                             |
-| **U**         | Verificação de Atualizações       | Verifica manualmente no GitHub a versão mais recente do complemento.                     |
-| **H**         | Ajuda de Comandos                 | Apresenta uma lista de todos os atalhos disponíveis dentro da camada de comandos.        |
+| Tecla         | Função                            | Descrição                                                                               |
+| ------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| **T**         | Tradutor Inteligente              | Traduz o texto sob o cursor do NVDA ou a seleção.                                       |
+| **Shift + T** | Tradutor da Área de Transferência | Traduz o conteúdo atualmente na área de transferência.                                  |
+| **R**         | Refinador de Texto                | Resume, Corrige Gramática, Explica ou executa **Prompts Personalizados**.               |
+| **V**         | Visão do Objeto                   | Descreve o objeto atual do NVDA.                                                        |
+| **O**         | Visão de Ecrã Completo            | Analisa todo o layout e conteúdo do ecrã.                                               |
+| **Shift + V** | Análise de Vídeo Online           | Analisa vídeos do **YouTube**, **Instagram**, **TikTok** ou **Twitter (X)**.            |
+| **D**         | Leitor de Documentos              | Leitor avançado de PDFs e imagens com seleção de intervalo de páginas.                  |
+| **F**         | OCR de Ficheiro                   | Reconhecimento direto de texto em imagem, PDF ou ficheiros TIFF selecionados.           |
+| **A**         | Transcrição de Áudio              | Transcreve ficheiros MP3, WAV ou OGG para texto.                                        |
+| **C**         | Resolvedor de CAPTCHA             | Captura e resolve CAPTCHAs no ecrã ou em objetos do NVDA.                               |
+| **S**         | Ditado Inteligente                | Converte voz em texto. Pressione para iniciar a gravação, novamente para parar/digitar. |
+| **L**         | Relatório de Estado               | Anuncia o progresso atual (ex.: "A digitalizar...", "Ocioso").                          |
+| **U**         | Verificar Atualizações            | Verifica manualmente no GitHub a versão mais recente do add-on.                         |
+| **Espaço**    | Recordar Último Resultado         | Mostra a última resposta da IA num diálogo de chat para revisão ou acompanhamento.      |
+| **H**         | Ajuda de Comandos                 | Exibe uma lista de todos os atalhos disponíveis na camada de comando.                   |
 
 ### 2.1 Atalhos do Leitor de Documentos (Dentro do Visualizador)
 
-Depois de um documento ser aberto através do comando **D**:
+Após abrir um documento com o comando **D**:
 
-- **Ctrl + PageDown:** Avançar para a página seguinte (anuncia o número da página).
-- **Ctrl + PageUp:** Recuar para a página anterior (anuncia o número da página).
-- **Alt + A:** Abrir um diálogo de chat para colocar perguntas sobre o documento.
-- **Alt + R:** Forçar uma nova análise da página atual ou de todas as páginas utilizando o motor Gemini.
-- **Alt + G:** Gerar e guardar um ficheiro de áudio de alta qualidade (WAV) a partir do conteúdo.
-- **Alt + S / Ctrl + S:** Guardar o texto extraído como ficheiro TXT ou HTML.
+- **Ctrl + PageDown:** Avança para a próxima página (anuncia o número da página).
+- **Ctrl + PageUp:** Regressa à página anterior (anuncia o número da página).
+- **Alt + A:** Abre um diálogo de chat para colocar perguntas sobre o documento.
+- **Alt + R:** Força um novo escaneamento da página atual ou de todas as páginas usando o motor Gemini.
+- **Alt + G:** Gera e guarda um ficheiro de áudio de alta qualidade (WAV) do conteúdo.
+- **Alt + S / Ctrl + S:** Guarda o texto extraído como ficheiro TXT ou HTML.
 
-## 3. Prompts Personalizados e Variáveis
+## 3. Prompts Personalizados & Variáveis
 
-Pode criar comandos de IA personalizados nas Definições utilizando o formato: `Nome:Texto do Prompt` (separe vários comandos com `|` ou novas linhas).
+Abra **Configurações > Prompts > Gerir Prompts...** para configurar prompts do sistema e personalizados.
+
+- **Separador Prompts Padrão:** edite os prompts internos. Pode redefinir um prompt individual ou todos os padrões.
+- **Separador Prompts Personalizados:** adicione, edite, remova e reordene prompts personalizados.
+- **Botão Guia de Variáveis:** abre uma janela de ajuda com todas as variáveis suportadas e tipos de entrada.
 
 ### Variáveis Disponíveis
 
-| Variável        | Descrição                                    | Tipo de Entrada   |
-| --------------- | -------------------------------------------- | ----------------- |
-| `[selection]`   | Texto atualmente selecionado                 | Texto             |
-| `[clipboard]`   | Conteúdo da área de transferência            | Texto             |
-| `[screen_obj]`  | Captura de ecrã do objeto do navegador       | Imagem            |
-| `[screen_full]` | Captura de ecrã do ecrã completo             | Imagem            |
-| `[file_ocr]`    | Selecionar imagem/PDF para extração de texto | Imagem, PDF, TIFF |
-| `[file_read]`   | Selecionar documento para leitura            | TXT, Código, PDF  |
-| `[file_audio]`  | Selecionar ficheiro de áudio para análise    | MP3, WAV, OGG     |
+| Variável        | Descrição                                   | Tipo de Entrada   |
+| --------------- | ------------------------------------------- | ----------------- |
+| `[selection]`   | Texto atualmente selecionado                | Texto             |
+| `[clipboard]`   | Conteúdo da área de transferência           | Texto             |
+| `[screen_obj]`  | Captura de ecrã do objeto do NVDA           | Imagem            |
+| `[screen_full]` | Captura de ecrã completo                    | Imagem            |
+| `[file_ocr]`    | Seleciona imagem/PDF para extração de texto | Imagem, PDF, TIFF |
+| `[file_read]`   | Seleciona documento para leitura            | TXT, Código, PDF  |
+| `[file_audio]`  | Seleciona ficheiro de áudio para análise    | MP3, WAV, OGG     |
 
 ### Exemplos de Prompts Personalizados
 
 - **OCR Rápido:** `Meu OCR:[file_ocr]`
-- **Traduzir Imagem:** `Traduzir Img:Extrair o texto desta imagem e traduzir para inglês. [file_ocr]`
-- **Analisar Áudio:** `Resumir Áudio:Ouvir esta gravação e resumir os pontos principais. [file_audio]`
-- **Depurador de Código:** `Depurar:Encontrar erros neste código e explicá-los: [selection]`
+- **Traduzir Imagem:** `Traduzir Img:Extrair texto desta imagem e traduzir para inglês. [file_ocr]`
+- **Analisar Áudio:** `Resumir Áudio:Ouça esta gravação e resuma os pontos principais. [file_audio]`
+- **Depurador de Código:** `Depurar:Encontre erros neste código e explique-os: [selection]`
 
 ---
 
-**Nota:** É necessária uma ligação ativa à internet para todas as funcionalidades de IA. Documentos com várias páginas e ficheiros TIFF são processados automaticamente.
+**Nota:** É necessária uma ligação ativa à internet para todos os recursos de IA. Documentos com múltiplas páginas e ficheiros TIFF são processados automaticamente.
+
+## 4. Suporte & Comunidade
+
+Mantenha-se atualizado com as últimas notícias, funcionalidades e lançamentos:
+
+- **Canal Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
+- **Issues no GitHub:** Para relatórios de erros e pedidos de funcionalidades.
+
+## Alterações na versão 4.6
+
+- **Recordar Resultado Interativo:** Adicionada a tecla **Espaço** na camada de comando, permitindo reabrir instantaneamente a última resposta da IA num chat para acompanhamento, mesmo com "Saída Direta" ativa.
+
+- **Hub da Comunidade no Telegram:** Adicionado link "Canal Oficial do Telegram" no menu Ferramentas do NVDA, oferecendo acesso rápido a notícias e lançamentos.
+- **Estabilidade de Resposta Aprimorada:** Otimizada a lógica central de Tradução, OCR e Visão para maior fiabilidade e experiência mais fluida com saída de voz direta.
+- **Guia de Interface Melhorado:** Atualizadas descrições das configurações e documentação para explicar melhor o sistema de recordação e funcionamento junto à saída direta.
+
+## Alterações na versão 4.5
+
+- **Gestor Avançado de Prompts:** Diálogo dedicado para personalizar prompts do sistema e gerir prompts do utilizador com suporte completo a adicionar, editar, reordenar e pré-visualizar.
+
+- **Suporte Completo a Proxy:** Resolvidos problemas de conectividade garantindo que configurações de proxy do utilizador sejam aplicadas em todas as requisições de API, incluindo tradução, OCR e geração de voz.
+- **Migração Automática de Dados:** Sistema inteligente que atualiza prompts antigos para formato JSON v2 na primeira execução sem perda de dados.
+- **Compatibilidade Atualizada (2025.1):** Versão mínima do NVDA definida para 2025.1 devido a dependências de bibliotecas em funcionalidades avançadas como o Leitor de Documentos.
+- **Interface de Configurações Otimizada:** Reorganização da gestão de prompts num diálogo separado para experiência mais limpa e acessível.
+- **Guia de Variáveis de Prompt:** Guia incorporado nos diálogos de prompt para identificar e usar variáveis dinâmicas como [selection], [clipboard] e [screen_obj].
+
+## Alterações na versão 4.0.3
+
+- **Resiliência de Rede Aprimorada:** Mecanismo de retry automático para conexões instáveis e erros temporários do servidor.
+
+- **Diálogo de Tradução Visual:** Janela dedicada para resultados de tradução, permitindo navegação linha a linha em traduções longas, semelhante ao OCR.
+- **Visualização Formatada Agregada:** "Ver Formatado" no Leitor de Documentos mostra todas as páginas processadas numa única janela organizada com cabeçalhos claros.
+- **Fluxo de OCR Otimizado:** Pula automaticamente a seleção de intervalo de páginas em documentos de página única.
+- **Estabilidade de API Aprimorada:** Autenticação baseada em cabeçalhos para resolver erros "Todas as chaves API falharam" causados por rotação de chave.
+- **Correção de Erros:** Resolvidos crashes potenciais, incluindo erro de foco no diálogo de chat e encerramento do add-on.
 
 ## Alterações na versão 4.0.1
 
-- **Leitor Avançado de Documentos:** Novo visualizador poderoso para PDFs e imagens, com seleção de intervalo de páginas, processamento em segundo plano e navegação fluida com `Ctrl+PageUp/Down`.
-- **Novo Submenu de Ferramentas:** Adicionado um submenu dedicado "Vision Assistant" no menu Ferramentas do NVDA para acesso mais rápido às funcionalidades principais, definições e documentação.
-- **Personalização Flexível:** Possibilidade de escolher diretamente o motor de OCR e a voz TTS preferidos no painel de definições.
-- **Suporte a Múltiplas Chaves de API:** Adicionado suporte a várias chaves de API do Gemini.
-- **Motor de OCR Alternativo:** Introduzido um novo motor de OCR para garantir reconhecimento fiável mesmo ao atingir limites de quota da API Gemini.
-- **Rotação Inteligente de Chaves de API:** Alterna automaticamente e memoriza a chave de API mais rápida em funcionamento.
-- **Documento para MP3/WAV:** Capacidade integrada de gerar e guardar ficheiros de áudio de alta qualidade nos formatos MP3 (128 kbps) e WAV.
-- **Suporte a Stories do Instagram:** Capacidade de descrever e analisar Stories do Instagram através das respetivas URLs.
-- **Suporte ao TikTok:** Introduzido suporte a vídeos do TikTok, com descrição visual completa e transcrição de áudio.
-- **Diálogo de Atualização Redesenhado:** Nova interface acessível com caixa de texto deslocável para leitura clara das alterações.
-- **Estado Unificado e UX:** Normalização dos diálogos de ficheiros e melhoria do comando `L` para relatar progresso em tempo real.
+- **Leitor de Documentos Avançado:** Novo visualizador para PDFs e imagens com seleção de intervalo de páginas, processamento em segundo plano e navegação contínua `Ctrl+PageUp/Down`.
+
+- **Novo Submenu de Ferramentas:** Submenu dedicado "Vision Assistant" no menu Ferramentas do NVDA para acesso rápido a funcionalidades, configurações e documentação.
+- **Personalização Flexível:** É possível escolher motor OCR e voz TTS diretamente no painel de configurações.
+- **Suporte a Múltiplas Chaves API:** Suporte a múltiplas chaves Gemini, uma por linha ou separadas por vírgulas.
+- **Motor OCR Alternativo:** Novo motor OCR para garantir reconhecimento de texto mesmo com limites de cota do Gemini.
+- **Rotação Inteligente de Chaves API:** Alterna automaticamente para a chave mais rápida disponível.
+- **Documento para MP3/WAV:** Gera e guarda ficheiros de áudio de alta qualidade em MP3 (128kbps) e WAV diretamente no leitor.
+- **Suporte a Stories do Instagram:** Descrição e análise de Stories via URL.
+- **Suporte a TikTok:** Análise completa de vídeos com descrição visual e transcrição de áudio.
+- **Diálogo de Atualização Redesenhado:** Interface acessível com caixa de texto rolável para leitura clara das mudanças antes da instalação.
+- **Status & UX Unificado:** Padronização de diálogos de ficheiro e melhoria do comando 'L' para reportar progresso em tempo real.
 
 ## Alterações na versão 3.6.0
 
-- **Sistema de Ajuda:** Adicionado um comando de ajuda (`H`) dentro da Camada de Comandos.
-- **Análise de Vídeo Online:** Suporte alargado a vídeos do **Twitter (X)**, com melhorias na deteção de URLs e estabilidade.
-- **Contribuição para o Projeto:** Adicionado um diálogo opcional de donativos para apoiar o desenvolvimento futuro do projeto.
+- **Sistema de Ajuda:** Comando de ajuda (`H`) na Camada de Comando com lista de todos os atalhos e funções.
+
+- **Análise de Vídeo Online:** Suporte expandido para vídeos do **Twitter (X)**. Detecção de URL melhorada para maior fiabilidade.
+- **Contribuição para o Projeto:** Diálogo opcional de donativo para apoiar atualizações futuras e crescimento contínuo do projeto.
 
 ## Alterações na versão 3.5.0
 
-\* **Camada de Comandos:** Introdução do sistema de Camada de Comandos (predefinição: `NVDA+Shift+V`). \* **Análise de Vídeo Online:** Novo recurso para analisar vídeos do YouTube e Instagram diretamente através de URL.
+- **Camada de Comando:** Sistema de Camada de Comando (padrão: `NVDA+Shift+V`) para agrupar atalhos sob uma tecla mestre. Ex.: `NVDA+Shift+V` seguido de `T` para tradução.
+
+- **Análise de Vídeo Online:** Análise de vídeos do YouTube e Instagram via URL.
 
 ## Alterações na versão 3.1.0
 
-- **Modo de Saída Direta:** Opção para ignorar o diálogo de chat e ouvir as respostas da IA diretamente por voz.
-- **Integração com a Área de Transferência:** Nova definição para copiar automaticamente as respostas da IA para a área de transferência.
+- **Modo Saída Direta:** Resposta da IA diretamente via voz sem abrir diálogo de chat.
+
+- **Integração com Área de Transferência:** Copia automaticamente respostas da IA para a área de transferência.
 
 ## Alterações na versão 3.0
 
 - **Novos Idiomas:** Adicionadas traduções para **Persa** e **Vietnamita**.
-- **Modelos de IA Expandidos:** Reorganização da lista de modelos e suporte para **Gemini 3.0 Pro** e **Gemini 2.0 Flash Lite**.
-- **Estabilidade do Ditado:** Melhorias significativas no Ditado Inteligente.
-- **Gestão de Ficheiros:** Correção de falhas ao carregar ficheiros com nomes não ingleses.
-- **Otimização de Prompts:** Melhoria da lógica de tradução e estruturação dos resultados de Visão.
+
+- **Modelos de IA Expandido:** Lista reorganizada com prefixos claros `[Free]`, `[Pro]`, `[Auto]`. Suporte para **Gemini 3.0 Pro** e **Gemini 2.0 Flash Lite**.
+- **Estabilidade do Ditado:** Verificação de áudio inferior a 1 segundo para evitar erros ou respostas vazias.
+- **Manipulação de Ficheiros:** Corrigido problema com ficheiros com nomes não ingleses.
+- **Otimização de Prompts:** Lógica de tradução e resultados de visão estruturados.
 
 ## Alterações na versão 2.9
 
-- **Adicionadas traduções em Francês e Turco.**
-- **Visualização Formatada:** Botão "Ver Formatado" nos diálogos de chat.
-- **Definição de Markdown:** Nova opção "Limpar Markdown no Chat".
-- **Gestão de Diálogos:** Correções relacionadas com abertura múltipla e foco.
-- **Melhorias de UX:** Normalização dos títulos dos diálogos e remoção de anúncios de voz redundantes.
+- **Traduções em Francês e Turco adicionadas.**
+
+- **Visualização Formatada:** Botão "Ver Formatado" em diálogos de chat para visualizar a conversa com estilo (Títulos, Negrito, Código).
+- **Configuração Markdown:** Nova opção "Limpar Markdown no Chat". Desmarcar mostra o Markdown cru.
+- **Gestão de Diálogos:** Corrigido problema de múltiplas janelas de "Refinar Texto".
+- **Melhorias de UX:** Padronização de títulos de diálogos e remoção de anúncios de voz redundantes.
 
 ## Alterações na versão 2.8
 
-- Tradução italiana adicionada.
-- **Relatório de Estado:** Novo comando para anunciar o estado atual do complemento.
-- **Exportação HTML:** O botão "Guardar Conteúdo" passa a guardar a saída como HTML formatado.
-- **Interface de Definições:** Layout do painel de definições melhorado com agrupamentos acessíveis.
+- Adicionada tradução italiana.
+
+- **Relatório de Estado:** Novo comando (NVDA+Control+Shift+I) para anunciar estado atual do add-on.
+- **Exportação HTML:** Botão "Guardar Conteúdo" guarda saída como HTML formatado.
+- **Interface de Configurações:** Agrupamento acessível aprimorado.
 - **Novos Modelos:** Suporte para gemini-flash-latest e gemini-flash-lite-latest.
-- **Idiomas:** Adicionado Nepalês.
-- **Lógica do Menu Refinar:** Correção de um erro crítico quando o idioma da interface do NVDA não era inglês.
-- **Ditado:** Melhoria na deteção de silêncio.
-- **Definições de Atualização:** A verificação de atualizações no arranque passa a estar desativada por predefinição.
+- **Idiomas:** Adicionado Nepali.
+- **Lógica do Menu Refine:** Corrigido bug crítico em comandos "Refine Text".
+- **Ditado:** Detecção de silêncio melhorada.
+- **Atualizar Configurações:** "Verificar atualizações ao iniciar" desativado por padrão.
 - Limpeza de código.
 
 ## Alterações na versão 2.7
 
-- Migração da estrutura do projeto para o modelo oficial de complementos da NV Access.
-- Implementação de lógica de nova tentativa automática para erros HTTP 429 (limite de taxa).
-- Otimização dos prompts de tradução para maior precisão e melhor lógica de "Troca Inteligente".
+- Estrutura do projeto migrada para o Template oficial NV Access Add-on.
+
+- Lógica de retry automático para HTTP 429 implementada.
+- Prompts de tradução otimizados para maior precisão e melhor lógica de "Smart Swap".
 - Tradução russa atualizada.
 
 ## Alterações na versão 2.6
 
-- Adicionado suporte à tradução russa (agradecimentos ao nvda-ru).
-- Mensagens de erro atualizadas com feedback mais descritivo sobre conectividade.
-- Idioma de destino predefinido alterado para inglês.
+- Suporte a tradução russa adicionado (Obrigado nvda-ru).
+
+- Mensagens de erro atualizadas para feedback descritivo sobre conectividade.
+- Idioma alvo padrão alterado para inglês.
 
 ## Alterações na versão 2.5
 
-- Adicionado comando nativo de OCR de ficheiros (NVDA+Control+Shift+F).
-- Botão "Guardar Chat" nos diálogos de resultados.
-- Implementado suporte completo à localização (i18n).
-- Migração do feedback de áudio para o módulo nativo de tons do NVDA.
-- Utilização da API de Ficheiros do Gemini.
-- Correção de falha ao traduzir texto com chavetas.
+- Comando OCR de Ficheiro Nativo (NVDA+Control+Shift+F) adicionado.
+
+- Botão "Guardar Chat" adicionado em diálogos de resultado.
+- Suporte completo a localização (i18n).
+- Feedback de áudio migrado para módulo de tons nativo do NVDA.
+- API Gemini para ficheiros PDF e áudio.
+- Corrigido crash ao traduzir textos com chaves `{}`.
 
 ## Alterações na versão 2.1.1
 
-- Correção de um problema em que a variável [file_ocr] não funcionava corretamente em Prompts Personalizados.
+- Corrigido problema com variável [file_ocr] em Prompts Personalizados.
 
 ## Alterações na versão 2.1
 
-- Padronização de todos os atalhos para NVDA+Control+Shift, eliminando conflitos com o layout Laptop do NVDA e atalhos do sistema.
+- Todos os atalhos padronizados para NVDA+Control+Shift para evitar conflitos.
 
 ## Alterações na versão 2.0
 
-- Implementação de sistema de atualização automática integrado.
-- Cache inteligente de tradução para recuperação imediata.
-- Memória de conversas para refinar resultados de forma contextual.
-- Comando dedicado de tradução da área de transferência (NVDA+Control+Shift+Y).
-- Otimização dos prompts de IA para impor rigorosamente o idioma de saída.
-- Correção de falhas causadas por caracteres especiais no texto de entrada.
+- Sistema de Auto-Atualização incorporado.
+
+- Cache de Tradução Inteligente adicionado.
+- Memória de Conversa para refinar resultados em chat.
+- Comando de Tradução da Área de Transferência dedicado (NVDA+Control+Shift+Y).
+- Prompts de IA otimizados para saída no idioma alvo.
+- Corrigido crash causado por caracteres especiais no texto.
 
 ## Alterações na versão 1.5
 
 - Suporte para mais de 20 novos idiomas.
-- Implementação de diálogo interativo de refinamento.
-- Adicionado recurso nativo de Ditado Inteligente.
-- Categoria "Vision Assistant" adicionada aos gestos de entrada do NVDA.
-- Correção de falhas COMError em aplicações específicas como Firefox e Word.
-- Adicionado mecanismo automático de nova tentativa para erros de servidor.
+
+- Diálogo Interativo Refine para perguntas de acompanhamento.
+- Ditado Inteligente nativo adicionado.
+- Categoria "Vision Assistant" no diálogo de Gestos de Entrada do NVDA.
+- Corrigido crash COMError em apps como Firefox e Word.
+- Mecanismo de retry automático para erros de servidor.
 
 ## Alterações na versão 1.0
 
