@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the 'VisionAssistant' package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 'VisionAssistant' '4.0.0'\n"
+"Project-Id-Version: 'VisionAssistant' '4.6'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-01-26 16:50+0330\n"
-"PO-Revision-Date: 2026-01-27 16:12+0700\n"
+"POT-Creation-Date: 2026-02-20 18:12+0700\n"
+"PO-Revision-Date: 2026-02-20 19:52+0700\n"
 "Last-Translator: Muhammad Gagah <muhammadgagah@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "Language: id\n"
@@ -19,42 +18,45 @@ msgstr ""
 "X-Generator: Poedit 3.8\n"
 
 #. Translators: Label for the button to copy the TON cryptocurrency wallet address.
-#: addon\globalPlugins\visionAssistant\donate_dialog.py:17
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:18
 msgid "Copy TON Address"
 msgstr "Salin Alamat TON"
 
 #. Translators: Label for the button to copy the USDT (TRC20 network) wallet address.
-#: addon\globalPlugins\visionAssistant\donate_dialog.py:19
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:20
 msgid "Copy USDT (TRC20) Address"
 msgstr "Salin Alamat USDT (TRC20)"
 
+#. Translators: Label for the button to copy the support email address for gift cards.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:22
+msgid "Copy Support Email"
+msgstr "Salin Email Dukungan"
+
 #. Translators: Button to dismiss the donation dialog without taking any action.
-#: addon\globalPlugins\visionAssistant\donate_dialog.py:25
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:29
 msgid "Maybe Later"
 msgstr "Nanti Saja"
 
-#. Translators: Success message shown after a wallet address is copied to the clipboard.
-#: addon\globalPlugins\visionAssistant\donate_dialog.py:36
-msgid ""
-"Address copied to clipboard! If you'd like, you can now proceed to your "
-"wallet and donate any amount you can. Your support is greatly appreciated!"
-msgstr ""
-"Alamat disalin ke papan klip! Jika Anda mau, Anda sekarang dapat melanjutkan "
-"ke dompet Anda dan menyumbangkan jumlah berapa pun yang Anda bisa. Dukungan "
-"Anda sangat kami hargai!"
+#. Translators: Success message shown after an address or email is copied to the clipboard.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:40
+msgid "Copied to clipboard! Your support is greatly appreciated!"
+msgstr "Disalin ke papan klip! Dukungan Anda sangat dihargai!"
 
 #. Translators: Title for the success message box.
-#: addon\globalPlugins\visionAssistant\__init__.py:2221 addon\globalPlugins\visionAssistant\__init__.py:2269 addon\globalPlugins\visionAssistant\donate_dialog.py:38
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:42
+#: addon\globalPlugins\visionAssistant\__init__.py:2346
+#: addon\globalPlugins\visionAssistant\__init__.py:2394
 msgid "Success"
 msgstr "Berhasil"
 
 #. Translators: Title of the donation request dialog.
-#: addon\globalPlugins\visionAssistant\donate_dialog.py:49
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:53
 #, python-brace-format
 msgid "Support the Future of {name}"
 msgstr "Dukung Masa Depan {name}"
 
-#: addon\globalPlugins\visionAssistant\donate_dialog.py:53
+#. Translators: The main message of the donation dialog.
+#: addon\globalPlugins\visionAssistant\donate_dialog.py:56
 #, python-brace-format
 msgid ""
 "{name} is a project born from a personal vision to bridge the gap between AI "
@@ -67,294 +69,805 @@ msgid ""
 "remains fast, stable, and constantly evolving is a continuous creative "
 "journey that I am passionate about pursuing.\n"
 "\n"
+"Important Note: Due to international banking restrictions in my region, I am "
+"unable to use PayPal or Stripe. If you wish to support this project, you can "
+"donate via Cryptocurrency or by sending an Apple Gift Card (US region) to: "
+"{email}\n"
+"\n"
 "If this assistant has brought value to your daily life, your support is a "
 "wonderful way to show appreciation for the original work and the dedication "
-"behind it. It provides the extra motivation to keep the inspiration alive "
-"and ensures we can continue to push the boundaries together. Thank you for "
-"being part of this mission!"
+"behind it. Thank you for being part of this mission!"
 msgstr ""
 "{name} adalah proyek yang lahir dari visi pribadi untuk menjembatani "
-"kesenjangan antara AI dan aksesibilitas sejati. Konsep awal dan banyak fitur "
-"yang Anda nikmati diciptakan dari ide-ide saya sendiri untuk memecahkan "
+"kesenjangan antara AI dan aksesibilitas sebenarnya. Konsep awal dan banyak "
+"fitur yang Anda nikmati diciptakan dari ide saya sendiri untuk memecahkan "
 "tantangan nyata dan memberikan tingkat kemandirian digital yang baru.\n"
 "\n"
-"Saya sangat bangga memikirkan setiap detail dan mengubah inovasi saya "
-"sendiri serta permintaan berharga Anda menjadi kenyataan. Memastikan alat "
-"ini tetap cepat, stabil, dan terus berkembang adalah perjalanan kreatif "
-"berkelanjutan yang saya tekuni dengan penuh semangat.\n"
+"Saya sangat bangga memikirkan setiap detail dan mewujudkan inovasi saya dan "
+"permintaan berharga Anda menjadi kenyataan. Memastikan alat ini tetap cepat, "
+"stabil, dan terus berkembang adalah perjalanan kreatif berkelanjutan yang "
+"ingin saya lakukan.\n"
 "\n"
-"Jika asisten ini telah memberikan nilai bagi kehidupan sehari-hari Anda, "
-"dukungan Anda adalah cara yang luar biasa untuk menunjukkan penghargaan atas "
-"karya orisinal dan dedikasi di baliknya. Ini memberikan motivasi ekstra "
-"untuk menjaga inspirasi tetap hidup dan memastikan kita dapat terus "
-"mendorong batas-batas bersama. Terima kasih telah menjadi bagian dari misi "
-"ini!"
+"Catatan Penting: Karena pembatasan perbankan internasional di wilayah saya, "
+"saya tidak dapat menggunakan PayPal atau Stripe. Jika Anda ingin mendukung "
+"proyek ini, Anda dapat berdonasi melalui Cryptocurrency atau dengan "
+"mengirimkan Kartu Hadiah Apple (wilayah AS) ke: {email}\n"
+"\n"
+"Jika asisten ini telah memberikan nilai bagi kehidupan Anda sehari-hari, "
+"dukungan Anda adalah cara yang bagus untuk menunjukkan penghargaan atas "
+"karya asli dan dedikasi di baliknya. Terima kasih telah menjadi bagian dari "
+"misi ini!"
+
+#. Translators: Label for prompt name input field.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:22
+msgid "Name:"
+msgstr "Nama:"
+
+#. Translators: Label for prompt text input field.
+#. Translators: Label above the prompt editor textarea.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:28
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:189
+msgid "Prompt Text:"
+msgstr "Teks Perintah:"
+
+#. Translators: Button label to open the variables help dialog.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:47
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:142
+msgid "Variables Guide"
+msgstr "Panduan Variabel"
+
+#. Translators: Validation error for empty prompt name.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:64
+msgid "Name cannot be empty."
+msgstr "Nama tidak boleh kosong."
+
+#. Translators: Title of validation warning dialog.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:66
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:74
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:362
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:473
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:501
+msgid "Validation Error"
+msgstr "Kesalahan Validasi"
+
+#. Translators: Validation error for empty prompt text.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:72
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:360
+msgid "Prompt text cannot be empty."
+msgstr "Teks perintah tidak boleh kosong."
+
+#. Translators: Title for the prompt variables help dialog.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:95
+msgid "Prompt Variables Guide"
+msgstr "Panduan Variabel Prompt"
+
+#. Translators: Intro text for the prompt variables help dialog.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:99
+msgid "Use these variables inside prompt text:"
+msgstr "Gunakan variabel berikut di dalam teks prompt:"
+
+#. Translators: Button to close chat dialog
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:110
+#: addon\globalPlugins\visionAssistant\__init__.py:1505
+#: addon\globalPlugins\visionAssistant\__init__.py:2049
+msgid "Close"
+msgstr "Tutup"
+
+#. Translators: Title for the prompt manager dialog.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:120
+msgid "Prompt Manager"
+msgstr "Pengelola Prompt"
+
+#. Translators: Notebook tab for built-in refine prompts.
+#. Translators: Label above the list of default prompt entries.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:132
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:166
+msgid "Default Prompts"
+msgstr "Perintah Bawaan"
+
+#. Translators: Notebook tab for user-defined prompts.
+#. Translators: Label above the list of custom prompts.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:134
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:221
+msgid "Custom Prompts"
+msgstr "Perintah Kustom"
+
+#. Translators: Note explaining when prompt changes are persisted.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:146
+msgid "Changes are applied only when you press OK."
+msgstr "Perubahan hanya diterapkan bila Anda menekan OK."
+
+#. Translators: Button label to reset currently selected default prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:178
+msgid "Reset Selected"
+msgstr "Atur Ulang Pilihan"
+
+#. Translators: Button label to reset all default prompts.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:183
+msgid "Reset All"
+msgstr "Atur Ulang Semua"
+
+#. Translators: Button label to apply current editor text to the selected default prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:198
+msgid "Apply to Selected"
+msgstr "Terapkan ke Pilihan"
+
+#. Translators: Button label for adding a custom prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:230
+msgid "Add"
+msgstr "Tambahkan"
+
+#. Translators: Button label for editing a custom prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:232
+msgid "Edit"
+msgstr "Edit"
+
+#. Translators: Button label for removing a custom prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:234
+msgid "Remove"
+msgstr "Hapus"
+
+#. Translators: Button label for moving selected custom prompt up in the list.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:245
+msgid "Move Up"
+msgstr "Pindah ke Atas"
+
+#. Translators: Button label for moving selected custom prompt down in the list.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:247
+msgid "Move Down"
+msgstr "Pindah ke Bawah"
+
+#. Translators: Label above the custom prompt preview area.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:256
+msgid "Prompt Preview:"
+msgstr "Pratinjau Perintah:"
+
+#. Translators: Validation message shown when required text is missing in a guarded prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:318
+#, python-brace-format
+msgid ""
+"This prompt is used by {feature}. To save it, add the required text below:"
+msgstr ""
+"Prompt ini digunakan oleh {feature}. Untuk menyimpannya, tambahkan teks yang "
+"diperlukan di bawah ini:"
+
+#. Translators: Guidance shown after listing missing required text.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:324
+msgid "Add these items exactly as written, then try again."
+msgstr "Tambahkan item ini persis seperti yang tertulis, lalu coba lagi."
+
+#. Translators: Title of validation warning dialog for guarded prompt checks.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:326
+msgid "Required Text Missing"
+msgstr "Teks yang Diperlukan Tidak Ada"
+
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:338
+#, python-brace-format
+msgid ""
+"You are editing a prompt used by {feature}.\n"
+"\n"
+"If this prompt is changed, this feature may not work correctly.\n"
+"\n"
+"Do you understand the risk and want to save anyway?"
+msgstr ""
+"Anda sedang mengedit perintah yang digunakan oleh {feature}.\n"
+"\n"
+"Jika perintah ini diubah, fitur ini mungkin tidak berfungsi dengan benar.\n"
+"\n"
+"Apakah Anda memahami risikonya dan tetap ingin menyimpan?"
+
+#. Translators: Title of confirmation dialog shown before saving guarded prompts.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:341
+msgid "Confirm"
+msgstr "Konfirmasi"
+
+#. Translators: Confirm button label for guarded prompt save confirmation.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:345
+msgid "Yes, Save Anyway"
+msgstr "Ya, Tetap Simpan"
+
+#. Translators: Cancel button label for guarded prompt save confirmation.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:347
+msgid "No, Go Back"
+msgstr "Tidak, Kembali"
+
+#. Translators: Message shown after applying changes to the selected default prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:396
+msgid "Selected prompt updated."
+msgstr "Prompt yang dipilih telah diperbarui."
+
+#. Translators: Confirmation text before resetting all default prompts.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:409
+msgid "Reset all default prompts to built-in values?"
+msgstr "Setel ulang semua perintah default ke nilai bawaan?"
+
+#. Translators: Title of confirmation dialog.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:411
+msgid "Confirm Reset"
+msgstr "Konfirmasi Reset"
+
+#. Translators: Title of dialog for adding a custom prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:466
+msgid "Add Custom Prompt"
+msgstr "Tambahkan Prompt Kustom"
+
+#. Translators: Validation error for duplicate custom prompt name.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:471
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:499
+msgid "A custom prompt with this name already exists."
+msgstr "Permintaan khusus dengan nama ini sudah ada."
+
+#. Translators: Title of the dialog for editing an existing custom prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:490
+msgid "Edit Custom Prompt"
+msgstr "Edit Perintah Kustom"
+
+#. Translators: Confirmation text before deleting a custom prompt.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:514
+#, python-brace-format
+msgid "Remove custom prompt '{name}'?"
+msgstr "Hapus perintah khusus '{name}'?"
+
+#. Translators: Title of confirmation dialog.
+#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:516
+msgid "Confirm Remove"
+msgstr "Konfirmasi Hapus"
 
 #. --- 1. Recommended (Auto-Updating) ---
 #. Translators: AI Model info. [Auto] = Automatic updates. (Latest) = Newest version.
-#: addon\globalPlugins\visionAssistant\__init__.py:67 addon\globalPlugins\visionAssistant\__init__.py:68
+#: addon\globalPlugins\visionAssistant\__init__.py:67
+#: addon\globalPlugins\visionAssistant\__init__.py:68
 msgid "[Auto]"
 msgstr "[Otomatis]"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:67 addon\globalPlugins\visionAssistant\__init__.py:68
+#: addon\globalPlugins\visionAssistant\__init__.py:67
+#: addon\globalPlugins\visionAssistant\__init__.py:68
 msgid "(Latest)"
 msgstr "(Terbaru)"
 
 #. --- 2. Current Standard (Free & Fast) ---
 #. Translators: AI Model info. [Free] = Generous usage limits. (Preview) = Experimental or early-access version.
-#: addon\globalPlugins\visionAssistant\__init__.py:72 addon\globalPlugins\visionAssistant\__init__.py:73 addon\globalPlugins\visionAssistant\__init__.py:74
+#: addon\globalPlugins\visionAssistant\__init__.py:72
+#: addon\globalPlugins\visionAssistant\__init__.py:73
+#: addon\globalPlugins\visionAssistant\__init__.py:74
 msgid "[Free]"
 msgstr "[Gratis]"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:72 addon\globalPlugins\visionAssistant\__init__.py:78
+#: addon\globalPlugins\visionAssistant\__init__.py:72
+#: addon\globalPlugins\visionAssistant\__init__.py:78
 msgid "(Preview)"
 msgstr "(Preview)"
 
 #. --- 3. High Intelligence (Paid/Pro/Preview) ---
 #. Translators: AI Model info. [Pro] = High intelligence/Paid tier. (Preview) = Experimental version.
-#: addon\globalPlugins\visionAssistant\__init__.py:78 addon\globalPlugins\visionAssistant\__init__.py:79
+#: addon\globalPlugins\visionAssistant\__init__.py:78
+#: addon\globalPlugins\visionAssistant\__init__.py:79
 msgid "[Pro]"
 msgstr "[Pro]"
 
-#. Translators: Voice style description (e.g., Bright, Calm, Formal).
-#: addon\globalPlugins\visionAssistant\__init__.py:84 addon\globalPlugins\visionAssistant\__init__.py:93
+#. Translators: Adjective describing a bright AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:84
+#: addon\globalPlugins\visionAssistant\__init__.py:102
 msgid "Bright"
 msgstr "Bright"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:85 addon\globalPlugins\visionAssistant\__init__.py:102
+#. Translators: Adjective describing an upbeat AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:86
+#: addon\globalPlugins\visionAssistant\__init__.py:120
 msgid "Upbeat"
 msgstr "Upbeat"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:86 addon\globalPlugins\visionAssistant\__init__.py:101
+#. Translators: Adjective describing an informative AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:88
+#: addon\globalPlugins\visionAssistant\__init__.py:118
 msgid "Informative"
 msgstr "Informative"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:87 addon\globalPlugins\visionAssistant\__init__.py:90 addon\globalPlugins\visionAssistant\__init__.py:104
+#. Translators: Adjective describing a firm AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:90
+#: addon\globalPlugins\visionAssistant\__init__.py:96
+#: addon\globalPlugins\visionAssistant\__init__.py:124
 msgid "Firm"
 msgstr "Firm"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:88
+#. Translators: Adjective describing an excitable AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:92
 msgid "Excitable"
 msgstr "Excitable"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:89
+#. Translators: Adjective describing a youthful AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:94
 msgid "Youthful"
 msgstr "Youthful"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:91
+#. Translators: Adjective describing a breezy AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:98
 msgid "Breezy"
 msgstr "Breezy"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:92 addon\globalPlugins\visionAssistant\__init__.py:96
+#. Translators: Adjective describing an easy-going AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:100
+#: addon\globalPlugins\visionAssistant\__init__.py:108
 msgid "Easy-going"
 msgstr "Easy-going"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:94
+#. Translators: Adjective describing a breathy AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:104
 msgid "Breathy"
 msgstr "Breathy"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:95 addon\globalPlugins\visionAssistant\__init__.py:99
+#. Translators: Adjective describing a clear AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:106
+#: addon\globalPlugins\visionAssistant\__init__.py:114
 msgid "Clear"
 msgstr "Clear"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:97 addon\globalPlugins\visionAssistant\__init__.py:98
+#. Translators: Adjective describing a smooth AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:110
+#: addon\globalPlugins\visionAssistant\__init__.py:112
 msgid "Smooth"
 msgstr "Smooth"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:100
+#. Translators: Adjective describing a gravelly AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:116
 msgid "Gravelly"
 msgstr "Gravelly"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:103
+#. Translators: Adjective describing a soft AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:122
 msgid "Soft"
 msgstr "Soft"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:105
+#. Translators: Adjective describing an even AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:126
 msgid "Even"
 msgstr "Even"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:106
+#. Translators: Adjective describing a mature AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:128
 msgid "Mature"
 msgstr "Mature"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:107
+#. Translators: Adjective describing a forward AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:130
 msgid "Forward"
 msgstr "Forward"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:108
+#. Translators: Adjective describing a friendly AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:132
 msgid "Friendly"
 msgstr "Friendly"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:109
+#. Translators: Adjective describing a casual AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:134
 msgid "Casual"
 msgstr "Casual"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:110
+#. Translators: Adjective describing a gentle AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:136
 msgid "Gentle"
 msgstr "Gentle"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:111
+#. Translators: Adjective describing a lively AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:138
 msgid "Lively"
 msgstr "Lively"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:112
+#. Translators: Adjective describing a knowledgeable AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:140
 msgid "Knowledgeable"
 msgstr "Knowledgeable"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:113
+#. Translators: Adjective describing a warm AI voice style.
+#: addon\globalPlugins\visionAssistant\__init__.py:142
 msgid "Warm"
 msgstr "Warm"
 
 #. Translators: OCR Engine option (Fast but less formatted)
-#: addon\globalPlugins\visionAssistant\__init__.py:134
+#: addon\globalPlugins\visionAssistant\__init__.py:163
 msgid "Chrome (Fast)"
 msgstr "Chrome (Cepat)"
 
 #. Translators: OCR Engine option (Slower but better formatting)
-#: addon\globalPlugins\visionAssistant\__init__.py:136
+#: addon\globalPlugins\visionAssistant\__init__.py:165
 msgid "Gemini (Formatted)"
 msgstr "Gemini (Diformat)"
 
+#. Translators: Section header for text refinement prompts in Prompt Manager.
+#. Translators: main message of the Refine dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:205
+#: addon\globalPlugins\visionAssistant\__init__.py:213
+#: addon\globalPlugins\visionAssistant\__init__.py:221
+#: addon\globalPlugins\visionAssistant\__init__.py:229
+#: addon\globalPlugins\visionAssistant\__init__.py:3055
+msgid "Refine"
+msgstr "Penyempurnaan"
+
+#. Translators: Label for the text summarization prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:207
+msgid "Summarize"
+msgstr "Buat Ringkasan"
+
+#. Translators: Label for the grammar correction prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:215
+msgid "Fix Grammar"
+msgstr "Perbaiki Tata Bahasa"
+
+#. Translators: Label for the grammar correction and translation prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:223
+msgid "Fix Grammar & Translate"
+msgstr "Perbaiki Tata Bahasa & Terjemahkan"
+
+#. Translators: Label for the text explanation prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:231
+msgid "Explain"
+msgstr "Jelaskan"
+
+#. Translators: Section header for translation-related prompts in Prompt Manager.
+#. Translators: Box title for translation options
+#: addon\globalPlugins\visionAssistant\__init__.py:237
+#: addon\globalPlugins\visionAssistant\__init__.py:249
+#: addon\globalPlugins\visionAssistant\__init__.py:1858
+msgid "Translation"
+msgstr "Terjemahan"
+
+#. Translators: Label for the smart translation prompt.
+#. Translators: Feature name used in guarded prompt warnings for smart translation.
+#: addon\globalPlugins\visionAssistant\__init__.py:239
+#: addon\globalPlugins\visionAssistant\__init__.py:242
+msgid "Smart Translation"
+msgstr "Terjemahan Cerdas"
+
+#. Translators: Label for the quick translation prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:251
+msgid "Quick Translation"
+msgstr "Terjemahan Cepat"
+
+#. Translators: Section header for document-related prompts in Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:257
+#: addon\globalPlugins\visionAssistant\__init__.py:384
+msgid "Document"
+msgstr "Dokumen"
+
+#. Translators: Label for the initial context prompt in document chat.
+#: addon\globalPlugins\visionAssistant\__init__.py:259
+msgid "Document Chat Context"
+msgstr "Konteks Obrolan Dokumen"
+
+#. Translators: Section header for advanced/internal prompts in Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:265
+#: addon\globalPlugins\visionAssistant\__init__.py:302
+#: addon\globalPlugins\visionAssistant\__init__.py:311
+#: addon\globalPlugins\visionAssistant\__init__.py:411
+msgid "Advanced"
+msgstr "Lanjutan"
+
+#. Translators: Label for the AI's acknowledgement reply in document chat.
+#: addon\globalPlugins\visionAssistant\__init__.py:267
+msgid "Document Chat Bootstrap Reply"
+msgstr "Balasan Bootstrap Obrolan Dokumen"
+
+#. Translators: Section header for image analysis prompts in Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:274
+#: addon\globalPlugins\visionAssistant\__init__.py:288
+msgid "Vision"
+msgstr "Penglihatan"
+
+#. Translators: Label for the prompt used to analyze the current navigator object.
+#: addon\globalPlugins\visionAssistant\__init__.py:276
+msgid "Navigator Object Analysis"
+msgstr "Analisis Objek Navigator"
+
+#. Translators: Label for the prompt used to analyze the entire screen.
+#: addon\globalPlugins\visionAssistant\__init__.py:290
+msgid "Full Screen Analysis"
+msgstr "Analisis Layar Penuh"
+
+#. Translators: Label for the follow-up context in image analysis chat.
+#: addon\globalPlugins\visionAssistant\__init__.py:304
+msgid "Vision Follow-up Context"
+msgstr "Konteks Tindak Lanjut Visi"
+
+#. Translators: Label for the rule enforced during image analysis follow-up questions.
+#: addon\globalPlugins\visionAssistant\__init__.py:313
+msgid "Vision Follow-up Answer Rule"
+msgstr "Aturan Jawaban Tindak Lanjut Visi"
+
+#. Translators: Section header for video analysis prompts in Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:320
+msgid "Video"
+msgstr "Video"
+
+#. Translators: Label for the video content analysis prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:322
+msgid "Video Analysis"
+msgstr "Analisis Video"
+
+#. Translators: Section header for audio-related prompts in Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:332
+#: addon\globalPlugins\visionAssistant\__init__.py:340
+msgid "Audio"
+msgstr "Audio"
+
+#. Translators: Label for the audio file transcription prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:334
+msgid "Audio Transcription"
+msgstr "Transkripsi Audio"
+
+#. Translators: Label for the smart voice dictation prompt.
+#. Translators: Feature name used in guarded prompt warnings for smart dictation.
+#: addon\globalPlugins\visionAssistant\__init__.py:342
+#: addon\globalPlugins\visionAssistant\__init__.py:345
+msgid "Smart Dictation"
+msgstr "Dikte Cerdas"
+
+#. Translators: Section header for OCR-related prompts in Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:355
+#: addon\globalPlugins\visionAssistant\__init__.py:367
+msgid "OCR"
+msgstr "OCR"
+
+#. Translators: Label for the OCR prompt used for image text extraction.
+#: addon\globalPlugins\visionAssistant\__init__.py:357
+msgid "OCR Image Extraction"
+msgstr "Ekstraksi Gambar OCR"
+
+#. Translators: Label for the OCR prompt used for document text extraction.
+#. Translators: Feature name used in guarded prompt warnings for OCR document extraction.
+#: addon\globalPlugins\visionAssistant\__init__.py:369
+#: addon\globalPlugins\visionAssistant\__init__.py:372
+msgid "OCR Document Extraction"
+msgstr "Ekstraksi Dokumen OCR"
+
+#. Translators: Label for the combined OCR and translation prompt for documents.
+#: addon\globalPlugins\visionAssistant\__init__.py:386
+msgid "Document OCR + Translate"
+msgstr "Dokumen OCR + Terjemahan"
+
+#. Translators: Section header for CAPTCHA-related prompts in Prompt Manager.
+#. --- CAPTCHA Group ---
+#. Translators: Title of the settings group for CAPTCHA options
+#: addon\globalPlugins\visionAssistant\__init__.py:396
+#: addon\globalPlugins\visionAssistant\__init__.py:1742
+msgid "CAPTCHA"
+msgstr "CAPTCHA"
+
+#. Translators: Label for the CAPTCHA solving prompt.
+#. Translators: Feature name used in guarded prompt warnings for CAPTCHA solver.
+#: addon\globalPlugins\visionAssistant\__init__.py:398
+#: addon\globalPlugins\visionAssistant\__init__.py:401
+msgid "CAPTCHA Solver"
+msgstr "Pemecah CAPTCHA"
+
+#. Translators: Label for the fallback prompt when only files are provided in Refine.
+#: addon\globalPlugins\visionAssistant\__init__.py:413
+msgid "Refine Files-Only Fallback"
+msgstr "Perbaiki Penggantian Khusus File"
+
+#. Translators: Description and input type for the [selection] variable in the Variables Guide.
+#: addon\globalPlugins\visionAssistant\__init__.py:421
+msgid "Currently selected text"
+msgstr "Teks yang dipilih saat ini"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:421
+#: addon\globalPlugins\visionAssistant\__init__.py:423
+msgid "Text"
+msgstr "Teks"
+
+#. Translators: Description for the [clipboard] variable in the Variables Guide.
+#: addon\globalPlugins\visionAssistant\__init__.py:423
+msgid "Clipboard content"
+msgstr "Konten papan klipKonten papan klip"
+
+#. Translators: Description and input type for the [screen_obj] variable in the Variables Guide.
+#: addon\globalPlugins\visionAssistant\__init__.py:425
+msgid "Screenshot of the navigator object"
+msgstr "Tangkapan layar objek navigator"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:425
+#: addon\globalPlugins\visionAssistant\__init__.py:427
+msgid "Image"
+msgstr "Image"
+
+#. Translators: Description for the [screen_full] variable in the Variables Guide.
+#: addon\globalPlugins\visionAssistant\__init__.py:427
+msgid "Screenshot of the entire screen"
+msgstr "Tangkapan layar seluruh layar"
+
+#. Translators: Description and input type for the [file_ocr] variable in the Variables Guide.
+#: addon\globalPlugins\visionAssistant\__init__.py:429
+msgid "Select image/PDF/TIFF for text extraction"
+msgstr "Pilih gambar/PDF/TIFF untuk ekstraksi teks"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:429
+msgid "Image, PDF, TIFF"
+msgstr "Gambar, PDF, TIFF"
+
+#. Translators: Description and input type for the [file_read] variable in the Variables Guide.
+#: addon\globalPlugins\visionAssistant\__init__.py:431
+msgid "Select document for reading"
+msgstr "Pilih dokumen untuk dibaca"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:431
+msgid "TXT, Code, PDF"
+msgstr "TXT, Code, PDF"
+
+#. Translators: Description and input type for the [file_audio] variable in the Variables Guide.
+#: addon\globalPlugins\visionAssistant\__init__.py:433
+msgid "Select audio file for analysis"
+msgstr "Pilih file audio untuk dianalisis"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:433
+msgid "MP3, WAV, OGG"
+msgstr "MP3, WAV, OGG"
+
+#. Translators: Prefix for custom prompts in the Refine menu
+#: addon\globalPlugins\visionAssistant\__init__.py:721
+msgid "Custom: "
+msgstr "Kustom: "
+
 #. Translators: Title of the error dialog box
-#: addon\globalPlugins\visionAssistant\__init__.py:698
+#: addon\globalPlugins\visionAssistant\__init__.py:805
 #, python-brace-format
 msgid "{name} Error"
 msgstr "{name} Kesalahan"
 
 #. Translators: Error message for Bad Request (400)
-#: addon\globalPlugins\visionAssistant\__init__.py:959
+#: addon\globalPlugins\visionAssistant\__init__.py:1068
 msgid "Error 400: Bad Request (Check API Key)"
 msgstr "Kesalahan 400: Permintaan Tidak Falit (Periksa Kunci API)"
 
 #. Translators: Error message for Forbidden (403)
-#: addon\globalPlugins\visionAssistant\__init__.py:961
+#: addon\globalPlugins\visionAssistant\__init__.py:1070
 msgid "Error 403: Forbidden (Check Region)"
 msgstr "Kesalahan 403: Akses Ditolak (Periksa Wilayah)"
 
+#. Translators: Message of a dialog which may pop up while performing an AI call
+#: addon\globalPlugins\visionAssistant\__init__.py:1113
+#: addon\globalPlugins\visionAssistant\__init__.py:1234
+msgid "Error 429: Quota Exceeded (Try later)"
+msgstr "Kesalahan 429: Kuota Melampaui Batas (Coba lagi nanti)"
+
+#. Translators: Message of a dialog which may pop up while performing an AI call
+#: addon\globalPlugins\visionAssistant\__init__.py:1116
+#: addon\globalPlugins\visionAssistant\__init__.py:1237
+#, python-brace-format
+msgid "Server Error {code}: {reason}"
+msgstr "Kesalahan Server {code}: {reason}"
+
 #. Translators: Error when no API keys are found in settings
-#: addon\globalPlugins\visionAssistant\__init__.py:1017
+#: addon\globalPlugins\visionAssistant\__init__.py:1126
 msgid "No API Keys configured."
 msgstr "Tidak ada Kunci API yang dikonfigurasi."
 
 #. Translators: Error when all available API keys fail
-#: addon\globalPlugins\visionAssistant\__init__.py:1032
+#: addon\globalPlugins\visionAssistant\__init__.py:1141
 msgid "All API Keys failed (Quota/Server)."
 msgstr "Semua Kunci API gagal (Kuota/Server)."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:1036
+#: addon\globalPlugins\visionAssistant\__init__.py:1145
 msgid "Unknown error occurred."
 msgstr "Terjadi kesalahan yang tidak diketahui."
 
 #. Translators: Error message for missing API Keys
-#: addon\globalPlugins\visionAssistant\__init__.py:1068
+#: addon\globalPlugins\visionAssistant\__init__.py:1177
 msgid "No API Keys."
 msgstr "Tidak Ada Kunci API."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:1134
+#: addon\globalPlugins\visionAssistant\__init__.py:1214
+#: addon\globalPlugins\visionAssistant\__init__.py:1944
+#: addon\globalPlugins\visionAssistant\__init__.py:3344
+msgid "Upload failed."
+msgstr "Gagal mengunggah."
+
+#: addon\globalPlugins\visionAssistant\__init__.py:1243
 msgid "All keys failed."
 msgstr "Semua kunci gagal."
 
 #. Translators: Title of update confirmation dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1231
+#: addon\globalPlugins\visionAssistant\__init__.py:1340
 msgid "Update Available"
 msgstr "Pembaruan Tersedia"
 
 #. Translators: Message asking user to update. {version} is version number.
-#: addon\globalPlugins\visionAssistant\__init__.py:1238
+#: addon\globalPlugins\visionAssistant\__init__.py:1347
 #, python-brace-format
 msgid "A new version ({version}) of {name} is available."
 msgstr "Versi baru ({version}) of {name} telah tersedia."
 
 #. Translators: Label for the changes text box
-#: addon\globalPlugins\visionAssistant\__init__.py:1243
+#: addon\globalPlugins\visionAssistant\__init__.py:1352
 msgid "Changes:"
 msgstr "Perubahan:"
 
 #. Translators: Question to download and install
-#: addon\globalPlugins\visionAssistant\__init__.py:1250
+#: addon\globalPlugins\visionAssistant\__init__.py:1359
 msgid "Download and Install?"
 msgstr "Unduh dan pasang?"
 
 #. Translators: Button to accept update
-#: addon\globalPlugins\visionAssistant\__init__.py:1255
+#: addon\globalPlugins\visionAssistant\__init__.py:1364
 msgid "&Yes"
 msgstr "&Ya"
 
 #. Translators: Button to reject update
-#: addon\globalPlugins\visionAssistant\__init__.py:1257
+#: addon\globalPlugins\visionAssistant\__init__.py:1366
 msgid "&No"
 msgstr "&TIDAK"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:1298
+#. Translators: Error message when an update is found but the addon file is missing from GitHub.
+#: addon\globalPlugins\visionAssistant\__init__.py:1408
 msgid "Update found but no .nvda-addon file in release."
 msgstr "Pembaruan ditemukan tetapi tidak ada berkas .nvda-addon dalam rilis."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:1301
+#. Translators: Status message informing the user they are already on the latest version.
+#: addon\globalPlugins\visionAssistant\__init__.py:1412
 msgid "You have the latest version."
 msgstr "Anda sudah menggunakan versi terbaru."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:1305
+#: addon\globalPlugins\visionAssistant\__init__.py:1416
 #, python-brace-format
 msgid "Update check failed: {error}"
 msgstr "Pemeriksaan pembaruan gagal: {error}"
 
 #. Translators: Message shown while downloading update
-#: addon\globalPlugins\visionAssistant\__init__.py:1324
+#: addon\globalPlugins\visionAssistant\__init__.py:1435
 msgid "Downloading update..."
 msgstr "Mengunduh pembaruan..."
 
 #. Translators: Error message for download failure
-#: addon\globalPlugins\visionAssistant\__init__.py:1333
+#: addon\globalPlugins\visionAssistant\__init__.py:1444
 #, python-brace-format
 msgid "Download failed: {error}"
 msgstr "Pengunduhan gagal: {error}"
 
 #. Translators: Label for the AI response text area in a chat dialog
 #. Translators: Label for AI Response Language selection
-#: addon\globalPlugins\visionAssistant\__init__.py:1353 addon\globalPlugins\visionAssistant\__init__.py:1595
+#: addon\globalPlugins\visionAssistant\__init__.py:1464
+#: addon\globalPlugins\visionAssistant\__init__.py:1706
 msgid "AI Response:"
 msgstr "Respon AI:"
 
 #. Translators: Format for displaying AI message in a chat dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1363 addon\globalPlugins\visionAssistant\__init__.py:1451 addon\globalPlugins\visionAssistant\__init__.py:1468
+#: addon\globalPlugins\visionAssistant\__init__.py:1474
+#: addon\globalPlugins\visionAssistant\__init__.py:1562
+#: addon\globalPlugins\visionAssistant\__init__.py:1579
 #, python-brace-format
 msgid "AI: {text}\n"
 msgstr "AI: {text}\n"
 
 #. Translators: Label for user input field in a chat dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1374
+#: addon\globalPlugins\visionAssistant\__init__.py:1485
 msgid "Ask:"
 msgstr "Bertanya:"
 
 #. Translators: Button to send message in a chat dialog
 #. Translators: Button to send message
-#: addon\globalPlugins\visionAssistant\__init__.py:1384 addon\globalPlugins\visionAssistant\__init__.py:1808
+#: addon\globalPlugins\visionAssistant\__init__.py:1495
+#: addon\globalPlugins\visionAssistant\__init__.py:1925
 msgid "Send"
 msgstr "Kirim"
 
 #. Translators: Button to view the content in a formatted HTML window
 #. Translators: Button to view formatted content
-#: addon\globalPlugins\visionAssistant\__init__.py:1386 addon\globalPlugins\visionAssistant\__init__.py:1920
+#: addon\globalPlugins\visionAssistant\__init__.py:1497
+#: addon\globalPlugins\visionAssistant\__init__.py:2039
 msgid "View Formatted"
 msgstr "Lihat tampilan terformat"
 
 #. Translators: Button to save only the result content without chat history
-#: addon\globalPlugins\visionAssistant\__init__.py:1389
+#: addon\globalPlugins\visionAssistant\__init__.py:1500
 msgid "Save Content"
 msgstr "Simpan isi obrolan"
 
 #. Translators: Button to save chat in a chat dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1392
+#: addon\globalPlugins\visionAssistant\__init__.py:1503
 msgid "Save Chat"
 msgstr "Simpan Obrolan"
 
-#. Translators: Button to close chat dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1394 addon\globalPlugins\visionAssistant\__init__.py:1930 addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:112
-msgid "Close"
-msgstr "Tutup"
-
 #. Translators: Format for displaying User message in a chat dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1427 addon\globalPlugins\visionAssistant\__init__.py:1466
+#: addon\globalPlugins\visionAssistant\__init__.py:1538
+#: addon\globalPlugins\visionAssistant\__init__.py:1577
 #, python-brace-format
 msgid ""
 "\n"
@@ -365,534 +878,585 @@ msgstr ""
 
 #. Translators: Message shown while processing in a chat dialog
 #. Translators: Message showing AI is thinking
-#: addon\globalPlugins\visionAssistant\__init__.py:1431 addon\globalPlugins\visionAssistant\__init__.py:1843
+#: addon\globalPlugins\visionAssistant\__init__.py:1542
+#: addon\globalPlugins\visionAssistant\__init__.py:1960
 msgid "Thinking..."
 msgstr "Sedang berpikir..."
 
 #. Translators: Title of the formatted result window
-#: addon\globalPlugins\visionAssistant\__init__.py:1488
+#: addon\globalPlugins\visionAssistant\__init__.py:1599
 msgid "Formatted Conversation"
 msgstr "Percakapan Terformat"
 
 #. Translators: Error message if viewing fails
-#: addon\globalPlugins\visionAssistant\__init__.py:1491
+#: addon\globalPlugins\visionAssistant\__init__.py:1602
 #, python-brace-format
 msgid "Error displaying content: {error}"
 msgstr "Kesalahan saat menampilkan isi obrolan: {error}"
 
 #. Translators: Save dialog title
-#: addon\globalPlugins\visionAssistant\__init__.py:1496
+#: addon\globalPlugins\visionAssistant\__init__.py:1607
 msgid "Save Chat Log"
 msgstr "Simpan Log Obrolan"
 
+#. Translators: Message shown on successful save of a file.
 #. Translators: Message on successful save
-#: addon\globalPlugins\visionAssistant\__init__.py:1501 addon\globalPlugins\visionAssistant\__init__.py:1515
+#: addon\globalPlugins\visionAssistant\__init__.py:1612
+#: addon\globalPlugins\visionAssistant\__init__.py:1626
 msgid "Saved."
 msgstr "Disimpan."
 
 #. Translators: Message in the error dialog when saving fails.
-#: addon\globalPlugins\visionAssistant\__init__.py:1504 addon\globalPlugins\visionAssistant\__init__.py:1518
+#: addon\globalPlugins\visionAssistant\__init__.py:1615
+#: addon\globalPlugins\visionAssistant\__init__.py:1629
 #, python-brace-format
 msgid "Save failed: {error}"
 msgstr "Gagal menyimpan: {error}"
 
 #. Translators: Save dialog title
-#: addon\globalPlugins\visionAssistant\__init__.py:1509
+#: addon\globalPlugins\visionAssistant\__init__.py:1620
 msgid "Save Result"
 msgstr "Simpan Hasil"
 
 #. --- Connection Group ---
 #. Translators: Title of the settings group for connection and updates
-#: addon\globalPlugins\visionAssistant\__init__.py:1526
+#: addon\globalPlugins\visionAssistant\__init__.py:1637
 msgid "Connection"
 msgstr "Koneksi"
 
 #. Translators: Label for API Key input
-#: addon\globalPlugins\visionAssistant\__init__.py:1532
+#: addon\globalPlugins\visionAssistant\__init__.py:1643
 msgid "Gemini API Key (Separate multiple keys with comma or newline):"
 msgstr ""
 "Kunci API Gemini (Pisahkan beberapa kunci dengan koma atau baris baru):"
 
 #. Translators: Checkbox to toggle API Key visibility
-#: addon\globalPlugins\visionAssistant\__init__.py:1546
+#: addon\globalPlugins\visionAssistant\__init__.py:1657
 msgid "Show API Key"
 msgstr "Tampilkan Kunci API"
 
 #. Translators: Label for Model selection
-#: addon\globalPlugins\visionAssistant\__init__.py:1552
+#: addon\globalPlugins\visionAssistant\__init__.py:1663
 msgid "AI Model:"
 msgstr "Model AI:"
 
 #. Translators: Label for Proxy URL input
-#: addon\globalPlugins\visionAssistant\__init__.py:1560
+#: addon\globalPlugins\visionAssistant\__init__.py:1671
 msgid "Proxy URL:"
 msgstr "Alamat Proksi:"
 
 #. Translators: Checkbox to enable/disable automatic update checks on NVDA startup
-#: addon\globalPlugins\visionAssistant\__init__.py:1564
+#: addon\globalPlugins\visionAssistant\__init__.py:1675
 msgid "Check for updates on startup"
 msgstr "Periksa pembaruan saat NVDA dinyalakan"
 
 #. Translators: Checkbox to toggle markdown cleaning in chat windows
-#: addon\globalPlugins\visionAssistant\__init__.py:1567
+#: addon\globalPlugins\visionAssistant\__init__.py:1678
 msgid "Clean Markdown in Chat"
 msgstr "Bersihkan markdown dalam obrolan"
 
 #. Translators: Checkbox to enable copying AI responses to clipboard
-#: addon\globalPlugins\visionAssistant\__init__.py:1570
+#: addon\globalPlugins\visionAssistant\__init__.py:1681
 msgid "Copy AI responses to clipboard"
 msgstr "Salin tanggapan AI ke papan klip"
 
 #. Translators: Checkbox to skip chat window and only speak AI responses
-#: addon\globalPlugins\visionAssistant\__init__.py:1573
+#: addon\globalPlugins\visionAssistant\__init__.py:1684
 msgid "Direct Output (No Chat Window)"
 msgstr "Output Langsung (Tanpa Jendela Obrolan)"
 
 #. --- Translation Languages Group ---
 #. Translators: Title of the settings group for translation languages configuration
-#: addon\globalPlugins\visionAssistant\__init__.py:1579
+#: addon\globalPlugins\visionAssistant\__init__.py:1690
 msgid "Translation Languages"
 msgstr "Bahasa Terjemahan"
 
 #. Translators: Label for Source Language selection
-#: addon\globalPlugins\visionAssistant\__init__.py:1585
+#: addon\globalPlugins\visionAssistant\__init__.py:1696
 msgid "Source:"
 msgstr "Bahasa sumber:"
 
 #. Translators: Label for Target Language selection
 #. Translators: Label for target language
-#: addon\globalPlugins\visionAssistant\__init__.py:1590 addon\globalPlugins\visionAssistant\__init__.py:1747
+#: addon\globalPlugins\visionAssistant\__init__.py:1701
+#: addon\globalPlugins\visionAssistant\__init__.py:1864
 msgid "Target:"
 msgstr "Bahasa tujuan:"
 
 #. Translators: Checkbox for Smart Swap feature
-#: addon\globalPlugins\visionAssistant\__init__.py:1600
+#: addon\globalPlugins\visionAssistant\__init__.py:1711
 msgid "Smart Swap"
 msgstr "Tukar bahasa secara cerdas"
 
 #. --- Document Reader Settings ---
 #. Translators: Title of settings group for Document Reader features
-#: addon\globalPlugins\visionAssistant\__init__.py:1606
+#. Translators: Title of the Document Reader window.
+#: addon\globalPlugins\visionAssistant\__init__.py:1717
+#: addon\globalPlugins\visionAssistant\__init__.py:1982
 msgid "Document Reader"
 msgstr "Pembaca Dokumen"
 
 #. Translators: Label for OCR Engine selection
-#: addon\globalPlugins\visionAssistant\__init__.py:1612
+#: addon\globalPlugins\visionAssistant\__init__.py:1723
 msgid "OCR Engine:"
 msgstr "Mesin OCR:"
 
 #. Translators: Label for TTS Voice selection
-#: addon\globalPlugins\visionAssistant\__init__.py:1621
+#: addon\globalPlugins\visionAssistant\__init__.py:1732
 msgid "TTS Voice:"
 msgstr "Suara TTS:"
 
-#. --- CAPTCHA Group ---
-#. Translators: Title of the settings group for CAPTCHA options
-#: addon\globalPlugins\visionAssistant\__init__.py:343 addon\globalPlugins\visionAssistant\__init__.py:1631
-msgid "CAPTCHA"
-msgstr "CAPTCHA"
-
 #. Translators: Label for CAPTCHA capture method selection
-#: addon\globalPlugins\visionAssistant\__init__.py:1636
+#: addon\globalPlugins\visionAssistant\__init__.py:1747
 msgid "Capture Method:"
 msgstr "Metode Pengambilan:"
 
 #. Translators: A choice for capture method. Captures only the specific object under the NVDA navigator cursor.
-#: addon\globalPlugins\visionAssistant\__init__.py:1638
+#: addon\globalPlugins\visionAssistant\__init__.py:1749
 msgid "Navigator Object"
 msgstr "Navigator Object"
 
 #. Translators: A choice for capture method. Captures the entire visible screen area.
-#: addon\globalPlugins\visionAssistant\__init__.py:1640
+#: addon\globalPlugins\visionAssistant\__init__.py:1751
 msgid "Full Screen"
 msgstr "Seluruh layar"
 
-#. --- Custom Prompts Group ---
-#. Translators: Title of the settings group for custom prompts
-#: addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:136 addon\globalPlugins\visionAssistant\prompt_manager_dialog.py:223
-msgid "Custom Prompts"
-msgstr "Perintah Kustom"
+#. --- Prompt Manager Group ---
+#. Translators: Title of the settings group for prompt management
+#: addon\globalPlugins\visionAssistant\__init__.py:1761
+msgid "Prompts"
+msgstr "Perintah"
 
-#. Translators: Helper text explaining the format for custom prompts
-#: addon\globalPlugins\visionAssistant\__init__.py:1110
-msgid "Format: Name:Content"
-msgstr "Format: Nama:Isi"
+#. Translators: Description for the prompt manager button.
+#: addon\globalPlugins\visionAssistant\__init__.py:1766
+msgid "Manage default and custom prompts."
+msgstr "Kelola perintah default dan kustom."
+
+#. Translators: Button label to open prompt manager dialog.
+#: addon\globalPlugins\visionAssistant\__init__.py:1768
+msgid "Manage Prompts..."
+msgstr "Kelola Perintah..."
+
+#. Translators: Summary text for prompt counts in settings.
+#: addon\globalPlugins\visionAssistant\__init__.py:1778
+#, python-brace-format
+msgid "Default prompts: {defaultCount}, Custom prompts: {customCount}"
+msgstr "Perintah bawaan: {defaultCount}, Perintah khusus: {customCount}"
 
 #. Translators: Title of the PDF options dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1721
+#: addon\globalPlugins\visionAssistant\__init__.py:1838
 msgid "Options"
 msgstr "Pilihan"
 
 #. Translators: Label showing total pages found
-#: addon\globalPlugins\visionAssistant\__init__.py:1724
+#: addon\globalPlugins\visionAssistant\__init__.py:1841
 #, python-brace-format
 msgid "Total Pages (All Files): {count}"
 msgstr "Total Halaman (Semua File): {count}"
 
 #. Translators: Box title for page range selection
-#: addon\globalPlugins\visionAssistant\__init__.py:1727
+#: addon\globalPlugins\visionAssistant\__init__.py:1844
 msgid "Range"
 msgstr "Jangkauan"
 
 #. Translators: Label for start page
-#: addon\globalPlugins\visionAssistant\__init__.py:1730
+#: addon\globalPlugins\visionAssistant\__init__.py:1847
 msgid "From:"
 msgstr "Dari:"
 
 #. Translators: Label for end page
-#: addon\globalPlugins\visionAssistant\__init__.py:1734
+#: addon\globalPlugins\visionAssistant\__init__.py:1851
 msgid "To:"
 msgstr "Ke:"
 
-#. Translators: Box title for translation options
-#: addon\globalPlugins\visionAssistant\__init__.py:227 addon\globalPlugins\visionAssistant\__init__.py:233 addon\globalPlugins\visionAssistant\__init__.py:1741
-msgid "Translation"
-msgstr "Terjemahan"
-
 #. Translators: Checkbox to enable translation
-#: addon\globalPlugins\visionAssistant\__init__.py:1743
+#: addon\globalPlugins\visionAssistant\__init__.py:1860
 msgid "Translate Output"
 msgstr "Terjemahkan Output"
 
 #. Translators: Button to start processing
-#: addon\globalPlugins\visionAssistant\__init__.py:1756
+#: addon\globalPlugins\visionAssistant\__init__.py:1873
 msgid "Start"
 msgstr "Mulai"
 
 #. Translators: Button to cancel
-#: addon\globalPlugins\visionAssistant\__init__.py:1759
+#: addon\globalPlugins\visionAssistant\__init__.py:1876
 msgid "Cancel"
 msgstr "Batalkan"
 
 #. Translators: Title of the chat dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:1784
+#: addon\globalPlugins\visionAssistant\__init__.py:1901
 msgid "Ask about Document"
 msgstr "Tanyakan tentang Dokumen"
 
 #. Translators: Label showing the analyzed file name
-#: addon\globalPlugins\visionAssistant\__init__.py:1793
+#: addon\globalPlugins\visionAssistant\__init__.py:1910
 #, python-brace-format
 msgid "File: {name}"
 msgstr "Berkas: {name}"
 
 #. Translators: Status message while uploading
-#: addon\globalPlugins\visionAssistant\__init__.py:1798
+#: addon\globalPlugins\visionAssistant\__init__.py:1915
 msgid "Uploading to Gemini...\n"
 msgstr "Mengunggah ke Gemini...\n"
 
 #. Translators: Label for the chat input field
-#: addon\globalPlugins\visionAssistant\__init__.py:1802
+#: addon\globalPlugins\visionAssistant\__init__.py:1919
 msgid "Your Question:"
 msgstr "Masukkan Pertanyaan Anda:"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:1105 addon\globalPlugins\visionAssistant\__init__.py:1827 addon\globalPlugins\visionAssistant\__init__.py:3216
-msgid "Upload failed."
-msgstr "Gagal mengunggah."
-
 #. Translators: Message when ready to chat
-#: addon\globalPlugins\visionAssistant\__init__.py:1833
+#: addon\globalPlugins\visionAssistant\__init__.py:1950
 msgid "Ready! Ask your questions.\n"
 msgstr "Siap! Ajukan pertanyaan Anda.\n"
 
 #. Translators: Initial status when the add-on is doing nothing
 #. Translators: Status message when the add-on is doing nothing
-#: addon\globalPlugins\visionAssistant\__init__.py:1853 addon\globalPlugins\visionAssistant\__init__.py:2132 addon\globalPlugins\visionAssistant\__init__.py:2219 addon\globalPlugins\visionAssistant\__init__.py:2223 addon\globalPlugins\visionAssistant\__init__.py:2287 addon\globalPlugins\visionAssistant\__init__.py:2484 addon\globalPlugins\visionAssistant\__init__.py:3078 addon\globalPlugins\visionAssistant\__init__.py:3194 addon\globalPlugins\visionAssistant\__init__.py:3199 addon\globalPlugins\visionAssistant\__init__.py:3215 addon\globalPlugins\visionAssistant\__init__.py:3228 addon\globalPlugins\visionAssistant\__init__.py:3237 addon\globalPlugins\visionAssistant\__init__.py:3325 addon\globalPlugins\visionAssistant\__init__.py:3329 addon\globalPlugins\visionAssistant\__init__.py:3393 addon\globalPlugins\visionAssistant\__init__.py:3407 addon\globalPlugins\visionAssistant\__init__.py:3411 addon\globalPlugins\visionAssistant\__init__.py:3416 addon\globalPlugins\visionAssistant\__init__.py:3502 addon\globalPlugins\visionAssistant\__init__.py:3515 addon\globalPlugins\visionAssistant\__init__.py:3519 addon\globalPlugins\visionAssistant\__init__.py:3555 addon\globalPlugins\visionAssistant\__init__.py:3565
+#: addon\globalPlugins\visionAssistant\__init__.py:1970
+#: addon\globalPlugins\visionAssistant\__init__.py:2257
+#: addon\globalPlugins\visionAssistant\__init__.py:2344
+#: addon\globalPlugins\visionAssistant\__init__.py:2348
+#: addon\globalPlugins\visionAssistant\__init__.py:2412
+#: addon\globalPlugins\visionAssistant\__init__.py:2605
+#: addon\globalPlugins\visionAssistant\__init__.py:3203
+#: addon\globalPlugins\visionAssistant\__init__.py:3323
+#: addon\globalPlugins\visionAssistant\__init__.py:3328
+#: addon\globalPlugins\visionAssistant\__init__.py:3343
+#: addon\globalPlugins\visionAssistant\__init__.py:3356
+#: addon\globalPlugins\visionAssistant\__init__.py:3364
+#: addon\globalPlugins\visionAssistant\__init__.py:3461
+#: addon\globalPlugins\visionAssistant\__init__.py:3464
+#: addon\globalPlugins\visionAssistant\__init__.py:3537
+#: addon\globalPlugins\visionAssistant\__init__.py:3551
+#: addon\globalPlugins\visionAssistant\__init__.py:3554
+#: addon\globalPlugins\visionAssistant\__init__.py:3559
+#: addon\globalPlugins\visionAssistant\__init__.py:3645
+#: addon\globalPlugins\visionAssistant\__init__.py:3658
+#: addon\globalPlugins\visionAssistant\__init__.py:3661
+#: addon\globalPlugins\visionAssistant\__init__.py:3697
+#: addon\globalPlugins\visionAssistant\__init__.py:3707
 msgid "Idle"
 msgstr "Tidak digunakan"
 
 #. Translators: Spoken prefix for AI response
-#: addon\globalPlugins\visionAssistant\__init__.py:1860
+#: addon\globalPlugins\visionAssistant\__init__.py:1977
 msgid "AI: "
 msgstr "AI: "
 
 #. Translators: Initial status message
-#: addon\globalPlugins\visionAssistant\__init__.py:1883
+#: addon\globalPlugins\visionAssistant\__init__.py:2002
 msgid "Initializing..."
 msgstr "Menginisialisasi..."
 
 #. Translators: Button to go to previous page
-#: addon\globalPlugins\visionAssistant\__init__.py:1889
+#: addon\globalPlugins\visionAssistant\__init__.py:2008
 msgid "Previous (Ctrl+PageUp)"
 msgstr "Sebelumnya (Ctrl+PageUp)"
 
 #. Translators: Button to go to next page
-#: addon\globalPlugins\visionAssistant\__init__.py:1893
+#: addon\globalPlugins\visionAssistant\__init__.py:2012
 msgid "Next (Ctrl+PageDown)"
 msgstr "Berikutnya (Ctrl+PageDown)"
 
 #. Translators: Label for Go To Page
-#: addon\globalPlugins\visionAssistant\__init__.py:1897
+#: addon\globalPlugins\visionAssistant\__init__.py:2016
 msgid "Go to:"
 msgstr "Menuju ke:"
 
 #. Translators: Button to Ask questions about the document
-#: addon\globalPlugins\visionAssistant\__init__.py:1905
+#: addon\globalPlugins\visionAssistant\__init__.py:2024
 msgid "Ask AI (Alt+A)"
 msgstr "Tanya AI (Alt+A)"
 
 #. Translators: Button to force re-scan
-#: addon\globalPlugins\visionAssistant\__init__.py:1910
+#: addon\globalPlugins\visionAssistant\__init__.py:2029
 msgid "Re-scan with Gemini (Alt+R)"
 msgstr "Pindai ulang dengan Gemini (Alt+R)"
 
 #. Translators: Button to generate audio
-#: addon\globalPlugins\visionAssistant\__init__.py:1915
+#: addon\globalPlugins\visionAssistant\__init__.py:2034
 msgid "Generate Audio (Alt+G)"
 msgstr "Hasilkan Audio (Alt+G)"
 
 #. Translators: Button to save text
-#: addon\globalPlugins\visionAssistant\__init__.py:1925
+#: addon\globalPlugins\visionAssistant\__init__.py:2044
 msgid "Save (Alt+S)"
 msgstr "Simpan (Alt+S)"
 
 #. Translators: Spoken message when the current page is ready
-#: addon\globalPlugins\visionAssistant\__init__.py:1964
+#: addon\globalPlugins\visionAssistant\__init__.py:2083
 #, python-brace-format
 msgid "Page {num} ready"
 msgstr "Halaman {num} telah siap"
 
 #. Translators: Placeholder text when OCR fails
-#: addon\globalPlugins\visionAssistant\__init__.py:1986
+#: addon\globalPlugins\visionAssistant\__init__.py:2105
 msgid "[OCR failed. Try Gemini Re-scan.]"
 msgstr "[OCR gagal. Coba Pindai Ulang dengan Gemini.]"
 
 #. Translators: Error message for page processing failure
-#: addon\globalPlugins\visionAssistant\__init__.py:1995
+#: addon\globalPlugins\visionAssistant\__init__.py:2114
 msgid "Error processing page."
 msgstr "Kesalahan pemrosesan halaman."
 
 #. Translators: Status label format
-#: addon\globalPlugins\visionAssistant\__init__.py:2000
+#: addon\globalPlugins\visionAssistant\__init__.py:2119
 #, python-brace-format
 msgid "Page {current} of {total}"
 msgstr "Halaman {current} dari {total}"
 
 #. Translators: Status when page is loading
-#: addon\globalPlugins\visionAssistant\__init__.py:2007
+#: addon\globalPlugins\visionAssistant\__init__.py:2126
 msgid "Processing in background..."
 msgstr "Memproses di latar belakang..."
 
 #. Translators: Spoken message when switching pages
-#: addon\globalPlugins\visionAssistant\__init__.py:2018 addon\globalPlugins\visionAssistant\__init__.py:2037
+#. Translators: Heading for each page in the formatted content view.
+#: addon\globalPlugins\visionAssistant\__init__.py:2137
+#: addon\globalPlugins\visionAssistant\__init__.py:2156
 #, python-brace-format
 msgid "Page {num}"
 msgstr "Halaman {num}"
 
 #. Translators: Title of the formatted result window
-#: addon\globalPlugins\visionAssistant\__init__.py:2050
+#: addon\globalPlugins\visionAssistant\__init__.py:2169
 msgid "Formatted Content"
 msgstr "Konten Terformat"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:2056 addon\globalPlugins\visionAssistant\__init__.py:2141 addon\globalPlugins\visionAssistant\__init__.py:2228
+#: addon\globalPlugins\visionAssistant\__init__.py:2175
+#: addon\globalPlugins\visionAssistant\__init__.py:2266
+#: addon\globalPlugins\visionAssistant\__init__.py:2353
 msgid "Please configure Gemini API Key."
 msgstr "Silakan konfigurasikan Kunci API Gemini."
 
 #. Translators: Status reported when an error occurs
-#: addon\globalPlugins\visionAssistant\__init__.py:2056 addon\globalPlugins\visionAssistant\__init__.py:2141 addon\globalPlugins\visionAssistant\__init__.py:2228 addon\globalPlugins\visionAssistant\__init__.py:2596 addon\globalPlugins\visionAssistant\__init__.py:2603 addon\globalPlugins\visionAssistant\__init__.py:2672
+#: addon\globalPlugins\visionAssistant\__init__.py:2175
+#: addon\globalPlugins\visionAssistant\__init__.py:2266
+#: addon\globalPlugins\visionAssistant\__init__.py:2353
+#: addon\globalPlugins\visionAssistant\__init__.py:2717
+#: addon\globalPlugins\visionAssistant\__init__.py:2724
+#: addon\globalPlugins\visionAssistant\__init__.py:2793
 msgid "Error"
 msgstr "Kesalahan"
 
 #. Translators: Menu option for current page
-#: addon\globalPlugins\visionAssistant\__init__.py:2060
+#: addon\globalPlugins\visionAssistant\__init__.py:2179
 msgid "Current Page"
 msgstr "Halaman Saat Ini"
 
 #. Translators: Menu option for all pages
-#: addon\globalPlugins\visionAssistant\__init__.py:2062
+#: addon\globalPlugins\visionAssistant\__init__.py:2181
 msgid "All Pages (In Range)"
 msgstr "Semua Halaman (Dalam Jangkauan)"
 
 #. Translators: Message during manual scan
-#: addon\globalPlugins\visionAssistant\__init__.py:2072
+#: addon\globalPlugins\visionAssistant\__init__.py:2191
 msgid "Scanning with Gemini..."
 msgstr "Memindai dengan Gemini..."
 
 #. Translators: Message when scan is complete
-#: addon\globalPlugins\visionAssistant\__init__.py:2088
+#: addon\globalPlugins\visionAssistant\__init__.py:2207
 msgid "Scan complete"
 msgstr "Pemindaian selesai"
 
 #. Translators: Message when batch scan starts
-#: addon\globalPlugins\visionAssistant\__init__.py:2096
+#: addon\globalPlugins\visionAssistant\__init__.py:2215
 msgid "Batch Processing Started"
 msgstr "Pemrosesan Batch Dimulai"
 
 #. Translators: Error message if PDF creation fails
-#: addon\globalPlugins\visionAssistant\__init__.py:2107
+#: addon\globalPlugins\visionAssistant\__init__.py:2226
 msgid "Error creating temporary PDF."
 msgstr "Terjadi kesalahan saat membuat PDF sementara."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:2115
+#: addon\globalPlugins\visionAssistant\__init__.py:2234
 msgid "Unknown error"
 msgstr "Kesalahan tidak diketahui"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:2116
+#. Translators: Message reported when batch scan fails
+#: addon\globalPlugins\visionAssistant\__init__.py:2236
 #, python-brace-format
 msgid "Scan failed: {err}"
 msgstr "Pemindaian gagal: {err}"
 
 #. Translators: Message when batch scan is complete
-#: addon\globalPlugins\visionAssistant\__init__.py:2129
+#: addon\globalPlugins\visionAssistant\__init__.py:2254
 msgid "Batch Scan Complete"
 msgstr "Pemindaian Batch Selesai"
 
 #. Translators: Menu option for TTS current page
-#: addon\globalPlugins\visionAssistant\__init__.py:2145
+#: addon\globalPlugins\visionAssistant\__init__.py:2270
 msgid "Generate for Current Page"
 msgstr "Hasilkan untuk Halaman Saat Ini"
 
 #. Translators: Menu option for TTS all pages
-#: addon\globalPlugins\visionAssistant\__init__.py:2147
+#: addon\globalPlugins\visionAssistant\__init__.py:2272
 msgid "Generate for All Pages (In Range)"
 msgstr "Hasilkan untuk Semua Halaman (Dalam Jangkauan)"
 
 #. Translators: Error message when text field is empty
-#: addon\globalPlugins\visionAssistant\__init__.py:2157
+#: addon\globalPlugins\visionAssistant\__init__.py:2282
 msgid "No text to read."
 msgstr "Tidak ada teks untuk dibaca."
 
 #. Translators: Message while gathering text
-#: addon\globalPlugins\visionAssistant\__init__.py:2167
+#: addon\globalPlugins\visionAssistant\__init__.py:2292
 msgid "Gathering text for audio..."
 msgstr "Menyiapkan teks untuk audio..."
 
 #. Translators: File dialog title for saving audio
-#: addon\globalPlugins\visionAssistant\__init__.py:2177
+#: addon\globalPlugins\visionAssistant\__init__.py:2302
 msgid "Save Audio"
 msgstr "Simpan Audio"
 
 #. Translators: Message while generating audio
-#: addon\globalPlugins\visionAssistant\__init__.py:2184
+#: addon\globalPlugins\visionAssistant\__init__.py:2309
 msgid "Generating Audio..."
 msgstr "Menghasilkan Audio..."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:2200
+#: addon\globalPlugins\visionAssistant\__init__.py:2325
 msgid "lame.exe not found in lib folder."
 msgstr "lame.exe tidak ditemukan di folder lib."
 
 #. Translators: Spoken message when audio is saved
-#: addon\globalPlugins\visionAssistant\__init__.py:2218
+#: addon\globalPlugins\visionAssistant\__init__.py:2343
 msgid "Audio Saved"
 msgstr "Audio Disimpan"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:2221
+#: addon\globalPlugins\visionAssistant\__init__.py:2346
 msgid "Audio file generated and saved successfully."
 msgstr "File audio berhasil dibuat dan disimpan."
 
 #. Translators: File dialog title for saving
-#: addon\globalPlugins\visionAssistant\__init__.py:2243
+#: addon\globalPlugins\visionAssistant\__init__.py:2368
 msgid "Save"
 msgstr "Simpan"
 
 #. Translators: Message showing save progress
-#: addon\globalPlugins\visionAssistant\__init__.py:2254
+#: addon\globalPlugins\visionAssistant\__init__.py:2379
 #, python-brace-format
 msgid "Saving Page {num}..."
 msgstr "Sedang menyimpan {num}..."
 
 #. Translators: Status label when save is complete
-#: addon\globalPlugins\visionAssistant\__init__.py:2267
+#: addon\globalPlugins\visionAssistant\__init__.py:2392
 msgid "Saved"
 msgstr "Disimpan"
 
 #. Translators: Message box content for successful save
-#: addon\globalPlugins\visionAssistant\__init__.py:2269
+#: addon\globalPlugins\visionAssistant\__init__.py:2394
 msgid "File saved successfully."
 msgstr "File berhasil disimpan."
 
 #. Translators: Menu item for Document Reader
-#: addon\globalPlugins\visionAssistant\__init__.py:2304
+#: addon\globalPlugins\visionAssistant\__init__.py:2429
 msgid "&Document Reader..."
 msgstr "&Pembaca Dokumen..."
 
 #. Translators: Menu item for Audio Transcription
-#: addon\globalPlugins\visionAssistant\__init__.py:2308
+#: addon\globalPlugins\visionAssistant\__init__.py:2433
 msgid "Transcribe &Audio File..."
 msgstr "Transkripsikan File &Audio..."
 
 #. Translators: Menu item for Video Analysis
-#: addon\globalPlugins\visionAssistant\__init__.py:2312
+#: addon\globalPlugins\visionAssistant\__init__.py:2437
 msgid "Analyze &Video URL..."
 msgstr "Analisis &URL Video..."
 
 #. Translators: Menu item to open settings
-#: addon\globalPlugins\visionAssistant\__init__.py:2318
+#: addon\globalPlugins\visionAssistant\__init__.py:2443
 msgid "&Settings..."
 msgstr "&Pengaturan..."
 
 #. Translators: Menu item to check for updates
-#: addon\globalPlugins\visionAssistant\__init__.py:2322
+#: addon\globalPlugins\visionAssistant\__init__.py:2447
 msgid "Check for &Update"
 msgstr "Periksa &Pembaruan"
 
 #. Translators: Menu item to open documentation
-#: addon\globalPlugins\visionAssistant\__init__.py:2326
+#: addon\globalPlugins\visionAssistant\__init__.py:2451
 msgid "Docu&mentation"
 msgstr "&Dokumentasi"
 
 #. Translators: Menu item for donations
-#: addon\globalPlugins\visionAssistant\__init__.py:2330
+#: addon\globalPlugins\visionAssistant\__init__.py:2455
 msgid "D&onate"
 msgstr "&Donasi"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:2334
+#. Translators: Menu item to open the Telegram channel
+#: addon\globalPlugins\visionAssistant\__init__.py:2459
+msgid "Telegram &Channel"
+msgstr "Saluran &Telegram"
+
+#. Translators: The name of the addon's sub-menu in the NVDA Tools menu.
+#: addon\globalPlugins\visionAssistant\__init__.py:2464
 msgid "Vision Assistant"
 msgstr "Vision Assistant"
 
 #. Translators: Standard title for opening a file
-#: addon\globalPlugins\visionAssistant\__init__.py:2348 addon\globalPlugins\visionAssistant\__init__.py:2490 addon\globalPlugins\visionAssistant\__init__.py:2957
+#: addon\globalPlugins\visionAssistant\__init__.py:2479
+#: addon\globalPlugins\visionAssistant\__init__.py:2611
+#: addon\globalPlugins\visionAssistant\__init__.py:3082
 msgid "Open"
 msgstr "Buka"
 
 #. Translators: File dialog filter for supported files
-#: addon\globalPlugins\visionAssistant\__init__.py:2356
+#: addon\globalPlugins\visionAssistant\__init__.py:2487
 msgid "Supported Files"
 msgstr "File yang Didukung"
 
 #. Translators: Error when PyMuPDF is missing
-#: addon\globalPlugins\visionAssistant\__init__.py:2363 addon\globalPlugins\visionAssistant\__init__.py:3140
+#: addon\globalPlugins\visionAssistant\__init__.py:2494
+#: addon\globalPlugins\visionAssistant\__init__.py:3269
 msgid "PyMuPDF library is missing."
 msgstr "Pustaka PyMuPDF tidak ada."
 
 #. Translators: Error when no pages found
-#: addon\globalPlugins\visionAssistant\__init__.py:2369 addon\globalPlugins\visionAssistant\__init__.py:3146
+#: addon\globalPlugins\visionAssistant\__init__.py:2500
+#: addon\globalPlugins\visionAssistant\__init__.py:3275
 msgid "No readable pages found."
 msgstr "Tidak ditemukan halaman yang dapat dibaca."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2403
+#: addon\globalPlugins\visionAssistant\__init__.py:2534
 msgid "Activates the Command Layer for quick access to all features."
 msgstr "Mengaktifkan Lapisan Perintah untuk akses cepat ke semua fitur."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2461 addon\globalPlugins\visionAssistant\__init__.py:2772
+#: addon\globalPlugins\visionAssistant\__init__.py:2581
+#: addon\globalPlugins\visionAssistant\__init__.py:2893
 msgid "Translates the selected text or navigator object."
 msgstr "Menerjemahkan teks atau objek navigator yang dipilih."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2462 addon\globalPlugins\visionAssistant\__init__.py:3607
+#: addon\globalPlugins\visionAssistant\__init__.py:2582
+#: addon\globalPlugins\visionAssistant\__init__.py:3749
 msgid "Translates the text currently in the clipboard."
 msgstr "Menerjemahkan teks yang saat ini ada di papan klip."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2463 addon\globalPlugins\visionAssistant\__init__.py:2901
+#: addon\globalPlugins\visionAssistant\__init__.py:2583
+#: addon\globalPlugins\visionAssistant\__init__.py:3026
 msgid "Opens a menu to Explain, Summarize, or Fix the selected text."
 msgstr ""
 "Membuka menu untuk Menjelaskan, Meringkas, atau Memperbaiki teks yang "
 "dipilih."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2464 addon\globalPlugins\visionAssistant\__init__.py:3289
+#: addon\globalPlugins\visionAssistant\__init__.py:2584
+#: addon\globalPlugins\visionAssistant\__init__.py:3425
 msgid "Performs OCR and description on the entire screen."
 msgstr "Melakukan OCR dan deskripsi di seluruh layar."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2465 addon\globalPlugins\visionAssistant\__init__.py:3295
+#: addon\globalPlugins\visionAssistant\__init__.py:2585
+#: addon\globalPlugins\visionAssistant\__init__.py:3431
 msgid "Describes the current object (Navigator Object)."
 msgstr "Menjelaskan objek saat ini (Navigator Object)."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2466 addon\globalPlugins\visionAssistant\__init__.py:3240
+#: addon\globalPlugins\visionAssistant\__init__.py:2586
+#: addon\globalPlugins\visionAssistant\__init__.py:3367
 msgid ""
 "Opens the Document Reader for detailed page-by-page analysis (PDF/Images)."
 msgstr ""
@@ -900,243 +1464,252 @@ msgstr ""
 "(PDF/Gambar)."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2467 addon\globalPlugins\visionAssistant\__init__.py:3127
+#: addon\globalPlugins\visionAssistant\__init__.py:2587
+#: addon\globalPlugins\visionAssistant\__init__.py:3256
 msgid "Recognizes text from a selected image or PDF file."
 msgstr "Mengenali teks dari gambar atau file PDF yang dipilih."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2468 addon\globalPlugins\visionAssistant\__init__.py:3375
+#: addon\globalPlugins\visionAssistant\__init__.py:2588
+#: addon\globalPlugins\visionAssistant\__init__.py:3519
 msgid "Transcribes a selected audio file."
 msgstr "Mentranskripsikan file audio yang dipilih."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2469 addon\globalPlugins\visionAssistant\__init__.py:3419
+#: addon\globalPlugins\visionAssistant\__init__.py:2589
+#: addon\globalPlugins\visionAssistant\__init__.py:3562
 msgid "Analyzes a YouTube, Instagram, Twitter or TikTok video URL."
 msgstr "Menganalisis URL video YouTube, Instagram, Twitter atau TikTok."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2470 addon\globalPlugins\visionAssistant\__init__.py:3522
+#: addon\globalPlugins\visionAssistant\__init__.py:2590
+#: addon\globalPlugins\visionAssistant\__init__.py:3664
 msgid "Attempts to solve a CAPTCHA on the screen or navigator object."
 msgstr "Mencoba memecahkan CAPTCHA pada layar atau navigator object."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2471 addon\globalPlugins\visionAssistant\__init__.py:2679
+#: addon\globalPlugins\visionAssistant\__init__.py:2591
+#: addon\globalPlugins\visionAssistant\__init__.py:2800
 msgid "Records voice, transcribes it using AI, and types the result."
 msgstr ""
 "Merekam suara, mentranskripsikannya menggunakan AI, dan mengetik hasilnya."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2472 addon\globalPlugins\visionAssistant\__init__.py:2480
+#: addon\globalPlugins\visionAssistant\__init__.py:2592
+#: addon\globalPlugins\visionAssistant\__init__.py:2601
 msgid "Announces the current status of the add-on."
 msgstr "Mengumumkan status add-on saat ini."
 
 #. Translators: Script description for Input Gestures dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2473 addon\globalPlugins\visionAssistant\__init__.py:3576
+#: addon\globalPlugins\visionAssistant\__init__.py:2593
+#: addon\globalPlugins\visionAssistant\__init__.py:3718
 msgid "Checks for updates manually."
 msgstr "Memeriksa pembaruan secara manual."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:2474
+#. Translators: Script description for Input Gestures dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:2594
+#: addon\globalPlugins\visionAssistant\__init__.py:3764
+msgid ""
+"Shows the last AI response in a chat dialog for review or follow-up "
+"questions."
+msgstr ""
+"Menampilkan respons AI terakhir dalam dialog obrolan untuk ulasan atau "
+"pertanyaan lanjutan."
+
+#: addon\globalPlugins\visionAssistant\__init__.py:2595
 msgid "Shows a list of available commands in the layer."
 msgstr "Menampilkan daftar lapisan perintah yang tersedia."
 
 #. Translators: Title of the help dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2477
+#: addon\globalPlugins\visionAssistant\__init__.py:2598
 #, python-brace-format
 msgid "{name} Help"
 msgstr "Bantuan {name}"
 
 #. Translators: Message of a dialog which may pop up while trying to upload a file
-#: addon\globalPlugins\visionAssistant\__init__.py:2562
+#: addon\globalPlugins\visionAssistant\__init__.py:2683
 #, python-brace-format
 msgid "Upload Connection Error: {reason}"
 msgstr "Terjadi kesalahan koneksi saat mengunggah: {reason}"
 
 #. Translators: Message of a dialog which may pop up while trying to upload a file
-#: addon\globalPlugins\visionAssistant\__init__.py:2568
+#: addon\globalPlugins\visionAssistant\__init__.py:2689
 #, python-brace-format
 msgid "Upload Server Error {code}: {reason}"
 msgstr "Terjadi kesalahan server saat mengunggah {code}: {reason}"
 
 #. Translators: Message of a dialog which may pop up while trying to upload a file
-#: addon\globalPlugins\visionAssistant\__init__.py:2574
+#: addon\globalPlugins\visionAssistant\__init__.py:2695
 #, python-brace-format
 msgid "File Upload Error: {error}"
 msgstr "Terjadi kesalahan saat mengunggah berkas {error}"
 
+#. Translators: Error message when there's no content to send
+#: addon\globalPlugins\visionAssistant\__init__.py:2716
+#: addon\globalPlugins\visionAssistant\__init__.py:2723
+msgid "Nothing to send."
+msgstr "Tidak ada yang perlu dikirim."
+
 #. Translators: Error message when AI refuses to answer due to safety guidelines
-#: addon\globalPlugins\visionAssistant\__init__.py:2648
+#: addon\globalPlugins\visionAssistant\__init__.py:2769
 msgid "Error: Response blocked by AI safety filters."
 msgstr "Kesalahan: Respons diblokir oleh filter keamanan AI."
 
 #. Translators: Message reported when dictation starts
-#: addon\globalPlugins\visionAssistant\__init__.py:2689
+#: addon\globalPlugins\visionAssistant\__init__.py:2810
 msgid "Listening..."
 msgstr "Mendengarkan..."
 
 #. Translators: Message in an error dialog which can pop up while trying dictation.
-#: addon\globalPlugins\visionAssistant\__init__.py:2693
+#: addon\globalPlugins\visionAssistant\__init__.py:2814
 #, python-brace-format
 msgid "Audio Hardware Error: {error}"
 msgstr "Kesalahan Perangkat Keras Audio: {error}"
 
 #. Translators: Message reported when processing dictation
-#: addon\globalPlugins\visionAssistant\__init__.py:2703
+#: addon\globalPlugins\visionAssistant\__init__.py:2824
 msgid "Typing..."
 msgstr "Mengetik..."
 
 #. Translators: Message in an error dialog which can pop up while trying dictation.
-#: addon\globalPlugins\visionAssistant\__init__.py:2708
+#: addon\globalPlugins\visionAssistant\__init__.py:2829
 #, python-brace-format
 msgid "Save Recording Error: {error}"
 msgstr "Kesalahan Penyimpanan Rekaman: {error}"
 
 #. Translators: Message reported when the AI detects silence or empty speech
-#: addon\globalPlugins\visionAssistant\__init__.py:2723 addon\globalPlugins\visionAssistant\__init__.py:2746
+#: addon\globalPlugins\visionAssistant\__init__.py:2844
+#: addon\globalPlugins\visionAssistant\__init__.py:2867
 msgid "No speech detected."
 msgstr "Tidak ada ucapan yang terdeteksi."
 
 #. Translators: Message reported while trying dictation.
-#: addon\globalPlugins\visionAssistant\__init__.py:2753
+#: addon\globalPlugins\visionAssistant\__init__.py:2874
 msgid "No speech recognized or Error."
 msgstr "Ucapan tidak dikenali atau Error."
 
 #. Translators: Message reported when dictation is complete
-#: addon\globalPlugins\visionAssistant\__init__.py:2768
+#: addon\globalPlugins\visionAssistant\__init__.py:2889
 #, python-brace-format
 msgid "Typed: {text}"
 msgstr "Ketikkan: {text}"
 
 #. Translators: Message reported when calling translation command
-#: addon\globalPlugins\visionAssistant\__init__.py:2779
+#: addon\globalPlugins\visionAssistant\__init__.py:2900
 msgid "No text found."
 msgstr "Tidak ada teks yang ditemukan."
 
 #. Translators: Message reported when calling translation command
-#: addon\globalPlugins\visionAssistant\__init__.py:2784
+#: addon\globalPlugins\visionAssistant\__init__.py:2905
 msgid "Translating..."
 msgstr "Menerjemahkan..."
 
 #. Translators: Message reported when calling translation command
-#: addon\globalPlugins\visionAssistant\__init__.py:2818
+#: addon\globalPlugins\visionAssistant\__init__.py:2937
 #, python-brace-format
 msgid "Translated: {text}"
 msgstr "Diterjemahkan: {text}"
 
-#. Translators: A choice in the menu of the text refinement command
-#: addon\globalPlugins\visionAssistant\__init__.py:204
-msgid "Summarize"
-msgstr "Buat Ringkasan"
-
-#. Translators: A choice in the menu of the text refinement command
-#: addon\globalPlugins\visionAssistant\__init__.py:210
-msgid "Fix Grammar"
-msgstr "Perbaiki Tata Bahasa"
-
-#. Translators: A choice in the menu of the text refinement command
-#: addon\globalPlugins\visionAssistant\__init__.py:216
-msgid "Fix Grammar & Translate"
-msgstr "Perbaiki Tata Bahasa & Terjemahkan"
-
-#. Translators: A choice in the menu of the text refinement command
-#: addon\globalPlugins\visionAssistant\__init__.py:222
-msgid "Explain"
-msgstr "Jelaskan"
-
-#. Translators: Prefix for custom prompts in the Refine menu
-#: addon\globalPlugins\visionAssistant\__init__.py:614
-msgid "Custom: "
-msgstr "Kustom: "
+#: addon\globalPlugins\visionAssistant\__init__.py:2961
+#, python-brace-format
+msgid "{name} - Translation"
+msgstr "{name} - Terjemahan"
 
 #. Translators: Title of the Refine dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:2928
+#: addon\globalPlugins\visionAssistant\__init__.py:3053
 msgid "Choose action:"
 msgstr "Pilih tindakan:"
 
-#. Translators: main message of the Refine dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:203 addon\globalPlugins\visionAssistant\__init__.py:209 addon\globalPlugins\visionAssistant\__init__.py:215 addon\globalPlugins\visionAssistant\__init__.py:221 addon\globalPlugins\visionAssistant\__init__.py:2930
-msgid "Refine"
-msgstr "Penyempurnaan"
-
 #. Translators: Message while processing request of the refine text command
-#: addon\globalPlugins\visionAssistant\__init__.py:2965
+#: addon\globalPlugins\visionAssistant\__init__.py:3090
 msgid "Processing..."
 msgstr "Memproses..."
 
 #. Translators: Message reported when executing the refine command
-#: addon\globalPlugins\visionAssistant\__init__.py:3023
+#: addon\globalPlugins\visionAssistant\__init__.py:3148
 msgid "Uploading file..."
 msgstr "Mengunggah berkas..."
 
 #. Translators: Message reported when executing the refine command
 #. Translators: Message reported when calling the audio transcription command
 #. Translators: Message reported when AI is analyzing the video
-#: addon\globalPlugins\visionAssistant\__init__.py:3073 addon\globalPlugins\visionAssistant\__init__.py:3397 addon\globalPlugins\visionAssistant\__init__.py:3499
+#: addon\globalPlugins\visionAssistant\__init__.py:3198
+#: addon\globalPlugins\visionAssistant\__init__.py:3541
+#: addon\globalPlugins\visionAssistant\__init__.py:3642
 msgid "Analyzing..."
 msgstr "Menganalisis..."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:3115
+#: addon\globalPlugins\visionAssistant\__init__.py:3244
 #, python-brace-format
 msgid "{name} - Refine Result"
 msgstr "{name} - Hasil Penyempurnaan"
 
 #. Translators: Message reported when calling the OCR file recognition command
-#: addon\globalPlugins\visionAssistant\__init__.py:3167
+#: addon\globalPlugins\visionAssistant\__init__.py:3296
 msgid "Uploading & Extracting..."
 msgstr "Mengunggah & Mengekstrak..."
 
+#. Translators: Error shown when OCR finds no text in the selected files
+#: addon\globalPlugins\visionAssistant\__init__.py:3325
+#: addon\globalPlugins\visionAssistant\__init__.py:3358
+msgid "No text detected in the selected file(s)."
+msgstr "Tidak ada teks yang terdeteksi pada file yang dipilih(s)."
+
 #. Translators: Error message if PDF creation fails
-#: addon\globalPlugins\visionAssistant\__init__.py:3207
+#: addon\globalPlugins\visionAssistant\__init__.py:3335
 msgid "Error creating PDF."
 msgstr "Terjadi kesalahan saat membuat PDF."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:3277
+#: addon\globalPlugins\visionAssistant\__init__.py:3413
 #, python-brace-format
 msgid "{name} - Chat"
 msgstr "{name} - Obrolan"
 
 #. Translators: Message reported when calling an image analysis command
-#: addon\globalPlugins\visionAssistant\__init__.py:3305
+#: addon\globalPlugins\visionAssistant\__init__.py:3441
 msgid "Scanning..."
 msgstr "Memindai..."
 
 #. Translators: Message reported when calling an image analysis command
 #. Translators: Message reported when calling the CAPTCHA solving command
-#: addon\globalPlugins\visionAssistant\__init__.py:3310 addon\globalPlugins\visionAssistant\__init__.py:3542
+#: addon\globalPlugins\visionAssistant\__init__.py:3446
+#: addon\globalPlugins\visionAssistant\__init__.py:3684
 msgid "Capture failed."
 msgstr "Pengambilan gagal."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:3363
+#: addon\globalPlugins\visionAssistant\__init__.py:3507
 #, python-brace-format
 msgid "{name} - Image Analysis"
 msgstr "{name} - Analisis Gambar"
 
 #. Translators: Message reported when calling the audio transcription command
-#: addon\globalPlugins\visionAssistant\__init__.py:3387
+#: addon\globalPlugins\visionAssistant\__init__.py:3531
 msgid "Uploading..."
 msgstr "Mengunggah..."
 
 #. Translators: Generic error message when audio processing fails
-#: addon\globalPlugins\visionAssistant\__init__.py:3414
+#: addon\globalPlugins\visionAssistant\__init__.py:3557
 msgid "Error processing audio."
 msgstr "Terjadi kesalahan saat memproses audio."
 
 #. Translators: Title for the video URL entry dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:3426
+#: addon\globalPlugins\visionAssistant\__init__.py:3569
 msgid "YouTube / Instagram / Twitter / TikTok Analysis"
 msgstr "Analisis YouTube / Instagram / Twitter / TikTok"
 
 #. Translators: Label for the text entry in video dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:3428
+#: addon\globalPlugins\visionAssistant\__init__.py:3571
 msgid "Enter Video URL (YouTube/Instagram/Twitter/TikTok):"
 msgstr "Masukkan URL Video (YouTube/Instagram/Twitter/TikTok):"
 
 #. Translators: Error message when the URL is invalid
-#: addon\globalPlugins\visionAssistant\__init__.py:3443 addon\globalPlugins\visionAssistant\__init__.py:3446
+#: addon\globalPlugins\visionAssistant\__init__.py:3586
+#: addon\globalPlugins\visionAssistant\__init__.py:3589
 msgid "Error: Invalid URL."
 msgstr "Kesalahan: URL Tidak Valid."
 
 #. Translators: Error message when the platform is not supported
-#: addon\globalPlugins\visionAssistant\__init__.py:3456
+#: addon\globalPlugins\visionAssistant\__init__.py:3599
 msgid ""
 "Error: Unsupported platform. Only YouTube, Instagram, Twitter, and TikTok "
 "are supported."
@@ -1145,90 +1718,96 @@ msgstr ""
 "TikTok yang didukung."
 
 #. Translators: Message reported when processing video link
-#: addon\globalPlugins\visionAssistant\__init__.py:3460
+#: addon\globalPlugins\visionAssistant\__init__.py:3603
 msgid "Processing Video..."
 msgstr "Memproses Video..."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:3471
+#: addon\globalPlugins\visionAssistant\__init__.py:3614
 msgid "Error: Could not extract Instagram video."
 msgstr "Kesalahan: Tidak dapat mengekstrak video Instagram."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:3474
+#: addon\globalPlugins\visionAssistant\__init__.py:3617
 msgid "Error: Could not extract Twitter video."
 msgstr "Kesalahan: Tidak dapat mengekstrak video Twitter."
 
-#: addon\globalPlugins\visionAssistant\__init__.py:3477
+#: addon\globalPlugins\visionAssistant\__init__.py:3620
 msgid "Error: Could not extract TikTok video."
 msgstr "Kesalahan: Tidak dapat mengekstrak video TikTok."
 
 #. Translators: Message reported when downloading video
-#: addon\globalPlugins\visionAssistant\__init__.py:3484
+#: addon\globalPlugins\visionAssistant\__init__.py:3627
 msgid "Downloading Video..."
 msgstr "Mengunduh Video..."
 
 #. Translators: Error message when video download fails
-#: addon\globalPlugins\visionAssistant\__init__.py:3489
+#: addon\globalPlugins\visionAssistant\__init__.py:3632
 msgid "Error: Download failed."
 msgstr "Kesalahan: Pengunduhan gagal."
 
 #. Translators: Message reported when uploading video to AI
-#: addon\globalPlugins\visionAssistant\__init__.py:3493
+#: addon\globalPlugins\visionAssistant\__init__.py:3636
 msgid "Uploading to AI..."
 msgstr "Mengunggah ke AI..."
 
 #. Translators: Message reported when analyzing YouTube video
-#: addon\globalPlugins\visionAssistant\__init__.py:3511
+#: addon\globalPlugins\visionAssistant\__init__.py:3654
 msgid "Analyzing YouTube..."
 msgstr "Menganalisis YouTube..."
 
 #. Translators: Message reported when calling the CAPTCHA solving command
-#: addon\globalPlugins\visionAssistant\__init__.py:3537
+#: addon\globalPlugins\visionAssistant\__init__.py:3679
 msgid "Solving..."
 msgstr "Memecahkan..."
 
 #. Translators: Message reported when AI cannot find any CAPTCHA in the image
-#: addon\globalPlugins\visionAssistant\__init__.py:3558
+#: addon\globalPlugins\visionAssistant\__init__.py:3700
 msgid "No CAPTCHA detected."
 msgstr "Tidak ada CAPTCHA yang terdeteksi."
 
 #. Translators: Message reported when calling the CAPTCHA solving command
-#: addon\globalPlugins\visionAssistant\__init__.py:3563
+#: addon\globalPlugins\visionAssistant\__init__.py:3705
 msgid "Failed."
 msgstr "Gagal."
 
 #. Translators: Message reported when calling the CAPTCHA solving command
-#: addon\globalPlugins\visionAssistant\__init__.py:3572
+#: addon\globalPlugins\visionAssistant\__init__.py:3714
 #, python-brace-format
 msgid "Captcha: {text}"
 msgstr "Captcha: {text}"
 
 #. Translators: Message reported when calling the update command
-#: addon\globalPlugins\visionAssistant\__init__.py:3580
+#: addon\globalPlugins\visionAssistant\__init__.py:3722
 msgid "Checking for updates..."
 msgstr "Memeriksa pembaruan..."
 
 #. Translators: Message when calling the command to translate from clipboard
-#: addon\globalPlugins\visionAssistant\__init__.py:3613
+#: addon\globalPlugins\visionAssistant\__init__.py:3755
 msgid "Translating Clipboard..."
 msgstr "Menerjemahkan teks dari papan klip..."
 
 #. Translators: Message when calling the command to translate from clipboard
-#: addon\globalPlugins\visionAssistant\__init__.py:3618
+#: addon\globalPlugins\visionAssistant\__init__.py:3760
 msgid "Clipboard empty."
 msgstr "Papan klip kosong."
 
+#. Translators: Message reported when the user tries to show the last result but none is stored.
+#: addon\globalPlugins\visionAssistant\__init__.py:3769
+msgid "No previous result to show."
+msgstr "Tidak ada hasil sebelumnya untuk ditampilkan."
+
 #. Translators: Message shown when settings dialog is already open
-#: addon\globalPlugins\visionAssistant\__init__.py:3626
+#: addon\globalPlugins\visionAssistant\__init__.py:3783
+#: addon\globalPlugins\visionAssistant\__init__.py:3793
 msgid "Settings dialog is already open."
 msgstr "Dialog pengaturan sudah terbuka."
 
 #. Translators: Message when opening documentation
-#: addon\globalPlugins\visionAssistant\__init__.py:3630
+#: addon\globalPlugins\visionAssistant\__init__.py:3799
 msgid "Opening documentation..."
 msgstr "Membuka dokumentasi..."
 
 #. Translators: Error when help file is missing
-#: addon\globalPlugins\visionAssistant\__init__.py:3640
+#: addon\globalPlugins\visionAssistant\__init__.py:3809
 msgid "Documentation file not found."
 msgstr "File dokumentasi tidak ditemukan."
 
@@ -1255,7 +1834,9 @@ msgid ""
 "- Audio Transcription (A)\n"
 "- Smart Dictation (S)\n"
 "- Announce Status (L)\n"
-"- Check Update (U)"
+"- Check Update (U)\n"
+"- Recall Last Result (Space),\n"
+"- Commands Help (H),\n"
 msgstr ""
 "Asisten AI canggih untuk NVDA yang menggunakan model Gemini.\n"
 "Lapisan Perintah: Tekan NVDA+Shift+V, lalu:\n"
@@ -1264,75 +1845,122 @@ msgstr ""
 "- Deskripsikan Objek (V) / Layar Penuh (O)\n"
 "- Analisis Video Secara Online (Shift+V)\n"
 "- Pembaca Dokumen (D)\n"
-"- Berkas OCR (P)\n"
+"- OCR Berkas (F)\n"
 "- Pemecah CAPTCHA (C)\n"
 "- Transkripsi Audio (A)\n"
 "- Dikte Cerdas (S)\n"
-"- Umumkan Kerja add-on saat ini (L)\n"
-"- Periksa Pembaruan (U)"
+"- Umumkan Status (L)\n"
+"- Periksa Pembaruan (U)\n"
+"- Buka Hasil Terakhir (Space)\n"
+"- Bantuan Perintah (H)\n"
 
 #. Brief changelog for this version
 #. Translators: what's new content for the add-on version to be shown in the add-on store
-#: buildVars.py:29
+#: buildVars.py:32
 msgid ""
-"## Changes for 4.0.1\n"
-"*   **Advanced Document Reader:** A powerful new viewer for PDF and images "
-"with page range selection, background processing, and seamless `Ctrl+PageUp/"
-"Down` navigation.\n"
-"*   **New Tools Submenu:** Added a dedicated \"Vision Assistant\" submenu "
-"under NVDA's Tools menu for quicker access to core features, settings, and "
-"documentation.\n"
-"*   **Flexible Customization:** You can now choose your preferred OCR engine "
-"and TTS voice directly from the settings panel.\n"
-"*   **Multiple API Key Support:** Added support for multiple Gemini API "
-"keys. You can enter one key per line or separate them with commas in the "
-"settings.\n"
-"*   **Alternative OCR Engine:** Introduced a new OCR engine to ensure "
-"reliable text recognition even when hitting Gemini API quota limits.\n"
-"*   **Smart API Key Rotation:** Automatically switches to and remembers the "
-"fastest working API key to bypass quota limits.\n"
-"*   **Document to MP3/WAV:** Integrated capability to generate and save high-"
-"quality audio files in both MP3 (128kbps) and WAV formats directly within "
-"the reader.\n"
-"*   **Instagram Stories Support:** Added the ability to describe and analyze "
-"Instagram Stories using their URLs.\n"
-"*   **TikTok Support:** Introduced support for TikTok videos, allowing for "
-"full visual description and audio transcription of clips.\n"
-"*   **Redesigned Update Dialog:** Features a new accessible interface with a "
-"scrollable text box to clearly read version changes before installing.\n"
-"*   **Unified Status & UX:** Standardized file dialogs across the add-on and "
-"enhanced the 'L' command to report real-time progress."
+"## Changes for 4.6\n"
+"* **Interactive Result Recall:** Added the **Space** key to the command "
+"layer, allowing users to instantly reopen the last AI response in a chat "
+"window for follow-up questions, even when \"Direct Output\" mode is active.\n"
+"* **Telegram Community Hub:** Added an \"Official Telegram Channel\" link to "
+"the NVDA Tools menu, providing a quick way to stay updated with the latest "
+"news, features, and releases.\n"
+"* **Enhanced Response Stability:** Optimized the core logic for Translation, "
+"OCR, and Vision features to ensure more reliable performance and a smoother "
+"experience when using direct speech output.\n"
+"* **Improved Interface Guidance:** Updated the settings descriptions and "
+"documentation to better explain the new recall system and how it works "
+"alongside the direct output settings."
 msgstr ""
-"## Perubahan untuk 4.0.1\n"
-"* **Pembaca Dokumen Tingkat Lanjut:** Penampil baru yang canggih untuk PDF "
-"dan gambar dengan pemilihan rentang halaman, pemrosesan latar belakang, dan "
-"navigasi `Ctrl+PageUp/Down` yang lancar.\n"
-"* **Submenu Alat Baru:** Menambahkan submenu khusus \"Vision Assistant\" di "
-"dalam menu Tools NVDA untuk akses lebih cepat ke fitur inti, pengaturan, dan "
-"dokumentasi.\n"
-"* **Kustomisasi Fleksibel:** Kini Anda dapat memilih mesin OCR dan suara TTS "
-"pilihan Anda langsung dari panel pengaturan.\n"
-"* **Dukungan Beberapa Kunci API:** Menambahkan dukungan untuk beberapa kunci "
-"API Gemini untuk memastikan layanan berkelanjutan. Anda dapat memasukkan "
-"satu kunci per baris atau memisahkannya dengan koma di pengaturan.\n"
-"* **Mesin OCR Alternatif:** Memperkenalkan mesin OCR baru untuk memastikan "
-"pengenalan teks yang andal bahkan ketika mencapai batas kuota API Gemini.\n"
-"* **Rotasi Kunci API Cerdas:** Secara otomatis beralih ke dan mengingat "
-"kunci API yang bekerja paling cepat untuk melewati batas kuota tanpa "
-"intervensi manual.\n"
-"* **Ubah Dokumen ke Audio:** Kemampuan terintegrasi untuk menghasilkan dan "
-"menyimpan file audio berkualitas tinggi (WAV) dari halaman dokumen langsung "
-"di dalam pembaca dokumen.\n"
-"*   **Dukungan untuk Instagram Stories:** Menambahkan kemampuan untuk "
-"mendeskripsikan dan menganalisis Instagram Stories melalui URL.\n"
-"*   **Mendukung Deskripsi video TikTok** Memperkenalkan dukungan untuk video "
-"TikTok, memungkinkan deskripsi visual lengkap dan transkripsi audio klip.\n"
-"* **Dialog Pembaruan yang Didesain Ulang:** Menampilkan antarmuka baru yang "
-"dapat diakses dengan kotak teks yang dapat digulir untuk membaca dengan "
-"jelas perubahan versi sebelum menginstal.\n"
-"* **Status & UX Terpadu:** Dialog file standar di seluruh add-on dan "
-"menyempurnakan perintah 'L' untuk melaporkan kemajuan real-time untuk semua "
-"tugas latar belakang."
+"## Perubahan untuk 4.6\n"
+"* **Pembukaan Ulang Hasil Interaktif:** Menambahkan tombol **Space** ke "
+"lapisan perintah, sehingga pengguna bisa langsung membuka kembali respons AI "
+"terakhir di jendela obrolan untuk pertanyaan lanjutan, termasuk saat mode "
+"\"Direct Output\" aktif.\n"
+"* **Pusat Komunitas Telegram:** Menambahkan tautan \"Official Telegram "
+"Channel\" ke menu Tools NVDA agar pengguna bisa cepat mengikuti berita, "
+"fitur, dan rilis terbaru.\n"
+"* **Stabilitas Respons Ditingkatkan:** Mengoptimalkan logika inti untuk "
+"fitur Terjemahan, OCR, dan Visi agar performa lebih andal serta pengalaman "
+"output suara langsung lebih mulus.\n"
+"* **Panduan Antarmuka Ditingkatkan:** Memperbarui deskripsi pengaturan dan "
+"dokumentasi agar sistem pembukaan hasil terbaru lebih mudah dipahami dan "
+"jelas kaitannya dengan pengaturan output langsung."
+
+#~ msgid ""
+#~ "Address copied to clipboard! If you'd like, you can now proceed to your "
+#~ "wallet and donate any amount you can. Your support is greatly appreciated!"
+#~ msgstr ""
+#~ "Alamat disalin ke papan klip! Jika Anda mau, Anda sekarang dapat "
+#~ "melanjutkan ke dompet Anda dan menyumbangkan jumlah berapa pun yang Anda "
+#~ "bisa. Dukungan Anda sangat kami hargai!"
+
+#~ msgid "Format: Name:Content"
+#~ msgstr "Format: Nama:Isi"
+
+#~ msgid ""
+#~ "## Changes for 4.0.1\n"
+#~ "*   **Advanced Document Reader:** A powerful new viewer for PDF and "
+#~ "images with page range selection, background processing, and seamless "
+#~ "`Ctrl+PageUp/Down` navigation.\n"
+#~ "*   **New Tools Submenu:** Added a dedicated \"Vision Assistant\" submenu "
+#~ "under NVDA's Tools menu for quicker access to core features, settings, "
+#~ "and documentation.\n"
+#~ "*   **Flexible Customization:** You can now choose your preferred OCR "
+#~ "engine and TTS voice directly from the settings panel.\n"
+#~ "*   **Multiple API Key Support:** Added support for multiple Gemini API "
+#~ "keys. You can enter one key per line or separate them with commas in the "
+#~ "settings.\n"
+#~ "*   **Alternative OCR Engine:** Introduced a new OCR engine to ensure "
+#~ "reliable text recognition even when hitting Gemini API quota limits.\n"
+#~ "*   **Smart API Key Rotation:** Automatically switches to and remembers "
+#~ "the fastest working API key to bypass quota limits.\n"
+#~ "*   **Document to MP3/WAV:** Integrated capability to generate and save "
+#~ "high-quality audio files in both MP3 (128kbps) and WAV formats directly "
+#~ "within the reader.\n"
+#~ "*   **Instagram Stories Support:** Added the ability to describe and "
+#~ "analyze Instagram Stories using their URLs.\n"
+#~ "*   **TikTok Support:** Introduced support for TikTok videos, allowing "
+#~ "for full visual description and audio transcription of clips.\n"
+#~ "*   **Redesigned Update Dialog:** Features a new accessible interface "
+#~ "with a scrollable text box to clearly read version changes before "
+#~ "installing.\n"
+#~ "*   **Unified Status & UX:** Standardized file dialogs across the add-on "
+#~ "and enhanced the 'L' command to report real-time progress."
+#~ msgstr ""
+#~ "## Perubahan untuk 4.0.1\n"
+#~ "* **Pembaca Dokumen Tingkat Lanjut:** Penampil baru yang canggih untuk "
+#~ "PDF dan gambar dengan pemilihan rentang halaman, pemrosesan latar "
+#~ "belakang, dan navigasi `Ctrl+PageUp/Down` yang lancar.\n"
+#~ "* **Submenu Alat Baru:** Menambahkan submenu khusus \"Vision Assistant\" "
+#~ "di dalam menu Tools NVDA untuk akses lebih cepat ke fitur inti, "
+#~ "pengaturan, dan dokumentasi.\n"
+#~ "* **Kustomisasi Fleksibel:** Kini Anda dapat memilih mesin OCR dan suara "
+#~ "TTS pilihan Anda langsung dari panel pengaturan.\n"
+#~ "* **Dukungan Beberapa Kunci API:** Menambahkan dukungan untuk beberapa "
+#~ "kunci API Gemini untuk memastikan layanan berkelanjutan. Anda dapat "
+#~ "memasukkan satu kunci per baris atau memisahkannya dengan koma di "
+#~ "pengaturan.\n"
+#~ "* **Mesin OCR Alternatif:** Memperkenalkan mesin OCR baru untuk "
+#~ "memastikan pengenalan teks yang andal bahkan ketika mencapai batas kuota "
+#~ "API Gemini.\n"
+#~ "* **Rotasi Kunci API Cerdas:** Secara otomatis beralih ke dan mengingat "
+#~ "kunci API yang bekerja paling cepat untuk melewati batas kuota tanpa "
+#~ "intervensi manual.\n"
+#~ "* **Ubah Dokumen ke Audio:** Kemampuan terintegrasi untuk menghasilkan "
+#~ "dan menyimpan file audio berkualitas tinggi (WAV) dari halaman dokumen "
+#~ "langsung di dalam pembaca dokumen.\n"
+#~ "*   **Dukungan untuk Instagram Stories:** Menambahkan kemampuan untuk "
+#~ "mendeskripsikan dan menganalisis Instagram Stories melalui URL.\n"
+#~ "*   **Mendukung Deskripsi video TikTok** Memperkenalkan dukungan untuk "
+#~ "video TikTok, memungkinkan deskripsi visual lengkap dan transkripsi audio "
+#~ "klip.\n"
+#~ "* **Dialog Pembaruan yang Didesain Ulang:** Menampilkan antarmuka baru "
+#~ "yang dapat diakses dengan kotak teks yang dapat digulir untuk membaca "
+#~ "dengan jelas perubahan versi sebelum menginstal.\n"
+#~ "* **Status & UX Terpadu:** Dialog file standar di seluruh add-on dan "
+#~ "menyempurnakan perintah 'L' untuk melaporkan kemajuan real-time untuk "
+#~ "semua tugas latar belakang."
 
 #~ msgid "[Legacy]"
 #~ msgstr "[Lawas]"
@@ -1347,13 +1975,6 @@ msgstr ""
 
 #~ msgid "API Key missing."
 #~ msgstr "Kunci API tidak ada."
-
-#~ msgid "Error 429: Quota Exceeded (Try later)"
-#~ msgstr "Kesalahan 429: Kuota Melampaui Batas (Coba lagi nanti)"
-
-#, python-brace-format
-#~ msgid "Server Error {code}: {reason}"
-#~ msgstr "Kesalahan Server {code}: {reason}"
 
 #, python-brace-format
 #~ msgid "Connection Error: {reason}"
