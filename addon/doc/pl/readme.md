@@ -1,227 +1,230 @@
-# Vision Assistant Pro - Dokumentacja
+# Pomoc Vision Assistant Pro
 
-**Vision Assistant Pro** to zaawansowany, wielomodalny asystent AI dla NVDA. Wykorzystuje modele Gemini od Google, umożliwiając odczytywanie ekranu, tłumaczenie, dyktowanie oraz analizę dokumentów.
+**Vision Assistant Pro** to wielofunkcyjny asystent AI dla NVDA. Wykorzystuje silniki AI do odczytywania ekranu, tłumaczenia, dyktowania głosowego i analizy dokumentów.
 
-*Ten dodatek został udostępniony społeczności z okazji Międzynarodowego Dnia Osób z Niepełnosprawnościami.*
+_Ten dodatek został udostępniony społeczności z okazji Międzynarodowego Dnia Osób z Niepełnosprawnościami._
 
-## 1. Instalacja i konfiguracja
+## 1. Konfiguracja
 
-Przejdź do **Menu NVDA > Ustawienia > Opcje > Vision Assistant Pro**.
+Przejdź do **Menu NVDA > Preferencje > Ustawienia > Vision Assistant Pro**.
 
-- **Klucz API:** Jest wymagany do działania dodatku. Można wprowadzić wiele kluczy (oddzielając je przecinkami lub nowym wierszem). Asystent będzie automatycznie przełączać się między nimi po wyczerpaniu limitu.
-- **Model AI:** Wybierz między modelami **Flash** (najszybszy/darmowy), **Lite** lub **Pro** (wysoka inteligencja).
-- **URL proxy:** Opcjonalnie. Użyj, jeśli Google jest zablokowany w Twoim regionie. Musi to być adres internetowy pełniący funkcję pomostu do API Gemini.
-- **Silnik OCR:** Wybierz między **Chrome (szybki)** dla szybkich odpowiedzi lub **Gemini (sformatowany)** dla lepszego zachowania układu strony i rozpoznawania tabel.
-- **Głos TTS:** Wybierz preferowany styl głosu do generowania plików audio ze stron dokumentów.
-- **Inteligentna zamiana (Smart Swap):** Automatycznie zamienia języki miejscami, jeśli tekst źródłowy odpowiada językowi docelowemu.
-- **Tryb bezpośredni (Direct Output):** Pomija okno czatu i natychmiast odczytuje odpowiedź AI przez mowę. **Uwaga:** Nawet w tym trybie możesz nacisnąć **Spację** w warstwie poleceń, aby ponownie otworzyć ostatni wynik w oknie czatu.
-- **Integracja ze schowkiem (Clipboard Integration):** Automatycznie kopiuje odpowiedź AI do schowka.
+### 1.1 Ustawienia połączenia
+- **Dostawca:** Najpierw Wybierz usługę AI. Obsługiwani dostawcy to **Google Gemini**, **OpenAI**, **Mistral**, **Groq** oraz **Niestandardowy** (serwery zgodne z OpenAI, np. Ollama/LM Studio).
+- **Ważne:** Zalecamy korzystanie z **Google Gemini**, który zapewnia najlepszą jakość (szczególnie przy analizie obrazów i plików).
+- **Klucz API:** Wymagany. Można podać wiele kluczy (rozdzielonych przecinkami lub w osobnych wierszach), aby dodatek rotował je automatycznie.
+- **Pobierz modele:** Po wprowadzeniu klucza API naciśnij ten przycisk, aby pobrać aktualną listę dostępnych modeli od dostawcy.
+- **Model AI:** Wybierz główny model używany do czatu i analizy.
 
-## 2. Warstwa poleceń i skróty klawiszowe
+### 1.2 Osobny model dla każdego zadania
+*Dostępne dla Gemini, OpenAI, Groq i Mistral.*
 
-Aby zapobiec konfliktom klawiszy, ten dodatek wykorzystuje **warstwę poleceń** (Command Layer).
+> **⚠️ Uwaga:** Te ustawienia są przeznaczone dla **doświadczonych użytkowników**. Jeśli nie wiesz, do czego służy dany model, zostaw tę opcję **odznaczoną**. Wybranie nieodpowiedniego modelu (np. modelu tekstowego do rozpoznawania obrazów) spowoduje błędy.
 
+Zaznacz **„Osobny model dla każdego zadania"**. Pozwala to wybrać konkretne modele z listy rozwijanej:
+- **Model dla OCR / rozpoznawania obrazów:** Model do analizy obrazów.
+- **Rozpoznawanie mowy (STT):** Model do dyktowania.
+- **Synteza mowy (TTS):** Model do generowania audio.
+*Uwaga: Nieobsługiwane funkcje (np. TTS dla Groq) zostaną automatycznie ukryte.*
+
+### 1.3 Adresy usług (niestandardowy dostawca)
+*Dostępne tylko przy wybranym dostawcy „Niestandardowy".*
+
+> **⚠️ Uwaga:** Ta sekcja umożliwia ręczną konfigurację API i jest przeznaczona dla **użytkowników prowadzących lokalne serwery lub proxy**. Błędne adresy URL lub nazwy modeli uniemożliwią połączenie. Jeśli nie wiesz, do czego służą te pola, zostaw tę opcję **odznaczoną**.
+
+Zaznacz **„Adresy usług"**, aby ręcznie podać dane serwera. W przeciwieństwie do natywnych dostawców, tutaj trzeba **wpisać** konkretne adresy URL i nazwy modeli:
+- **URL listy modeli:** Adres do pobrania dostępnych modeli.
+- **URL dla OCR/STT/TTS:** Pełne adresy usług (np. `http://localhost:11434/v1/audio/speech`).
+- **Niestandardowe modele:** Wpisz ręcznie nazwę modelu (np. `llama3:8b`) dla każdego zadania.
+
+### 1.4 Preferencje ogólne
+- **Silnik OCR:** Wybierz między **Chrome (szybki)** a **Gemini (formatowany)**, który lepiej zachowuje układ strony.
+    - *Uwaga:* Jeśli wybierzesz „Gemini (formatowany)", ale dostawcą jest np. OpenAI/Groq, dodatek automatycznie skieruje obraz do modelu rozpoznawania aktywnego dostawcy.
+- **Głos TTS:** Wybierz preferowany styl głosu. Lista aktualizuje się automatycznie na podstawie aktywnego dostawcy.
+- **Kreatywność (temperatura):** Kontroluje losowość odpowiedzi AI. Niższe wartości są lepsze dla tłumaczenia i OCR.
+- **URL serwera proxy:** Skonfiguruj, jeśli usługi AI są ograniczone w twoim regionie (obsługuje lokalne proxy, np. `127.0.0.1`, oraz adresy pośredniczące).
+
+## 2. Warstwa poleceń i skróty
+
+Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy poleceń**.
 1. Naciśnij **NVDA + Shift + V** (klawisz główny), aby aktywować warstwę (usłyszysz sygnał dźwiękowy).
-2. Zwolnij klawisze, a następnie naciśnij jeden z poniższych klawiszy:
+2. Puść klawisze, a następnie naciśnij jeden z poniższych:
 
-| Klawisz | Funkcja | Opis |
-|---|---|---|
-| **T** | Inteligentny tłumacz | Tłumaczy tekst pod kursorem nawigatora lub zaznaczenie. |
-| **Shift + T** | Tłumaczenie ze schowka | Tłumaczy zawartość znajdującą się w schowku. |
-| **R** | Poprawianie tekstu | Podsumuj, popraw gramatykę, wyjaśnij lub uruchom polecenia niestandardowe. |
-| **V** | rozpoznawanie obiektu | Opisuje bieżący obiekt nawigatora. |
-| **O** | rozpoznawanie pełnego ekranu | Analizuje cały układ i zawartość ekranu. |
-| **Shift + V** | Analiza wideo online | Analizuj filmy z **YouTube**, **Instagram**, **TikTok** lub **Twitter (X)**. |
-| **D** | Czytnik dokumentów | Zaawansowany czytnik plików PDF i obrazów z wyborem zakresu stron. |
-| **F** | OCR pliku | Bezpośrednie rozpoznawanie tekstu z wybranych plików graficznych, PDF lub TIFF. |
-| **A** | Transkrypcja audio | Transkrybuj pliki MP3, WAV lub OGG na tekst. |
-| **C** | Rozwiązywanie CAPTCHA | Przechwytuje i rozwiązuje CAPTCHA na ekranie lub obiekcie nawigatora. |
-| **S** | Inteligentne dyktowanie | Zamienia mowę na tekst. Naciśnij, aby rozpocząć nagrywanie, naciśnij ponownie, aby zatrzymać i wpisać. |
-| **L** | Raportowanie stanu | Odczytuje bieżący postęp (np. „Skanowanie...", „Bezczynność"). |
-| **U** | Sprawdzanie aktualizacji | Ręczne sprawdzanie najnowszej wersji dodatku na GitHubie. |
-| **Spacja** | Przywołanie ostatniego wyniku | Wyświetla ostatnią odpowiedź AI w oknie czatu do przeglądu lub zadawania dodatkowych pytań. |
-| **H** | Pomoc poleceń | Wyświetla listę wszystkich dostępnych skrótów w warstwie poleceń. |
+| Klawisz       | Funkcja                  | Opis                                                                        |
+|---------------|--------------------------|-----------------------------------------------------------------------------|
+| **T**         | Tłumacz                  | Tłumaczy tekst pod kursorem nawigatora lub zaznaczenie.                     |
+| **Shift + T** | Tłumaczenie schowka      | Tłumaczy zawartość schowka.                                                |
+| **R**         | Poprawianie tekstu       | Podsumuj, popraw gramatykę, wyjaśnij lub uruchom **niestandardowe polecenie**. |
+| **V**         | Opis obiektu             | Opisuje bieżący obiekt nawigatora.                                          |
+| **O**         | Rozpoznawanie ekranu     | Analizuje układ i zawartość całego ekranu.                                  |
+| **Shift + V** | Analiza wideo online     | Analizuj filmy z **YouTube**, **Instagrama**, **TikToka** lub **Twittera (X)**. |
+| **D**         | Czytnik dokumentów       | Czytnik PDF i obrazów z wyborem zakresu stron.                              |
+| **F**         | OCR pliku                | Rozpoznawanie tekstu z wybranego obrazu, PDF lub TIFF.                      |
+| **A**         | Transkrypcja audio       | Transkrybuje pliki MP3, WAV lub OGG na tekst.                              |
+| **C**         | Rozwiązywanie CAPTCHA    | Przechwytuje i rozwiązuje CAPTCHA.              |
+| **S**         | Dyktowanie               | Zamienia mowę na tekst. Naciśnij raz, aby nagrywać, ponownie, aby zakończyć.  |
+| **L**         | Raport stanu             | Odczytuje bieżący postęp (np. „Skanowanie...", „Bezczynny").               |
+| **U**         | Sprawdzanie aktualizacji | Ręcznie sprawdza najnowszą wersję dodatku na GitHubie.                     |
+| **Spacja**    | Ostatnia odpowiedź AI    | Wyświetla ostatnią odpowiedź AI w oknie czatu do przeglądu lub kontynuacji. |
+| **H**         | Pomoc poleceń            | Wyświetla listę wszystkich dostępnych skrótów w warstwie poleceń.           |
 
-### 2.1 Skróty czytnika dokumentów (w przeglądarce)
-
-Po otwarciu dokumentu poleceniem **D**:
-
-- **Ctrl + PageDown:** Przejdź do następnej strony (odczytuje numer strony).
-- **Ctrl + PageUp:** Przejdź do poprzedniej strony (odczytuje numer strony).
-- **Alt + A:** Otwórz okno czatu, aby zadawać pytania dotyczące dokumentu.
-- **Alt + R:** Wymuś ponowne skanowanie bieżącej strony lub wszystkich stron za pomocą silnika Gemini.
-- **Alt + G:** Wygeneruj i zapisz plik audio wysokiej jakości (WAV) z zawartości.
+### 2.1 Skróty czytnika dokumentów (wewnątrz przeglądarki)
+- **Ctrl + PageDown:** Przejdź do następnej strony.
+- **Ctrl + PageUp:** Przejdź do poprzedniej strony.
+- **Alt + A:** Otwórz okno czatu, aby zadać pytanie o dokument.
+- **Alt + R:** Wymuś **ponowne skanowanie AI** przy użyciu aktywnego dostawcy.
+- **Alt + G:** Wygeneruj i zapisz plik audio (WAV/MP3). *Ukryte, jeśli dostawca nie obsługuje TTS.*
 - **Alt + S / Ctrl + S:** Zapisz wyodrębniony tekst jako plik TXT lub HTML.
 
 ## 3. Polecenia niestandardowe i zmienne
 
-Otwórz **Ustawienia > Prompty > Zarządzaj promptami...** aby skonfigurować prompty systemowe i niestandardowe.
+Zarządzaj poleceniami w **Ustawienia > Polecenia > Zarządzaj poleceniami...**.
 
-- **Karta promptów domyślnych:** edycja wbudowanych promptów. Można zresetować pojedynczy prompt lub przywrócić wszystkie domyślne.
-- **Karta promptów niestandardowych:** dodawanie, edytowanie, usuwanie i zmiana kolejności promptów niestandardowych.
-- **Przycisk przewodnika po zmiennych:** otwiera okno pomocy ze wszystkimi obsługiwanymi zmiennymi i typami danych wejściowych.
-
-### Dostępne zmienne
-
-| Zmienna | Opis | Typ danych wejściowych |
-|---|---|---|
-| `[selection]` | Aktualnie zaznaczony tekst | Tekst |
-| `[clipboard]` | Zawartość schowka | Tekst |
-| `[screen_obj]` | Zrzut ekranu obiektu nawigatora | Obraz |
-| `[screen_full]` | Zrzut pełnego ekranu | Obraz |
-| `[file_ocr]` | Wybierz plik graficzny/PDF do wyodrębnienia tekstu | Obraz, PDF, TIFF |
-| `[file_read]` | Wybierz dokument do odczytu | TXT, Kod, PDF |
-| `[file_audio]` | Wybierz plik audio do analizy | MP3, WAV, OGG |
-
-### Przykładowe polecenia niestandardowe
-
-- **Szybki OCR:** `My OCR:[file_ocr]`
-- **Tłumaczenie obrazu:** `Translate Img:Extract text from this image and translate to English. [file_ocr]`
-- **Analiza audio:** `Summarize Audio:Listen to this recording and summarize the main points. [file_audio]`
-- **Debuger kodu:** `Debug:Find bugs in this code and explain them: [selection]`
+### Obsługiwane zmienne
+- `[selection]`: Aktualnie zaznaczony tekst.
+- `[clipboard]`: Zawartość schowka.
+- `[screen_obj]`: Zrzut ekranu obiektu nawigatora.
+- `[screen_full]`: Zrzut całego ekranu.
+- `[file_ocr]`: Wybierz obraz/PDF do wyodrębnienia tekstu.
+- `[file_read]`: Wybierz dokument do odczytu (TXT, kod, PDF).
+- `[file_audio]`: Wybierz plik audio do analizy (MP3, WAV, OGG).
 
 ***
-**Uwaga:** Do działania wszystkich funkcji AI wymagane jest aktywne połączenie internetowe. Dokumenty wielostronicowe i pliki TIFF są przetwarzane automatycznie.
+**Uwaga:** Wszystkie funkcje AI wymagają aktywnego połączenia z internetem. Dokumenty wielostronicowe są przetwarzane automatycznie.
 
 ## 4. Wsparcie i społeczność
 
-Bądź na bieżąco z najnowszymi wiadomościami, funkcjami i wydaniami:
-
-- **Kanał Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
+Bądź na bieżąco z najnowszymi wiadomościami i aktualizacjami:
+- **Kanał w Telegramie:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** Zgłaszanie błędów i propozycje nowych funkcji.
 
-## Zmiany w wersji 4.6
+---
 
-* **Możliwość wymuszenia trybu interaktywnego czatu:** Dodano klawisz **Spacja** do warstwy poleceń, umożliwiający natychmiastowe ponowne otwarcie ostatniej odpowiedzi AI w oknie czatu w celu zadawania dodatkowych pytań, nawet gdy aktywny jest tryb Bezpośredni.
-* **Hub społeczności na Telegramie:** Dodano link do „Oficjalnego kanału na Telegramie" w menu Narzędzia NVDA, zapewniający szybki dostęp do najnowszych wiadomości, funkcji i wydań.
-* **Zwiększona stabilność odpowiedzi:** Zoptymalizowano główną logikę funkcji tłumaczenia, OCR i przetwarzania obrazu, aby umożliwić bardziej niezawodne działanie i płynniejsze korzystanie z trybu bezpośredniego.
-* **Ulepszone wskazówki interfejsu:** Zaktualizowano opisy ustawień i dokumentację.
+## Zmiany w wersji 5.0
+
+* **Wielu dostawców**: Dodano pełną obsługę **OpenAI**, **Groq** i **Mistral** obok Google Gemini. Teraz można wybrać preferowany model AI.
+* **Przypisywanie modeli do zadań**: Użytkownicy natywnych dostawców (Gemini, OpenAI itp.) mogą teraz wybierać konkretne modele z listy rozwijanej dla różnych zadań (OCR, STT, TTS).
+* **Adresy usług**: Użytkownicy niestandardowych dostawców mogą ręcznie wprowadzać konkretne adresy URL i nazwy modeli np. dla skonfigurowania lokalnego modelu.
+* **Ukrywanie nieobsługiwanych funkcji**: Menu ustawień i interfejs czytnika dokumentów automatycznie ukrywają nieobsługiwane funkcje (np. TTS) na podstawie wybranego dostawcy.
+* **Pobieranie modeli z API**: Dodatek pobiera listę dostępnych modeli bezpośrednio z API dostawcy, co umożliwia obsługę nowych modeli natychmiast po ich wydaniu.
+* **Hybrydowe OCR i tłumaczenie**: Zoptymalizowano logikę, aby używać Tłumacza Google dla szybkości przy OCR Chrome oraz tłumaczenia opartego na AI przy silnikach Gemini/Groq/OpenAI.
+* **Ponowne skanowanie AI**: Funkcja ponownego skanowania w czytniku dokumentów nie jest już ograniczona do Gemini. Wykorzystuje teraz aktywnego dostawcę AI do ponownego przetwarzania stron.
+
+## Zmiany w wersji 4.6
+* **Przywołanie ostatniego wyniku:** Dodano klawisz **Spacja** do warstwy poleceń, umożliwiający natychmiastowe ponowne otwarcie ostatniej odpowiedzi AI w oknie czatu, nawet gdy aktywny jest tryb bezpośredni.
+* **Kanał w Telegramie:** Dodano link do oficjalnego kanału Telegram w menu Narzędzia NVDA, umożliwiając szybki dostęp do najnowszych wiadomości i aktualizacji.
+* **Stabilność odpowiedzi:** Zoptymalizowano logikę tłumaczenia, OCR i rozpoznawania, aby zapewnić bardziej niezawodne działanie i płynniejsze odczytywanie wyników.
+* **Lepsza dokumentacja:** Zaktualizowano opisy ustawień i dokumentację, aby lepiej wyjaśnić system przywoływania wyników i jego współdziałanie z trybem bezpośrednim.
 
 ## Zmiany w wersji 4.5
-
-* **Zaawansowany menedżer promptów:** Wprowadzono dedykowane okno zarządzania w ustawieniach do dostosowywania domyślnych promptów systemowych i zarządzania promptami użytkownika z pełną obsługą dodawania, edytowania, zmiany kolejności i podglądu.
-* **Kompleksowa obsługa proxy:** Rozwiązano problemy z łącznością sieciową, zapewniając ścisłe stosowanie skonfigurowanych przez użytkownika ustawień proxy do wszystkich żądań API, w tym tłumaczenia, OCR i generowania mowy.
-* **Automatyczna migracja danych:** Zintegrowano inteligentny system migracji automatycznie aktualizujący starsze konfiguracje promptów do formatu JSON v2 przy pierwszym uruchomieniu bez utraty danych.
-* **Zaktualizowana kompatybilność (2025.1):** Ustawiono minimalną wymaganą wersję NVDA na 2025.1 ze względu na zależności bibliotek w zaawansowanych funkcjach, takich jak czytnik dokumentów, aby zapewnić stabilne działanie.
-* **Zoptymalizowany interfejs ustawień:** Uproszczono interfejs ustawień poprzez przeniesienie zarządzania promptami do osobnego okna, zapewniając czystsze i bardziej dostępne środowisko użytkownika.
-* **Przewodnik po zmiennych promptów:** Dodano wbudowany przewodnik w oknach promptów, pomagający użytkownikom łatwo identyfikować i używać dynamicznych zmiennych, takich jak [selection], [clipboard] i [screen_obj].
+* **Menedżer poleceń:** Dodano dedykowane okno dialogowe w ustawieniach do zarządzania domyślnymi poleceniami systemowymi i poleceniami użytkownika, z pełną obsługą dodawania, edycji, zmiany kolejności i podglądu.
+* **Obsługa proxy:** Rozwiązano problemy z łącznością, zapewniając prawidłowe stosowanie ustawień proxy do wszystkich żądań API, w tym tłumaczenia, OCR i generowania mowy.
+* **Migracja danych:** Dodano system migracji, który automatycznie aktualizuje starsze konfiguracje poleceń do formatu JSON v2 przy pierwszym uruchomieniu, bez utraty danych.
+* **Kompatybilność z NVDA 2025.1:** Ustawiono minimalną wymaganą wersję NVDA na 2025.1 ze względu na zależności biblioteczne w funkcjach czytnika dokumentów.
+* **Uproszczony interfejs ustawień:** Uporządkowano interfejs ustawień, przenosząc zarządzanie poleceniami do osobnego okna dialogowego.
+* **Przewodnik po zmiennych:** Dodano wbudowany przewodnik w oknach dialogowych poleceń, ułatwiający korzystanie ze zmiennych dynamicznych, takich jak [selection], [clipboard] i [screen_obj].
 
 ## Zmiany w wersji 4.0.3
-
-* **Zwiększona odporność sieciowa:** Dodano mechanizm automatycznego ponawiania prób w celu lepszej obsługi niestabilnych połączeń internetowych i tymczasowych błędów serwera, zapewniając bardziej niezawodne odpowiedzi AI.
-* **Okno tłumaczenia:** Wprowadzono dedykowane okno wyników tłumaczenia. Użytkownicy mogą teraz łatwo nawigować i czytać długie tłumaczenia wiersz po wierszu, podobnie jak wyniki OCR.
-* **Zagregowany widok sformatowany:** Funkcja „Widok sformatowany" w czytniku dokumentów wyświetla teraz wszystkie przetworzone strony w jednym, uporządkowanym oknie z wyraźnymi nagłówkami stron.
-* **Zoptymalizowany przepływ pracy OCR:** Automatyczne pomijanie wyboru zakresu stron dla dokumentów jednostronicowych, co przyspiesza i usprawnia proces rozpoznawania.
-* **Poprawiona stabilność API:** Przejście na bardziej niezawodną metodę uwierzytelniania opartą na nagłówkach, rozwiązujące potencjalne błędy „All API Keys failed" spowodowane konfliktami rotacji kluczy.
-* **Poprawki błędów:** Rozwiązano kilka potencjalnych awarii, w tym problem podczas kończenia pracy dodatku oraz błąd fokusa w oknie czatu.
+* **Obsługa niestabilnego połączenia:** Dodano mechanizm automatycznych ponownych prób, aby lepiej radzić sobie z chwilowymi błędami serwera i niestabilnym połączeniem.
+* **Okno tłumaczenia:** Dodano dedykowane okno dla wyników tłumaczenia. Długie tłumaczenia można teraz przeglądać wiersz po wierszu, podobnie jak wyniki OCR.
+* **Zbiorczy podgląd sformatowany:** Funkcja „Podgląd sformatowany" w czytniku dokumentów wyświetla teraz wszystkie przetworzone strony w jednym uporządkowanym oknie z nagłówkami stron.
+* **Szybszy OCR:** Dla dokumentów jednostronicowych pomijany jest wybór zakresu stron, co przyspiesza proces rozpoznawania.
+* **Stabilność API:** Zmieniono metodę uwierzytelniania na opartą o nagłówki HTTP, eliminując błędy „Wszystkie klucze API zawiodły" powodowane przez konflikty rotacji kluczy.
+* **Poprawki błędów:** Naprawiono kilka potencjalnych awarii, w tym problem przy zamykaniu dodatku oraz błąd fokusu w oknie czatu.
 
 ## Zmiany w wersji 4.0.1
-
-* **Zaawansowany czytnik dokumentów:** Nowa, zaawansowana przeglądarka plików PDF i obrazów z wyborem zakresu stron, przetwarzaniem w tle i płynną nawigacją Ctrl+PageUp/Down.
-* **Nowe podmenu Narzędzia:** Dodano dedykowane podmenu „Vision Assistant" w menu Narzędzia NVDA dla szybszego dostępu do głównych funkcji, ustawień i dokumentacji.
-* **Elastyczna konfiguracja:** Możliwość wyboru preferowanego silnika OCR i głosu TTS bezpośrednio z panelu ustawień.
-* **Obsługa wielu kluczy API:** Dodano obsługę wielu kluczy API Gemini. Można wprowadzić jeden klucz w wierszu lub oddzielać je przecinkami w ustawieniach.
-* **Alternatywny silnik OCR:** Wprowadzono nowy silnik OCR zapewniający niezawodne rozpoznawanie tekstu nawet po wyczerpaniu limitów API Gemini.
-* **Inteligentna rotacja kluczy API:** Automatyczne przełączanie na najszybszy działający klucz API i zapamiętywanie go w celu obejścia limitów.
-* **Dokument do MP3/WAV:** Zintegrowano możliwość generowania i zapisywania plików audio wysokiej jakości w formatach MP3 (128 kbps) i WAV bezpośrednio w czytniku.
-* **Obsługa Instagram Stories:** Dodano możliwość opisywania i analizowania Instagram Stories za pomocą adresów URL.
-* **Obsługa TikTok:** Wprowadzono obsługę filmów TikTok, umożliwiając pełny opis wizualny i transkrypcję audio klipów.
-* **Przeprojektowane okno aktualizacji:** Nowy, dostępny interfejs z przewijanym polem tekstowym do wyraźnego odczytania zmian wersji przed instalacją.
-* **Ujednolicony stan i UX:** Standaryzacja okien dialogowych plików w całym dodatku oraz ulepszenie polecenia „L" do raportowania postępu w czasie rzeczywistym.
+* **Czytnik dokumentów:** Nowa przeglądarka PDF i obrazów z wyborem zakresu stron, przetwarzaniem w tle i nawigacją Ctrl+PageUp/Down.
+* **Podmenu Narzędzia:** Dodano podmenu „Vision Assistant" w menu Narzędzia NVDA, umożliwiające szybki dostęp do głównych funkcji, ustawień i dokumentacji.
+* **Konfiguracja:** Teraz można wybrać preferowany silnik OCR i głos TTS bezpośrednio w panelu ustawień.
+* **Wiele kluczy API:** Dodano obsługę wielu kluczy API Gemini. Klucze można podać po jednym w wierszu lub rozdzielone przecinkami.
+* **Alternatywny silnik OCR:** Dodano nowy silnik OCR, zapewniający niezawodne rozpoznawanie tekstu nawet po przekroczeniu limitów API Gemini.
+* **Rotacja kluczy API:** Automatyczne przełączanie na najszybszy działający klucz API, aby obejść limity.
+* **Eksport audio:** Możliwość generowania i zapisywania plików audio w formatach MP3 (128 kbps) i WAV bezpośrednio z czytnika.
+* **Instagram Stories:** Dodano możliwość opisu i analizy Instagram Stories za pomocą adresów URL.
+* **TikTok:** Dodano obsługę filmów TikTok, umożliwiając opis wizualny i transkrypcję audio.
+* **Okno aktualizacji:** Nowy dostępny interfejs z polem tekstowym do przejrzenia zmian przed instalacją.
+* **Ujednolicenie interfejsu:** Ustandaryzowano okna dialogowe plików w całym dodatku i rozszerzono polecenie „L" o raportowanie postępu w czasie rzeczywistym.
 
 ## Zmiany w wersji 3.6.0
-
-* **System pomocy:** Dodano polecenie pomocy (`H`) w warstwie poleceń, zapewniające łatwy dostęp do listy wszystkich skrótów i ich funkcji.
-* **Analiza wideo online:** Rozszerzono obsługę o filmy z **Twitter (X)**. Poprawiono również wykrywanie adresów URL i stabilność działania.
-* **Wkład w projekt:** Dodano opcjonalne okno donacji dla użytkowników chcących wesprzeć przyszłe aktualizacje i ciągły rozwój projektu.
+* **System pomocy:** Dodano polecenie pomocy (`H`) w warstwie poleceń, wyświetlające listę wszystkich skrótów i ich funkcji.
+* **Analiza wideo online:** Rozszerzono obsługę o filmy z **Twittera (X)**. Poprawiono wykrywanie adresów URL i stabilność.
+* **Wsparcie projektu:** Dodano opcjonalne okno darowizn dla osób chcących wesprzeć dalszy rozwój projektu.
 
 ## Zmiany w wersji 3.5.0
-
-* **Warstwa poleceń:** Wprowadzono system warstwy poleceń (domyślnie: `NVDA+Shift+V`) grupujący skróty pod jednym klawiszem głównym. Na przykład zamiast `NVDA+Control+Shift+T` do tłumaczenia, teraz naciskasz `NVDA+Shift+V`, a następnie `T`.
-* **Analiza wideo online:** Dodano nową funkcję analizy filmów z YouTube i Instagram bezpośrednio poprzez podanie adresu URL.
+* **Warstwa poleceń:** Wprowadzono system warstwy poleceń (domyślnie: `NVDA+Shift+V`), grupujący skróty pod jednym klawiszem głównym. Na przykład zamiast naciskać `NVDA+Control+Shift+T` do tłumaczenia, wystarczy nacisnąć `NVDA+Shift+V`, a potem `T`.
+* **Analiza wideo online:** Dodano nową funkcję analizy filmów z YouTube i Instagrama na podstawie adresu URL.
 
 ## Zmiany w wersji 3.1.0
-
-* **Tryb bezpośredniego wyjścia:** Dodano opcję pomijania okna czatu i bezpośredniego odczytywania odpowiedzi AI przez mowę, zapewniając szybsze i płynniejsze działanie.
-* **Integracja ze schowkiem:** Dodano nowe ustawienie automatycznego kopiowania odpowiedzi AI do schowka.
+* **Tryb bezpośredni:** Dodano opcję pomijania okna czatu i odczytywania odpowiedzi AI bezpośrednio przez syntezator mowy.
+* **Kopiowanie do schowka:** Dodano ustawienie automatycznego kopiowania odpowiedzi AI do schowka.
 
 ## Zmiany w wersji 3.0
 
 * **Nowe języki:** Dodano tłumaczenia na **perski** i **wietnamski**.
-* **Rozszerzone modele AI:** Przeorganizowano listę wyboru modeli z wyraźnymi prefiksami (`[Free]`, `[Pro]`, `[Auto]`), aby pomóc użytkownikom odróżnić modele darmowe od płatnych (z limitem). Dodano obsługę **Gemini 3.0 Pro** i **Gemini 2.0 Flash Lite**.
-* **Stabilność dyktowania:** Znacząco poprawiono stabilność inteligentnego dyktowania. Dodano kontrolę bezpieczeństwa ignorującą klipy audio krótsze niż 1 sekunda, zapobiegając halucynacjom AI i pustym błędom.
-* **Obsługa plików:** Naprawiono problem z przesyłaniem plików o nazwach w językach innych niż angielski.
-* **Optymalizacja promptów:** Poprawiono logikę tłumaczenia i ustrukturyzowano wyniki wizji.
+* **Rozszerzenie modeli AI:** Uporządkowano listę modeli z czytelnymi prefiksami (`[Darmowy]`, `[Pro]`, `[Auto]`), ułatwiając rozróżnienie modeli darmowych i płatnych. Dodano obsługę **Gemini 3.0 Pro** i **Gemini 2.0 Flash Lite**.
+* **Stabilność dyktowania:** Znacząco poprawiono stabilność dyktowania. Dodano zabezpieczenie ignorujące nagrania krótsze niż 1 sekunda, zapobiegając halucynacjom AI i pustym błędom.
+* **Obsługa plików:** Naprawiono problem z przesyłaniem plików o nazwach zawierających znaki spoza alfabetu łacińskiego.
+* **Polecenia:** Poprawiono logikę tłumaczenia i ustrukturyzowano wyniki rozpoznawania.
 
 ## Zmiany w wersji 2.9
 
 * **Dodano tłumaczenia na francuski i turecki.**
-* **Widok sformatowany:** Dodano przycisk „Widok sformatowany" w oknach czatu do przeglądania rozmowy z odpowiednim formatowaniem (nagłówki, pogrubienie, kod) w standardowym oknie przeglądarki.
-* **Ustawienie Markdown:** Dodano nową opcję „Czyść Markdown w czacie" w ustawieniach. Odznaczenie pozwala użytkownikom widzieć surową składnię Markdown (np. `**`, `#`) w oknie czatu.
-* **Zarządzanie oknami:** Naprawiono problem powodujący wielokrotne otwieranie lub nieprawidłowe ustawianie fokusa okien „Popraw tekst" lub czatu.
-* **Usprawnienia UX:** Ustandaryzowano tytuły okien dialogowych plików na „Otwórz" i usunięto zbędne komunikaty głosowe (np. „Otwieranie menu...") dla płynniejszego działania.
+* **Podgląd sformatowany:** Dodano przycisk „Podgląd sformatowany" w oknach czatu, umożliwiający wyświetlenie rozmowy z prawidłowym formatowaniem (nagłówki, pogrubienie, kod) w standardowym oknie przeglądarki.
+* **Ustawienie Markdown:** Dodano opcję „Czyść Markdown w czacie" w ustawieniach. Odznaczenie pozwala widzieć surową składnię Markdown (np. `**`, `#`) w oknie czatu.
+* **Zarządzanie oknami:** Naprawiono problem z wielokrotnym otwieraniem okien „Poprawianie tekstu" lub czatu.
+* **Usprawnienia interfejsu:** Ujednolicono tytuły okien dialogowych plików na „Otwórz" i usunięto zbędne komunikaty głosowe (np. „Otwieranie menu...").
 
 ## Zmiany w wersji 2.8
-
 * Dodano tłumaczenie na włoski.
-* **Raportowanie stanu:** Dodano nowe polecenie (NVDA+Control+Shift+I) do odczytywania bieżącego stanu dodatku (np. „Przesyłanie...", „Analizowanie...").
-* **Eksport HTML:** Przycisk „Zapisz zawartość" w oknach wyników zapisuje teraz dane jako sformatowany plik HTML, zachowując style takie jak nagłówki i pogrubiony tekst.
+* **Raport stanu:** Dodano polecenie (NVDA+Control+Shift+I) odczytujące bieżący stan dodatku (np. „Przesyłanie...", „Analizowanie...").
+* **Eksport HTML:** Przycisk „Zapisz treść" w oknach wyników zapisuje teraz dane jako sformatowany plik HTML, zachowując style takie jak nagłówki i pogrubienia.
 * **Interfejs ustawień:** Poprawiono układ panelu ustawień z dostępnym grupowaniem.
 * **Nowe modele:** Dodano obsługę gemini-flash-latest i gemini-flash-lite-latest.
 * **Języki:** Dodano nepalski do obsługiwanych języków.
-* **Logika menu poprawiania:** Naprawiono krytyczny błąd powodujący niepowodzenie poleceń „Popraw tekst", gdy język interfejsu NVDA nie był angielski.
-* **Dyktowanie:** Poprawiono wykrywanie ciszy, aby zapobiec nieprawidłowemu wyjściu tekstowemu przy braku mowy na wejściu.
-* **Ustawienia aktualizacji:** Opcja „Sprawdzaj aktualizacje przy uruchomieniu" jest teraz domyślnie wyłączona, zgodnie z zasadami Add-on Store.
-* Oczyszczenie kodu.
+* **Poprawianie tekstu:** Naprawiono błąd, przez który polecenia „Poprawianie tekstu" nie działały, gdy język interfejsu NVDA nie był angielski.
+* **Dyktowanie:** Poprawiono wykrywanie ciszy, aby zapobiec błędnemu rozpoznawaniu tekstu przy braku mowy.
+* **Ustawienia aktualizacji:** Opcja „Sprawdzaj aktualizacje przy uruchomieniu" jest teraz domyślnie wyłączona, zgodnie z polityką Add-on Store.
+* Porządki w kodzie.
 
 ## Zmiany w wersji 2.7
-
-* Przeniesiono strukturę projektu na oficjalny szablon dodatku NV Access w celu lepszej zgodności ze standardami.
-* Wdrożono logikę automatycznego ponawiania prób dla błędów HTTP 429 (limit szybkości) w celu zapewnienia niezawodności przy dużym obciążeniu.
-* Zoptymalizowano polecenia tłumaczenia w celu zwiększenia dokładności i lepszej obsługi logiki inteligentnej zamiany.
+* Przeniesiono strukturę projektu na oficjalny szablon dodatków NV Access, zapewniając zgodność ze standardami.
+* Dodano automatyczne ponawianie prób przy błędach HTTP 429 (limit zapytań), poprawiając niezawodność w okresach dużego ruchu.
+* Zoptymalizowano polecenia tłumaczenia dla wyższej dokładności i lepszej obsługi logiki „Zamień języki".
 * Zaktualizowano tłumaczenie rosyjskie.
 
 ## Zmiany w wersji 2.6
-
-* Dodano obsługę tłumaczenia na rosyjski (podziękowania dla nvda-ru).
-* Zaktualizowano komunikaty o błędach, zapewniając bardziej opisowe informacje zwrotne dotyczące łączności.
-* Zmieniono domyślny język docelowy tłumaczenia na angielski.
+* Dodano tłumaczenie na rosyjski (podziękowania dla nvda-ru).
+* Zaktualizowano komunikaty o błędach, aby lepiej informowały o problemach z łącznością.
+* Zmieniono domyślny język docelowy na angielski.
 
 ## Zmiany w wersji 2.5
-
-* Dodano natywne polecenie OCR pliku (NVDA+Control+Shift+F).
+* Dodano polecenie OCR pliku (NVDA+Control+Shift+F).
 * Dodano przycisk „Zapisz czat" w oknach wyników.
 * Wdrożono pełną obsługę lokalizacji (i18n).
-* Przeniesiono sygnały dźwiękowe na natywny moduł sygnałów NVDA.
-* Przejście na File API Gemini w celu lepszej obsługi plików PDF i audio.
+* Przeniesiono sygnały dźwiękowe na natywny moduł NVDA.
+* Przejście na Gemini File API dla lepszej obsługi plików PDF i audio.
 * Naprawiono awarię przy tłumaczeniu tekstu zawierającego nawiasy klamrowe.
 
 ## Zmiany w wersji 2.1.1
-
-* Naprawiono problem polegający na nieprawidłowym działaniu zmiennej `[file_ocr]` w poleceniach niestandardowych.
+* Naprawiono problem z nieprawidłowym działaniem zmiennej [file_ocr] w poleceniach niestandardowych.
 
 ## Zmiany w wersji 2.1
-
-* Wszystkie skróty klawiszowe ustandaryzowano do formatu NVDA+Control+Shift, aby wyeliminować konflikty z układem laptopa NVDA i systemowymi skrótami.
+* Ustandaryzowano wszystkie skróty na NVDA+Control+Shift, eliminując konflikty z układem laptopowym NVDA i skrótami systemowymi.
 
 ## Zmiany w wersji 2.0
-
-* Wdrożono wbudowany system automatycznych aktualizacji.
-* Dodano pamięć podręczną inteligentnego tłumaczenia umożliwiającą natychmiastowe pobieranie wcześniej przetłumaczonego tekstu.
-* Dodano pamięć rozmowy umożliwiającą kontekstowe doprecyzowywanie wyników w oknach czatu.
-* Dodano dedykowane polecenie tłumaczenia ze schowka (NVDA+Control+Shift+Y).
-* Zoptymalizowano polecenia AI w celu ścisłego wymuszania wyniku w języku docelowym.
-* Naprawiono awarię spowodowaną znakami specjalnymi w tekście wejściowym.
+* Wbudowany system automatycznych aktualizacji.
+* Pamięć podręczna tłumaczeń, umożliwiająca natychmiastowe przywoływanie wcześniej przetłumaczonych tekstów.
+* Pamięć kontekstu rozmowy w oknach czatu, umożliwiająca doprecyzowywanie wyników.
+* Dedykowane polecenie tłumaczenia schowka (NVDA+Control+Shift+Y).
+* Zoptymalizowano polecenia AI, aby ściślej wymuszać język docelowy.
+* Naprawiono awarię powodowaną przez znaki specjalne w tekście wejściowym.
 
 ## Zmiany w wersji 1.5
-
 * Dodano obsługę ponad 20 nowych języków.
-* Wdrożono interaktywne okno dialogowe poprawiania tekstu z pytaniami doprecyzowującymi.
-* Dodano natywną funkcję inteligentnego dyktowania.
-* Dodano kategorię „Vision Assistant" w oknie „Zdarzenia wejścia" NVDA.
-* Naprawiono awarie COMError w określonych aplikacjach, takich jak Firefox i Word.
+* Dodano okno dialogowe do doprecyzowywania wyników za pomocą pytań uzupełniających.
+* Dodano wbudowane dyktowanie.
+* Dodano kategorię „Vision Assistant" w oknie Zdarzenia wejścia NVDA.
+* Naprawiono awarie COMError w niektórych aplikacjach, takich jak Firefox i Word.
 * Dodano mechanizm automatycznego ponawiania prób przy błędach serwera.
 
 ## Zmiany w wersji 1.0
-
 * Pierwsze wydanie.
