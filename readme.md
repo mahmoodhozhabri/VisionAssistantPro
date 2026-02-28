@@ -1,8 +1,6 @@
-> **⚠️ Important Notice:** Due to the current regional situation and the high risk of internet blackouts, my connectivity may be lost at any time. If I am unable to respond to issues or messages, please understand that it is due to these circumstances beyond my control. Thank you for your patience and continued support.
-
 # Vision Assistant Pro Documentation
 
-**Vision Assistant Pro** is an advanced, multi-modal AI assistant for NVDA. It leverages Google's Gemini models to provide intelligent screen reading, translation, voice dictation, and document analysis capabilities.
+**Vision Assistant Pro** is an advanced, multi-modal AI assistant for NVDA. It leverages world-class AI engines to provide intelligent screen reading, translation, voice dictation, and document analysis.
 
 _This add-on was released to the community in honor of the International Day of Persons with Disabilities._
 
@@ -10,14 +8,40 @@ _This add-on was released to the community in honor of the International Day of 
 
 Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**.
 
-- **API Key:** Required. You can enter multiple keys (separated by commas or new lines). The assistant will automatically rotate between them if a quota limit is reached.
-- **AI Model:** Choose between **Flash** (Fastest/Free), **Lite**, or **Pro** (High Intelligence) models.
-- **Proxy URL:** Optional. Use this if Google is blocked in your region. It must be a web address that acts as a bridge to the Gemini API.
-- **OCR Engine:** Choose between **Chrome (Fast)** for quick results or **Gemini (Formatted)** for superior layout preservation and table recognition.
-- **TTS Voice:** Select the preferred voice style for generating audio files from document pages.
-- **Smart Swap:** Automatically swaps languages if the source text matches the target language.
-- **Direct Output:** Skips the chat window and announces the AI response directly via speech. **Note:** Even in this mode, you can press **Space** within the command layer to reopen the last result in a chat dialog.
-- **Clipboard Integration:** Automatically copies the AI response to the clipboard.
+### 1.1 Connection Settings
+- **Provider:** Select your preferred AI service. Supported providers include **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, and **Custom** (OpenAI-compatible servers like Ollama/LM Studio).
+- **Important Note:** We strongly recommend using **Google Gemini** for the best performance and accuracy (especially for image/file analysis).
+- **API Key:** Required. You can enter multiple keys (separated by commas or new lines) for automatic rotation.
+- **Fetch Models:** After entering your API key, press this button to download the latest list of available models from the provider.
+- **AI Model:** Select the main model used for general chat and analysis.
+
+### 1.2 Advanced Model Routing (Native Providers)
+*Available for Gemini, OpenAI, Groq, and Mistral.*
+
+> **⚠️ Warning:** These settings are intended for **advanced users only**. If you are unsure what a specific model does, please leave this **unchecked**. Selecting an incompatible model for a task (e.g., a text-only model for Vision) will cause errors and stop the add-on from working.
+
+Check **"Advanced Model Routing (Task-specific)"** to unlock detailed control. This allows you to select specific models from the dropdown list for different tasks:
+- **OCR / Vision Model:** Choose a specialized model for analyzing images.
+- **Speech-to-Text (STT):** Choose a specific model for dictation.
+- **Text-to-Speech (TTS):** Choose a model for generating audio.
+*Note: Unsupported features (e.g., TTS for Groq) will be automatically hidden.*
+
+### 1.3 Advanced Endpoint Configuration (Custom Provider)
+*Available only when "Custom" is selected.*
+
+> **⚠️ Warning:** This section allows for manual API configuration and is designed for **power users** running local servers or proxies. Incorrect URLs or model names will break connectivity. If you don't know exactly what these endpoints are, keep this **unchecked**.
+
+Check **"Advanced Endpoint Configuration"** to manually input server details. Unlike native providers, here you must **type** the specific URLs and Model Names:
+- **Models List URL:** The endpoint to fetch available models.
+- **OCR/STT/TTS Endpoint URL:** Full URLs for specific services (e.g., `http://localhost:11434/v1/audio/speech`).
+- **Custom Models:** Manually type the model name (e.g., `llama3:8b`) for each task.
+
+### 1.4 General Preferences
+- **OCR Engine:** Choose between **Chrome (Fast)** for quick results or **Gemini (Formatted)** for superior layout preservation.
+    - *Note:* If you select "Gemini (Formatted)" but your provider is set to OpenAI/Groq, the addon will intelligently route the image to your active provider's vision model.
+- **TTS Voice:** Select your preferred voice style. This list updates dynamically based on your active provider.
+- **Creativity (Temperature):** Controls the randomness of the AI. Lower values are better for accurate translation/OCR.
+- **Proxy URL:** Configure this if AI services are restricted in your region (supports local proxies like `127.0.0.1` or bridge URLs).
 
 ## 2. Command Layer & Shortcuts
 
@@ -36,7 +60,7 @@ To prevent keyboard conflicts, this add-on uses a **Command Layer**.
 | **D**         | Document Reader          | Advanced reader for PDF and images with page range selection.               |
 | **F**         | File OCR                 | Direct text recognition from selected image, PDF, or TIFF files.            |
 | **A**         | Audio Transcription      | Transcribe MP3, WAV, or OGG files into text.                                |
-| **C**         | CAPTCHA Solver           | Captures and solves CAPTCHAs on the screen or navigator object.             |
+| **C**         | CAPTCHA Solver           | Captures and solves CAPTCHAs (Supports Gov portals).                        |
 | **S**         | Smart Dictation          | Converts speech to text. Press to start recording, again to stop/type.      |
 | **L**         | Status Reporting         | Announces current progress (e.g., "Scanning...", "Idle").                   |
 | **U**         | Update Check             | Manually check GitHub for the latest version of the add-on.                 |
@@ -44,49 +68,46 @@ To prevent keyboard conflicts, this add-on uses a **Command Layer**.
 | **H**         | Commands Help            | Displays a list of all available shortcuts within the command layer.        |
 
 ### 2.1 Document Reader Shortcuts (Inside Viewer)
-Once a document is opened via the **D** command:
-- **Ctrl + PageDown:** Move to the next page (announces page number).
-- **Ctrl + PageUp:** Move to the previous page (announces page number).
+- **Ctrl + PageDown:** Move to the next page.
+- **Ctrl + PageUp:** Move to the previous page.
 - **Alt + A:** Open a chat dialog to ask questions about the document.
-- **Alt + R:** Force a re-scan of the current page or all pages using the Gemini engine.
-- **Alt + G:** Generate and save a high-quality audio file (WAV) from the content.
+- **Alt + R:** Force a **Re-scan with AI** using your active provider.
+- **Alt + G:** Generate and save a high-quality audio file (WAV/MP3). *Hidden if provider doesn't support TTS.*
 - **Alt + S / Ctrl + S:** Save the extracted text as a TXT or HTML file.
 
 ## 3. Custom Prompts & Variables
 
-Open **Settings > Prompts > Manage Prompts...** to configure system and custom prompts.
+You can manage prompts in **Settings > Prompts > Manage Prompts...**.
 
-- **Default Prompts tab:** edit built-in prompts. You can reset a single prompt or reset all defaults.
-- **Custom Prompts tab:** add, edit, remove, and reorder custom prompts.
-- **Variables Guide button:** opens a help window with all supported variables and input types.
-
-### Available Variables
-
-| Variable         | Description                                      | Input Type       |
-|------------------|--------------------------------------------------|------------------|
-| `[selection]`    | Currently selected text                          | Text             |
-| `[clipboard]`    | Clipboard content                                | Text             |
-| `[screen_obj]`   | Screenshot of the navigator object               | Image            |
-| `[screen_full]`  | Full screen screenshot                           | Image            |
-| `[file_ocr]`     | Select image/PDF file for text extraction        | Image, PDF, TIFF |
-| `[file_read]`    | Select document for reading                      | TXT, Code, PDF   |
-| `[file_audio]`   | Select audio file for analysis                   | MP3, WAV, OGG    |
-
-### Example Custom Prompts
-
-- **Quick OCR:** `My OCR:[file_ocr]`
-- **Translate Image:** `Translate Img:Extract text from this image and translate to English. [file_ocr]`
-- **Analyze Audio:** `Summarize Audio:Listen to this recording and summarize the main points. [file_audio]`
-- **Code Debugger:** `Debug:Find bugs in this code and explain them: [selection]`
+### Supported Variables
+- `[selection]`: Currently selected text.
+- `[clipboard]`: Clipboard content.
+- `[screen_obj]`: Screenshot of the navigator object.
+- `[screen_full]`: Full screen screenshot.
+- `[file_ocr]`: Select image/PDF file for text extraction.
+- `[file_read]`: Select document for reading (TXT, Code, PDF).
+- `[file_audio]`: Select audio file for analysis (MP3, WAV, OGG).
 
 ***
-**Note:** An active internet connection is required for all AI features. Multi-page documents and TIFFs are processed automatically.
+**Note:** An active internet connection is required for all AI features. Multi-page documents are processed automatically.
 
 ## 4. Support & Community
 
 Stay updated with the latest news, features, and releases:
 - **Telegram Channel:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** For bug reports and feature requests.
+
+---
+
+## Changes for 5.0
+
+* **Multi-Provider Architecture**: Added full support for **OpenAI**, **Groq**, and **Mistral** alongside Google Gemini. Users can now choose their preferred AI backend.
+* **Advanced Model Routing**: Users of native providers (Gemini, OpenAI, etc.) can now select specific models from a dropdown list for different tasks (OCR, STT, TTS).
+* **Advanced Endpoint Configuration**: Custom provider users can manually input specific URLs and model names for granular control over local or third-party servers.
+* **Smart Feature Visibility**: The settings menu and Document Reader UI now automatically hide unsupported features (like TTS) based on the selected provider.
+* **Dynamic Model Fetching**: The addon now fetches the available model list directly from the provider's API, ensuring compatibility with new models as soon as they are released.
+* **Hybrid OCR & Translation**: Optimized the logic to use Google Translate for speed when using Chrome OCR, and AI-powered translation when using Gemini/Groq/OpenAI engines.
+* **Universal "Re-scan with AI"**: The Document Reader's re-scan feature is no longer limited to Gemini. It now utilizes whatever AI provider is currently active to re-process pages.
 
 ## Changes for 4.6
 * **Interactive Result Recall:** Added the **Space** key to the command layer, allowing users to instantly reopen the last AI response in a chat window for follow-up questions, even when "Direct Output" mode is active.

@@ -1,6 +1,6 @@
 # Dokumentasi Vision Assistant Pro
 
-**Vision Assistant Pro** adalah asisten AI multimodal canggih untuk NVDA. Add-on ini memanfaatkan model Gemini dari Google untuk menyediakan pembacaan layar cerdas, terjemahan, dikte suara, dan analisis dokumen.
+**Vision Assistant Pro** adalah asisten AI multimodal canggih untuk NVDA. Add-on ini memanfaatkan mesin AI kelas dunia untuk menyediakan pembacaan layar cerdas, terjemahan, dikte suara, dan analisis dokumen.
 
 _Add-on ini dirilis untuk komunitas dalam rangka memperingati Hari Internasional Penyandang Disabilitas._
 
@@ -8,14 +8,40 @@ _Add-on ini dirilis untuk komunitas dalam rangka memperingati Hari Internasional
 
 Buka **Menu NVDA > Preferensi > Pengaturan > Vision Assistant Pro**.
 
-- **API Key:** Wajib. Anda bisa memasukkan beberapa kunci (dipisahkan koma atau baris baru). Asisten akan otomatis berpindah kunci saat kuota salah satu kunci habis.
-- **AI Model:** Pilih model **Flash** (Tercepat/Gratis), **Lite**, atau **Pro** (Kecerdasan Tinggi).
-- **Proxy URL:** Opsional. Gunakan jika Google diblokir di wilayah Anda. Harus berupa alamat web yang menjadi perantara ke Gemini API.
-- **OCR Engine:** Pilih **Chrome (Cepat)** untuk hasil cepat atau **Gemini (Terformat)** untuk menjaga tata letak dan pengenalan tabel yang lebih baik.
-- **TTS Voice:** Pilih gaya suara untuk membuat file audio dari halaman dokumen.
-- **Smart Swap:** Menukar bahasa otomatis jika teks sumber sama dengan bahasa target.
-- **Direct Output:** Melewati jendela obrolan dan langsung membacakan respons AI. **Catatan:** Dalam mode ini, Anda tetap bisa menekan **Space** di lapisan perintah untuk membuka lagi hasil terakhir ke dialog obrolan.
-- **Clipboard Integration:** Menyalin respons AI ke papan klip secara otomatis.
+### 1.1 Pengaturan Koneksi
+- **Provider:** Pilih layanan AI pilihan Anda. Penyedia yang didukung termasuk **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, dan **Kustom** (Server yang kompatibel dengan OpenAI seperti Ollama/LM Studio).
+- **Catatan Penting:** Kami sangat menyarankan penggunaan **Google Gemini** untuk performa dan akurasi terbaik (terutama untuk analisis gambar/file).
+- **API Key:** Wajib. Anda dapat memasukkan beberapa kunci (dipisahkan koma atau baris baru) untuk rotasi otomatis saat limit tercapai.
+- **Fetch Models:** Setelah memasukkan API Key Anda, tekan tombol ini untuk mengunduh daftar lengkap model terbaru yang tersedia dari penyedia.
+- **AI Model:** Pilih model utama yang akan digunakan untuk obrolan umum dan analisis.
+
+### 1.2 Perutean Model Lanjutan (Penyedia Bawaan)
+*Tersedia untuk Gemini, OpenAI, Groq, dan Mistral.*
+
+> **⚠️ Peringatan:** Pengaturan ini ditujukan untuk **pengguna tingkat lanjut saja**. Jika Anda tidak yakin dengan fungsi model tertentu, biarkan opsi ini **tidak dicentang**. Memilih model yang tidak kompatibel untuk suatu tugas (misalnya, model teks saja untuk Visi) akan menyebabkan kesalahan dan menghentikan kinerja add-on.
+
+Centang **"Advanced Model Routing (Task-specific)"** untuk membuka kontrol terperinci. Ini memungkinkan Anda memilih model tertentu dari daftar dropdown untuk tugas yang berbeda:
+- **OCR / Vision Model:** Pilih model khusus untuk menganalisis gambar.
+- **Speech-to-Text (STT):** Pilih model khusus untuk mendikte.
+- **Text-to-Speech (TTS):** Pilih model khusus untuk menghasilkan suara.
+*Catatan: Fitur yang tidak didukung (misalnya, TTS untuk Groq) akan disembunyikan secara otomatis.*
+
+### 1.3 Konfigurasi Titik Akhir Lanjutan (Penyedia Kustom)
+*Hanya tersedia ketika penyedia "Kustom" dipilih.*
+
+> **⚠️ Peringatan:** Bagian ini memungkinkan konfigurasi API secara manual dan dirancang untuk **pengguna mahir** yang menjalankan server atau proksi lokal. URL atau nama model yang salah akan memutus koneksi. Jika Anda tidak tahu persis kegunaan titik akhir ini, biarkan opsi ini **tidak dicentang**.
+
+Centang **"Advanced Endpoint Configuration"** untuk memasukkan detail server secara manual. Tidak seperti penyedia bawaan, di sini Anda harus **mengetik** URL dan Nama Model tertentu:
+- **Models List URL:** Titik akhir untuk mengambil daftar model yang tersedia.
+- **OCR/STT/TTS Endpoint URL:** URL lengkap untuk layanan tertentu (misalnya, `http://localhost:11434/v1/audio/speech`).
+- **Custom Models:** Ketik nama model secara manual (misalnya, `llama3:8b`) untuk setiap tugas.
+
+### 1.4 Preferensi Umum
+- **OCR Engine:** Pilih antara **Chrome (Cepat)** untuk hasil cepat atau **Gemini (Terformat)** untuk mempertahankan tata letak informasi.
+    - *Catatan:* Jika Anda memilih "Gemini (Terformat)" tetapi penyedia Anda diatur ke OpenAI/Groq, addon akan secara cerdas mengarahkan gambar ke model visi dari penyedia Anda yang aktif.
+- **TTS Voice:** Pilih gaya suara pilihan Anda. Daftar ini diperbarui secara dinamis berdasarkan penyedia aktif Anda.
+- **Creativity (Temperature):** Mengontrol tingkat keacakan AI. Nilai yang lebih rendah lebih baik untuk akurasi terjemahan/OCR.
+- **Proxy URL:** Konfigurasikan jika layanan AI dibatasi di wilayah Anda (mendukung proxy lokal seperti `127.0.0.1` atau URL jembatan).
 
 ## 2. Lapisan Perintah & Pintasan
 
@@ -34,7 +60,7 @@ Untuk mencegah konflik keyboard, add-on ini menggunakan **Lapisan Perintah**.
 | **D**         | Pembaca Dokumen       | Pembaca lanjutan untuk PDF dan gambar dengan pilihan rentang halaman.     |
 | **F**         | OCR Berkas            | Mengenali teks langsung dari file gambar, PDF, atau TIFF yang dipilih.    |
 | **A**         | Transkripsi Audio     | Mentranskripsikan file MP3, WAV, atau OGG ke teks.                        |
-| **C**         | Pemecah CAPTCHA       | Menangkap dan memecahkan CAPTCHA di layar atau pada objek navigator.      |
+| **C**         | Pemecah CAPTCHA       | Menangkap dan memecahkan CAPTCHA (Termasuk portal Pemerintahan).          |
 | **S**         | Dikte Cerdas          | Mengubah suara menjadi teks. Tekan sekali untuk mulai rekam, tekan lagi untuk berhenti/ketik. |
 | **L**         | Laporan Status        | Mengumumkan progres saat ini (misalnya, "Memindai...", "Diam").           |
 | **U**         | Cek Pembaruan         | Mengecek versi add-on terbaru di GitHub secara manual.                    |
@@ -42,49 +68,46 @@ Untuk mencegah konflik keyboard, add-on ini menggunakan **Lapisan Perintah**.
 | **H**         | Bantuan Perintah      | Menampilkan daftar semua pintasan dalam lapisan perintah.                 |
 
 ### 2.1 Pintasan Pembaca Dokumen (Di Dalam Penampil)
-Setelah dokumen dibuka lewat perintah **D**:
-- **Ctrl + PageDown:** Pindah ke halaman berikutnya (mengumumkan nomor halaman).
-- **Ctrl + PageUp:** Pindah ke halaman sebelumnya (mengumumkan nomor halaman).
+- **Ctrl + PageDown:** Pindah ke halaman berikutnya.
+- **Ctrl + PageUp:** Pindah ke halaman sebelumnya.
 - **Alt + A:** Buka dialog obrolan untuk bertanya tentang dokumen.
-- **Alt + R:** Paksa pemindaian ulang halaman saat ini atau semua halaman dengan mesin Gemini.
-- **Alt + G:** Buat dan simpan file audio berkualitas tinggi (WAV) dari konten.
+- **Alt + R:** Paksa **Pindai ulang dengan AI** menggunakan penyedia aktif Anda.
+- **Alt + G:** Buat dan simpan file audio berkualitas tinggi (WAV/MP3). *Disembunyikan jika penyedia tidak mendukung TTS.*
 - **Alt + S / Ctrl + S:** Simpan teks hasil ekstraksi sebagai file TXT atau HTML.
 
 ## 3. Prompt Kustom & Variabel
 
-Buka **Pengaturan > Prompt > Kelola Prompt...** untuk mengatur prompt sistem dan prompt kustom.
-
-- **Tab Default Prompts:** mengubah prompt bawaan. Anda bisa reset satu prompt atau reset semua prompt bawaan.
-- **Tab Custom Prompts:** menambah, mengubah, menghapus, dan mengurutkan ulang prompt kustom.
-- **Tombol Variables Guide:** membuka jendela bantuan berisi semua variabel dan tipe input yang didukung.
+Anda dapat mengelola prompt di **Pengaturan > Prompt > Kelola Prompt...**.
 
 ### Variabel Tersedia
-
-| Variabel       | Deskripsi                                    | Tipe Input        |
-|----------------|----------------------------------------------|-------------------|
-| `[selection]`  | Teks yang sedang dipilih                     | Teks              |
-| `[clipboard]`  | Isi papan klip                               | Teks              |
-| `[screen_obj]` | Tangkapan layar objek navigator              | Gambar            |
-| `[screen_full]`| Tangkapan layar penuh                        | Gambar            |
-| `[file_ocr]`   | Pilih file gambar/PDF untuk ekstraksi teks  | Gambar, PDF, TIFF |
-| `[file_read]`  | Pilih dokumen untuk dibaca                   | TXT, Kode, PDF    |
-| `[file_audio]` | Pilih file audio untuk dianalisis            | MP3, WAV, OGG     |
-
-### Contoh Prompt Kustom
-
-- **Quick OCR:** `My OCR:[file_ocr]`
-- **Translate Image:** `Translate Img:Extract text from this image and translate to English. [file_ocr]`
-- **Analyze Audio:** `Summarize Audio:Listen to this recording and summarize the main points. [file_audio]`
-- **Code Debugger:** `Debug:Find bugs in this code and explain them: [selection]`
+- `[selection]`: Teks yang sedang dipilih.
+- `[clipboard]`: Isi papan klip.
+- `[screen_obj]`: Tangkapan layar objek navigator.
+- `[screen_full]`: Tangkapan layar penuh.
+- `[file_ocr]`: Pilih file gambar/PDF untuk ekstraksi teks.
+- `[file_read]`: Pilih dokumen untuk dibaca (TXT, Kode, PDF).
+- `[file_audio]`: Pilih file audio untuk dianalisis (MP3, WAV, OGG).
 
 ***
-**Catatan:** Semua fitur AI memerlukan koneksi internet aktif. Dokumen multi-halaman dan TIFF diproses otomatis.
+**Catatan:** Koneksi internet aktif diperlukan untuk semua fitur AI. Dokumen multi-halaman akan diproses otomatis.
 
 ## 4. Dukungan & Komunitas
 
 Ikuti kabar fitur dan rilis terbaru:
 - **Kanal Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** Untuk laporan bug dan permintaan fitur.
+
+---
+
+## Perubahan untuk 5.0
+
+* **Arsitektur Multi-Penyedia**: Menambahkan dukungan penuh untuk **OpenAI**, **Groq**, dan **Mistral** bersama dengan Google Gemini. Pengguna kini dapat memilih backend AI yang mereka inginkan.
+* **Perutean Model Lanjutan**: Pengguna penyedia bawaan (Gemini, OpenAI, dll.) kini dapat memilih model tertentu dari daftar dropdown untuk berbagai tugas (OCR, STT, TTS).
+* **Konfigurasi Titik Akhir Lanjutan**: Pengguna penyedia kustom dapat secara manual memasukkan URL dan nama model tertentu untuk kontrol seutuhnya atas server lokal atau pihak ketiga.
+* **Visibilitas Fitur Cerdas**: Menu pengaturan dan UI Pembaca Dokumen kini secara otomatis menyembunyikan fitur yang tidak didukung (seperti TTS) berdasarkan penyedia yang dipilih.
+* **Pengambilan Model Dinamis**: Add-on ini kini mengambil daftar model yang tersedia langsung dari API penyedia, memastikan kompatibilitas dengan model baru segera setelah dirilis.
+* **Hybrid OCR & Translation**: Mengoptimalkan logika untuk menggunakan Google Translate untuk kecepatan saat menggunakan Chrome OCR, dan terjemahan bertenaga AI saat menggunakan mesin Gemini/Groq/OpenAI.
+* **"Pindai Ulang dengan AI" Universal**: Fitur pindai ulang Pembaca Dokumen tidak lagi terbatas pada Gemini. Fitur ini kini memanfaatkan penyedia AI apa pun yang sedang aktif untuk memproses kembali halaman dokumen.
 
 ## Perubahan untuk 4.6
 * **Pembukaan Ulang Hasil Interaktif:** Menambahkan tombol **Space** pada lapisan perintah, sehingga pengguna bisa langsung membuka kembali respons AI terakhir dalam jendela obrolan untuk pertanyaan lanjutan, termasuk saat mode "Direct Output" aktif.
