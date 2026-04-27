@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #. Translators: Label for the button to copy the TON cryptocurrency wallet address.
 #: addon\globalPlugins\visionAssistant\donate_dialog.py:18
@@ -479,7 +479,6 @@ msgstr "Excêntrico"
 
 #. Translators: Adjective describing a professional AI voice style.
 #: addon\globalPlugins\visionAssistant\__init__.py:150
-#| msgid "Processing..."
 msgid "Professional"
 msgstr "Profissional"
 
@@ -490,7 +489,6 @@ msgstr "Alegre"
 
 #. Translators: Adjective describing a confident AI voice style.
 #: addon\globalPlugins\visionAssistant\__init__.py:154
-#| msgid "Confirm Reset"
 msgid "Confident"
 msgstr "Confiante"
 
@@ -531,7 +529,6 @@ msgstr "Chrome (Rápido)"
 
 #. Translators: OCR Engine option (Slower but better formatting/AI-driven)
 #: addon\globalPlugins\visionAssistant\__init__.py:193
-#| msgid "Advanced"
 msgid "AI (Advanced)"
 msgstr "IA (Avançada)"
 
@@ -805,7 +802,6 @@ msgstr "Todas as chaves falharam."
 
 #. Translators: Error message when speech-to-text fails.
 #: addon\globalPlugins\visionAssistant\__init__.py:1734
-#| msgid "Audio Transcription"
 msgid "Transcription Failed"
 msgstr "Falha na Transcrição"
 
@@ -981,7 +977,6 @@ msgstr "Google Gemini"
 
 #. Translators: Name of the OpenAI provider
 #: addon\globalPlugins\visionAssistant\__init__.py:2101
-#| msgid "Open"
 msgid "OpenAI"
 msgstr "OpenAI"
 
@@ -997,7 +992,6 @@ msgstr "Groq"
 
 #. Translators: Option for a user-defined custom AI provider
 #: addon\globalPlugins\visionAssistant\__init__.py:2107
-#| msgid "Custom: "
 msgid "Custom"
 msgstr "Personalizado"
 
@@ -1008,7 +1002,6 @@ msgstr "Provedor:"
 
 #. Translators: Label for API Key input
 #: addon\globalPlugins\visionAssistant\__init__.py:2118
-#| msgid "Gemini API Key (Separate multiple keys with comma or newline):"
 msgid "API Key (Separate multiple keys with comma or newline):"
 msgstr "Chave de API (Separe múltiplas chaves com vírgula ou quebra de linha):"
 
@@ -1020,19 +1013,16 @@ msgstr "Mostrar chave API"
 #. Custom Fields Box
 #. Translators: Static box title for custom AI provider settings
 #: addon\globalPlugins\visionAssistant\__init__.py:2135
-#| msgid "Custom Prompts"
 msgid "Custom Provider Settings"
 msgstr "Configurações de Provedor Personalizado"
 
 #. Translators: Label for Custom API URL input
 #: addon\globalPlugins\visionAssistant\__init__.py:2139
-#| msgid "Proxy URL:"
 msgid "API URL:"
 msgstr "URL da API:"
 
 #. Translators: Label for Custom Model Name input
 #: addon\globalPlugins\visionAssistant\__init__.py:2144
-#| msgid "Name:"
 msgid "Model Name:"
 msgstr "Nome do Modelo:"
 
@@ -1047,13 +1037,11 @@ msgid "OpenAI Compatible"
 msgstr "Compatível com OpenAI"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:2151
-#| msgid "Gemini (Formatted)"
 msgid "Gemini Compatible"
 msgstr "Compatível com Gemini"
 
 #. Translators: Checkbox to indicate if custom provider supports file upload
 #: addon\globalPlugins\visionAssistant\__init__.py:2156
-#| msgid "Supported Files"
 msgid "Supports File Upload"
 msgstr "Suporta Upload de Arquivos"
 
@@ -1070,7 +1058,6 @@ msgstr "URL da Lista de Modelos:"
 
 #. Translators: Label for Custom OCR URL
 #: addon\globalPlugins\visionAssistant\__init__.py:2176
-#| msgid "OCR Engine:"
 msgid "OCR Endpoint URL:"
 msgstr "URL do Endpoint OCR:"
 
@@ -1254,14 +1241,12 @@ msgstr "Prompts padrão: {defaultCount}, Prompts personalizados: {customCount}"
 
 #. Translators: Progress message shown while fetching AI models from the server
 #: addon\globalPlugins\visionAssistant\__init__.py:2502
-#| msgid "Checking for updates..."
 msgid "Fetching models..."
 msgstr "Buscando modelos..."
 
 #. Translators: Default model routing option for advanced mode
 #: addon\globalPlugins\visionAssistant\__init__.py:2518
 #: addon\globalPlugins\visionAssistant\__init__.py:2558
-#| msgid "Default Prompts"
 msgid "Default (Auto)"
 msgstr "Padrão (Automático)"
 
@@ -1329,7 +1314,6 @@ msgstr "Arquivo: {name}"
 
 #. Translators: Status message while uploading
 #: addon\globalPlugins\visionAssistant\__init__.py:2798
-#| msgid "Uploading to AI..."
 msgid "Uploading to AI...\n"
 msgstr "Enviando para a IA...\n"
 
@@ -1408,7 +1392,6 @@ msgstr "Pergunte à IA (Alt+A)"
 
 #. Translators: Button to force re-scan
 #: addon\globalPlugins\visionAssistant\__init__.py:2945
-#| msgid "Re-scan with Gemini (Alt+R)"
 msgid "Re-scan with AI (Alt+R)"
 msgstr "Re-scaneamento com IA (Alt+R)"
 
@@ -1485,7 +1468,6 @@ msgstr "Todas as páginas (dentro do intervalo)"
 
 #. Translators: Message during manual scan
 #: addon\globalPlugins\visionAssistant\__init__.py:3140
-#| msgid "Scanning with Gemini..."
 msgid "Scanning with AI..."
 msgstr "Escaneando com IA..."
 
@@ -1493,13 +1475,11 @@ msgstr "Escaneando com IA..."
 #: addon\globalPlugins\visionAssistant\__init__.py:3156
 #: addon\globalPlugins\visionAssistant\__init__.py:3216
 #, python-brace-format
-#| msgid "Scan failed: {err}"
 msgid "[Scan failed: {err}]"
 msgstr "[Escaneamento falhou: {err}]"
 
 #. Translators: Message shown when OCR returns no text for a page.
 #: addon\globalPlugins\visionAssistant\__init__.py:3161
-#| msgid "No speech detected."
 msgid "[No text detected]"
 msgstr "[Nenhum texto detectado]"
 
@@ -1511,7 +1491,6 @@ msgstr "Varredura concluída"
 #. Translators: Generic system error message inside the document viewer.
 #: addon\globalPlugins\visionAssistant\__init__.py:3169
 #, python-brace-format
-#| msgid "Error: {error}"
 msgid "[Error: {msg}]"
 msgstr "[Erro: {msg}]"
 
@@ -1531,20 +1510,17 @@ msgid "Batch Scan Complete"
 msgstr "Varredura em lote concluída"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:3209
-#| msgid "Scan complete"
 msgid "Scan Complete"
 msgstr "Escaneamento Concluído"
 
 #. Translators: Message when the entire batch processing fails.
 #: addon\globalPlugins\visionAssistant\__init__.py:3214
-#| msgid "Batch Scan Complete"
 msgid "Batch Scan Failed"
 msgstr "Falha no Escaneamento em Lote"
 
 #. Translators: Spoken message for background batch processing.
 #: addon\globalPlugins\visionAssistant\__init__.py:3226
 #, python-brace-format
-#| msgid "Processing in background..."
 msgid "AI is scanning {n} pages in background."
 msgstr "A IA está escaneando {n} páginas em segundo plano."
 
@@ -1584,7 +1560,6 @@ msgid "Generating Audio..."
 msgstr "Gerando áudio..."
 
 #: addon\globalPlugins\visionAssistant\__init__.py:3291
-#| msgid "Unknown error"
 msgid "Unknown Error"
 msgstr "Erro Desconhecido"
 
@@ -1914,7 +1889,6 @@ msgstr "{name} - Resultado Refinado"
 
 #. Translators: Message reported when extracting text from a file
 #: addon\globalPlugins\visionAssistant\__init__.py:4297
-#| msgid "Uploading & Extracting..."
 msgid "Extracting Text..."
 msgstr "Extraindo Texto..."
 
@@ -1926,7 +1900,6 @@ msgstr "Erro ao criar PDF."
 
 #. Translators: Error shown when OCR finds no text in the selected files
 #: addon\globalPlugins\visionAssistant\__init__.py:4347
-#| msgid "No text detected in the selected file(s)."
 msgid "No text detected or error occurred."
 msgstr "Nenhum texto detectado ou ocorreu um erro."
 
