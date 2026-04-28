@@ -4670,6 +4670,7 @@ class Document:
             preserve_metadata=1,
             use_objstms=1,
             compression_effort=0,
+            raise_on_repair=False,
             ):
         '''
         Save PDF using some different defaults
@@ -4694,6 +4695,7 @@ class Document:
                 preserve_metadata=preserve_metadata,
                 use_objstms=use_objstms,
                 compression_effort=compression_effort,
+                raise_on_repair=raise_on_repair,
                 )
 
     def find_bookmark(self, bm):
@@ -6202,6 +6204,14 @@ class Document:
                     f'{refs_old=} {m_internal_old=:#x} {m_internal_new=:#x}'
         return page
 
+    def repair(self):
+        '''
+        If we are a PDF document, does repair.
+        '''
+        pdf = _as_pdf_document(self, required=False)
+        if pdf.m_internal:
+            mupdf.pdf_check_document(pdf)
+    
     def resolve_link(self, uri=None, chapters=0):
         """Calculate internal link destination.
 
@@ -6481,9 +6491,11 @@ class Document:
             preserve_metadata=1,
             use_objstms=0,
             compression_effort=0,
+            raise_on_repair=False,
             ):
         # From %pythonprepend save
         #
+        is_repaired_pre = self.is_repaired
         """Save PDF to file, pathlib.Path or file pointer."""
         if self.is_closed or self.is_encrypted:
             raise ValueError("document closed or encrypted")
@@ -6547,6 +6559,9 @@ class Document:
             #log( f'{type(out)=} {type(out.this)=}')
             mupdf.pdf_write_document(pdf, out, opts)
             out.fz_close_output()
+        if raise_on_repair:
+            if self.is_repaired and not is_repaired_pre:
+                raise Exception(f'Document save did a repair')
 
     def save_snapshot(self, filename):
         """Save a file snapshot suitable for journalling."""
@@ -6784,12 +6799,9 @@ class Document:
         pdf = _as_pdf_document(self)
         # create page sub-pdf via pdf_rearrange_pages2().
         #
-        if mupdf_version_tuple >= (1, 25, 3):
-            # We use PDF_CLEAN_STRUCTURE_KEEP otherwise we lose structure tree
-            # which, for example, breaks test_3705.
-            mupdf.pdf_rearrange_pages2(pdf, pyliste, mupdf.PDF_CLEAN_STRUCTURE_KEEP)
-        else:
-            mupdf.pdf_rearrange_pages2(pdf, pyliste)
+        # We use PDF_CLEAN_STRUCTURE_KEEP otherwise we lose structure tree
+        # which, for example, breaks test_3705.
+        mupdf.pdf_rearrange_pages2(pdf, pyliste, mupdf.PDF_CLEAN_STRUCTURE_KEEP)
 
         # remove any existing pages with their kids
         self._reset_page_refs()
@@ -7853,6 +7865,7 @@ class Document:
             preserve_metadata=1,
             use_objstms=0,
             compression_effort=0,
+            raise_on_repair=False,
     ):
         from io import BytesIO
         bio = BytesIO()
@@ -7877,6 +7890,7 @@ class Document:
                 preserve_metadata=preserve_metadata,
                 use_objstms=use_objstms,
                 compression_effort=compression_effort,
+                raise_on_repair=raise_on_repair,
         )
         return bio.getvalue()
     
@@ -17597,15 +17611,17 @@ TEXT_ACCURATE_BBOXES = mupdf.FZ_STEXT_ACCURATE_BBOXES
 TEXT_COLLECT_VECTORS = mupdf.FZ_STEXT_COLLECT_VECTORS
 TEXT_IGNORE_ACTUALTEXT = mupdf.FZ_STEXT_IGNORE_ACTUALTEXT
 TEXT_SEGMENT = mupdf.FZ_STEXT_SEGMENT
+TEXT_CLIP = mupdf.FZ_STEXT_CLIP
+if mupdf_version_tuple >= (1, 27, 1):
+    TEXT_LAZY_VECTORS = mupdf.FZ_STEXT_LAZY_VECTORS
 
-if mupdf_version_tuple >= (1, 26):
-    TEXT_PARAGRAPH_BREAK = mupdf.FZ_STEXT_PARAGRAPH_BREAK
-    TEXT_TABLE_HUNT = mupdf.FZ_STEXT_TABLE_HUNT
-    TEXT_COLLECT_STYLES = mupdf.FZ_STEXT_COLLECT_STYLES
-    TEXT_USE_GID_FOR_UNKNOWN_UNICODE = mupdf.FZ_STEXT_USE_GID_FOR_UNKNOWN_UNICODE
-    TEXT_CLIP_RECT = mupdf.FZ_STEXT_CLIP_RECT
-    TEXT_ACCURATE_ASCENDERS = mupdf.FZ_STEXT_ACCURATE_ASCENDERS
-    TEXT_ACCURATE_SIDE_BEARINGS = mupdf.FZ_STEXT_ACCURATE_SIDE_BEARINGS
+TEXT_PARAGRAPH_BREAK = mupdf.FZ_STEXT_PARAGRAPH_BREAK
+TEXT_TABLE_HUNT = mupdf.FZ_STEXT_TABLE_HUNT
+TEXT_COLLECT_STYLES = mupdf.FZ_STEXT_COLLECT_STYLES
+TEXT_USE_GID_FOR_UNKNOWN_UNICODE = mupdf.FZ_STEXT_USE_GID_FOR_UNKNOWN_UNICODE
+TEXT_CLIP_RECT = mupdf.FZ_STEXT_CLIP_RECT
+TEXT_ACCURATE_ASCENDERS = mupdf.FZ_STEXT_ACCURATE_ASCENDERS
+TEXT_ACCURATE_SIDE_BEARINGS = mupdf.FZ_STEXT_ACCURATE_SIDE_BEARINGS
 
 # 2025-05-07: Non-standard names preserved for backwards compatibility.
 TEXT_STEXT_SEGMENT = TEXT_SEGMENT
@@ -20530,8 +20546,7 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
             if rhs:
                 self.size = rhs.size
                 self.flags = rhs.flags
-                if mupdf_version_tuple >= (1, 25, 2):
-                    self.char_flags = rhs.char_flags
+                self.char_flags = rhs.char_flags
                 self.font = rhs.font
                 self.argb = rhs.argb
                 self.asc = rhs.asc
@@ -20540,8 +20555,7 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
             else:
                 self.size = -1
                 self.flags = -1
-                if mupdf_version_tuple >= (1, 25, 2):
-                    self.char_flags = -1
+                self.char_flags = -1
                 self.font = ''
                 self.argb = -1
                 self.asc = 0
@@ -20549,8 +20563,7 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
                 self.bidi = 0
         def __str__(self):
             ret = f'{self.size} {self.flags}'
-            if mupdf_version_tuple >= (1, 25, 2):
-                ret += f' {self.char_flags}'
+            ret += f' {self.char_flags}'
             ret += f' {self.font} {self.color} {self.asc} {self.desc}'
             return ret
 
@@ -20578,9 +20591,8 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
         origin = mupdf.FzPoint(ch.m_internal.origin)
         style.size = ch.m_internal.size
         style.flags = flags
-        if mupdf_version_tuple >= (1, 25, 2):
-            # FZ_STEXT_SYNTHETIC is per-char, not per-span.
-            style.char_flags = ch.m_internal.flags & ~mupdf.FZ_STEXT_SYNTHETIC
+        # FZ_STEXT_SYNTHETIC is per-char, not per-span.
+        style.char_flags = ch.m_internal.flags & ~mupdf.FZ_STEXT_SYNTHETIC
         style.font = JM_font_name(mupdf.FzFont(mupdf.ll_fz_keep_font(ch.m_internal.font)))
         style.argb = ch.m_internal.argb
         style.asc = JM_font_ascender(mupdf.FzFont(mupdf.ll_fz_keep_font(ch.m_internal.font)))
@@ -20589,9 +20601,7 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
 
         if (style.size != old_style.size
                 or style.flags != old_style.flags
-                or (mupdf_version_tuple >= (1, 25, 2)
-                    and (style.char_flags != old_style.char_flags)
-                    )
+                or (style.char_flags != old_style.char_flags)
                 or style.argb != old_style.argb
                 or style.font != old_style.font
                 or style.bidi != old_style.bidi
@@ -20623,12 +20633,10 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
             span[dictkey_size] = style.size
             span[dictkey_flags] = style.flags
             span[dictkey_bidi] = style.bidi
-            if mupdf_version_tuple >= (1, 25, 2):
-                span[dictkey_char_flags] = style.char_flags
+            span[dictkey_char_flags] = style.char_flags
             span[dictkey_font] = JM_EscapeStrFromStr(style.font)
             span[dictkey_color] = style.argb & 0xffffff
-            if mupdf_version_tuple >= (1, 25, 0):
-                span['alpha'] = style.argb >> 24
+            span['alpha'] = style.argb >> 24
             span["ascender"] = asc
             span["descender"] = desc
 
@@ -25894,6 +25902,6 @@ if 0:
 
 __version__ = VersionBind
 __doc__ = (
-        f'PyMuPDF {VersionBind}: Python bindings for the MuPDF {VersionFitz} library (rebased implementation).\n'
+        f'PyMuPDF {VersionBind}: Python bindings for the MuPDF {VersionFitz} library.\n'
         f'Python {sys.version_info[0]}.{sys.version_info[1]} running on {sys.platform} ({64 if sys.maxsize > 2**32 else 32}-bit).\n'
         )

@@ -24,6 +24,24 @@ FZ_FUNCTION int internal_env_flag_check_unset( const char* if_, const char* name
 /** Internal use only. Returns `fz_context*` for use by current thread. */
 FZ_FUNCTION fz_context* internal_context_get();
 
+/* Internal, do not call directly. */
+FZ_FUNCTION void internal_check_ndebug0(bool caller_ndebug_defined);
+
+/** Checks current NDEBUG is same as NDEBUG used when C++ bindings
+were built. If not, shows message on cerr and calls abort().
+
+Mixing NDEBUG and non-NDEBUG code is not supported by the C++
+bindings.
+*/
+static inline void internal_check_ndebug()
+{
+	#ifdef NDEBUG
+		internal_check_ndebug0(true);
+	#else
+		internal_check_ndebug0(false);
+	#endif
+}
+
 } /* End of namespace mupdf. */
 
 #endif

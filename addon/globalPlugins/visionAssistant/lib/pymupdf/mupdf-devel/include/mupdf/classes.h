@@ -49,6 +49,7 @@ struct FzDocumentWriter;
 struct FzDrawOptions;
 struct FzErrorContext;
 struct FzErrorStackSlot;
+struct FzFlotilla;
 struct FzFont;
 struct FzFontContext;
 struct FzFontFlagsT;
@@ -58,8 +59,12 @@ struct FzGlyph;
 struct FzGlyphCache;
 struct FzHalftone;
 struct FzHashTable;
+struct FzHyphContext;
+struct FzHyphTrie;
+struct FzHyphenator;
 struct FzIccProfile;
 struct FzImage;
+struct FzImageRaftOptions;
 struct FzInstallLoadSystemFontFuncsArgs;
 struct FzInt2;
 struct FzInt2Heap;
@@ -79,6 +84,7 @@ struct FzLink;
 struct FzLinkDest;
 struct FzLocation;
 struct FzLocksContext;
+struct FzMatchQuad;
 struct FzMatrix;
 struct FzMd5;
 struct FzOutline;
@@ -102,6 +108,9 @@ struct FzPwgOptions;
 struct FzQuad;
 struct FzRange;
 struct FzRect;
+struct FzSearch;
+struct FzSearchResult;
+struct FzSearchResultDetails;
 struct FzSeparations;
 struct FzSha256;
 struct FzSha384;
@@ -111,12 +120,14 @@ struct FzShadeColorCache;
 struct FzShaperDataT;
 struct FzStextBlock;
 struct FzStextChar;
+struct FzStextGridInfo;
 struct FzStextGridPositions;
 struct FzStextLine;
 struct FzStextOptions;
 struct FzStextPage;
 struct FzStextPageBlockIterator;
 struct FzStextPageDetails;
+struct FzStextPosition;
 struct FzStextStruct;
 struct FzStorable;
 struct FzStore;
@@ -128,6 +139,7 @@ struct FzStream;
 struct FzString;
 struct FzStrokeState;
 struct FzStyleContext;
+struct FzSvgDeviceOptions;
 struct FzText;
 struct FzTextDecoder;
 struct FzTextItem;
@@ -197,6 +209,7 @@ struct PdfSanitizeFilterOptions;
 struct PdfTextObjectState;
 struct PdfTextState;
 struct PdfUnsavedSig;
+struct PdfVectorizeFilterOptions;
 struct PdfVmtx;
 struct PdfWriteOptions;
 struct PdfXrange;
@@ -1222,6 +1235,25 @@ struct FzBuffer
 	/** Constructor using `fz_new_buffer_from_display_list()`. */
 	FZ_FUNCTION FzBuffer(const FzDisplayList& list, FzStextOptions& options);
 
+	/** Constructor using `fz_new_buffer_from_flattened_display_list()`. */
+	FZ_FUNCTION FzBuffer(const FzDisplayList& list, FzStextOptions& options, ::fz_text_flatten flatten);
+
+	/** Constructor using `fz_new_buffer_from_flattened_page()`. */
+	/**
+		Convenience functions built on fz_new_buffer_from_flattened_stext_page.
+	*/
+	FZ_FUNCTION FzBuffer(const FzPage& page, FzStextOptions& options, ::fz_text_flatten flatten);
+
+	/** Constructor using `fz_new_buffer_from_flattened_page_number()`. */
+	FZ_FUNCTION FzBuffer(const FzDocument& doc, int number, FzStextOptions& options, ::fz_text_flatten flatten);
+
+	/** Constructor using `fz_new_buffer_from_flattened_stext_page()`. */
+	/**
+		Create a new buffer by flattening the text from an stext
+		page.
+	*/
+	FZ_FUNCTION FzBuffer(const FzStextPage& text, ::fz_text_flatten flatten, FzStextPosition& map);
+
 	/** Constructor using `fz_new_buffer_from_image_as_jpeg()`. */
 	FZ_FUNCTION FzBuffer(const FzImage& image, const FzColorParams& color_params, int quality, int invert_cmyk);
 
@@ -1237,6 +1269,9 @@ struct FzBuffer
 	FZ_FUNCTION FzBuffer(const FzImage& image, const FzColorParams& color_params);
 
 	/** Constructor using `fz_new_buffer_from_page()`. */
+	/**
+		Convenience functions built on fz_new_buffer_from_stext_page.
+	*/
 	FZ_FUNCTION FzBuffer(const FzPage& page, FzStextOptions& options);
 
 	/** Constructor using `fz_new_buffer_from_page_number()`. */
@@ -1274,7 +1309,8 @@ struct FzBuffer
 
 	/** Constructor using `fz_new_buffer_from_stext_page()`. */
 	/**
-		Convert structured text into plain text.
+		Does the same as fz_new_buffer_from_flattened_stext_page(), with
+		the options FZ_TEXT_FLATTEN_KEEP_PARAGRAPHS.
 	*/
 	FZ_FUNCTION FzBuffer(const FzStextPage& text);
 
@@ -1508,6 +1544,9 @@ struct FzBuffer
 		Create a scalable image from an SVG document.
 	*/
 	FZ_FUNCTION FzImage fz_new_image_from_svg(const char *base_uri, const FzArchive& dir) const;
+
+	/** Class-aware wrapper for `::fz_new_jpx_image_from_buffer()`.  */
+	FZ_FUNCTION FzImage fz_new_jpx_image_from_buffer(const FzColorspace& cs) const;
 
 	/** Class-aware wrapper for `::fz_open_buffer()`.  */
 	/**
@@ -2726,6 +2765,9 @@ struct FzDevice
 	*/
 	FZ_FUNCTION FzDevice(const FzDevice& target, const FzMatrix& ctm, const FzRect& mediabox, int with_list, const char *language, const char *datadir, int (*progress)(::fz_context *, void *, int ), void *progress_arg);
 
+	/** Constructor using `fz_new_ocr_device_with_options()`. */
+	FZ_FUNCTION FzDevice(const FzDevice& target, const FzMatrix& ctm, const FzRect& mediabox, int with_list, const char *language, const char *datadir, int (*progress)(::fz_context *, void *, int ), void *progress_arg, const char *options);
+
 	/** Constructor using `fz_new_stext_device()`. */
 	/**
 		Create a device to extract the text on a page.
@@ -2805,9 +2847,14 @@ struct FzDevice
 	
 		reuse_images: Share image resources using <symbol> definitions.
 	
+		resolution: Resolution to use when rasterizing shadings (and such) to images.
+	
 		id: ID parameter to keep generated IDs unique across SVG files.
 	*/
 	FZ_FUNCTION FzDevice(const FzOutput& out, float page_width, float page_height, int text_format, int reuse_images, int *id);
+
+	/** Constructor using `fz_new_svg_device_with_options()`. */
+	FZ_FUNCTION FzDevice(const FzOutput& out, float page_width, float page_height, const FzSvgDeviceOptions& opts);
 
 	/** Constructor using `fz_new_test_device()`. */
 	/**
@@ -3020,6 +3067,9 @@ struct FzDevice
 		function.
 	*/
 	FZ_FUNCTION FzDevice fz_new_ocr_device(const FzMatrix& ctm, const FzRect& mediabox, int with_list, const char *language, const char *datadir, int (*progress)(::fz_context *, void *, int ), void *progress_arg) const;
+
+	/** Class-aware wrapper for `::fz_new_ocr_device_with_options()`.  */
+	FZ_FUNCTION FzDevice fz_new_ocr_device_with_options(const FzMatrix& ctm, const FzRect& mediabox, int with_list, const char *language, const char *datadir, int (*progress)(::fz_context *, void *, int ), void *progress_arg, const char *options) const;
 
 	/** Class-aware wrapper for `::fz_pop_clip()`.  */
 	FZ_FUNCTION void fz_pop_clip() const;
@@ -3287,8 +3337,21 @@ struct FzDisplayList
 	/** Class-aware wrapper for `::fz_fill_pixmap_from_display_list()`.  */
 	FZ_FUNCTION FzPixmap fz_fill_pixmap_from_display_list(const FzMatrix& ctm, const FzPixmap& pix) const;
 
+	/** Class-aware wrapper for `::fz_match_display_list()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`fz_match_display_list(const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
+	 */
+	FZ_FUNCTION int fz_match_display_list(const char *needle, int *hit_mark, FzQuad& hit_bbox, int hit_max, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_match_display_list_cb()`.  */
+	FZ_FUNCTION int fz_match_display_list_cb(const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options) const;
+
 	/** Class-aware wrapper for `::fz_new_buffer_from_display_list()`.  */
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_display_list(FzStextOptions& options) const;
+
+	/** Class-aware wrapper for `::fz_new_buffer_from_flattened_display_list()`.  */
+	FZ_FUNCTION FzBuffer fz_new_buffer_from_flattened_display_list(FzStextOptions& options, ::fz_text_flatten flatten) const;
 
 	/** Class-aware wrapper for `::fz_new_list_device()`.  */
 	/**
@@ -3695,12 +3758,35 @@ struct FzDocument
 	*/
 	FZ_FUNCTION std::string fz_lookup_metadata2(const char *key) const;
 
+	/** Class-aware wrapper for `::fz_match_chapter_page_number()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`fz_match_chapter_page_number(int chapter, int page, const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
+	 */
+	FZ_FUNCTION int fz_match_chapter_page_number(int chapter, int page, const char *needle, int *hit_mark, FzQuad& hit_bbox, int hit_max, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_match_chapter_page_number_cb()`.  */
+	FZ_FUNCTION int fz_match_chapter_page_number_cb(int chapter, int page, const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_match_page_number()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`fz_match_page_number(int number, const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
+	 */
+	FZ_FUNCTION int fz_match_page_number(int number, const char *needle, int *hit_mark, FzQuad& hit_bbox, int hit_max, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_match_page_number_cb()`.  */
+	FZ_FUNCTION int fz_match_page_number_cb(int number, const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options) const;
+
 	/** Class-aware wrapper for `::fz_needs_password()`.  */
 	/**
 		Check if a document is encrypted with a
 		non-blank password.
 	*/
 	FZ_FUNCTION int fz_needs_password() const;
+
+	/** Class-aware wrapper for `::fz_new_buffer_from_flattened_page_number()`.  */
+	FZ_FUNCTION FzBuffer fz_new_buffer_from_flattened_page_number(int number, FzStextOptions& options, ::fz_text_flatten flatten) const;
 
 	/** Class-aware wrapper for `::fz_new_buffer_from_page_number()`.  */
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_page_number(int number, FzStextOptions& options) const;
@@ -4055,6 +4141,9 @@ struct FzDocumentWriter
 	/** Constructor using `fz_new_pixmap_writer()`. */
 	FZ_FUNCTION FzDocumentWriter(const char *path, const char *options, const char *default_path, int n, void (*save)(::fz_context *, ::fz_pixmap *, const char *));
 
+	/** Constructor using `fz_new_pixmap_writer_with_output()`. */
+	FZ_FUNCTION FzDocumentWriter(const FzOutput& out, const char *options, int n, void (*write)(::fz_context *, ::fz_output *, ::fz_pixmap *));
+
 	/** Constructor using `fz_new_svg_writer_with_output()`. */
 	FZ_FUNCTION FzDocumentWriter(const FzOutput& out, const char *options);
 
@@ -4340,6 +4429,53 @@ struct FzErrorStackSlot
 	/** This class is not copyable or assignable. */
 	FzErrorStackSlot(const FzErrorStackSlot& rhs);
 	FzErrorStackSlot& operator=(const FzErrorStackSlot& rhs);
+};
+
+/** Wrapper class for struct `fz_flotilla`. Not copyable or assignable. */
+struct FzFlotilla
+{
+	/** == Constructors. */
+
+	/** Constructor using `fz_new_flotilla_from_stext_page_vectors()`. */
+	FZ_FUNCTION FzFlotilla(const FzStextPage& page);
+
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzFlotilla();
+
+	/* == Methods. */
+
+	/** Class-aware wrapper for `::fz_flotilla_raft_area()`.  */
+	FZ_FUNCTION FzRect fz_flotilla_raft_area(int i) const;
+
+	/** Class-aware wrapper for `::fz_flotilla_size()`.  */
+	FZ_FUNCTION int fz_flotilla_size() const;
+
+	/** Constructor using raw copy of pre-existing `::fz_flotilla`. */
+	FZ_FUNCTION FzFlotilla(::fz_flotilla* internal);
+
+	/** Destructor using fz_drop_flotilla(). */
+	FZ_FUNCTION ~FzFlotilla();
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_flotilla* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzFlotilla(const FzFlotilla& rhs);
+	FzFlotilla& operator=(const FzFlotilla& rhs);
 };
 
 /** Wrapper class for struct `fz_font`. */
@@ -5233,6 +5369,126 @@ struct FzHashTable
 	FzHashTable& operator=(const FzHashTable& rhs);
 };
 
+/** Wrapper class for struct `fz_hyph_context`. Not copyable or assignable. */
+struct FzHyphContext
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzHyphContext();
+
+	/** Constructor using raw copy of pre-existing `::fz_hyph_context`. */
+	FZ_FUNCTION FzHyphContext(::fz_hyph_context* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzHyphContext();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_hyph_context* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzHyphContext(const FzHyphContext& rhs);
+	FzHyphContext& operator=(const FzHyphContext& rhs);
+};
+
+/** Wrapper class for struct `fz_hyph_trie`. Not copyable or assignable. */
+struct FzHyphTrie
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzHyphTrie();
+
+	/** Constructor using raw copy of pre-existing `::fz_hyph_trie`. */
+	FZ_FUNCTION FzHyphTrie(::fz_hyph_trie* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzHyphTrie();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_hyph_trie* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzHyphTrie(const FzHyphTrie& rhs);
+	FzHyphTrie& operator=(const FzHyphTrie& rhs);
+};
+
+/** Wrapper class for struct `fz_hyphenator`. Not copyable or assignable. */
+struct FzHyphenator
+{
+	/** == Constructors. */
+
+	/** Constructor using `fz_new_hyphenator_from_stream()`. */
+	FZ_FUNCTION FzHyphenator(const FzStream& stm);
+
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzHyphenator();
+
+	/* == Methods. */
+
+	/** Class-aware wrapper for `::fz_hyphenate_word()`.  */
+	FZ_FUNCTION void fz_hyphenate_word(const char *input, int input_size, char *output, int output_size) const;
+
+	/** Constructor using raw copy of pre-existing `::fz_hyphenator`. */
+	FZ_FUNCTION FzHyphenator(::fz_hyphenator* internal);
+
+	/** Destructor using fz_drop_hyphenator(). */
+	FZ_FUNCTION ~FzHyphenator();
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_hyphenator* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzHyphenator(const FzHyphenator& rhs);
+	FzHyphenator& operator=(const FzHyphenator& rhs);
+};
+
 /** Wrapper class for struct `fz_icc_profile`. Not copyable or assignable. */
 /**
 	Opaque type for an ICC Profile.
@@ -5445,6 +5701,9 @@ struct FzImage
 	*/
 	FZ_FUNCTION FzImage(int w, int h, int bpc, const FzColorspace& colorspace, int xres, int yres, int interpolate, int imagemask, const float *decode, const int *colorkey, const FzImage& mask, size_t size, ::fz_image_get_pixmap_fn *get_pixmap, ::fz_image_get_size_fn *get_size, ::fz_drop_image_fn *drop);
 
+	/** Constructor using `fz_new_jpx_image_from_buffer()`. */
+	FZ_FUNCTION FzImage(const FzBuffer& buffer, const FzColorspace& cs);
+
 	/** Copy constructor using `fz_keep_image()`. */
 	FZ_FUNCTION FzImage(const FzImage& rhs);
 
@@ -5505,6 +5764,17 @@ struct FzImage
 		Returns a non NULL kept pixmap pointer. May throw exceptions.
 	*/
 	FZ_FUNCTION FzPixmap fz_get_pixmap_from_image(FzIrect& subarea, FzMatrix& ctm, int *w, int *h) const;
+
+	/** Class-aware wrapper for `::fz_get_pixmap_mask_from_image()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`fz_get_pixmap_mask_from_image(const ::fz_irect *subarea, ::fz_matrix *ctm, int in_smask)` => `(fz_pixmap *, int dw, int dh)`
+	 */
+	/**
+		Like fz_get_pixmap_from_image but convert to an alpha only mask using
+		luminance if the image is grayscale or RGB.
+	*/
+	FZ_FUNCTION FzPixmap fz_get_pixmap_mask_from_image(FzIrect& subarea, FzMatrix& ctm, int *dw, int *dh, int in_smask) const;
 
 	/** Class-aware wrapper for `::fz_get_unscaled_pixmap_from_image()`.  */
 	/**
@@ -5654,6 +5924,44 @@ struct FzImage
 	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
 	generate code regardless so we always need to have this available. */
 	FZ_DATA static int s_num_instances;
+};
+
+/** Wrapper class for struct `fz_image_raft_options`. Not copyable or assignable. */
+struct FzImageRaftOptions
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzImageRaftOptions();
+
+	/** Constructor using raw copy of pre-existing `::fz_image_raft_options`. */
+	FZ_FUNCTION FzImageRaftOptions(::fz_image_raft_options* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzImageRaftOptions();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_image_raft_options* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzImageRaftOptions(const FzImageRaftOptions& rhs);
+	FzImageRaftOptions& operator=(const FzImageRaftOptions& rhs);
 };
 
 /** Wrapper class for struct `fz_install_load_system_font_funcs_args`. */
@@ -6742,6 +7050,44 @@ struct FzLocksContext
 	FzLocksContext& operator=(const FzLocksContext& rhs);
 };
 
+/** Wrapper class for struct `fz_match_quad`. Not copyable or assignable. */
+struct FzMatchQuad
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzMatchQuad();
+
+	/** Constructor using raw copy of pre-existing `::fz_match_quad`. */
+	FZ_FUNCTION FzMatchQuad(::fz_match_quad* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzMatchQuad();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_match_quad* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzMatchQuad(const FzMatchQuad& rhs);
+	FzMatchQuad& operator=(const FzMatchQuad& rhs);
+};
+
 /** Wrapper class for struct `fz_matrix`. */
 /**
 	fz_matrix is a row-major 3x3 matrix used for representing
@@ -7454,7 +7800,10 @@ struct FzOutput
 	/** Constructor using `fz_new_output_with_path()`. */
 	/**
 		Open an output stream that writes to a
-		given path.
+		given path. This stream will always be a binary stream.
+	
+		On Windows, if this stream is stdout or stderr, these will
+		be set to binary.
 	
 		filename: The filename to write to (specified in UTF-8).
 	
@@ -7535,9 +7884,14 @@ struct FzOutput
 	
 		reuse_images: Share image resources using <symbol> definitions.
 	
+		resolution: Resolution to use when rasterizing shadings (and such) to images.
+	
 		id: ID parameter to keep generated IDs unique across SVG files.
 	*/
 	FZ_FUNCTION FzDevice fz_new_svg_device_with_id(float page_width, float page_height, int text_format, int reuse_images, int *id) const;
+
+	/** Class-aware wrapper for `::fz_new_svg_device_with_options()`.  */
+	FZ_FUNCTION FzDevice fz_new_svg_device_with_options(float page_width, float page_height, const FzSvgDeviceOptions& opts) const;
 
 	/** Class-aware wrapper for `::fz_new_trace_device()`.  */
 	/**
@@ -7792,6 +8146,9 @@ struct FzOutput
 	*/
 	FZ_FUNCTION void fz_write_pixmap_as_pam(const FzPixmap& pixmap) const;
 
+	/** Class-aware wrapper for `::fz_write_pixmap_as_pbm()`.  */
+	FZ_FUNCTION void fz_write_pixmap_as_pbm(const FzPixmap& pixmap) const;
+
 	/** Class-aware wrapper for `::fz_write_pixmap_as_pcl()`.  */
 	/**
 		Write an (RGB) pixmap as color PCL.
@@ -7809,6 +8166,9 @@ struct FzOutput
 		Write a (Greyscale or RGB) pixmap as pdfocr.
 	*/
 	FZ_FUNCTION void fz_write_pixmap_as_pdfocr(const FzPixmap& pixmap, FzPdfocrOptions& options) const;
+
+	/** Class-aware wrapper for `::fz_write_pixmap_as_pkm()`.  */
+	FZ_FUNCTION void fz_write_pixmap_as_pkm(const FzPixmap& pixmap) const;
 
 	/** Class-aware wrapper for `::fz_write_pixmap_as_png()`.  */
 	/**
@@ -8114,7 +8474,26 @@ struct FzPage
 	*/
 	FZ_FUNCTION FzLink fz_load_links() const;
 
+	/** Class-aware wrapper for `::fz_match_page()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`fz_match_page(const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
+	 */
+	FZ_FUNCTION int fz_match_page(const char *needle, int *hit_mark, FzQuad& hit_bbox, int hit_max, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_match_page_cb()`.  */
+	FZ_FUNCTION int fz_match_page_cb(const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_new_buffer_from_flattened_page()`.  */
+	/**
+		Convenience functions built on fz_new_buffer_from_flattened_stext_page.
+	*/
+	FZ_FUNCTION FzBuffer fz_new_buffer_from_flattened_page(FzStextOptions& options, ::fz_text_flatten flatten) const;
+
 	/** Class-aware wrapper for `::fz_new_buffer_from_page()`.  */
+	/**
+		Convenience functions built on fz_new_buffer_from_stext_page.
+	*/
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_page(FzStextOptions& options) const;
 
 	/** Class-aware wrapper for `::fz_new_buffer_from_page_with_format()`.  */
@@ -8480,6 +8859,21 @@ struct FzPath
 		Return the number of bytes required to pack a path.
 	*/
 	FZ_FUNCTION int fz_packed_path_size() const;
+
+	/** Class-aware wrapper for `::fz_path_is_closed()`.  */
+	/**
+		Check whether a given path has all its segments closed.
+	
+		This includes both explicit closepaths, and where segments are implicitly
+		closed by segments that end where they started.
+	*/
+	FZ_FUNCTION int fz_path_is_closed() const;
+
+	/** Class-aware wrapper for `::fz_path_is_empty()`.  */
+	/**
+		Find out if a path is completely empty.
+	*/
+	FZ_FUNCTION int fz_path_is_empty() const;
 
 	/** Class-aware wrapper for `::fz_path_is_rect()`.  */
 	/**
@@ -8906,6 +9300,7 @@ struct FzPdfocrOptions
 	float skew_angle;
 	int skew_border;
 	int page_count;
+	char *options;
 
 	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
 	generate code regardless so we always need to have this available. */
@@ -9130,6 +9525,9 @@ struct FzPixmap
 
 	/** Class-aware wrapper for `::fz_alpha_from_gray()`.  */
 	FZ_FUNCTION FzPixmap fz_alpha_from_gray() const;
+
+	/** Class-aware wrapper for `::fz_alpha_from_rgb()`.  */
+	FZ_FUNCTION FzPixmap fz_alpha_from_rgb() const;
 
 	/** Class-aware wrapper for `::fz_autowarp_pixmap()`.  */
 	FZ_FUNCTION FzPixmap fz_autowarp_pixmap(const FzQuad& points) const;
@@ -9901,6 +10299,7 @@ struct FzPool
 	/** Class-aware wrapper for `::fz_pool_alloc()`.  */
 	/**
 		Allocate a block of size bytes from the pool.
+		Block will be inited to 0's.
 	*/
 	FZ_FUNCTION void *fz_pool_alloc(size_t size) const;
 
@@ -10667,6 +11066,169 @@ struct FzRect
 	FZ_FUNCTION bool operator!=(const FzRect& rhs);
 };
 
+/** Wrapper class for struct `fz_search`. Not copyable or assignable. */
+struct FzSearch
+{
+	/** == Constructors. */
+
+	/** Constructor using `fz_new_search()`. */
+	/**
+		Create a new search.
+	*/
+	FZ_FUNCTION FzSearch();
+
+	/* == Methods. */
+
+	/** Class-aware wrapper for `::fz_feed_search()`.  */
+	/**
+		Supply more stext to be searched; ownership of the stext page is
+		passed in.
+	
+		This can be called immediately after an fz_search has been created
+		to give it the first page to search, or it will be requested as soon
+		as the first search operation is done on that page.
+	
+		If we are calling this in response to fz_search_forwards telling
+		us that we need another page, page will be the stext for the next
+		page.
+	
+		If we are calling this in response to fz_search_backwards telling
+		is that we need another page, page will be the stext for the previous
+		page.
+	
+		seq is a simple integer value that will be parrotted back to us in the
+		match (typically the page number within the document).
+	
+		The search function will retain the page for a while. When it has
+		finished with it, it will call fz_drop_stext_page() to release it.
+	
+		Pass page = NULL to indicate that there are no more pages (in this
+		direction) to be fed.
+	*/
+	FZ_FUNCTION void fz_feed_search(const FzStextPage& page, int seq) const;
+
+	/** Class-aware wrapper for `::fz_search_set_options()`.  */
+	/**
+		Change the options/needle to be used for a search.
+	
+		If the needle is invalid (in the case of regexps, it fails to compile)
+		it will throw an error.
+	
+		If the needle changes, the current position of the search within the
+		text is kept.
+	
+		If the options change, the search position may revert to the beginning
+		of the current page.
+	*/
+	FZ_FUNCTION void fz_search_set_options(::fz_search_options options, const char *needle) const;
+
+	/** Constructor using raw copy of pre-existing `::fz_search`. */
+	FZ_FUNCTION FzSearch(::fz_search* internal);
+
+	/** Destructor using fz_drop_search(). */
+	FZ_FUNCTION ~FzSearch();
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_search* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzSearch(const FzSearch& rhs);
+	FzSearch& operator=(const FzSearch& rhs);
+};
+
+/** Wrapper class for struct `fz_search_result`. Not copyable or assignable. */
+/**
+	Structure used to represent the 'result' of a search.
+*/
+struct FzSearchResult
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzSearchResult();
+
+	/** Constructor using raw copy of pre-existing `::fz_search_result`. */
+	FZ_FUNCTION FzSearchResult(::fz_search_result* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzSearchResult();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_search_result* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzSearchResult(const FzSearchResult& rhs);
+	FzSearchResult& operator=(const FzSearchResult& rhs);
+};
+
+/** Wrapper class for struct `fz_search_result_details`. Not copyable or assignable. */
+struct FzSearchResultDetails
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzSearchResultDetails();
+
+	/** Constructor using raw copy of pre-existing `::fz_search_result_details`. */
+	FZ_FUNCTION FzSearchResultDetails(::fz_search_result_details* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzSearchResultDetails();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_search_result_details* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzSearchResultDetails(const FzSearchResultDetails& rhs);
+	FzSearchResultDetails& operator=(const FzSearchResultDetails& rhs);
+};
+
 /** Wrapper class for struct `fz_separations`. */
 struct FzSeparations
 {
@@ -11275,6 +11837,44 @@ struct FzStextChar
 	FZ_DATA static int s_num_instances;
 };
 
+/** Wrapper class for struct `fz_stext_grid_info`. Not copyable or assignable. */
+struct FzStextGridInfo
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzStextGridInfo();
+
+	/** Constructor using raw copy of pre-existing `::fz_stext_grid_info`. */
+	FZ_FUNCTION FzStextGridInfo(::fz_stext_grid_info* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzStextGridInfo();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_stext_grid_info* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzStextGridInfo(const FzStextGridInfo& rhs);
+	FzStextGridInfo& operator=(const FzStextGridInfo& rhs);
+};
+
 /** Wrapper class for struct `fz_stext_grid_positions`. Not copyable or assignable. */
 struct FzStextGridPositions
 {
@@ -11459,15 +12059,18 @@ struct FzStextPage
 	FZ_FUNCTION FzStextPage(const FzDisplayList& list, FzStextOptions& options);
 
 	/** Constructor using `fz_new_stext_page_from_page()`. */
+	FZ_FUNCTION FzStextPage(const FzPage& page, FzStextOptions& options);
+
+	/** Constructor using `fz_new_stext_page_from_page_number()`. */
+	FZ_FUNCTION FzStextPage(const FzDocument& doc, int number, FzStextOptions& options);
+
+	/** Constructor using `fz_new_stext_page_from_page_with_cookie()`. */
 	/**
 		Extract text from page.
 	
 		Ownership of the fz_stext_page is returned to the caller.
 	*/
-	FZ_FUNCTION FzStextPage(const FzPage& page, FzStextOptions& options);
-
-	/** Constructor using `fz_new_stext_page_from_page_number()`. */
-	FZ_FUNCTION FzStextPage(const FzDocument& doc, int number, FzStextOptions& options);
+	FZ_FUNCTION FzStextPage(const FzPage& page, FzStextOptions& options, FzCookie& cookie);
 
 	/** Constructor using `pdf_new_stext_page_from_annot()`. */
 	FZ_FUNCTION FzStextPage(const PdfAnnot& annot, FzStextOptions& options);
@@ -11512,9 +12115,54 @@ struct FzStextPage
 	*/
 	FZ_FUNCTION std::vector<fz_quad> fz_highlight_selection2(const FzPoint& a, const FzPoint& b, int max_quads) const;
 
+	/** Class-aware wrapper for `::fz_match_stext_page()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`fz_match_stext_page(const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
+	 */
+	/**
+		Search for occurrence of 'needle' in text page, matching in a given
+		style.
+	
+		Return the number of quads and store hit quads in the passed in
+		array.
+	
+		NOTE: This is an experimental interface and subject to change
+		without notice.
+	*/
+	FZ_FUNCTION int fz_match_stext_page(const char *needle, int *hit_mark, FzQuad& hit_bbox, int hit_max, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_match_stext_page_cb()`.  */
+	/**
+		Search for occurrence of 'needle' in text page.
+	
+		Call callback once for each hit. This callback will receive
+		(potentially) multiple quads for each hit.
+	
+		Returns the number of hits - note that this is potentially
+		different from (i.e. is not greater than) the number of quads
+		as returned by the non callback API.
+	
+		NOTE: This is an experimental interface and subject to change
+		without notice.
+	*/
+	FZ_FUNCTION int fz_match_stext_page_cb(const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options) const;
+
+	/** Class-aware wrapper for `::fz_new_buffer_from_flattened_stext_page()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`fz_new_buffer_from_flattened_stext_page(::fz_text_flatten flatten, ::fz_stext_position **map)` => `(fz_buffer *)`
+	 */
+	/**
+		Create a new buffer by flattening the text from an stext
+		page.
+	*/
+	FZ_FUNCTION FzBuffer fz_new_buffer_from_flattened_stext_page(::fz_text_flatten flatten, FzStextPosition& map) const;
+
 	/** Class-aware wrapper for `::fz_new_buffer_from_stext_page()`.  */
 	/**
-		Convert structured text into plain text.
+		Does the same as fz_new_buffer_from_flattened_stext_page(), with
+		the options FZ_TEXT_FLATTEN_KEEP_PARAGRAPHS.
 	*/
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_stext_page() const;
 
@@ -11587,6 +12235,7 @@ struct FzStextPage
 	 */
 	/**
 		Search for occurrence of 'needle' in text page.
+		Case insensitive match.
 	
 		Return the number of quads and store hit quads in the passed in
 		array.
@@ -11659,6 +12308,9 @@ struct FzStextPage
 
 	/** Class-aware wrapper for `::fz_snap_selection()`.  */
 	FZ_FUNCTION FzQuad fz_snap_selection(FzPoint& ap, FzPoint& bp, int mode) const;
+
+	/** Class-aware wrapper for `::fz_stext_raft_images()`.  */
+	FZ_FUNCTION void fz_stext_raft_images(const FzImageRaftOptions& options) const;
 
 	/** Class-aware wrapper for `::fz_stext_remove_page_fill()`.  */
 	FZ_FUNCTION int fz_stext_remove_page_fill() const;
@@ -11912,6 +12564,44 @@ struct FzStextPageDetails
 	/** This class is not copyable or assignable. */
 	FzStextPageDetails(const FzStextPageDetails& rhs);
 	FzStextPageDetails& operator=(const FzStextPageDetails& rhs);
+};
+
+/** Wrapper class for struct `fz_stext_position`. Not copyable or assignable. */
+struct FzStextPosition
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzStextPosition();
+
+	/** Constructor using raw copy of pre-existing `::fz_stext_position`. */
+	FZ_FUNCTION FzStextPosition(::fz_stext_position* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzStextPosition();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_stext_position* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzStextPosition(const FzStextPosition& rhs);
+	FzStextPosition& operator=(const FzStextPosition& rhs);
 };
 
 /** Wrapper class for struct `fz_stext_struct`. Not copyable or assignable. */
@@ -13288,6 +13978,49 @@ struct FzStyleContext
 	FzStyleContext& operator=(const FzStyleContext& rhs);
 };
 
+/** Wrapper class for struct `fz_svg_device_options`. Not copyable or assignable. */
+struct FzSvgDeviceOptions
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION FzSvgDeviceOptions();
+
+	/* == Methods. */
+
+	/** Class-aware wrapper for `::fz_parse_svg_device_options()`.  */
+	FZ_FUNCTION void fz_parse_svg_device_options(const char *args) const;
+
+	/** Constructor using raw copy of pre-existing `::fz_svg_device_options`. */
+	FZ_FUNCTION FzSvgDeviceOptions(::fz_svg_device_options* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~FzSvgDeviceOptions();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::fz_svg_device_options* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	FzSvgDeviceOptions(const FzSvgDeviceOptions& rhs);
+	FzSvgDeviceOptions& operator=(const FzSvgDeviceOptions& rhs);
+};
+
 /** Wrapper class for struct `fz_text`. */
 struct FzText
 {
@@ -14112,6 +14845,12 @@ struct FzXml
 	*/
 	FZ_FUNCTION FzImage fz_new_image_from_svg_xml(const FzXml& xml, const char *base_uri, const FzArchive& dir) const;
 
+	/** Class-aware wrapper for `::fz_new_text_from_xml()`.  */
+	/**
+		Extract and concatenate all plain text data from XML tree into a new string.
+	*/
+	FZ_FUNCTION char *fz_new_text_from_xml() const;
+
 	/** Class-aware wrapper for `::fz_save_xml()`.  */
 	/**
 		As for fz_write_xml, but direct to a file.
@@ -14593,6 +15332,9 @@ struct PdfAnnot
 		`pdf_annot_default_appearance_unmapped(char *font_name, int font_name_len, float color[4])` => `(float size, int n)`
 	 */
 	FZ_FUNCTION void pdf_annot_default_appearance_unmapped(char *font_name, int font_name_len, float *size, int *n, float color[4]) const;
+
+	/** Class-aware wrapper for `::pdf_annot_display_rect()`.  */
+	FZ_FUNCTION FzRect pdf_annot_display_rect() const;
 
 	/** Class-aware wrapper for `::pdf_annot_ensure_local_xref()`.  */
 	FZ_FUNCTION void pdf_annot_ensure_local_xref() const;
@@ -15166,6 +15908,7 @@ struct PdfCleanOptions
 	::pdf_image_rewriter_options image;
 	int subset_fonts;
 	::pdf_clean_options_structure structure;
+	::pdf_clean_options_vectorize vectorize;
 
 	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
 	generate code regardless so we always need to have this available. */
@@ -15660,6 +16403,9 @@ struct PdfDocument
 	/** Class-aware wrapper for `::pdf_can_undo()`.  */
 	FZ_FUNCTION int pdf_can_undo() const;
 
+	/** Class-aware wrapper for `::pdf_check_document()`.  */
+	FZ_FUNCTION void pdf_check_document() const;
+
 	/** Class-aware wrapper for `::pdf_clear_xref()`.  */
 	FZ_FUNCTION void pdf_clear_xref() const;
 
@@ -15869,8 +16615,14 @@ struct PdfDocument
 	/** Class-aware wrapper for `::pdf_js_supported()`.  */
 	FZ_FUNCTION int pdf_js_supported() const;
 
+	/** Class-aware wrapper for `::pdf_layer_config_creator()`.  */
+	FZ_FUNCTION const char *pdf_layer_config_creator(int config_num) const;
+
 	/** Class-aware wrapper for `::pdf_layer_config_info()`.  */
 	FZ_FUNCTION void pdf_layer_config_info(int config_num, PdfLayerConfig& info) const;
+
+	/** Class-aware wrapper for `::pdf_layer_config_name()`.  */
+	FZ_FUNCTION const char *pdf_layer_config_name(int config_num) const;
 
 	/** Class-aware wrapper for `::pdf_layer_config_ui_info()`.  */
 	FZ_FUNCTION void pdf_layer_config_ui_info(int ui, PdfLayerConfigUi& info) const;
@@ -15895,6 +16647,13 @@ struct PdfDocument
 
 	/** Class-aware wrapper for `::pdf_load_image()`.  */
 	FZ_FUNCTION FzImage pdf_load_image(const PdfObj& obj) const;
+
+	/** Class-aware wrapper for `::pdf_load_image_stream()`.
+	
+	This method has out-params. Python/C# wrappers look like:
+		`pdf_load_image_stream(int num, ::fz_compression_params *params, size_t worst_case)` => `(fz_buffer *, int truncated)`
+	 */
+	FZ_FUNCTION FzBuffer pdf_load_image_stream(int num, const FzCompressionParams& params, int *truncated, size_t worst_case) const;
 
 	/** Class-aware wrapper for `::pdf_load_inline_image()`.  */
 	FZ_FUNCTION FzImage pdf_load_inline_image(const PdfResourceStack& rdb, const PdfObj& dict, const FzStream& file) const;
@@ -16034,6 +16793,9 @@ struct PdfDocument
 
 	/** Class-aware wrapper for `::pdf_new_sanitize_filter()`.  */
 	FZ_FUNCTION PdfProcessor pdf_new_sanitize_filter(const PdfProcessor& chain, int struct_parents, const FzMatrix& transform, PdfFilterOptions& options, void *sopts) const;
+
+	/** Class-aware wrapper for `::pdf_new_vectorize_filter()`.  */
+	FZ_FUNCTION PdfProcessor pdf_new_vectorize_filter(const PdfProcessor& chain, int structparents, const FzMatrix& transform, PdfFilterOptions& options, void *vopts) const;
 
 	/** Class-aware wrapper for `::pdf_new_xobject()`.  */
 	FZ_FUNCTION PdfObj pdf_new_xobject(const FzRect& bbox, const FzMatrix& matrix, const PdfObj& res, const FzBuffer& buffer) const;
@@ -16194,6 +16956,9 @@ struct PdfDocument
 	/** Class-aware wrapper for `::pdf_set_page_labels()`.  */
 	FZ_FUNCTION void pdf_set_page_labels(int index, ::pdf_page_label_style style, const char *prefix, int start) const;
 
+	/** Class-aware wrapper for `::pdf_set_page_tree_cache()`.  */
+	FZ_FUNCTION void pdf_set_page_tree_cache(int enabled) const;
+
 	/** Class-aware wrapper for `::pdf_set_populating_xref_trailer()`.  */
 	FZ_FUNCTION void pdf_set_populating_xref_trailer(const PdfObj& trailer) const;
 
@@ -16251,6 +17016,9 @@ struct PdfDocument
 	/** Class-aware wrapper for `::pdf_update_object()`.  */
 	FZ_FUNCTION void pdf_update_object(int num, const PdfObj& obj) const;
 
+	/** Class-aware wrapper for `::pdf_update_open_pages()`.  */
+	FZ_FUNCTION int pdf_update_open_pages() const;
+
 	/** Class-aware wrapper for `::pdf_update_stream()`.  */
 	FZ_FUNCTION void pdf_update_stream(const PdfObj& ref, const FzBuffer& buf, int compressed) const;
 
@@ -16262,6 +17030,9 @@ struct PdfDocument
 
 	/** Class-aware wrapper for `::pdf_validate_changes()`.  */
 	FZ_FUNCTION int pdf_validate_changes(int version) const;
+
+	/** Class-aware wrapper for `::pdf_vectorize_pages()`.  */
+	FZ_FUNCTION void pdf_vectorize_pages(int count, const int *new_page_list, ::pdf_clean_options_vectorize vectorize) const;
 
 	/** Class-aware wrapper for `::pdf_version()`.  */
 	FZ_FUNCTION int pdf_version() const;
@@ -17987,6 +18758,9 @@ struct PdfObj
 	/** Class-aware wrapper for `::pdf_get_indirect_document()`.  */
 	FZ_FUNCTION PdfDocument pdf_get_indirect_document() const;
 
+	/** Class-aware wrapper for `::pdf_guess_colorspace_components()`.  */
+	FZ_FUNCTION int pdf_guess_colorspace_components() const;
+
 	/** Class-aware wrapper for `::pdf_intent_from_name()`.  */
 	FZ_FUNCTION enum pdf_intent pdf_intent_from_name() const;
 
@@ -18514,6 +19288,9 @@ struct PdfPage
 	/** Class-aware wrapper for `::pdf_update_page()`.  */
 	FZ_FUNCTION int pdf_update_page() const;
 
+	/** Class-aware wrapper for `::pdf_vectorize_page()`.  */
+	FZ_FUNCTION void pdf_vectorize_page() const;
+
 	/** Returns wrapper for .super member. */
 	FZ_FUNCTION FzPage super();
 
@@ -18736,6 +19513,9 @@ struct PdfProcessor
 	FZ_FUNCTION PdfProcessor();
 
 	/* == Static methods. */
+
+	/** Class-aware wrapper for `::pdf_new_vectorize_filter()`.  */
+	FZ_FUNCTION static PdfProcessor pdf_new_vectorize_filter(const PdfDocument& doc, const PdfProcessor& chain, int structparents, const FzMatrix& transform, PdfFilterOptions& options, void *vopts);
 
 	/** Class-aware wrapper for `::pdf_new_color_filter()`.  */
 	FZ_FUNCTION static PdfProcessor pdf_new_color_filter(const PdfDocument& doc, const PdfProcessor& chain, int struct_parents, const FzMatrix& transform, PdfFilterOptions& options, void *copts);
@@ -19238,7 +20018,7 @@ struct PdfSanitizeFilterOptions
 	/* These members are the same as the members of ::pdf_sanitize_filter_options. */
 	void *opaque;
 	::fz_image *(*image_filter)(::fz_context *, void *, ::fz_matrix , const char *, ::fz_image *, ::fz_rect );
-	int (*text_filter)(::fz_context *, void *, int *, int , ::fz_matrix , ::fz_matrix , ::fz_rect );
+	int (*text_filter)(::fz_context *, void *, int *, int , ::fz_matrix , ::fz_matrix , ::fz_rect , int , float , float );
 	void (*after_text_object)(::fz_context *, void *, ::pdf_document *, ::pdf_processor *, ::fz_matrix );
 	int (*culler)(::fz_context *, void *, ::fz_rect , ::fz_cull_type );
 
@@ -19275,7 +20055,7 @@ struct PdfSanitizeFilterOptions2 : PdfSanitizeFilterOptions
 
 	/** Default virtual method implementations; these all throw an exception. */
 	FZ_FUNCTION virtual ::fz_image * image_filter(::fz_context *arg_0, ::fz_matrix arg_2, const char *arg_3, ::fz_image *arg_4, ::fz_rect arg_5);
-	FZ_FUNCTION virtual int text_filter(::fz_context *arg_0, int *arg_2, int arg_3, ::fz_matrix arg_4, ::fz_matrix arg_5, ::fz_rect arg_6);
+	FZ_FUNCTION virtual int text_filter(::fz_context *arg_0, int *arg_2, int arg_3, ::fz_matrix arg_4, ::fz_matrix arg_5, ::fz_rect arg_6, int arg_7, float arg_8, float arg_9);
 	FZ_FUNCTION virtual void after_text_object(::fz_context *arg_0, ::pdf_document *arg_2, ::pdf_processor *arg_3, ::fz_matrix arg_4);
 	FZ_FUNCTION virtual int culler(::fz_context *arg_0, ::fz_rect arg_2, ::fz_cull_type arg_3);
 };
@@ -19419,6 +20199,44 @@ struct PdfUnsavedSig
 	/** This class is not copyable or assignable. */
 	PdfUnsavedSig(const PdfUnsavedSig& rhs);
 	PdfUnsavedSig& operator=(const PdfUnsavedSig& rhs);
+};
+
+/** Wrapper class for struct `pdf_vectorize_filter_options`. Not copyable or assignable. */
+struct PdfVectorizeFilterOptions
+{
+	/** Default constructor, sets `m_internal` to null. */
+	FZ_FUNCTION PdfVectorizeFilterOptions();
+
+	/** Constructor using raw copy of pre-existing `::pdf_vectorize_filter_options`. */
+	FZ_FUNCTION PdfVectorizeFilterOptions(::pdf_vectorize_filter_options* internal);
+
+	#ifndef NDEBUG
+	/** Destructor only decrements s_num_instances. */
+	FZ_FUNCTION ~PdfVectorizeFilterOptions();
+	#else
+	/** We use default destructor. */
+	#endif
+
+	/** Return numerical value of .m_internal; helps with Python debugging. */
+	FZ_FUNCTION long long m_internal_value();
+
+	/** Return true iff `m_internal` is not null. */
+	FZ_FUNCTION operator bool();
+
+	/* == Member data. */
+
+	/** Pointer to wrapped data. */
+	::pdf_vectorize_filter_options* m_internal;
+
+	/* Ideally this would be in `#ifndef NDEBUG...#endif`, but Swig will
+	generate code regardless so we always need to have this available. */
+	FZ_DATA static int s_num_instances;
+
+	private:
+
+	/** This class is not copyable or assignable. */
+	PdfVectorizeFilterOptions(const PdfVectorizeFilterOptions& rhs);
+	PdfVectorizeFilterOptions& operator=(const PdfVectorizeFilterOptions& rhs);
 };
 
 /** Wrapper class for struct `pdf_vmtx`. Not copyable or assignable. */

@@ -1,5 +1,3 @@
-> **⚠️ Important Notice:** Due to the current regional situation and the high risk of internet blackouts, my connectivity may be lost at any time. If I am unable to respond to issues or messages, please understand that it is due to these circumstances beyond my control. Thank you for your patience and continued support.
-
 # Vision Assistant Pro Documentation
 
 **Vision Assistant Pro** is an advanced, multi-modal AI assistant for NVDA. It leverages Google's Gemini models to provide intelligent screen reading, translation, voice dictation, and document analysis capabilities.

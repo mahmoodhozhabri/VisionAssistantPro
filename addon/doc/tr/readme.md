@@ -1,222 +1,257 @@
-Profesyonel Görsel Asistan Dokümantasyonu
+# Profesyonel Görsel Asistan Belgeleri
 
-# Profesyonel Görsel Asistan
+**Profesyonel Görsel Asistan**, NVDA için gelişmiş, çok modlu bir yapay zekâ asistanıdır. Akıllı ekran okuma, çeviri, sesli dikte ve belge analizi sağlamak için dünya çapında yapay zekâ motorlarından yararlanır.
 
-**Profesyonel Görsel Asistan**, NVDA için gelişmiş, çok modlu bir yapay zekâ asistanıdır. Google’ın Gemini modellerini kullanarak akıllı ekran okuma, çeviri, sesli dikte ve belge analiz yetenekleri sunar.
-
-Bu eklenti, Engelliler Uluslararası Günü onuruna topluluğa sunulmuştur.
+**Bu eklenti, Dünya Engelliler Günü onuruna topluluğa sunulmuştur.**
 
 ## 1. Kurulum ve Yapılandırma
 
 **NVDA Menüsü > Tercihler > Ayarlar > Profesyonel Görsel Asistan** yolunu izleyin.
 
-- **API Anahtarı:** Gereklidir. [Google AI Studio](https://aistudio.google.com/) üzerinden ücretsiz bir anahtar alabilirsiniz. Birden fazla anahtar girebilirsiniz (virgülle veya yeni satırlarla ayırarak). Kota sınırına ulaşıldığında asistan otomatik olarak bunlar arasında geçiş yapacaktır.
-- **Yapay Zeka Modeli:** **Flash** (En Hızlı/Ücretsiz), **Lite** veya **Pro** (Yüksek Zeka) modelleri arasından seçim yapın.
-- **Proxy Adresi:** İsteğe bağlı. Bölgenizde Google engellenmişse bunu kullanın. Gemini API'sine köprü görevi gören bir web adresi olmalıdır. İsteklerinizi alan ve Gemini API'sine ileten bir sunucu adresine (URL) ihtiyacınız vardır.
-  > **Not:** Bu, standart VPN/SOCKS proxy'leri için **değildir** ('127.0.0.1:1080' gibi). Google'a köprü görevi gören bir web adresi (ör. "https://my-custom-proxy.com") olmalıdır.
-- **OCR Motoru:** Hızlı sonuçlar için **Chrome (Hızlı)** veya üstün düzen koruması ve tablo tanıma için **Gemini (Biçimlendirilmiş)** arasında seçim yapın.
-- **TTS Sesi:** Belge sayfalarından ses dosyaları oluşturmak için tercih edilen ses stilini seçin.
-- **Diller:** Kaynak, Hedef ve Yapay Zekâ Yanıt dillerini ayarlayın.
-- **Akıllı takas:** Kaynak metin hedef dille eşleşirse dilleri otomatik olarak değiştirir.
-- **Doğrudan Çıktı:** Sohbet penceresini atlar ve yanıtı doğrudan konuşma yoluyla duyurur.
-- **Pano Entegrasyonu:** Yapay zeka yanıtını otomatik olarak panoya kopyalar.
+### 1.1 Bağlantı Ayarları
+
+* **Sağlayıcı:** Tercih ettiğiniz yapay zekâ hizmetini seçin. Desteklenen sağlayıcılar: **Google Gemini**, **OpenAI**, **Mistral**, **Groq** ve **Özel** (Ollama / LM Studio gibi OpenAI uyumlu sunucular).
+* **Önemli Not:** En iyi performans ve doğruluk için (**özellikle resim/dosya analizi** konusunda) **Google Gemini** kullanmanızı şiddetle öneririz.
+* **API Anahtarı:** Zorunludur. Otomatik döndürme için birden fazla anahtar (virgül veya yeni satırla ayrılmış) girebilirsiniz.
+* **Modelleri Al:** API anahtarınızı girdikten sonra, sağlayıcıdan mevcut en güncel model listesini indirmek için bu düğmeye basın.
+* **Yapay Zekâ Modeli:** Genel sohbet ve analiz için kullanılacak ana modeli seçin.
+
+### 1.2 Gelişmiş Model Yönlendirme (Yerel Sağlayıcılar)
+
+*Gemini, OpenAI, Groq ve Mistral için kullanılabilir.*
+
+> **⚠️ Uyarı:** Bu ayarlar **yalnızca ileri düzey kullanıcılar** içindir. Belirli bir modelin ne yaptığından emin değilseniz, lütfen bunu **işaretlemeyin**. Bir görev için uyumsuz bir model seçmek (örneğin Görsel analiz için yalnızca metin modeli) hatalara yol açar ve eklentinin çalışmasını durdurur.
+
+Ayrıntılı denetimi açmak için **“Gelişmiş Model Yönlendirme (Göreve özgü)”** seçeneğini işaretleyin. Bu, farklı görevler için açılır listeden belirli modeller seçmenize olanak tanır:
+
+* **OCR / Görsel Model:** Görselleri analiz etmek için özel bir model seçin.
+* **Konuşmadan Metne (STT):** Dikte için belirli bir model seçin.
+* **Metinden Konuşmaya (TTS):** Ses üretimi için bir model seçin.
+  *Not: Desteklenmeyen özellikler (ör. Groq için TTS) otomatik olarak gizlenir.*
+
+### 1.3 Gelişmiş Uç Nokta Yapılandırması (Özel Sağlayıcı)
+
+*Yalnızca “Özel” seçildiğinde kullanılabilir.*
+
+> **⚠️ Uyarı:** Bu bölüm manuel API yapılandırmasına izin verir ve yerel sunucular veya proxy’ler çalıştıran **ileri seviye kullanıcılar** için tasarlanmıştır. Hatalı URL’ler veya model adları bağlantıyı bozacaktır. Bu uç noktaların ne olduğunu tam olarak bilmiyorsanız, bunu **işaretlemeden bırakın**.
+
+**“Gelişmiş Uç Nokta Yapılandırması”** seçeneğini işaretleyerek sunucu ayrıntılarını manuel olarak girin. Yerel sağlayıcılardan farklı olarak burada belirli URL’leri ve model adlarını **manuel olarak yazmanız** gerekir:
+
+* **Model Listesi URL’si:** Mevcut modelleri almak için kullanılan uç nokta.
+* **OCR/STT/TTS Uç Nokta URL’si:** Belirli hizmetler için tam URL’ler (ör. `http://localhost:11434/v1/audio/speech`).
+* **Özel Modeller:** Her görev için model adını manuel olarak yazın (ör. `llama3:8b`).
+
+### 1.4 Genel Tercihler
+
+* **OCR Motoru:** Hızlı sonuçlar için **Chrome (Hızlı)** veya üstün düzen koruması için **Gemini (Biçimlendirilmiş)** seçeneklerinden birini seçin.
+
+  * *Not:* “Gemini (Biçimlendirilmiş)” seçiliyken sağlayıcı OpenAI/Groq ise, eklenti görseli akıllıca etkin sağlayıcının görsel modeline yönlendirir.
+* **TTS Sesi:** Tercih ettiğiniz ses stilini seçin. Bu liste etkin sağlayıcıya göre dinamik olarak güncellenir.
+* **Yaratıcılık (Sıcaklık):** Yapay zekânın rastgeleliğini kontrol eder. Düşük değerler doğru çeviri/OCR için daha uygundur.
+* **Proxy URL’si:** Bölgenizde yapay zekâ hizmetleri kısıtlıysa yapılandırın ( `127.0.0.1` gibi yerel proxy’ler veya köprü URL’leri desteklenir).
 
 ## 2. Komut Katmanı ve Kısayollar
 
-Klavye kısayol çakışmalarını önlemek için bu eklenti bir **Komut Katmanı** kullanır.
+Klavye çakışmalarını önlemek için bu eklenti bir **Komut Katmanı** kullanır.
 
-1. Katmanı etkinleştirmek için **NVDA + Shift + V** (Ana Tuş) tuşlarına basın (bir bip sesi duyacaksınız).
-2. Tuşları bırakın, ardından aşağıdaki tek tuşlardan birine basın:
+1. Katmanı etkinleştirmek için **NVDA + Shift + V** (Ana Tuş) kombinasyonuna basın (bir bip sesi duyarsınız).
+2. Tuşları bırakın ve ardından aşağıdaki tek tuşlardan birine basın:
 
-| Tuş           | İşlev                   | Açıklama                                                                                    |
-| ------------- | ----------------------- | ------------------------------------------------------------------------------------------- |
-| **T**         | Akıllı Çeviri         | Dolaşım imleci altındaki veya seçili metni çevirir.                                         |
-| **Shift + T** | Panodan Çeviri          | Panodaki mevcut içeriği çevirir.                                                            |
-| **R**         | Metin İyileştirici      | Özetler, Dilbilgisini Düzeltir, Açıklar veya **Özel İstemler** çalıştırır.                  |
-| **V**         | Görsel Nesne            | Mevcut dolaşım nesnesini betimler.                                                            |
-| **O**         | Tam Ekran görseli        | Tüm ekran düzenini ve içeriğini analiz eder.                                                |
-| **Shift + V** | Çevrimiçi Video Analizi | **YouTube** veya **Instagram** videolarını Bağlantı üzerinden analiz eder.                       |
-| **D**         | Belge Analizi           | PDF/TXT/MD/PY dosyaları hakkında sohbet eder.                                                     |
-| **F**         | Dosya OCR               | Görüntü/PDF/TIFF dosyalarından doğrudan OCR yapar (Çok sayfalı TIFF desteklenir).           |
-| **A**         | Sesi metne çevirme     | MP3/WAV/OGG dosyalarını yazıya döker.                                                       |
-| **C**         | CAPTCHA Çözücü          | CAPTCHA’yı otomatik olarak yakalar ve çözer.                                                |
-| **S**         | Akıllı Dikte            | Konuşmayı metne dönüştürür. Kaydı başlatmak için basın, durdurmak/yazmak için tekrar basın. |
-| **L**         | Durumu Seslendir         | Mevcut durumu seslendirir (örn. "Yükleniyor...", "Boşta").                                      |
-| **U**         | Güncelleme Kontrolü     | GitHub üzerinden en son sürümü denetler.                                                |
-| **Boşluk**     | Son Sonucu Geri Çağır       | İnceleme veya takip için bir sohbet iletişim kutusundaki son YZ yanıtını gösterir.        |
-| **H** | Komut Yardımı | Kullanılabilir tüm kısayol tuşlarının kapsamlı bir listesini ve bunların komut katmanındaki açıklamalarını görüntüler. |
+| Tuş           | İşlev                    | Açıklama                                                                              |
+| ------------- | ------------------------ | ------------------------------------------------------------------------------------- |
+| **T**         | Akıllı Çeviri          | Dolaşım imleci altındaki metni veya seçimi çevirir.                                    |
+| **Shift + T** | Panodan Çeviri           | Panodaki içeriği çevirir.                                                             |
+| **R**         | Metin İyileştirici       | Özetleme, dilbilgisi düzeltme, açıklama veya **Özel İstemler** çalıştırır.            |
+| **V**         | Nesne Görsel Analizi     | Geçerli Dolaşım nesnesini betimler.                                                     |
+| **O**         | Tam Ekran Görsel Analizi | Tüm ekran düzenini ve içeriğini analiz eder.                                          |
+| **Shift + V** | Çevrim İçi Video Analizi | **YouTube**, **Instagram**, **TikTok** veya **Twitter (X)** videolarını analiz eder.  |
+| **D**         | Belge Okuyucu            | Sayfa aralığı seçimi olan PDF ve görseller için gelişmiş okuyucu.                     |
+| **F**         | Dosya OCR                | Seçilen görsel, PDF veya TIFF dosyalarından doğrudan metin tanıma.                    |
+| **A**         | Ses Dökümü               | MP3, WAV veya OGG dosyalarını metne dönüştürür.                                       |
+| **C**         | CAPTCHA Çözücü           | CAPTCHA’ları yakalar ve çözer (Kamu portalları desteklenir).                          |
+| **S**         | Akıllı Dikte             | Konuşmayı metne dönüştürür. Başlatmak için basın, durdurmak/yazmak için tekrar basın. |
+| **L**         | Durumu Seslendir          | Geçerli durumu bildirir (ör. “Taranıyor…”, “Boşta”).                                  |
+| **U**         | Güncellemeleri Denetle      | Eklentinin en son sürümü için GitHub’ı manuel olarak kontrol eder.                    |
+| **Boşluk Çubuğu**     | Son Sonucu Çağır         | Son yapay zekâ yanıtını inceleme veya devam için sohbet penceresinde gösterir.        |
+| **H**         | Komut Yardımı            | Komut katmanındaki tüm kısayolların listesini gösterir.                               |
 
-### 2.1 Belge Okuyucu Kısayolları (İç Görüntüleyici)
-**D** komutuyla bir belge açıldığında:
-- **Ctrl + Sayfa Aşağı:** Sonraki sayfaya gider (sayfa numarasını duyurur).
-- **Ctrl + Sayfa Yukarı:** Önceki sayfaya gider (sayfa numarasını duyurur).
-- **Alt + A:** Belgeyle ilgili sorular sormak için bir sohbet iletişim kutusu açar.
-- **Alt + R:** Gemini motorunu kullanarak geçerli sayfanın veya tüm sayfaların yeniden taranmasını zorlar.
-- **Alt + G:** İçerikten yüksek kaliteli bir ses dosyası (WAV) oluşturur ve kaydeder.
-- **Alt + S / Ctrl + S:** Çıkarılan metni TXT veya HTML dosyası olarak kaydeder.
+### 2.1 Belge Okuyucu Kısayolları (Görüntüleyici İçinde)
+
+* **Ctrl + Sayfa Aşağı:** Sonraki sayfaya gider.
+* **Ctrl + Sayfa Yukarı:** Önceki sayfaya gider.
+* **Alt + A:** Belge hakkında soru sormak için sohbet penceresi açar.
+* **Alt + R:** Etkin sağlayıcıyı kullanarak **Yapay Zekâ ile Yeniden Tarar**.
+* **Alt + G:** Yüksek kaliteli bir ses dosyası (WAV/MP3) oluşturur ve kaydeder. *Sağlayıcı TTS desteklemiyorsa gizlenir.*
+* **Alt + S / Ctrl + S:** Çıkarılan metni TXT veya HTML olarak kaydeder.
 
 ## 3. Özel İstemler ve Değişkenler
 
-Sistemi ve özel istemleri yapılandırmak için **Ayarlar > İstemler > İstemleri Yönet...**'i açın.
+İstemleri **Ayarlar > İstemler > İstemleri Yönet…** yolundan yönetebilirsiniz.
 
-- **Varsayılan İstemler sekmesi:** yerleşik istemleri düzenleyin. Tek bir istemi sıfırlayabilir veya tüm varsayılanları sıfırlayabilirsiniz.
-- **Özel İstemler sekmesi:** özel istemleri ekleyin, düzenleyin, kaldırın ve yeniden sıralayın.
-- **Değişken Kılavuzu düğmesi:** desteklenen tüm değişkenleri ve giriş türlerini içeren bir yardım penceresi açar.
+### Desteklenen Değişkenler
 
-### Kullanılabilir Değişkenler
+* `[selection]`: Geçerli seçili metin.
+* `[clipboard]`: Pano içeriği.
+* `[screen_obj]`: Gezgin nesnesinin ekran görüntüsü.
+* `[screen_full]`: Tam ekran görüntüsü.
+* `[file_ocr]`: Metin çıkarımı için görsel/PDF dosyası seç.
+* `[file_read]`: Okuma için belge seç (TXT, Kod, PDF).
+* `[file_audio]`: Analiz için ses dosyası seç (MP3, WAV, OGG).
 
-| Değişken        | Açıklama                                        | Girdi Türü         |
-| --------------- | ----------------------------------------------- | ------------------ |
-| `[selection]`   | Seçili olan metin                               | Metin              |
-| `[clipboard]`   | Pano içeriği                                    | Metin              |
-| `[screen_obj]`  | Dolaşım nesnesinin ekran görüntüsü                 | Görüntü            |
-| `[screen_full]` | Tam ekran görüntüsü                             | Görüntü            |
-| `[file_ocr]`    | Görüntü/PDF/TIFF seç (varsayılan “Metni çıkar”) | Görüntü, PDF, TIFF |
-| `[file_read]`   | Metin belgesi seç                               | TXT, Kod, PDF      |
-| `[file_audio]`  | Ses dosyası seç                                 | MP3, WAV, OGG      |
+---
 
-### Örnek Özel İstemler
-
-* **Hızlı OCR:** `My OCR:[file_ocr]`
-* **Görüntü Çevir:** `Translate Img:Bu görüntüden metni çıkar ve Farsçaya çevir. [file_ocr]`
-* **Ses Analizi:** `Summarize Audio:Bu kaydı dinle ve ana noktaları özetle. [file_audio]`
-* **Kod Hata Ayıklayıcı:** `Debug:Bu koddaki hataları bul ve açıkla: [selection]`
-
-***
-**Not:** Tüm yapay zekâ özellikleri için aktif bir internet bağlantısı gereklidir. Çok sayfalı TIFF dosyaları otomatik olarak işlenir.
+**Not:** Tüm yapay zekâ özellikleri için etkin bir internet bağlantısı gereklidir. Çok sayfalı belgeler otomatik olarak işlenir.
 
 ## 4. Destek ve Topluluk
 
-En son haberler, özellikler ve sürümlerle güncel kalın:
-- **Telegram Kanalı:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
-- **GitHub Sorun Bildirme:** Hata raporları ve özellik istekleri için.
+En son haberler, özellikler ve sürümlerden haberdar olun:
 
-## 4.6 için değişiklikler
-* **Etkileşimli Sonuç Geri Çağırma:** Komut katmanına **Boşluk** tuşu eklendi; bu sayede, "Doğrudan Çıktı" modu etkin olsa bile, kullanıcıların takip soruları için bir sohbet penceresindeki son YZ yanıtını anında yeniden açmasına olanak tanındı.
-* **Telegram Topluluk Merkezi:** NVDA Araçlar menüsüne, en son haberler, özellikler ve sürümlerle güncel kalmanın hızlı bir yolunu sağlayan bir "Resmi Telegram Kanalı" bağlantısı eklendi.
-* **Gelişmiş Yanıt Kararlılığı:** Doğrudan konuşma çıkışını kullanırken daha güvenilir performans ve daha sorunsuz bir deneyim sağlamak için Çeviri, OCR ve Görüntü özellikleri için temel mantık optimize edildi.
-* **Geliştirilmiş Arayüz Kılavuzu:** Yeni geri çağırma sistemini ve doğrudan çıkış ayarlarıyla birlikte nasıl çalıştığını daha iyi açıklamak için ayar açıklamaları ve belgeleri güncellendi.
+* **Telegram Kanalı:** [https://t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
+* **GitHub Issues:** Hata bildirimleri ve özellik istekleri için.
 
-## 4.5 için değişiklikler
-*   **Gelişmiş İstem Yöneticisi:** Varsayılan sistem istemlerini özelleştirmek ve ekleme, düzenleme, yeniden sıralama ve önizleme için tam destekle kullanıcı tanımlı istemleri yönetmek için ayarlara özel bir yönetim iletişim kutusu sunuldu.
-*   **Kapsamlı Proxy Desteği:** Kullanıcı tarafından yapılandırılan proxy ayarlarının çeviri, OCR ve konuşma oluşturma dahil tüm API isteklerine sıkı bir şekilde uygulanmasını sağlayarak ağ bağlantısı sorunları çözüldü.
-*   **Otomatik Veri Taşıma:** Eski istem yapılandırmalarını, ilk çalıştırmada veri kaybı olmadan otomatik olarak güçlü bir v2 JSON biçimine yükseltmek için entegre bir akıllı geçiş sistemi.
-*   **Güncellenmiş Uyumluluk (2025.1):** İstikrarlı performans sağlamak için Belge Okuyucu gibi gelişmiş özelliklerdeki kitaplık bağımlılıkları nedeniyle gerekli minimum NVDA sürümünü 2025.1 olarak ayarlandı.
-*   **Optimize Edilmiş Ayarlar Arayüzü:** Bilgi istemi yönetimini ayrı bir iletişim kutusunda yeniden düzenleyerek ayarlar arayüzünü kolaylaştırarak daha temiz ve daha erişilebilir bir kullanıcı deneyimi sağlandı.
-*   **İstem Değişkenleri Kılavuzu:** Kullanıcıların [selection], [clipboard] ve [screen_obj] gibi dinamik değişkenleri kolayca tanımlamasına ve kullanmasına yardımcı olmak için bilgi istemi iletişim kutularına yerleşik bir kılavuz eklendi.
+---
 
-## 4.0.3 için değişiklikler
-*   **Gelişmiş Ağ Dayanıklılığı:** Kararsız internet bağlantılarını ve geçici sunucu hatalarını daha iyi ele almak ve daha güvenilir AI yanıtları sağlamak için otomatik yeniden deneme mekanizması eklendi.
-*   **Görsel Çeviri İletişim Kutusu:** Çeviri sonuçları için özel bir pencere eklendi. Kullanıcılar artık OCR sonuçlarına benzer şekilde kolayca dolaşabilir ve uzun çevirileri satır satır okuyabilir.
-*   **Toplu Biçimlendirilmiş Görünüm:** Belge Okuyucudaki "Biçimlendirilmiş Görünüm" özelliği artık işlenen tüm sayfaları anlaşılır sayfa başlıklarına sahip tek, düzenli bir pencerede görüntülüyor.
-*   **Optimize Edilmiş OCR İş Akışı:** Tek sayfalı belgeler için sayfa aralığı seçimini otomatik olarak atlayarak tanıma sürecini daha hızlı ve sorunsuz hale getirir.
-*   **Geliştirilmiş API Kararlılığı:** Anahtar yönlendirme çakışmalarından kaynaklanan olası "Tüm API Anahtarları başarısız oldu" hatalarını çözen, daha sağlam bir başlık tabanlı kimlik doğrulama yöntemine geçildi.
-*   **Hata Düzeltmeleri:** Eklentinin sonlandırılması sırasında ortaya çıkan bir sorun ve sohbet iletişim kutusundaki odaklanma hatası da dahil olmak üzere çeşitli olası kilitlenmeler çözüldü.
+## 5.0 için Değişiklikler
 
-## 4.0.1 için değişiklikler
-*   **Gelişmiş Belge Okuyucu:** Sayfa aralığı seçimi, arka planda işleme ve kesintisiz "Ctrl+Sayfa Yukarı/Aşağı" dolaşma özellikleriyle PDF ve görüntüler için yeni ve güçlü bir görüntüleyici.
-*   **Yeni Araçlar Alt Menüsü:** Temel özelliklere, ayarlara ve belgelere daha hızlı erişim için NVDA'nın Araçlar menüsü altına özel bir "Görsel Asistan" alt menüsü eklendi.
-*   **Esnek Özelleştirme:** Artık tercih ettiğiniz OCR motorunu ve TTS sesini doğrudan ayarlar panelinden seçebilirsiniz.
-*   **Çoklu API Anahtarı Desteği:** Birden fazla Gemini API anahtarı için destek eklendi. Ayarlarda her satıra bir anahtar girebilir veya bunları virgülle ayırabilirsiniz.
-*   **Alternatif OCR Motoru:** Gemini API kota sınırlarına ulaşıldığında bile güvenilir metin tanıma sağlamak için yeni bir OCR motoru kullanıma sunuldu.
-*   **Akıllı API Anahtarı Döndürme:** Kota sınırlarını aşmak için otomatik olarak en hızlı çalışan API anahtarına geçiş yapar ve onu hatırlar.
-*   **MP3/WAV'a belge Dönüştürme:** Hem MP3 (128kbps) hem de WAV formatlarında yüksek kaliteli ses dosyalarını doğrudan okuyucunun içinde oluşturma ve kaydetmeye yönelik entegre yetenek.
-*   **Instagram Hikayeleri Desteği:** URL'lerini kullanarak Instagram Hikayelerini tanımlama ve analiz etme yeteneği eklendi.
-*   **TikTok Desteği:** Kliplerin tam görsel betimlemesine ve sesli transkripsiyonuna olanak tanıyan TikTok videoları için destek eklendi.
-*   **Yeniden Tasarlanan Güncelleme İletişim Kutusu:** Yüklemeden önce sürüm değişikliklerini net bir şekilde okumak için kaydırılabilir bir metin kutusu içeren yeni, erişilebilir bir arayüz içerir.
-*   **Birleşik Durum ve UX:** Eklenti genelinde standartlaştırılmış dosya iletişim kutuları ve gerçek zamanlı ilerlemeyi bildirmek için 'L' komutu geliştirildi.
+* **Çoklu Sağlayıcı Mimarisi**: Google Gemini’ye ek olarak **OpenAI**, **Groq** ve **Mistral** için tam destek eklendi. Kullanıcılar artık tercih ettikleri yapay zekâ arka ucunu seçebilir.
+* **Gelişmiş Model Yönlendirme**: Yerel sağlayıcı kullanıcıları (Gemini, OpenAI vb.) artık farklı görevler (OCR, STT, TTS) için açılır listeden belirli modelleri seçebilir.
+* **Gelişmiş Uç Nokta Yapılandırması**: Özel sağlayıcı kullanıcıları, yerel veya üçüncü taraf sunucular üzerinde ayrıntılı denetim için belirli URL’leri ve model adlarını manuel olarak girebilir.
+* **Akıllı Özellik Görünürlüğü**: Ayarlar menüsü ve Belge Okuyucu arayüzü, seçilen sağlayıcıya göre desteklenmeyen özellikleri (TTS gibi) otomatik olarak gizler.
+* **Dinamik Model Getirme**: Eklenti, mevcut model listesini doğrudan sağlayıcının API’sinden alır; böylece yeni modeller yayınlanır yayınlanmaz uyumluluk sağlanır.
+* **Hibrit OCR ve Çeviri**: Chrome OCR kullanılırken hız için Google Translate, Gemini/Groq/OpenAI motorları kullanılırken yapay zekâ destekli çeviri tercih edecek şekilde mantık optimize edildi.
+* **Evrensel “Yapay Zekâ ile Yeniden Tara”**: Belge Okuyucu’nun yeniden tarama özelliği artık yalnızca Gemini ile sınırlı değil; etkin olan herhangi bir yapay zekâ sağlayıcısını kullanır.
 
-## 3.6.0 için değişiklikler
-* **Yardım Sistemi:** Tüm kısayolların ve işlevlerinin kolay erişilebilen bir listesini sağlamak için Komut Katmanı içine bir yardım komutu (`H`) eklendi.
-* **Çevrimiçi Video Analizi:** **Twitter (X)** videolarını içerecek şekilde genişletilmiş destek. Ayrıca daha güvenilir bir deneyim için iyileştirilmiş Bağlantı algılama ve kararlılık.
-* **Proje Katkısı:** Projenin gelecekteki güncellemelerini ve sürekli büyümesini desteklemek isteyen kullanıcılar için isteğe bağlı bir bağış iletişim kutusu eklendi.
+## 4.6 için Değişiklikler
 
-## 3.5.0 için değişiklikler
-*   **Komut Katmanı:** Kısayolları tek bir ana tuş altında gruplamak için bir Komut Katmanı sistemi (varsayılan: `NVDA+Shift+V`) kullanıma sunuldu. Örneğin, çeviri için 'NVDA+Control+Shift+T' tuşlarına basmak yerine artık 'NVDA+Shift+V' ve ardından 'T' tuşlarına basıyorsunuz.
-*   **Çevrimiçi Video Analizi:** YouTube ve Instagram videolarını bir Bağlantı sağlayarak doğrudan analiz etmek için yeni bir özellik eklendi.
+* **Etkileşimli Sonuç Geri Çağırma:** Komut katmanına **Boşluk** tuşu eklendi; böylece “Doğrudan Çıktı” modu etkin olsa bile son yapay zekâ yanıtı takip soruları için anında yeniden açılabilir.
+* **Telegram Topluluk Merkezi:** NVDA Araçlar menüsüne “Resmî Telegram Kanalı” bağlantısı eklendi.
+* **Yanıt Kararlılığı Artışı:** Çeviri, OCR ve Görsel analiz özelliklerinin çekirdek mantığı optimize edildi.
+* **Geliştirilmiş Arayüz Yönlendirmesi:** Ayar açıklamaları ve belgeler, yeni geri çağırma sistemini daha iyi anlatacak şekilde güncellendi.
 
-## 3.1.0 için değişiklikler
-* **Doğrudan Çıktı Modu:** Daha hızlı ve daha kusursuz bir deneyim için sohbet iletişim kutusunu atlayıp yapay zeka yanıtlarını doğrudan konuşma yoluyla duyma seçeneği eklendi.
-* **Pano Entegrasyonu:** Yapay zeka yanıtlarını otomatik olarak panoya kopyalamak için yeni bir ayar eklendi.
+## 4.5 için Değişiklikler
+
+* **Gelişmiş İstem Yöneticisi:** Varsayılan sistem istemlerini ve kullanıcı tanımlı istemleri yönetmek için özel bir iletişim kutusu eklendi.
+* **Kapsamlı Proxy Desteği:** Kullanıcı tarafından yapılandırılan proxy ayarlarının tüm API isteklerine eksiksiz uygulanması sağlandı.
+* **Otomatik Veri Geçişi:** Eski istem yapılandırmaları, ilk çalıştırmada veri kaybı olmadan v2 JSON formatına otomatik yükseltilir.
+* **Güncellenmiş Uyumluluk (2025.1):** Belge Okuyucu gibi gelişmiş özellikler nedeniyle minimum NVDA sürümü 2025.1 olarak ayarlandı.
+* **Ayarlar Arayüzü Optimizasyonu:** İstem yönetimi ayrı bir iletişim kutusuna taşındı.
+* **İstem Değişkenleri Rehberi:** [selection], [clipboard] gibi değişkenleri tanıtan yerleşik rehber eklendi.
+
+## 4.0.3 için Değişiklikler
+
+* **Geliştirilmiş Ağ Dayanıklılığı:** Kararsız bağlantılar için otomatik yeniden deneme mekanizması eklendi.
+* **Görsel Çeviri Penceresi:** Uzun çevirileri satır satır okumaya uygun yeni pencere eklendi.
+* **Birleştirilmiş Biçimlendirilmiş Görünüm:** İşlenen tüm sayfalar tek bir pencerede, net başlıklarla gösterilir.
+* **OCR İş Akışı Optimizasyonu:** Tek sayfalı belgelerde sayfa aralığı seçimi atlanır.
+* **API Kararlılığı İyileştirmeleri:** Daha sağlam kimlik doğrulama yöntemine geçildi.
+* **Hata Düzeltmeleri:** Eklenti kapanışı ve sohbet penceresi odak sorunları giderildi.
+
+## 4.0.1 için Değişiklikler
+
+* **Gelişmiş Belge Okuyucu:** PDF ve görseller için sayfa aralığı seçimi ve arka plan işleme.
+* **Yeni Araçlar Alt Menüsü:** NVDA Araçlar menüsüne “Vision Assistant” alt menüsü eklendi.
+* **Esnek Özelleştirme:** OCR motoru ve TTS sesi ayarlardan seçilebilir.
+* **Çoklu API Anahtarı Desteği:** Birden fazla Gemini anahtarı desteği.
+* **Alternatif OCR Motoru:** Kota sınırlarında güvenilir tanıma.
+* **Akıllı API Anahtarı Döndürme:** En hızlı çalışan anahtara otomatik geçiş.
+* **Belgeden MP3/WAV:** Okuyucu içinde ses dosyası oluşturma.
+* **Instagram Hikâyeleri Desteği**
+* **TikTok Desteği**
+* **Yeniden Tasarlanan Güncelleme Penceresi**
+* **Birleşik Durum ve UX**
+
+## 3.6.0 için Değişiklikler
+
+* **Yardım Sistemi:** Komut katmanına (`H`) yardım eklendi.
+* **Çevrim İçi Video Analizi:** **Twitter (X)** videoları desteği eklendi.
+* **Projeye Katkı:** Bağış iletişim kutusu eklendi.
+
+## 3.5.0 için Değişiklikler
+
+* **Komut Katmanı:** Varsayılan `NVDA+Shift+V`.
+* **Çevrim İçi Video Analizi:** YouTube ve Instagram URL analizi.
+
+## 3.1.0 için Değişiklikler
+
+* **Doğrudan Çıktı Modu**
+* **Pano Entegrasyonu**
 
 ## 3.0 için Değişiklikler
 
-* **Yeni Diller:** **Farsça** ve **Vietnamca** çeviriler eklendi.
-* **Genişletilmiş Yapay Zekâ Modelleri:** Model seçim listesi, ücretsiz ve hız sınırlı (ücretli) modelleri ayırt etmeye yardımcı olmak için (`[Free]`, `[Pro]`, `[Auto]`) önekleriyle yeniden düzenlendi. **Gemini 3.0 Pro** ve **Gemini 2.0 Flash Lite** desteği eklendi.
-* **Dikte Kararlılığı:** Akıllı Dikte önemli ölçüde iyileştirildi. 1 saniyeden kısa ses kliplerini yok sayan bir güvenlik kontrolü eklendi; böylece yapay zekâ halüsinasyonları ve boş hatalar önlendi.
-* **Dosya İşleme:** İngilizce olmayan isimlere sahip dosyaların yüklenememesine neden olan bir sorun düzeltildi.
-* **İstem Optimizasyonu:** Çeviri mantığı geliştirildi ve Görüntü sonuçları daha yapılandırılmış hale getirildi.
+* **Yeni Diller:** **Farsça** ve **Vietnamca**
+* **Genişletilmiş Yapay Zekâ Modelleri**
+* **Dikte Kararlılığı İyileştirmeleri**
+* **Dosya İşleme Düzeltmeleri**
+* **İstem Optimizasyonu**
 
 ## 2.9 için Değişiklikler
 
 * **Fransızca ve Türkçe çeviriler eklendi.**
-* **Biçimlendirilmiş Görünüm:** Sohbet diyaloglarında, konuşmayı başlıklar, kalın metinler ve kodlarla birlikte düzgün biçimde görüntülemek için “Biçimlendirilmiş Görünüm” düğmesi eklendi.
-* **Markdown Ayarı:** Ayarlara “Sohbette Markdown Temizle” adlı yeni bir seçenek eklendi. Bu seçenek işaretlenmezse, kullanıcılar ham Markdown sözdizimini (`**`, `#` gibi) sohbet penceresinde görebilir.
-* **Diyalog Yönetimi:** “Metni İyileştir” veya sohbet pencerelerinin birden fazla kez açılması ya da odağı doğru alamaması sorunu düzeltildi.
-* **UX İyileştirmeleri:** Dosya iletişim kutusu başlıkları “Aç” olarak standartlaştırıldı ve daha akıcı bir deneyim için gereksiz sesli duyurular kaldırıldı (ör. “Menü açılıyor…”).
+* **Biçimlendirilmiş Görünüm**
+* **Markdown Ayarı**
+* **İletişim Kutusu Yönetimi**
+* **Kullanıcı Deneyimi İyileştirmeleri**
 
 ## 2.8 için Değişiklikler
 
 * İtalyanca çeviri eklendi.
-* **Durum Bildirimi:** Eklentinin mevcut durumunu (ör. “Yükleniyor…”, “Analiz ediliyor…”) duyurmak için yeni bir komut (NVDA+Control+Shift+I) eklendi.
-* **HTML Dışa Aktarma:** Sonuç diyaloglarındaki “İçeriği Kaydet” düğmesi artık çıktıyı başlıklar ve kalın metinler gibi stilleri koruyarak biçimlendirilmiş bir HTML dosyası olarak kaydeder.
-* **Ayarlar Arayüzü:** Ayarlar paneli, erişilebilir gruplamalarla iyileştirildi.
-* **Yeni Modeller:** gemini-flash-latest ve gemini-flash-lite-latest desteği eklendi.
-* **Diller:** Desteklenen dillere Nepalce eklendi.
-* **İyileştirme Menüsü Mantığı:** NVDA arayüz dili İngilizce olmadığında “Metni İyileştir” komutlarının çalışmamasına neden olan kritik bir hata düzeltildi.
-* **Dikte:** Konuşma girişi olmadığında yanlış metin üretimini önlemek için sessizlik algılama geliştirildi.
-* **Güncelleme Ayarları:** “Başlangıçta güncellemeleri kontrol et” seçeneği, Eklenti Mağazası politikalarına uyum için varsayılan olarak devre dışı bırakıldı.
-* Kod temizliği yapıldı.
+* **Durum Bildirimi**
+* **HTML Dışa Aktarma**
+* **Ayarlar Arayüzü İyileştirmeleri**
+* **Yeni Modeller**
+* **Yeni Diller**
+* **Dikte İyileştirmeleri**
+* **Güncelleme Ayarları**
+* Kod temizliği.
 
 ## 2.7 için Değişiklikler
 
-* Proje yapısı, daha iyi standart uyumluluğu için resmi NV Access Eklenti Şablonuna taşındı.
-* Yüksek trafik sırasında güvenilirliği sağlamak için HTTP 429 (Hız Sınırı) hataları için otomatik yeniden deneme mantığı uygulandı.
-* Daha yüksek doğruluk ve daha iyi “Akıllı Değiş Tokuş” mantığı için çeviri istemleri optimize edildi.
-* Rusça çeviri güncellendi.
+* Resmî NV Access Eklenti Şablonuna geçiş.
+* HTTP 429 için otomatik yeniden deneme.
+* Çeviri istemleri optimizasyonu.
+* Rusça çeviri güncellemesi.
 
 ## 2.6 için Değişiklikler
 
-* Rusça çeviri desteği eklendi (nvda-ru’ya teşekkürler).
-* Bağlantı sorunlarıyla ilgili daha açıklayıcı geri bildirim sağlamak için hata mesajları güncellendi.
-* Varsayılan hedef dil İngilizce olarak değiştirildi.
+* Rusça çeviri desteği.
+* Hata iletileri güncellendi.
+* Varsayılan hedef dil İngilizce yapıldı.
 
 ## 2.5 için Değişiklikler
 
-* Yerel Dosya OCR Komutu eklendi (NVDA+Control+Shift+F).
-* Sonuç diyaloglarına “Sohbeti Kaydet” düğmesi eklendi.
-* Tam yerelleştirme desteği (i18n) uygulandı.
-* Sesli geri bildirimler NVDA’nın yerel tonlar modülüne taşındı.
-* PDF ve ses dosyalarının daha iyi işlenmesi için Gemini Dosya API’sine geçildi.
-* Süslü parantez içeren metinler çevrilirken oluşan çökme düzeltildi.
+* Yerel Dosya OCR Komutu.
+* “Sohbeti Kaydet” düğmesi.
+* Tam yerelleştirme desteği.
+* NVDA ton modülüne geçiş.
+* Gemini Dosya API’sine geçiş.
+* Süslü parantez hatası düzeltildi.
 
 ## 2.1.1 için Değişiklikler
 
-* `[file_ocr]` değişkeninin Özel İstemler içinde doğru çalışmamasına neden olan bir sorun düzeltildi.
+* [file_ocr] değişkeni düzeltildi.
 
 ## 2.1 için Değişiklikler
 
-* NVDA’nın Dizüstü düzeni ve sistem kısayollarıyla çakışmaları önlemek için tüm kısayollar NVDA+Control+Shift olarak standartlaştırıldı.
+* Tüm kısayollar NVDA+Control+Shift standardına alındı.
 
 ## 2.0 için Değişiklikler
 
-* Dahili Otomatik Güncelleme sistemi uygulandı.
-* Önceden çevrilmiş metinlerin anında alınması için Akıllı Çeviri Önbelleği eklendi.
-* Sohbet diyaloglarında sonuçları bağlamsal olarak iyileştirmek için Konuşma Hafızası eklendi.
-* Ayrı Pano Çevirisi komutu eklendi (NVDA+Control+Shift+Y).
-* Yapay zekâ istemleri, hedef dil çıktısını kesin olarak zorlayacak şekilde optimize edildi.
-* Girdi metnindeki özel karakterlerin neden olduğu çökme düzeltildi.
+* Otomatik güncelleme sistemi.
+* Akıllı çeviri önbelleği.
+* Sohbet belleği.
+* Panoya özel çeviri komutu.
+* Yapay zekâ istemleri optimizasyonu.
+* Özel karakter çökmesi düzeltildi.
 
 ## 1.5 için Değişiklikler
 
-* 20’den fazla yeni dil desteği eklendi.
-* Takip soruları için Etkileşimli İyileştirme Diyaloğu uygulandı.
-* Yerel Akıllı Dikte özelliği eklendi.
-* NVDA’nın Girdi Hareketleri diyaloguna “Vision Assistant” kategorisi eklendi.
-* Firefox ve Word gibi belirli uygulamalarda oluşan COMError çökmeleri düzeltildi.
-* Sunucu hataları için otomatik yeniden deneme mekanizması eklendi.
+* 20’den fazla yeni dil desteği.
+* Etkileşimli iyileştirme penceresi.
+* Akıllı dikte.
+* NVDA Girdi Hareketleri kategorisi.
+* COMError çökme düzeltmeleri.
+* Otomatik yeniden deneme.
 
 ## 1.0 için Değişiklikler
 
 * İlk sürüm.
-
