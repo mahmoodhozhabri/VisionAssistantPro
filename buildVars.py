@@ -26,7 +26,7 @@ Command Layer: Press NVDA+Shift+V, then:
 - Recall Last Result (Space),
 - Commands Help (H),
 """),
-    addon_version="5.0",
+    addon_version="5.0.1",
     # Brief changelog for this version
     # Translators: what's new content for the add-on version to be shown in the add-on store
     addon_changelog=_("""## Changes for 5.0
@@ -42,7 +42,7 @@ Command Layer: Press NVDA+Shift+V, then:
     addon_sourceURL="https://github.com/mahmoodhozhabri/VisionAssistantPro",
     addon_docFileName="readme.html",
     addon_minimumNVDAVersion="2025.1",
-    addon_lastTestedNVDAVersion="2026.2.0",
+    addon_lastTestedNVDAVersion="2025.3.3",
     addon_updateChannel=None,
     addon_license="GPL-2.0",
     addon_licenseURL="https://www.gnu.org/licenses/gpl-2.0.html",
