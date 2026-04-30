@@ -4477,12 +4477,19 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     def script_fileOCR(self, gesture):
         if self.toggling: self.finish()
         wx.CallLater(100, self._open_file_ocr_dialog)
-
+	
     def _open_file_ocr_dialog(self):
         wc = "Files|*.pdf;*.jpg;*.jpeg;*.png;*.webp;*.tif;*.tiff"
         self._browse_and_run(self._pre_process_ocr, wc, multiple=True)
 
     def _pre_process_ocr(self, paths):
+        engine = config.conf["VisionAssistant"]["ocr_engine"]
+        is_single_image = len(paths) == 1 and paths[0].lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff'))
+        
+        if is_single_image and engine == 'gemini':
+            wx.CallAfter(self._ask_file_action, paths[0])
+            return
+
         try:
             if not fitz:
                 # Translators: Error when PyMuPDF is missing
@@ -4500,6 +4507,40 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 wx.CallAfter(self._show_ocr_range_dialog, v_doc)
         except Exception as e:
             log.error(f"Error preparing OCR: {e}")
+
+    def _ask_file_action(self, path):
+        # Translators: Options for the image file action menu
+        choices = [_("Extract Text (OCR)"), _("Describe Image")]
+        
+        gui.mainFrame.prePopup()
+        try:
+            dlg = wx.SingleChoiceDialog(
+                gui.mainFrame,
+                # Translators: Title of the image action dialog
+                _("Choose action:"),
+                # Translators: Header of the image action dialog
+                _("Image File"),
+                choices
+            )
+            dlg.Raise()
+            dlg.SetFocus()
+            
+            if dlg.ShowModal() == wx.ID_OK:
+                selection = dlg.GetSelection()
+                if selection == 0:
+                    threading.Thread(target=self._pre_process_file_ocr_single, args=(path,), daemon=True).start()
+                else:
+                    # Translators: Status reported when an image file is being analyzed
+                    self.report_status(_("Analyzing Image File..."))
+                    threading.Thread(target=self._thread_image_describe, args=(path,), daemon=True).start()
+            dlg.Destroy()
+        finally:
+            gui.mainFrame.postPopup()
+
+    def _pre_process_file_ocr_single(self, path):
+        v_doc = VirtualDocument([path])
+        v_doc.scan()
+        self._process_file_ocr(v_doc, 0, 0)
 
     def _show_ocr_range_dialog(self, v_doc):
         gui.mainFrame.prePopup()
@@ -4719,6 +4760,32 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             wx.CallAfter(self._open_vision_dialog, res, att, None)
         else:
             log.error("Vision analysis: AI returned empty response")
+            wx.CallAfter(setattr, self, 'current_status', _("Idle"))
+
+    def _thread_image_describe(self, path):
+        try:
+            mime_type = get_mime_type(path)
+            with open(path, "rb") as f:
+                img_data = base64.b64encode(f.read()).decode('utf-8')
+            
+            lang = config.conf["VisionAssistant"]["ai_response_language"]
+            vision_template = get_prompt_text("vision_navigator_object")
+            p = apply_prompt_template(vision_template, [("response_lang", lang)])
+            
+            att = [{'mime_type': mime_type, 'data': img_data}]
+            res = AIHandler.call(p, attachments=att)
+            
+            if res:
+                if res.startswith("ERROR:"):
+                    wx.CallAfter(show_error_dialog, res[6:])
+                else:
+                    wx.CallAfter(self._open_vision_dialog, res, att, None)
+            
+            # Translators: Initial status when the add-on is doing nothing
+            wx.CallAfter(setattr, self, 'current_status', _("Idle"))
+        except Exception as e:
+            log.error(f"Image file analysis failed: {e}", exc_info=True)
+            # Translators: Initial status when the add-on is doing nothing
             wx.CallAfter(setattr, self, 'current_status', _("Idle"))
 
     def _open_vision_dialog(self, text, atts, size, force_show=False):
