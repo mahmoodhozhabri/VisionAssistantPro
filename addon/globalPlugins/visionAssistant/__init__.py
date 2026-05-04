@@ -893,20 +893,48 @@ def send_ctrl_v():
 def get_proxy_opener():
     proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
     opener = request.build_opener()
-    
+
     if proxy_url:
         if not (proxy_url.startswith("http://") or proxy_url.startswith("https://")):
             proxy_url = "http://" + proxy_url
-            
+
         try:
-            handler = request.ProxyHandler({
-                'http': proxy_url,
-                'https': proxy_url
-            })
-            opener = request.build_opener(handler)
+            parsed = urlparse(proxy_url)
+
+            if parsed.username:
+                # Strip credentials from the URL — ProxyHandler ignores them.
+                # Instead, inject Proxy-Authorization upfront so it is sent on
+                # the very first CONNECT attempt, not after a 407 challenge
+                # (many proxies never send the challenge at all).
+                netloc_no_creds = parsed.hostname
+                if parsed.port:
+                    netloc_no_creds += f":{parsed.port}"
+                clean_url = parsed._replace(netloc=netloc_no_creds).geturl()
+
+                credentials = base64.b64encode(
+                    f"{parsed.username}:{parsed.password or ''}".encode()
+                ).decode()
+
+                proxy_handler = request.ProxyHandler({
+                    'http': clean_url,
+                    'https': clean_url,
+                })
+                opener = request.build_opener(proxy_handler)
+                opener.addheaders = [
+                    ('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'),
+                    ('Proxy-Authorization', f'Basic {credentials}'),
+                ]
+                return opener
+            else:
+                handler = request.ProxyHandler({
+                    'http': proxy_url,
+                    'https': proxy_url,
+                })
+                opener = request.build_opener(handler)
+
         except Exception as e:
             log.error(f"Proxy Setup Failed: {e}")
-            
+
     opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)')]
     return opener
 
@@ -1372,8 +1400,7 @@ class GeminiHandler:
             if adv_model: model = adv_model
         
         opener = GeminiHandler._get_opener()
-        proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-        base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+        base_url = "https://generativelanguage.googleapis.com"
         
         for i, key in enumerate(keys):
             try:
@@ -1442,8 +1469,7 @@ class GeminiHandler:
     def chat(history, new_msg, file_uri, mime_type):
         def _logic(key, hist, msg, uri, mime):
             model = config.conf["VisionAssistant"]["model_name"]
-            proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-            base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+            base_url = "https://generativelanguage.googleapis.com"
             url = f"{base_url}/v1beta/models/{model}:generateContent"
             
             contents = list(hist)
@@ -1467,8 +1493,7 @@ class GeminiHandler:
         keys = GeminiHandler._get_api_keys()
         if not keys: return None
         opener = GeminiHandler._get_opener()
-        proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-        base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+        base_url = "https://generativelanguage.googleapis.com"
         
         for key in keys:
             try:
@@ -1507,8 +1532,7 @@ class GeminiHandler:
                 else:
                     tts_model = "gemini-2.5-flash-preview-tts"
 
-            proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-            base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+            base_url = "https://generativelanguage.googleapis.com"
             url = f"{base_url}/v1beta/models/{tts_model}:generateContent"
             
             payload = {
@@ -1585,16 +1609,17 @@ class AIHandler:
     def get_base_url(provider):
         if provider == "custom":
             return config.conf["VisionAssistant"].get("custom_api_url", "").strip().rstrip('/')
-        
-        proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
+        # Always return the real provider API URL.
+        # The proxy_url setting is a network proxy (http://user:pass@host:port)
+        # and must never be used as the API base URL — that caused Bad Request errors.
         if provider == "gemini":
-            return proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+            return "https://generativelanguage.googleapis.com"
         elif provider == "openai":
-            return proxy_url.rstrip('/') if proxy_url else "https://api.openai.com"
+            return "https://api.openai.com"
         elif provider == "mistral":
-            return proxy_url.rstrip('/') if proxy_url else "https://api.mistral.ai"
+            return "https://api.mistral.ai"
         elif provider == "groq":
-            return proxy_url.rstrip('/') if proxy_url else "https://api.groq.com/openai"
+            return "https://api.groq.com/openai"
         return ""
 
     @staticmethod
@@ -3864,8 +3889,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
         def _logic(key, p_or_c, atts, j_mode):
             model = config.conf["VisionAssistant"]["model_name"]
-            proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-            base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+            base_url = "https://generativelanguage.googleapis.com"
             url = f"{base_url}/v1beta/models/{model}:generateContent"
             headers = {"Content-Type": "application/json; charset=UTF-8", "x-goog-api-key": key}
             
