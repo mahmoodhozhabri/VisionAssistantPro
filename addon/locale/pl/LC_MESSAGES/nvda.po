@@ -3,12 +3,17 @@
 # This file is distributed under the same license as the 'VisionAssistant' package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the 'VisionAssistant' package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: 'VisionAssistant' '5.0'\n"
+"Project-Id-Version: 'VisionAssistant' '5.5'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-04-25 21:59+0330\n"
-"PO-Revision-Date: 2026-04-27 11:15+0200\n"
+"POT-Creation-Date: 2026-05-02 15:19+0330\n"
+"PO-Revision-Date: 2026-05-05 14:50+0200\n"
 "Last-Translator: Oliwia Sobczak <oliwia.sobczak@proton.me>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -2160,47 +2165,201 @@ msgstr ""
 #. Translators: what's new content for the add-on version to be shown in the add-on store
 #: buildVars.py:32
 msgid ""
-"## Changes for 5.0\n"
-"* **Multi-Provider Architecture**: Added full support for **OpenAI**, "
-"**Groq**, and **Mistral** alongside Google Gemini. Users can now choose "
-"their preferred AI backend.\n"
-"* **Advanced Model Routing**: Users of native providers (Gemini, OpenAI, "
-"etc.) can now select specific models from a dropdown list for different "
-"tasks (OCR, STT, TTS).\n"
-"* **Advanced Endpoint Configuration**: Custom provider users can manually "
-"input specific URLs and model names for granular control over local or third-"
-"party servers.\n"
-"* **Smart Feature Visibility**: The settings menu and Document Reader UI now "
-"automatically hide unsupported features (like TTS) based on the selected "
-"provider.\n"
-"* **Dynamic Model Fetching**: The addon now fetches the available model list "
-"directly from the provider's API, ensuring compatibility with new models as "
-"soon as they are released.\n"
-"* **Hybrid OCR & Translation**: Optimized the logic to use Google Translate "
-"for speed when using Chrome OCR, and AI-powered translation when using "
-"Gemini/Groq/OpenAI engines.\n"
-"* **Universal \"Re-scan with AI\"**: The Document Reader's re-scan feature "
-"is no longer limited to Gemini. It now utilizes whatever AI provider is "
-"currently active to re-process pages."
+"## Changes for 5.5 (The Automation Update)\n"
+"\n"
+"*   **AI Operator (Autonomous Control - Shift+A):** This is the crown jewel "
+"of v5.5. Vision Assistant Pro has graduated from being a passive assistant "
+"to becoming your personal **AI Operator**. It doesn't just describe the "
+"screen—it takes command.\n"
+"    *   *How it works:* You can now give verbal instructions to operate your "
+"PC. For example, in a completely inaccessible application where your screen "
+"reader stays silent, you can press **Shift+A** and type: *\"Click on the "
+"Settings button\"* or *\"Find the search field, type 'Latest News' and press "
+"enter.\"* The AI visually identifies the elements, moves the mouse, and "
+"executes the task for you.\n"
+"    *   *Performance Note:* This feature is optimized for **Gemini 3.0 Flash "
+"(Preview)**, delivering incredibly fast and intelligent responses that can "
+"handle even the most complex UI layouts.\n"
+"    *   **⚠️ API Usage Warning:** Because the AI Operator needs to \"see\" "
+"exactly what's happening to be accurate, it sends a high-resolution "
+"screenshot with every step. Please note that frequent use will consume your "
+"API quota much faster than standard text-based tasks.\n"
+"*   **Visual UI Explorer (E):** Tired of navigating through \"unlabeled "
+"buttons\"? Press **E** to activate the UI Explorer. The AI will scan the "
+"entire window and generate a list of every clickable element it sees—"
+"including icons, graphics, and menus. Simply pick an item from the list, and "
+"the AI Operator will click it for you. It’s like having an \"accessible "
+"layer\" on top of any app.\n"
+"*   **Context-Aware Smart File Action (F):** The \"F\" key has been "
+"completely overhauled. It no longer assumes you only want OCR. When you "
+"select a single image, it now intelligently asks for your intent: you can "
+"choose a **Detailed Visual Description** to understand the scene or a "
+"**Structured Text Extraction (OCR)** for reading. The menu adapts "
+"dynamically based on the file type and your active AI engine.\n"
+"*   **Core Optimization:** We've performed a deep cleanup of the add-on’s "
+"internal logic, removing unused legacy functions and redundant code. This "
+"results in a leaner, faster, and more reliable experience for all users."
 msgstr ""
-"## Zmiany w wersji 5.0\n"
-"* **Wielu dostawców**: Dodano pełną obsługę **OpenAI**, **Groq** i "
-"**Mistral** obok Google Gemini. Teraz można wybrać preferowany model AI.\n"
-"* **Przypisywanie modeli do zadań**: Użytkownicy natywnych dostawców "
-"(Gemini, OpenAI itp.) mogą teraz wybierać konkretne modele z listy "
-"rozwijanej dla różnych zadań (OCR, STT, TTS).\n"
-"* **Adresy usług**: Użytkownicy niestandardowych dostawców mogą ręcznie "
-"wprowadzać konkretne adresy URL i nazwy modeli np. dla skonfigurowania "
-"lokalnego modelu.\n"
-"* **Ukrywanie nieobsługiwanych funkcji**: Menu ustawień i interfejs czytnika "
-"dokumentów automatycznie ukrywają nieobsługiwane funkcje (np. TTS) na "
-"podstawie wybranego dostawcy.\n"
-"* **Pobieranie modeli z API**: Dodatek pobiera listę dostępnych modeli "
-"bezpośrednio z API dostawcy, co umożliwia obsługę nowych modeli natychmiast "
-"po ich wydaniu.\n"
-"* **Hybrydowe OCR i tłumaczenie**: Zoptymalizowano logikę, aby używać "
-"Tłumacza Google dla szybkości przy OCR Chrome oraz tłumaczenia opartego na "
-"AI przy silnikach Gemini/Groq/OpenAI.\n"
-"* **Ponowne skanowanie AI**: Funkcja ponownego skanowania w czytniku "
-"dokumentów nie jest już ograniczona do Gemini. Wykorzystuje teraz aktywnego "
-"dostawcę AI do ponownego przetwarzania stron."
+"## Zmiany w 5.5 (Aktualizacja automatyzacji)\n"
+"\n"
+"*   **Operator AI (Sterowanie autonomiczne - Shift+A):** To perła w koronie wersji 5.5. Vision Assistant Pro przeszedł z biernego asystenta w Twojego osobistego **Operatora AI**. Nie tylko opisuje ekran, lecz przejmuje sterowanie.\n"
+"    *   *Jak to działa:* Możesz teraz wydawać polecenia głosowe dla obsługi swojego komputera. Na przykład w całkowicie niedostępnej aplikacji, gdzie czytnik ekranu milczy, możesz nacisnąć **Shift+A** i wpisać: *\"Kliknij przycisk Ustawienia\"* lub *\"Znajdź pole wyszukiwania, wpisz 'Najnowsze wiadomości' i naciśnij enter.\"* AI wizualnie identyfikuje elementy, przesuwa kursor i wykonuje zadanie za Ciebie.\n"
+"    *   *Uwaga o wydajności:* Funkcja jest zoptymalizowana dla **Gemini 3.0 Flash (Preview)**, dostarczając niezwykle szybkich i inteligentnych odpowiedzi, które poradzą sobie nawet z najbardziej złożonymi układami interfejsu.\n"
+"    *   **⚠️ Ostrzeżenie o zużyciu API:** Ponieważ Operator AI musi \"widzieć\" dokładnie to, co się dzieje, aby działać precyzyjnie, wysyła zrzut ekranu w wysokiej rozdzielczości na każdym kroku. Częste używanie znacznie szybciej zużyje Twój limit API niż standardowe zadania tekstowe.\n"
+"*   **Wizualny Eksplorator interfejsu (E):** Zmęczony nawigacją po \"nieoznaczonych przyciskach\"? Naciśnij **E**, aby uruchomić Eksplorator interfejsu. AI przeskanuje całe okno i wygeneruje listę każdego klikalnego elementu, jaki widzi: ikon, grafik i menu. Wybierz element z listy, a Operator AI kliknie go za Ciebie. To jak \"warstwa dostępności\" nałożona na dowolną aplikację.\n"
+"*   **Inteligentna akcja na pliku zależna od kontekstu (F):** Klawisz \"F\" został gruntownie przebudowany. Nie zakłada już, że chcesz tylko OCR. Gdy wybierzesz pojedynczy obraz, inteligentnie zapyta o Twoją intencję: możesz wybrać **Szczegółowy opis wizualny**, aby zrozumieć scenę, lub **Strukturalne wyodrębnienie tekstu (OCR)** do czytania. Menu dostosowuje się dynamicznie do typu pliku i aktywnego silnika AI.\n"
+"*   **Optymalizacja rdzenia:** Wykonaliśmy głębokie czyszczenie wewnętrznej logiki dodatku, usuwając nieużywane funkcje legacy i zbędny kod. Daje to lżejsze, szybsze i bardziej niezawodne działanie dla wszystkich użytkowników."
+
+#. Translators: Label for the UI Explorer system instruction prompt in the Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:492
+msgid "UI Explorer Instruction"
+msgstr "Instrukcja Eksploratora interfejsu"
+
+#. Translators: Feature name shown in the warning dialog when a user tries to eid the UI Explorer prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:495
+msgid "UI Explorer"
+msgstr "Eksplorator interfejsu"
+
+#. Translators: Label for the AI Operator system instruction prompt in the Prompt Manager.
+#: addon\globalPlugins\visionAssistant\__init__.py:511
+msgid "AI Operator Instruction"
+msgstr "Instrukcja Operatora AI"
+
+#. Translators: Feature name shown in the warning dialog when a user tries to edit the AI Operator prompt.
+#: addon\globalPlugins\visionAssistant\__init__.py:514
+#: addon\globalPlugins\visionAssistant\__init__.py:5388
+msgid "AI Operator"
+msgstr "Operator AI"
+
+#. Translators: Label for a text field in the "Custom Provider Settings" section of settings where the user enters the AI Operator URL.
+#: addon\globalPlugins\visionAssistant\__init__.py:2332
+msgid "AI Operator URL:"
+msgstr "URL Operatora AI:"
+
+#. Translators: Label for a text field in the "Custom Provider Settings" section of settings where the user manually enters the model name for AI Operator.
+#: addon\globalPlugins\visionAssistant\__init__.py:2337
+msgid "Custom Operator Model (Optional):"
+msgstr "Niestandardowy model Operatora (opcjonalne):"
+
+#. Translators: Label for a dropdown menu in the "Advanced Model Routing" section of settings to choose a specific model for AI Operator tasks.
+#: addon\globalPlugins\visionAssistant\__init__.py:2391
+msgid "AI Operator Model:"
+msgstr "Model Operatora AI:"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:2598
+msgid "Model Name (Manual):"
+msgstr "Nazwa modelu (ręcznie):"
+
+#. Translators: Option to follow the main model selected in the primary dropdown
+#. Translators: Option to follow the main model selected in the primary dropdown.
+#: addon\globalPlugins\visionAssistant\__init__.py:2674
+#: addon\globalPlugins\visionAssistant\__init__.py:2716
+msgid "Default (Main Model)"
+msgstr "Domyślny (model główny)"
+
+#. Translators: Option for the system to automatically choose the best model for this specific task
+#. Translators: Option for the system to automatically choose the best model for this task.
+#: addon\globalPlugins\visionAssistant\__init__.py:2676
+#: addon\globalPlugins\visionAssistant\__init__.py:2718
+msgid "Auto (Optimized)"
+msgstr "Auto (zoptymalizowane)"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:3826
+msgid ""
+"Performs smart actions (OCR or Description) on a selected image or PDF file."
+msgstr "Wykonuje inteligentne akcje (OCR lub opis) na wybranym pliku obrazu lub PDF."
+
+#. Translators: Script description for Input Gestures dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:4532
+msgid "Performs smart actions on a selected image or PDF file."
+msgstr "Wykonuje inteligentne akcje na wybranym pliku obrazu lub PDF."
+
+#. Translators: Options for the image file action menu
+#: addon\globalPlugins\visionAssistant\__init__.py:4568
+msgid "Extract Text (OCR)"
+msgstr "Wyodrębnij tekst (OCR)"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:4568
+msgid "Describe Image"
+msgstr "Opisz obraz"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:4571
+msgid "Image File"
+msgstr "Plik obrazu"
+
+#. Translators: Status reported when an image file is being analyzed
+#: addon\globalPlugins\visionAssistant\__init__.py:4581
+msgid "Analyzing Image File..."
+msgstr "Analizowanie pliku obrazu..."
+
+#: addon\globalPlugins\visionAssistant\__init__.py:5307
+msgid "Toggles the interactive UI elements explorer."
+msgstr "Przełącza interaktywny eksplorator elementów interfejsu."
+
+#. Translators: Status message when UI Explorer starts
+#: addon\globalPlugins\visionAssistant\__init__.py:5313
+msgid "UI Explorer Active"
+msgstr "Eksplorator interfejsu aktywny"
+
+#. Translators: Status message when UI Explorer stops
+#: addon\globalPlugins\visionAssistant\__init__.py:5318
+#: addon\globalPlugins\visionAssistant\__init__.py:5380
+msgid "UI Explorer Stopped"
+msgstr "Eksplorator interfejsu zatrzymany"
+
+#. Translators: Generic error message for AI failures
+#: addon\globalPlugins\visionAssistant\__init__.py:5336
+msgid "Unknown AI Error"
+msgstr "Nieznany błąd AI"
+
+#. Translators: Error shown when AI fails to find UI elements
+#: addon\globalPlugins\visionAssistant\__init__.py:5351
+msgid "AI failed to identify UI elements."
+msgstr "AI nie rozpoznało elementów interfejsu."
+
+#. Translators: Instruction for the elements list dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:5366
+msgid "Select an element to click:"
+msgstr "Wybierz element do kliknięcia:"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:5366
+msgid "UI Elements Explorer"
+msgstr "Eksplorator elementów interfejsu"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:5382
+msgid "Asks the AI Operator to perform an action or describe the screen."
+msgstr "Prosi Operatora AI o wykonanie akcji lub opisanie ekranu."
+
+#. Translators: Title and message for AI Operator command dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:5388
+msgid "What should I do or what is your question?"
+msgstr "Co mam zrobić lub jakie jest twoje pytanie?"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:5429
+msgid "AI Error"
+msgstr "Błąd AI"
+
+#. Translators: Internal history label for user actions in operator sessions
+#: addon\globalPlugins\visionAssistant\__init__.py:5432
+msgid "Action performed. Checking result..."
+msgstr "Akcja wykonana. Sprawdzanie wyniku..."
+
+#. Translators: The title of the interactive chat dialog for the AI Operator feature.
+#: addon\globalPlugins\visionAssistant\__init__.py:5481
+#, python-brace-format
+msgid "{name} - AI Operator"
+msgstr "{name} – Operator AI"
+
+#. Translators: Labels for the AI and User in chat history
+#: addon\globalPlugins\visionAssistant\__init__.py:5492
+msgid "Operator"
+msgstr "Operator"
+
+#: addon\globalPlugins\visionAssistant\__init__.py:5492
+msgid "You"
+msgstr "Ty"
+
+#. Translators: Default text for successful AI action
+#: addon\globalPlugins\visionAssistant\__init__.py:5519
+msgid "Action performed"
+msgstr "Akcja wykonana"
