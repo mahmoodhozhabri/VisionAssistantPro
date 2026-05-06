@@ -1,225 +1,201 @@
-# Dokumentation für KI Assistent Pro
+# KI Assistent pro Dokumentation
 
-**KI Assistent Pro** ist ein fortschrittlicher, multimodaler KI-Assistent für NVDA. Er nutzt Googles Gemini-Modelle, um intelligente Bildschirmlese-, Übersetzungs-, Sprachdiktat- und Dokumentenanalyse-Funktionen bereitzustellen.
+**KI Assistent pro** ist ein fortschrittlicher, multimodaler KI-Assistent für NVDA. Er nutzt erstklassige KI-Engines, um intelligentes Screenreading, Übersetzungen, Sprachdiktate und Dokumentenanalysen zu ermöglichen.
 
-*Dieses Add-on wurde zu Ehren des Internationalen Tages der Menschen mit Behinderungen für die Community veröffentlicht.*
+_Dieses Add-on wurde zu Ehren des Internationalen Tages der Menschen mit Behinderungen für die Community veröffentlicht._
 
 ## 1. Einrichtung & Konfiguration
 
-Gehen Sie zu **NVDA-Menü > Optionen > Einstellungen > KI Assistent Pro**.
+Gehen Sie zu **NVDA-Menü > Optionen > Einstellungen > KI Assistent pro**.
 
-* **API-Key:** Erforderlich. Sie können mehrere Keys eingeben (getrennt durch Kommas oder Zeilenumbrüche). Der Assistent rotiert automatisch zwischen ihnen, wenn ein Kontingentlimit erreicht ist.
-* **KI-Modell:** Wählen Sie zwischen den Modellen **Flash** (schnellste/kostenlos), **Lite** oder **Pro** (hohe Intelligenz).
-* **Proxy-URL:** Optional. Verwenden Sie diese, falls Google in Ihrer Region blockiert ist. Es muss eine Webadresse sein, die als Brücke zur Gemini-API fungiert.
-* **OCR-Modell:** Wählen Sie zwischen **Chrome (Schnell)** für schnelle Ergebnisse oder **Gemini (Formatiert)** für überlegene Layouterhaltung und Tabellenerkennung.
-* **TTS-Stimme:** Wählen Sie den bevorzugten Sprachstil für die Erstellung von Audiodateien aus Dokumentenseiten.
-* **Intelligenter Tausch:** Tauscht automatisch die Sprachen, wenn der Quelltext der Zielsprache entspricht.
-* **Direkte Ausgabe:** Überspringt das Chat-Fenster und kündigt die KI-Antwort direkt per Sprache an. **Hinweis:** Auch in diesem Modus können Sie die **Leertaste** innerhalb der Befehlsebene drücken, um das letzte Ergebnis in einem Chat-Dialog erneut zu öffnen.
-* **Zwischenablage-Integration:** Kopiert die KI-Antwort automatisch in die Zwischenablage.
+### 1.1 Verbindungseinstellungen
+- **Anbieter:** Wählen Sie Ihren bevorzugten KI-Dienst. Unterstützte Anbieter sind **Google Gemini**, **OpenAI**, **Mistral**, **Groq** und **Benutzerdefiniert** (OpenAI-kompatible Server wie Ollama/LM Studio).
+- **Wichtiger Hinweis:** Wir empfehlen dringend die Verwendung von **Google Gemini** für die beste Leistung und Genauigkeit (insbesondere bei der Bild-/Dateianalyse).
+- **API-Schlüssel:** Erforderlich. Sie können mehrere Schlüssel eingeben (getrennt durch Kommas oder neue Zeilen), um eine automatische Rotation zu ermöglichen.
+- **Modelle abrufen:** Nachdem Sie Ihren API-Schlüssel eingegeben haben, drücken Sie diese Schaltfläche, um die aktuelle Liste der verfügbaren Modelle vom Anbieter herunterzuladen.
+- **KI-Modell:** Wählen Sie das Hauptmodell aus, das für den allgemeinen Chat und die Analysen verwendet werden soll.
+
+### 1.2 Erweitertes Modell-Routing (Native Anbieter)
+*Verfügbar für Gemini, OpenAI, Groq und Mistral.*
+
+> **⚠️ Warnung:** Diese Einstellungen sind **nur für fortgeschrittene Benutzer** gedacht. Wenn Sie sich unsicher sind, was ein bestimmtes Modell bewirkt, lassen Sie dies bitte **deaktiviert**. Die Auswahl eines inkompatiblen Modells für eine Aufgabe (z. B. ein reines Textmodell für Vision-Aufgaben) führt zu Fehlern und stoppt die Funktion des Add-ons.
+
+Aktivieren Sie **"Erweitertes Modell-Routing (Aufgabenspezifisch)"**, um detaillierte Steuerungsmöglichkeiten freizuschalten. Dies ermöglicht es Ihnen, spezifische Modelle aus der Dropdown-Liste für verschiedene Aufgaben auszuwählen:
+- **OCR / Vision-Modell:** Wählen Sie ein spezialisiertes Modell für die Analyse von Bildern.
+- **Speech-to-Text (STT):** Wählen Sie ein spezifisches Modell für das Diktat.
+- **Text-to-Speech (TTS):** Wählen Sie ein Modell zur Generierung von Audio.
+*Hinweis: Nicht unterstützte Funktionen (z. B. TTS für Groq) werden automatisch ausgeblendet.*
+
+### 1.3 Erweiterte Endpunkt-Konfiguration (Benutzerdefinierter Anbieter)
+*Nur verfügbar, wenn "Benutzerdefiniert" ausgewählt ist.*
+
+> **Warnung:** Dieser Abschnitt ermöglicht die manuelle API-Konfiguration und ist für **Power-User** konzipiert, die lokale Server oder Proxys betreiben. Falsche URLs oder Modellnamen unterbrechen die Konnektivität. Wenn Sie nicht genau wissen, was diese Endpunkte sind, lassen Sie dies **deaktiviert**.
+
+Aktivieren Sie **"Erweiterte Endpunkt-Konfiguration"**, um Serverdetails manuell einzugeben. Im Gegensatz zu nativen Anbietern müssen Sie hier die spezifischen URLs und Modellnamen **tippen**:
+- **Modelllisten-URL:** Der Endpunkt zum Abrufen verfügbarer Modelle.
+- **OCR/STT/TTS Endpunkt-URL:** Vollständige URLs für spezifische Dienste (z. B. `http://localhost:11434/v1/audio/speech`).
+- **Benutzerdefinierte Modelle:** Geben Sie den Modellnamen (z. B. `llama3:8b`) für jede Aufgabe manuell ein.
+
+### 1.4 Allgemeine Einstellungen
+- **OCR-Engine:** Wählen Sie zwischen **Chrome (Schnell)** für schnelle Ergebnisse oder **Gemini (Formatiert)** für eine überlegene Beibehaltung des Layouts.
+    - *Hinweis:* Wenn Sie "Gemini (Formatiert)" wählen, Ihr Anbieter aber auf OpenAI/Groq eingestellt ist, leitet das Add-on das Bild intelligent an das Vision-Modell Ihres aktiven Anbieters weiter.
+- **TTS-Stimme:** Wählen Sie Ihren bevorzugten Stimmenstil. Diese Liste wird dynamisch basierend auf Ihrem aktiven Anbieter aktualisiert.
+- **Kreativität (Temperatur):** Steuert die Zufälligkeit der KI. Niedrigere Werte sind besser für genaue Übersetzungen/OCR.
+- **Proxy-URL:** Konfigurieren Sie dies, falls KI-Dienste in Ihrer Region eingeschränkt sind (unterstützt lokale Proxys wie `127.0.0.1` oder Bridge-URLs).
 
 ## 2. Befehlsebene & Tastenkombinationen
 
 Um Tastaturkonflikte zu vermeiden, verwendet dieses Add-on eine **Befehlsebene**.
+1. Drücken Sie **NVDA + Umschalt + V** (Haupttaste), um die Ebene zu aktivieren (Sie hören einen Signalton).
+2. Lassen Sie die Tasten los und drücken Sie dann eine der folgenden Einzeltasten:
 
-1. Drücken Sie **NVDA + Umschalt + V** (Master-Taste), um die Ebene zu aktivieren (Sie hören einen Piepton).
-2. Lassen Sie die Tasten los und drücken Sie dann eine der folgenden einzelnen Tasten:
+| Taste           | Funktion                 | Beschreibung                                                                 |
+|---------------|--------------------------|-----------------------------------------------------------------------------|
+| **T**         | Intelligenter Übersetzer  | Übersetzt Text unter dem Navigator-Objekt oder der Markierung.               |
+| **Umschalt+T** | Zwischenablage-Übersetzer | Übersetzt den aktuellen Inhalt der Zwischenablage.                           |
+| **R**         | Text-Optimierer          | Zusammenfassen, Grammatik korrigieren, Erklären oder **Eigene Prompts**.     |
+| **V**         | Objekt-Vision            | Beschreibt das aktuelle Navigator-Objekt.                                    |
+| **O**         | Vollbild-Vision          | Analysiert das gesamte Bildschirmlayout und den Inhalt.                      |
+| **Umschalt+V** | Online-Videoanalyse      | Analysiert **YouTube**, **Instagram**, **TikTok** oder **Twitter (X)** Videos.|
+| **D**         | Dokumentenleser          | Fortgeschrittener Leser für PDF und Bilder mit Seitenbereichsauswahl.        |
+| **F**         | Datei-OCR                | Direkte Texterkennung aus ausgewählten Bild-, PDF- oder TIFF-Dateien.        |
+| **A**         | Audio-Transkription      | Transkribiert MP3-, WAV- oder OGG-Dateien in Text.                           |
+| **C**         | CAPTCHA-Löser            | Erfasst und löst CAPTCHAs (Unterstützt Regierungsportale).                   |
+| **S**         | Intelligentes Diktat     | Wandelt Sprache in Text um. Drücken zum Starten, erneut drücken zum Stoppen. |
+| **L**         | Statusbericht            | Meldet den aktuellen Fortschritt (z. B. "Scannen...", "Bereit").              |
+| **U**         | Update-Prüfung           | Prüft manuell auf GitHub nach der neuesten Version des Add-ons.              |
+| **Leertaste** | Letztes Ergebnis abrufen | Zeigt die letzte KI-Antwort in einem Chat-Dialog zur Überprüfung an.         |
+| **H**         | Befehlshilfe             | Zeigt eine Liste aller verfügbaren Kürzel innerhalb der Befehlsebene an.     |
 
-| Taste | Funktion | Beschreibung |
-| --- | --- | --- |
-| **T** | Intelligenter Übersetzer | Übersetzt Text unter dem Navigator-Cursor oder der Markierung. |
-| **Umschalt + T** | Ablage-Übersetzer | Übersetzt den Inhalt, der sich aktuell in der Zwischenablage befindet. |
-| **R** | Text-Optimierer | Zusammenfassen, Grammatik korrigieren, Erklären oder **Eigene Prompts** ausführen. |
-| **V** | Objekt-Erkennung | Beschreibt das aktuelle Navigator-Objekt. |
-| **O** | Vollbild-Analyse | Analysiert das gesamte Bildschirmlayout und den Inhalt. |
-| **Umschalt + V** | Online-Videoanalyse | Analysiert **YouTube**, **Instagram**, **TikTok** oder **Twitter (X)** Videos. |
-| **D** | Dokumentenleser | Fortschrittlicher Leser für PDF und Bilder mit Seitenbereichsauswahl. |
-| **F** | Datei-OCR | Direkte Texterkennung aus ausgewählten Bild-, PDF- oder TIFF-Dateien. |
-| **A** | Transkription | Transkribiert MP3-, WAV- oder OGG-Dateien in Text. |
-| **C** | CAPTCHA-Löser | Erfasst und löst CAPTCHAs auf dem Bildschirm oder Navigator-Objekt. |
-| **S** | Intelligentes Diktat | Wandelt Sprache in Text um. Drücken zum Starten, erneut zum Stoppen/Tippen. |
-| **L** | Statusbericht | Meldet den aktuellen Fortschritt (z. B. „Scannen...“, „Bereit“). |
-| **U** | Update-Check | Prüft manuell auf GitHub nach der neuesten Version des Add-ons. |
-| **Leertaste** | Letztes Ergebnis | Zeigt die letzte KI-Antwort für Rückfragen erneut in einem Dialog an. |
-| **H** | Befehlshilfe | Zeigt eine Liste aller verfügbaren Kürzel innerhalb der Befehlsebene an. |
-
-### 2.1 Tastenkürzel im Dokumentenleser (Innerhalb des Betrachters)
-
-Sobald ein Dokument über den **D**-Befehl geöffnet wurde:
-
-* **Strg + Bild ab:** Zur nächsten Seite wechseln (kündigt Seitenzahl an).
-* **Strg + Bild auf:** Zur vorherigen Seite wechseln (kündigt Seitenzahl an).
-* **Alt + A:** Öffnet einen Chat-Dialog, um Fragen zum Dokument zu stellen.
-* **Alt + R:** Erneutes Scannen der aktuellen oder aller Seiten mit der Gemini-Engine erzwingen.
-* **Alt + G:** Erstellt und speichert eine hochwertige Audiodatei (WAV) des Inhalts.
-* **Alt + S / Strg + S:** Speichert den extrahierten Text als TXT- oder HTML-Datei.
-
----
+### 2.1 Tastenkombinationen im Dokumentenleser (Innerhalb des Viewers)
+- **Strg + BildAb:** Zur nächsten Seite wechseln.
+- **Strg + BildAuf:** Zur vorherigen Seite wechseln.
+- **Alt + A:** Öffnet einen Chat-Dialog, um Fragen zum Dokument zu stellen.
+- **Alt + R:** Erzwingt einen **erneuten Scan mit KI** über Ihren aktiven Anbieter.
+- **Alt + G:** Erzeugt und speichert eine hochwertige Audiodatei (WAV/MP3). *Ausgeblendet, wenn der Anbieter kein TTS unterstützt.*
+- **Alt + S / Strg + S:** Speichert den extrahierten Text als TXT- oder HTML-Datei.
 
 ## 3. Eigene Prompts & Variablen
 
-Öffnen Sie **Optionen > Einstellungen > KI Assistent Pro > Prompts verwalten...**, um System- und benutzerdefinierte Prompts zu konfigurieren.
+Sie können Prompts unter **Einstellungen > Prompts > Prompts verwalten...** verwalten.
 
-* **Tab Standard-Prompts:** Bearbeiten Sie integrierte Prompts. Sie können einzelne Prompts oder alle Standards zurücksetzen.
-* **Tab Eigene Prompts:** Hinzufügen, Bearbeiten, Entfernen und Neuanordnen benutzerdefinierter Prompts.
-* **Schaltfläche Variablen-Helfer:** Öffnet ein Hilfefenster mit allen unterstützten Variablen und Eingabetypen.
+### Unterstützte Variablen
+- `[selection]`: Aktuell markierter Text.
+- `[clipboard]`: Inhalt der Zwischenablage.
+- `[screen_obj]`: Screenshot des Navigator-Objekts.
+- `[screen_full]`: Vollbild-Screenshot.
+- `[file_ocr]`: Bild-/PDF-Datei für Textextraktion auswählen.
+- `[file_read]`: Dokument zum Lesen auswählen (TXT, Code, PDF).
+- `[file_audio]`: Audiodatei zur Analyse auswählen (MP3, WAV, OGG).
 
-### Verfügbare Variablen
-
-| Variable | Beschreibung | Eingabetyp |
-| --- | --- | --- |
-| `[selection]` | Aktuell markierter Text | Text |
-| `[clipboard]` | Inhalt der Zwischenablage | Text |
-| `[screen_obj]` | Screenshot des Navigator-Objekts | Bild |
-| `[screen_full]` | Vollständiger Screenshot | Bild |
-| `[file_ocr]` | Bild-/PDF-Datei für Textextraktion wählen | Bild, PDF, TIFF |
-| `[file_read]` | Dokument zum Lesen auswählen | TXT, Code, PDF |
-| `[file_audio]` | Audiodatei zur Analyse auswählen | MP3, WAV, OGG |
-
-### Beispiele für eigene Prompts
-
-* **Schnell-OCR:** `Mein OCR:[file_ocr]`
-* **Bild übersetzen:** `Bild übersetzen:Extrahiere Text aus diesem Bild und übersetze ihn ins Deutsche. [file_ocr]`
-* **Audio analysieren:** `Audio zusammenfassen:Höre dir diese Aufnahme an und fasse die Hauptpunkte zusammen. [file_audio]`
-* **Code-Debugger:** `Debug:Finde Fehler in diesem Code und erkläre sie: [selection]`
-
----
-
-**Hinweis:** Für alle KI-Funktionen ist eine aktive Internetverbindung erforderlich. Mehrseitige Dokumente und TIFFs werden automatisch verarbeitet.
+***
+**Hinweis:** Für alle KI-Funktionen ist eine aktive Internetverbindung erforderlich. Mehrseitige Dokumente werden automatisch verarbeitet.
 
 ## 4. Support & Community
 
-Bleiben Sie auf dem Laufenden mit den neuesten Nachrichten, Funktionen und Veröffentlichungen:
+Bleiben Sie auf dem Laufenden über Neuigkeiten, Funktionen und Veröffentlichungen:
+- **Telegram-Kanal:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
+- **GitHub Issues:** Für Fehlermeldungen und Funktionsanfragen.
 
-* **Telegram-Kanal:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
-* **GitHub Issues:** Für Fehlerberichte und Funktionsanfragen.
+## Änderungen in 5.0
 
----
+* **Multi-Anbieter-Architektur**: Volle Unterstützung für **OpenAI**, **Groq** und **Mistral** neben Google Gemini hinzugefügt. Benutzer können nun ihr bevorzugtes KI-Backend wählen.
+* **Erweitertes Modell-Routing**: Benutzer nativer Anbieter (Gemini, OpenAI etc.) können nun spezifische Modelle für verschiedene Aufgaben (OCR, STT, TTS) aus einer Liste wählen.
+* **Erweiterte Endpunkt-Konfiguration**: Benutzerdefinierte Anbieter können URLs und Modellnamen manuell eingeben, um die volle Kontrolle über lokale oder Drittanbieter-Server zu haben.
+* **Intelligente Sichtbarkeit von Funktionen**: Das Einstellungsmenü und die Benutzeroberfläche des Dokumentenlesers blenden nicht unterstützte Funktionen (wie TTS) basierend auf dem gewählten Anbieter automatisch aus.
+* **Dynamisches Abrufen von Modellen**: Das Add-on ruft die Liste der verfügbaren Modelle nun direkt über die API des Anbieters ab, um Kompatibilität mit neuen Modellen sofort nach deren Erscheinen sicherzustellen.
+* **Hybrid-OCR & Übersetzung**: Die Logik wurde optimiert, um Google Translate für Geschwindigkeit bei Chrome-OCR zu nutzen und KI-basierte Übersetzung bei Gemini/Groq/OpenAI-Engines zu verwenden.
+* **Universelles "Erneuter Scan mit KI"**: Die Re-Scan-Funktion des Dokumentenlesers ist nicht mehr auf Gemini beschränkt. Sie nutzt nun den jeweils aktiven KI-Anbieter zur Neuverarbeitung von Seiten.
 
-## Änderungen in Version 4.6
+## Änderungen in 4.6
+* **Interaktives Abrufen von Ergebnissen:** Die **Leertaste** wurde zur Befehlsebene hinzugefügt, wodurch Benutzer die letzte KI-Antwort sofort in einem Chat-Fenster für Folgefragen öffnen können, auch wenn der Modus "Direkte Ausgabe" aktiv ist.
+* **Telegram Community-Hub:** Link zum "Offiziellen Telegram-Kanal" im NVDA-Werkzeuge-Menü hinzugefügt.
+* **Erhöhte Antwortstabilität:** Kernlogik für Übersetzung, OCR und Vision optimiert, um eine zuverlässigere Leistung bei direkter Sprachausgabe zu gewährleisten.
+* **Verbesserte Benutzerführung:** Beschreibungen in den Einstellungen aktualisiert, um das neue Abrufsystem besser zu erklären.
 
-* **Interaktiver Ergebnisaufruf:** Die **Leertaste** wurde zur Befehlsebene hinzugefügt, sodass Benutzer die letzte KI-Antwort sofort in einem Chat-Fenster für Folgefragen öffnen können, selbst wenn der Modus „Direkte Ausgabe“ aktiv ist.
-* **Telegram Community Hub:** Link zum „Offiziellen Telegram-Kanal“ im NVDA-Werkzeuge-Menü hinzugefügt.
-* **Verbesserte Antwortstabilität:** Die Kernlogik für Übersetzung, OCR und Vision wurde optimiert, um eine zuverlässigere Leistung und ein reibungsloseres Erlebnis bei der direkten Sprachausgabe zu gewährleisten.
-* **Optimierte Benutzeroberflächen-Führung:** Die Beschreibungen in den Einstellungen und die Dokumentation wurden aktualisiert, um das neue Aufrufsystem und dessen Funktionsweise zusammen mit den Direktausgabe-Einstellungen besser zu erklären.
+## Änderungen in 4.5
+* **Erweiterter Prompt-Manager:** Separater Verwaltungsdialog in den Einstellungen zum Anpassen von System-Prompts und Verwalten benutzerdefinierter Prompts (Hinzufügen, Bearbeiten, Sortieren, Vorschau).
+* **Umfassende Proxy-Unterstützung:** Sichergestellt, dass Proxy-Einstellungen strikt auf alle API-Anfragen angewendet werden.
+* **Automatisierte Datenmigration:** System zur automatischen Aktualisierung alter Prompt-Konfigurationen auf das v2 JSON-Format beim ersten Start.
+* **Aktualisierte Kompatibilität (2025.1):** Erforderliche Mindestversion von NVDA auf 2025.1 gesetzt.
+* **Optimierte Benutzeroberfläche:** Bereinigung der Einstellungen durch Auslagerung der Prompt-Verwaltung in einen eigenen Dialog.
+* **Leitfaden für Prompt-Variablen:** Integrierter Leitfaden in den Prompt-Dialogen zur Verwendung von Variablen wie [selection], [clipboard] und [screen_obj].
 
-## Änderungen in Version 4.5
+## Änderungen in 4.0.3
+*   **Verbesserte Netzwerk-Resilienz:** Automatischer Wiederholungsmechanismus bei instabilen Verbindungen hinzugefügt.
+*   **Visueller Übersetzungsdialog:** Neues Fenster für Übersetzungsergebnisse, das zeilenweises Lesen langer Texte ermöglicht.
+*   **Aggregierte formatierte Ansicht:** Die Funktion "Formatiert anzeigen" im Dokumentenleser zeigt nun alle verarbeiteten Seiten in einem einzigen, organisierten Fenster an.
+*   **Optimierter OCR-Workflow:** Überspringt die Seitenbereichsauswahl bei einseitigen Dokumenten automatisch.
+*   **Verbesserte API-Stabilität:** Umstellung auf Header-basierte Authentifizierung zur Vermeidung von Fehlern bei der Schlüsselrotation.
 
-* **Fortschrittlicher Prompt-Manager:** Einführung eines speziellen Verwaltungsdialogs in den Einstellungen zur Anpassung von System-Prompts und zur Verwaltung benutzerdefinierter Prompts mit Unterstützung für Hinzufügen, Bearbeiten, Neuanordnen und Vorschau.
-* **Umfassende Proxy-Unterstützung:** Netzwerkverbindungsprobleme wurden gelöst, indem sichergestellt wurde, dass benutzerdefinierte Proxy-Einstellungen strikt auf alle API-Anfragen (Übersetzung, OCR, Spracherzeugung) angewendet werden.
-* **Automatisierte Datenmigration:** Integriertes System zur automatischen Aktualisierung alter Prompt-Konfigurationen in das robuste v2 JSON-Format beim ersten Start ohne Datenverlust.
-* **Aktualisierte Kompatibilität (2025.1):** Die erforderliche Mindestversion von NVDA wurde aufgrund von Bibliotheksabhängigkeiten in erweiterten Funktionen wie dem Dokumentenleser auf 2025.1 gesetzt.
-* **Optimierte Einstellungen-Oberfläche:** Die Benutzeroberfläche wurde durch die Auslagerung der Prompt-Verwaltung in einen separaten Dialog übersichtlicher und zugänglicher gestaltet.
-* **Prompt-Variablen-Helfer:** Ein integrierter Guide in den Prompt-Dialogen hilft Benutzern, dynamische Variablen wie [selection], [clipboard] und [screen_obj] leicht zu identifizieren und zu nutzen.
+## Änderungen in 4.0.1
+*   **Fortgeschrittener Dokumentenleser:** Neuer Viewer für PDF und Bilder mit Seitenbereichsauswahl und Hintergrundverarbeitung.
+*   **Neues Werkzeuge-Untermenü:** Untermenü "KI Assistent" unter NVDA-Werkzeuge für schnelleren Zugriff hinzugefügt.
+*   **Flexible Anpassung:** OCR-Engine und TTS-Stimme direkt in den Einstellungen wählbar.
+*   **Unterstützung mehrerer API-Schlüssel:** Unterstützung für mehrere Gemini-Schlüssel (einer pro Zeile oder durch Komma getrennt).
+*   **Alternative OCR-Engine:** Neue Engine zur Texterkennung hinzugefügt, falls das Gemini-Kontingent erschöpft ist.
+*   **Dokument zu MP3/WAV:** Fähigkeit zur Erzeugung hochwertiger Audiodateien direkt im Reader integriert.
+*   **Instagram Stories & TikTok Support:** Analyse von Stories und TikTok-Videos über deren URLs hinzugefügt.
 
-## Änderungen in Version 4.0.3
+## Änderungen in 3.6.0
+*   **Hilfesystem:** Hilfe-Befehl (`H`) innerhalb der Befehlsebene hinzugefügt.
+*   **Online-Videoanalyse:** Unterstützung für **Twitter (X)** Videos hinzugefügt sowie URL-Erkennung verbessert.
 
-* **Verbesserte Netzwerk-Resilienz:** Automatischer Wiederholungsmechanismus hinzugefügt, um instabile Internetverbindungen und temporäre Serverfehler besser zu handhaben.
-* **Visueller Übersetzungsdialog:** Einführung eines speziellen Fensters für Übersetzungsergebnisse, in dem Benutzer lange Übersetzungen Zeile für Zeile navigieren können.
-* **Aggregierte formatierte Ansicht:** Die Funktion „Formatiert anzeigen“ im Dokumentenleser zeigt nun alle verarbeiteten Seiten in einem einzigen Fenster mit klaren Seitenüberschriften an.
-* **Optimierter OCR-Workflow:** Die Seitenbereichsauswahl wird bei einseitigen Dokumenten automatisch übersprungen.
-* **Verbesserte API-Stabilität:** Wechsel zu einer robusteren Header-basierten Authentifizierungsmethode zur Vermeidung von Fehlern bei der Key-Rotation.
-* **Fehlerbehebungen:** Behebung potenzieller Abstürze beim Beenden des Add-ons und eines Fokusfehlers im Chat-Dialog.
+## Änderungen in 3.5.0
+*   **Befehlsebene:** Einführung der Befehlsebene (Standard: `NVDA+Umschalt+V`), um Kürzel unter einer Haupttaste zu gruppieren.
+*   **Online-Videoanalyse:** Neue Funktion zur Analyse von YouTube- und Instagram-Videos per URL.
 
-## Änderungen in Version 4.0.1
+## Änderungen in 3.1.0
+*   **Direkter Ausgabemodus:** Option zum Überspringen des Chat-Dialogs, um KI-Antworten sofort per Sprache zu hören.
+*   **Zwischenablage-Integration:** Einstellung zum automatischen Kopieren von KI-Antworten in die Zwischenablage.
 
-* **Fortschrittlicher Dokumentenleser:** Ein mächtiger neuer Viewer für PDFs und Bilder mit Seitenbereichsauswahl, Hintergrundverarbeitung und `Strg+BildAuf/Ab` Navigation.
-* **Neues Werkzeuge-Untermenü:** Spezielles Untermenü „KI Assistent“ unter NVDA-Werkzeuge für schnelleren Zugriff hinzugefügt.
-* **Flexible Anpassung:** OCR-Modell und TTS-Stimme können nun direkt in den Einstellungen gewählt werden.
-* **Unterstützung mehrerer API-Keys:** Erlaubt die Eingabe mehrerer Gemini-Keys (einer pro Zeile oder durch Kommas getrennt).
-* **Alternative OCR-Modelle:** Einführung eines neuen OCR-Modells für zuverlässige Erkennung bei Quota-Limits.
-* **Intelligente API-Key-Rotation:** Automatischer Wechsel zum schnellsten funktionierenden Key.
-* **Dokument zu MP3/WAV:** Integration der Erstellung hochwertiger Audiodateien (MP3 128kbps und WAV) direkt im Reader.
-* **Instagram-Stories Unterstützung:** Analyse von Instagram-Stories via URL möglich.
-* **TikTok Unterstützung:** Analyse und Transkription von TikTok-Videos hinzugefügt.
-* **Überarbeiteter Update-Dialog:** Barrierefreie Oberfläche mit scrollbarem Textfeld zum Lesen der Änderungen vor der Installation.
-* **Einheitlicher Status & UX:** Standardisierung der Dateidialoge und Verbesserung des 'L'-Befehls für Echtzeit-Fortschrittsmeldungen.
+## Änderungen in 3.0
+*   **Neue Sprachen:** Persisch und Vietnamesisch hinzugefügt.
+*   **Erweiterte KI-Modelle:** Modellliste mit Präfixen (`[Free]`, `[Pro]`, `[Auto]`) neu organisiert. Unterstützung für **Gemini 3.0 Pro** und **Gemini 2.0 Flash Lite**.
+*   **Diktat-Stabilität:** Ignoriert nun Audioclips unter 1 Sekunde, um Halluzinationen zu vermeiden.
+*   **Dateihandlung:** Fehler beim Hochladen von Dateien mit nicht-englischen Namen behoben.
 
-## Änderungen in Version 3.6.0
+## Änderungen in 2.9
+*   **Französische und türkische Übersetzungen hinzugefügt.**
+*   **Formatierte Ansicht:** Schaltfläche "Formatiert anzeigen" in Chat-Dialogen hinzugefügt (Überschriften, Fettdruck, Code).
+*   **Markdown-Einstellung:** Option "Bereinigtes Markdown im Chat" hinzugefügt.
 
-* **Hilfesystem:** Hilfe-Befehl (`H`) innerhalb der Befehlsebene hinzugefügt.
-* **Online-Videoanalyse:** Unterstützung für **Twitter (X)** Videos hinzugefügt und URL-Erkennung verbessert.
-* **Projekt-Unterstützung:** Optionaler Spendendialog für Nutzer hinzugefügt.
+## Änderungen in 2.8
+*   Italienische Übersetzung hinzugefügt.
+*   **Statusbericht:** Neuer Befehl (NVDA+Strg+Umschalt+I) zum Ansagen des aktuellen Status.
+*   **HTML-Export:** Speichern-Schaltfläche exportiert nun als formatiertes HTML.
+*   **Sprachen:** Nepali hinzugefügt.
 
-## Änderungen in Version 3.5.0
+## Änderungen in 2.7
+*   Projektstruktur auf die offizielle NV Access Vorlage migriert.
+*   Automatisches Retry bei HTTP 429 (Rate Limit) Fehlern.
+*   Optimierte Übersetzungs-Prompts.
 
-* **Befehlsebene:** Einführung des Befehlsebenen-Systems (Standard: `NVDA+Umschalt+V`), um Kürzel unter einer Master-Taste zu gruppieren.
-* **Online-Videoanalyse:** Neue Funktion zur Analyse von YouTube- und Instagram-Videos per URL.
+## Änderungen in 2.6
+*   Russische Übersetzung hinzugefügt.
+*   Standard-Zielsprache auf Englisch geändert.
 
-## Änderungen in Version 3.1.0
+## Änderungen in 2.5
+*   Native Datei-OCR (NVDA+Strg+Umschalt+F) hinzugefügt.
+*   "Chat speichern" Schaltfläche hinzugefügt.
+*   Umstellung auf Gemini File API für bessere PDF- und Audio-Handhabung.
 
-* **Direkt-Ausgabe-Modus:** Option hinzugefügt, den Chat-Dialog zu überspringen und Antworten direkt per Sprache zu hören.
-* **Zwischenablage-Integration:** Einstellung zum automatischen Kopieren der KI-Antworten hinzugefügt.
+## Änderungen in 2.1
+*   Standardisierung aller Kürzel auf NVDA+Strg+Umschalt, um Konflikte mit dem Laptop-Layout zu vermeiden.
 
-## Änderungen in Version 3.0
+## Änderungen in 2.0
+*   Integriertes Auto-Update-System.
+*   Intelligenter Übersetzungscache hinzugefügt.
+*   Konversationsgedächtnis für Kontext im Chat hinzugefügt.
+*   Separater Befehl für Zwischenablage-Übersetzung (NVDA+Strg+Umschalt+Y).
 
-* **Neue Sprachen:** Unterstützung für **Persisch** und **Vietnamesisch** hinzugefügt.
-* **Erweiterte KI-Modelle:** Neuorganisation der Modellliste mit Präfixen wie `[Free]` oder `[Pro]`. Unterstützung für **Gemini 3.0 Pro** und **Gemini 2.0 Flash Lite** hinzugefügt.
-* **Diktat-Stabilität:** Signifikante Verbesserungen beim Smart-Diktat; Clips unter 1 Sekunde werden nun ignoriert.
-* **Datei-Handling:** Fehler beim Hochladen von Dateien mit nicht-englischen Namen behoben.
-* **Prompt-Optimierung:** Verbesserte Übersetzungslogik und strukturierte Vision-Ergebnisse.
+## Änderungen in 1.5
+*   Unterstützung für über 20 neue Sprachen.
+*   Interaktiver Optimierungs-Dialog für Folgefragen.
+*   Native "Intelligentes Diktat" Funktion.
 
-## Änderungen in Version 2.9
-
-* **Sprachen:** Französische und türkische Übersetzungen hinzugefügt.
-* **Formatierte Ansicht:** Schaltfläche „Formatiert anzeigen“ im Chat-Dialog hinzugefügt (Überschriften, Fettdruck, Code).
-* **Markdown-Einstellung:** Option „Markdown im Chat säubern“ hinzugefügt, um Roh-Markdown-Syntax wahlweise anzuzeigen.
-* **Dialog-Management:** Fokusfehler und mehrfaches Öffnen von Fenstern behoben.
-* **UX-Verbesserungen:** Standardisierte Dateidialog-Titel und Entfernung redundanter Ansagen.
-
-## Änderungen in Version 2.8
-
-* Italienische Übersetzung hinzugefügt.
-* **Status-Bericht:** Neuer Befehl (NVDA+Strg+Umschalt+I) zur Ansage des aktuellen Status.
-* **HTML-Export:** Speichern-Schaltfläche exportiert nun als formatierte HTML-Datei.
-* **Neue Modelle:** Unterstützung für gemini-flash-latest und gemini-flash-lite-latest.
-* **Sprachen:** Nepali hinzugefügt.
-* **Refine-Menü:** Fehler behoben, bei dem Befehle fehlschlugen, wenn NVDA nicht auf Englisch eingestellt war.
-* **Diktat:** Verbesserte Stille-Erkennung.
-
-## Änderungen in Version 2.7
-
-* Migration auf das offizielle NV Access Add-on Template.
-* Automatischer Retry bei HTTP 429 Fehlern (Rate Limit).
-* Optimierte Prompts für höhere Genauigkeit und bessere Smart-Swap-Logik.
-
-## Änderungen in Version 2.6
-
-* Russische Übersetzung hinzugefügt.
-* Beschreibendere Fehlermeldungen bei Verbindungsproblemen.
-* Standard-Zielsprache auf Englisch geändert.
-
-## Änderungen in Version 2.5
-
-* Befehl für natives Datei-OCR hinzugefügt (NVDA+Strg+Umschalt+F).
-* „Chat speichern“-Button in Dialogen hinzugefügt.
-* Vollständige Lokalisierungsunterstützung (i18n).
-* Nutzung der Gemini File API für PDFs und Audio.
-
-## Änderungen in Version 2.1.1
-
-* Fehler mit der `[file_ocr]` Variable in eigenen Prompts behoben.
-
-## Änderungen in Version 2.1
-
-* Standardisierung aller Kürzel auf NVDA+Strg+Umschalt zur Vermeidung von Konflikten.
-
-## Änderungen in Version 2.0
-
-* Integriertes Auto-Update-System.
-* Smart-Translation-Cache für sofortige Abrufe.
-* Konversationsgedächtnis für Folgefragen im Chat.
-* Spezieller Befehl für Zwischenablage-Übersetzung.
-
-## Änderungen in Version 1.5
-
-* Unterstützung für über 20 neue Sprachen.
-* Interaktiver Optimierungsdialog für Folgefragen.
-* Natives Smart-Diktat-Feature.
-
-## Änderungen in Version 1.0
-
-* Erstveröffentlichung.
+## Änderungen in 1.0
+*   Erstveröffentlichung.
 
 ## Übersetzung
-
-Übersetzt von **BFW Würzburg** im Rahmen des Projekts "NVDA Nachhaltig"
+* Übersetzt von **BFW Würzburg** im Rahmen des Projekts "NVDA Nachhaltig"

@@ -17,12 +17,17 @@ from urllib import request, error, parse
 from urllib.parse import quote, urlparse, urlencode
 from http import cookiejar
 from functools import wraps
+import uuid
 from uuid import uuid4
 from concurrent.futures import ThreadPoolExecutor
 
 lib_dir = os.path.join(os.path.dirname(__file__), "lib")
 if lib_dir not in sys.path:
     sys.path.append(lib_dir)
+
+arch_lib_dir = os.path.join(lib_dir, "x64" if sys.maxsize > 2**32 else "x86")
+if arch_lib_dir not in sys.path:
+    sys.path.insert(0, arch_lib_dir)
 
 try:
     import markdown as markdown_lib
@@ -35,6 +40,7 @@ except ImportError:
     fitz = None
 
 import addonHandler
+import languageHandler
 import globalPluginHandler
 import globalVars
 import config
@@ -45,6 +51,9 @@ import textInfos
 import tones
 import NVDAObjects.behaviors
 import scriptHandler
+import mouseHandler
+import keyboardHandler
+import winUser
 from .prompt_manager_dialog import PromptManagerDialog
 
 log = logging.getLogger(__name__)
@@ -171,17 +180,26 @@ OPENAI_VOICES = [
     ("Cedar", _("Energetic"))
 ]
 
-BASE_LANGUAGES = [
-    ("Arabic", "ar"), ("Bulgarian", "bg"), ("Chinese", "zh"), ("Czech", "cs"), ("Danish", "da"),
-    ("Dutch", "nl"), ("English", "en"), ("Finnish", "fi"), ("French", "fr"),
-    ("German", "de"), ("Greek", "el"), ("Hebrew", "he"), ("Hindi", "hi"),
-    ("Hungarian", "hu"), ("Indonesian", "id"), ("Italian", "it"), ("Japanese", "ja"),
-    ("Korean", "ko"), ("Nepali", "ne"), ("Norwegian", "no"), ("Persian", "fa"), ("Polish", "pl"),
-    ("Portuguese", "pt"), ("Romanian", "ro"), ("Russian", "ru"), ("Spanish", "es"),
-    ("Swedish", "sv"), ("Thai", "th"), ("Turkish", "tr"), ("Ukrainian", "uk"),
-    ("Vietnamese", "vi")
+_LANG_CODES = [
+    "af", "ar", "bg", "bn", "bs", "ca", "cs", "da", "de", "el", 
+    "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", 
+    "hu", "id", "is", "it", "ja", "kn", "ko", "lv", "lt", "ml", 
+    "mr", "ms", "nl", "no", "pa", "pl", "pt", "ro", "ru", "sk", 
+    "sl", "sr", "sv", "ta", "te", "th", "tr", "uk", "ur", "vi", "zh_CN", "zh_TW"
 ]
-SOURCE_LIST = [("Auto-detect", "auto")] + BASE_LANGUAGES
+
+def get_localized_languages():
+    lang_list = []
+    for code in _LANG_CODES:
+        name = languageHandler.getLanguageDescription(code)
+        if name:
+            lang_list.append((name, code))
+    
+    lang_list.sort(key=lambda x: x[0])
+    return lang_list
+
+BASE_LANGUAGES = get_localized_languages()
+SOURCE_LIST = [(_("Auto-detect"), "auto")] + BASE_LANGUAGES
 SOURCE_NAMES = [x[0] for x in SOURCE_LIST]
 TARGET_LIST = BASE_LANGUAGES
 TARGET_NAMES = [x[0] for x in TARGET_LIST]
@@ -214,19 +232,25 @@ confspec = {
     "custom_tts_url": "string(default='')",
     "custom_tts_model": "string(default='')",
     "custom_tts_voice": "string(default='')",
+    "custom_operator_url": "string(default='')",
+    "custom_operator_model": "string(default='')",
     "advanced_model_routing": "boolean(default=False)",
     "gemini_ocr_model": "string(default='')",
     "gemini_stt_model": "string(default='')",
     "gemini_tts_model": "string(default='')",
+    "gemini_operator_model": "string(default='')",
     "openai_ocr_model": "string(default='')",
     "openai_stt_model": "string(default='')",
     "openai_tts_model": "string(default='')",
+    "openai_operator_model": "string(default='')",
     "mistral_ocr_model": "string(default='')",
     "mistral_stt_model": "string(default='')",
     "mistral_tts_model": "string(default='')",
+    "mistral_operator_model": "string(default='')",
     "groq_ocr_model": "string(default='')",
     "groq_stt_model": "string(default='')",
     "groq_tts_model": "string(default='')",
+    "groq_operator_model": "string(default='')",
     "model_name": "string(default='gemini-flash-lite-latest')",
     "openai_model_name": "string(default='')",
     "mistral_model_name": "string(default='')",
@@ -474,6 +498,45 @@ DEFAULT_SYSTEM_PROMPTS = (
         "label": "Refine Files-Only Fallback",
         "internal": True,
         "prompt": "Analyze these files.",
+    },
+    {
+        "key": "ui_explorer_system",
+        # Translators: Section header for UI Explorer prompts in the Prompt Manager dialog.
+        "section": _("Vision"),
+        # Translators: Label for the UI Explorer system instruction prompt in the Prompt Manager.
+        "label": _("UI Explorer Instruction"),
+        "guarded": True,
+        # Translators: Feature name shown in the warning dialog when a user tries to eid the UI Explorer prompt.
+        "guardedFeatureLabel": _("UI Explorer"),
+        "requiredMarkers": ["{app_name}"],
+        "prompt": (
+            "Analyze this UI screenshot for the app: {app_name}. "
+            "Identify all clickable or interactive elements (buttons, icons, menu items, fields). "
+            "For each element, provide a descriptive label and its center coordinates. "
+            "Coordinates scale: 0-1000. Ignore NVDA windows.\n"
+            "Output ONLY a valid JSON list of objects: "
+            "[{\"label\": \"Element Name\", \"x\": int, \"y\": int}, ...]"
+        ),
+    },
+    {
+        "key": "ai_operator_system",
+        # Translators: Section header for AI Operator prompts in the Prompt Manager dialog.
+        "section": _("Vision"),
+        # Translators: Label for the AI Operator system instruction prompt in the Prompt Manager.
+        "label": _("AI Operator Instruction"),
+        "guarded": True,
+        # Translators: Feature name shown in the warning dialog when a user tries to edit the AI Operator prompt.
+        "guardedFeatureLabel": _("AI Operator"),
+        "requiredMarkers": ["{user_command}", "{response_lang}", "{app_name}"],
+        "prompt": (
+            "You are a Windows operator. Foreground App: {app_name}. Task: {user_command}. "
+            "STRICT RULES:\n"
+            "1. RESPONSE LANGUAGE: Everything MUST be in {response_lang}.\n"
+            "2. FINAL STEP: If your action (e.g., clicking a specific button or menu) directly fulfills the user's request, you MUST set \"finished\": true immediately. Do not wait for a confirmation screenshot.\n"
+            "3. SUB-MENUS: Only set \"finished\": false if you are opening an intermediate menu to reach a final target in the next step.\n"
+            "4. ACTION: If action needed, output ONLY JSON: {{\"x\": int, \"y\": int, \"action\": \"click\"/\"right_click\"/\"double_click\"/\"type\", \"text\": \"...\", \"finished\": bool, \"explanation\": \"... (in {response_lang})\"}}.\n"
+            "Coordinates scale: 0-1000. Ignore 'AI Operator' or 'NVDA' windows."
+        ),
     },
 )
 
@@ -881,33 +944,37 @@ def show_error_dialog(message):
 
 def send_ctrl_v():
     try:
-        user32 = ctypes.windll.user32
-        VK_CONTROL = 0x11; VK_V = 0x56; KEYEVENTF_KEYUP = 0x0002
-        user32.keybd_event(VK_CONTROL, 0, 0, 0)
-        user32.keybd_event(VK_V, 0, 0, 0)
-        user32.keybd_event(VK_V, 0, KEYEVENTF_KEYUP, 0)
-        user32.keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0)
+        winUser.keybd_event(0x11, 0, 0, 0)
+        winUser.keybd_event(0x56, 0, 0, 0)
+        winUser.keybd_event(0x56, 0, 2, 0)
+        winUser.keybd_event(0x11, 0, 2, 0)
     except Exception as e:
         log.debugWarning(f"send_ctrl_v failed: {e}")
 
 def get_proxy_opener():
     proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
     opener = request.build_opener()
-    
     if proxy_url:
         if not (proxy_url.startswith("http://") or proxy_url.startswith("https://")):
             proxy_url = "http://" + proxy_url
-            
         try:
-            handler = request.ProxyHandler({
-                'http': proxy_url,
-                'https': proxy_url
-            })
-            opener = request.build_opener(handler)
+            parsed = urlparse(proxy_url)
+            if parsed.username:
+                proxy_host = parsed.hostname
+                if parsed.port:
+                    proxy_host += f":{parsed.port}"
+                clean_proxy_url = f"{parsed.scheme}://{proxy_host}"
+                auth_str = f"{parsed.username}:{parsed.password or ''}"
+                encoded_auth = base64.b64encode(auth_str.encode()).decode()
+                handler = request.ProxyHandler({'http': clean_proxy_url, 'https': clean_proxy_url})
+                opener = request.build_opener(handler)
+                opener.addheaders.append(('Proxy-Authorization', f'Basic {encoded_auth}'))
+            else:
+                handler = request.ProxyHandler({'http': proxy_url, 'https': proxy_url})
+                opener = request.build_opener(handler)
         except Exception as e:
             log.error(f"Proxy Setup Failed: {e}")
-            
-    opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)')]
+    opener.addheaders.append(('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'))
     return opener
 
 def get_twitter_download_link(tweet_url):
@@ -1134,23 +1201,18 @@ class SmartProgrammersOCREngine:
 class GoogleTranslator:
     @staticmethod
     def translate(text, target_lang):
-        try:
-            target_code = TARGET_CODES.get(target_lang, 'en')
-            base_url = "https://translate.googleapis.com/translate_a/single"
-            params = {"client": "gtx", "sl": "auto", "tl": target_code, "dt": "t", "q": text}
-            url = f"{base_url}?{parse.urlencode(params)}"
-            req = request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            opener = get_proxy_opener()
-            with opener.open(req, timeout=120) as response:
-                if response.status == 200:
-                    data = json.loads(response.read().decode('utf-8'))
-                    if data and isinstance(data, list) and len(data) > 0:
-                        result_parts = [x[0] for x in data[0] if x[0]]
-                        return "".join(result_parts)
-        except Exception as e:
-            log.error(f"Google Translate Failed: {e}", exc_info=True)
-            return text 
-        return text
+        def _logic(key, txt, lang):
+            url = AIHandler.get_endpoint("chat")
+            if "?" not in url: url += f"?key={key}"
+            else: url += f"&key={key}"
+            
+            quick_template = get_prompt_text("translate_quick") or "Translate to {target_lang}. Output ONLY translation."
+            quick_prompt = apply_prompt_template(quick_template, [("target_lang", lang)])
+            payload = {"contents": [{"parts": [{"text": quick_prompt}, {"text": txt}]}]}
+            req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
+            with GeminiHandler._get_opener().open(req, timeout=90) as r:
+                return json.loads(r.read().decode())['candidates'][0]['content']['parts'][0]['text']
+        return GeminiHandler._call_with_rotation(_logic, text, target_lang)
 
 class GeminiHandler:
     _working_key_idx = 0 
@@ -1229,24 +1291,17 @@ class GeminiHandler:
             return "ERROR:" + str(e)
 
     @staticmethod
-    def _logic(key, prompt, attachments, json_mode):
-        model = config.conf["VisionAssistant"]["model_name"]
+    def _logic(key, prompt, attachments, json_mode, task="chat"):
+        p_active = config.conf["VisionAssistant"]["active_provider"]
+        model = ""
+        if p_active == "custom":
+            model = config.conf["VisionAssistant"]["custom_model_name"].strip()
         
-        if config.conf["VisionAssistant"].get("advanced_model_routing", False):
-            is_image = attachments and any(a.get('mime_type', '').startswith('image/') for a in attachments)
-            is_audio = attachments and any(a.get('mime_type', '').startswith('audio/') for a in attachments)
-            if is_audio:
-                adv = config.conf["VisionAssistant"].get("gemini_stt_model", "").strip()
-                if adv: model = adv
-            elif is_image:
-                adv = config.conf["VisionAssistant"].get("gemini_ocr_model", "").strip()
-                if adv: model = adv
-
-        base_endpoint = AIHandler.get_endpoint("chat", model_override=model)
-        url = f"{base_endpoint}?key={key}"
+        base_endpoint = AIHandler.get_endpoint(task, model_override=model if model else None)
+        connector = "&" if "?" in base_endpoint else "?"
+        url = f"{base_endpoint}{connector}key={key}"
         
         temp = config.conf["VisionAssistant"].get("ai_temperature", 0.7)
-
         if isinstance(prompt, list):
             contents = prompt
         else:
@@ -1257,13 +1312,11 @@ class GeminiHandler:
                         parts.append({"file_data": {"mime_type": att['mime_type'], "file_uri": att['file_uri']}})
                     elif 'data' in att:
                         parts.append({"inline_data": {"mime_type": att['mime_type'], "data": att['data']}})
-            if prompt:
-                parts.append({"text": prompt})
+            if prompt: parts.append({"text": prompt})
             contents = [{"parts": parts}]
             
         p_str = str(prompt).lower() if isinstance(prompt, str) else ""
-        if any(x in p_str for x in ["extract", "translate", "ocr", "transcribe"]):
-            temp = 0.0
+        if any(x in p_str for x in ["extract", "translate", "ocr", "transcribe"]): temp = 0.0
 
         payload = {
             "contents": contents,
@@ -1275,31 +1328,30 @@ class GeminiHandler:
                 {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}
             ]
         }
-        if json_mode:
-            payload["generationConfig"]["response_mime_type"] = "application/json"
+        if json_mode: payload["generationConfig"]["response_mime_type"] = "application/json"
             
-        headers = {"Content-Type": "application/json", "x-goog-api-key": key}
+        headers = {"Content-Type": "application/json"}
         req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
         
         with GeminiHandler._get_opener().open(req, timeout=120) as r:
             res = json.loads(r.read().decode())
-            
             candidates = res.get('candidates')
             if not candidates:
                 if 'promptFeedback' in res and 'blockReason' in res['promptFeedback']:
+                    # Translators: Error prefix shown when the AI response is blocked by safety filters.
                     return "ERROR:" + _("Blocked by AI Safety Filters: ") + res['promptFeedback']['blockReason']
+                # Translators: Generic error message when Gemini returns an empty response.
                 return "ERROR:" + _("AI failed to provide a response. This might be due to safety filters or a temporary server issue.")
             
             first_candidate = candidates[0]
             content = first_candidate.get('content', {})
             parts = content.get('parts', [])
-            
             if not parts:
-                finish_reason = first_candidate.get('finishReason')
-                if finish_reason == "SAFETY":
+                if first_candidate.get('finishReason') == "SAFETY":
+                    # Translators: Error shown when the AI response is blocked during generation.
                     return "ERROR:" + _("The response was blocked mid-generation by safety filters.")
+                # Translators: Error shown when the response structure is unexpected or empty.
                 return "ERROR:" + _("AI returned an empty response structure.")
-                
             return parts[0].get('text', '')
 
     @staticmethod
@@ -1330,6 +1382,7 @@ class GeminiHandler:
             except Exception as e:
                 log.error(f"Unexpected error in Gemini rotation with key {idx}: {e}", exc_info=True)
                 return "ERROR:" + str(e)
+        # Translators: Generic error message when an operation fails for an unknown reason.
         return "ERROR:" + _("Unknown error occurred.")
 
     @staticmethod
@@ -1348,14 +1401,13 @@ class GeminiHandler:
     @staticmethod
     def ocr_page(image_bytes):
         def _logic(key, img_data):
-            model = config.conf["VisionAssistant"]["model_name"]
-            if config.conf["VisionAssistant"].get("advanced_model_routing", False):
-                adv_model = config.conf["VisionAssistant"].get("gemini_ocr_model", "").strip()
-                if adv_model: model = adv_model
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+            url = AIHandler.get_endpoint("ocr")
+            connector = "&" if "?" in url else "?"
+            full_url = f"{url}{connector}key={key}"
+            
             ocr_image_prompt = get_prompt_text("ocr_image_extract")
             payload = {"contents": [{"parts": [{"inline_data": {"mime_type": "image/jpeg", "data": base64.b64encode(img_data).decode('utf-8')}}, {"text": ocr_image_prompt}]}]}
-            req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
+            req = request.Request(full_url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
             with GeminiHandler._get_opener().open(req, timeout=120) as r:
                 return json.loads(r.read().decode())['candidates'][0]['content']['parts'][0]['text']
         return GeminiHandler._call_with_rotation(_logic, image_bytes)
@@ -1366,22 +1418,41 @@ class GeminiHandler:
         if not keys: 
             # Translators: Error message for missing API Keys
             return [ "ERROR:" + _("No API Keys.") ]
-        model = config.conf["VisionAssistant"]["model_name"]
-        if config.conf["VisionAssistant"].get("advanced_model_routing", False):
-            adv_model = config.conf["VisionAssistant"].get("gemini_ocr_model", "").strip()
-            if adv_model: model = adv_model
+            
+        p_active = config.conf["VisionAssistant"]["active_provider"]
+        upload_support = True
+        if p_active == "custom":
+            upload_support = config.conf["VisionAssistant"].get("custom_upload_support", False)
         
+        model = AIHandler.get_endpoint("ocr").split('/')[-1].split(':')[0]
+        
+        if not upload_support:
+            try:
+                parts = []
+                doc = fitz.open(file_path)
+                for i in range(len(doc)):
+                    page = doc.load_page(i)
+                    pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
+                    img_data = base64.b64encode(pix.tobytes("jpg")).decode('utf-8')
+                    parts.append({"inline_data": {"mime_type": "image/jpeg", "data": img_data}})
+                doc.close()
+                prompt = get_prompt_text("ocr_document_extract")
+                parts.append({"text": prompt})
+                res_text = GeminiHandler._call_with_rotation(GeminiHandler._logic, [{"parts": parts}], None, False, "ocr")
+                if res_text.startswith("ERROR:"): return [res_text]
+                return res_text.split('[[[PAGE_SEP]]]')
+            except Exception as e:
+                return ["ERROR:" + str(e)]
+
         opener = GeminiHandler._get_opener()
-        proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-        base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+        upload_url_base = AIHandler.get_endpoint("upload")
         
         for i, key in enumerate(keys):
             try:
                 f_size = os.path.getsize(file_path)
-                init_url = f"{base_url}/upload/v1beta/files"
                 headers = {"X-Goog-Upload-Protocol": "resumable", "X-Goog-Upload-Command": "start", "X-Goog-Upload-Header-Content-Length": str(f_size), "X-Goog-Upload-Header-Content-Type": mime_type, "Content-Type": "application/json", "x-goog-api-key": key}
                 
-                req = request.Request(init_url, data=json.dumps({"file": {"display_name": "batch"}}).encode(), headers=headers, method="POST")
+                req = request.Request(upload_url_base, data=json.dumps({"file": {"display_name": "batch"}}).encode(), headers=headers, method="POST")
                 with opener.open(req, timeout=120) as r: upload_url = r.headers.get("x-goog-upload-url")
                 
                 with open(file_path, 'rb') as f: f_data = f.read()
@@ -1390,31 +1461,36 @@ class GeminiHandler:
                     res = json.loads(r.read().decode())
                     uri, name = res['file']['uri'], res['file']['name']
                 
+                base_api_url = AIHandler.get_base_url(p_active).rstrip('/')
+                clean_base = re.sub(r'/(v1|v1beta|v1alpha)$', '', base_api_url, flags=re.IGNORECASE)
+                v_tag = "/v1beta"
+                
                 active = False
                 for attempt in range(30):
-                    req_check = request.Request(f"{base_url}/v1beta/{name}", headers={"x-goog-api-key": key})
+                    check_url = f"{clean_base}{v_tag}/{name}?key={key}"
+                    req_check = request.Request(check_url)
                     with opener.open(req_check, timeout=30) as r:
                         state = json.loads(r.read().decode()).get('state')
                         if state == "ACTIVE":
                             active = True
                             break
-                        if state == "FAILED":
-                            break
+                        if state == "FAILED": break
                     time.sleep(2)
 
                 if not active:
-                    if i < len(keys) - 1:
-                        continue
+                    if i < len(keys) - 1: continue
                     # Translators: Error message for upload failure
                     return [ "ERROR:" + _("Upload failed.") ]
 
                 GeminiHandler._register_file_uri(uri, key)
+                url = AIHandler.get_endpoint("ocr")
+                connector = "&" if "?" in url else "?"
+                full_url = f"{url}{connector}key={key}"
                 
-                url = f"{base_url}/v1beta/models/{model}:generateContent"
                 prompt = get_prompt_text("ocr_document_extract")
                 contents = [{"parts": [{"file_data": {"mime_type": mime_type, "file_uri": uri}}, {"text": prompt}]}]
                 
-                req_gen = request.Request(url, data=json.dumps({"contents": contents}).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": key})
+                req_gen = request.Request(full_url, data=json.dumps({"contents": contents}).encode(), headers={"Content-Type": "application/json"})
                 with opener.open(req_gen, timeout=180) as r:
                     res = json.loads(r.read().decode())
                     text = res['candidates'][0]['content']['parts'][0]['text']
@@ -1422,60 +1498,62 @@ class GeminiHandler:
                     
             except error.HTTPError as e:
                 err_code = GeminiHandler._handle_error(e)
-                if err_code in ["QUOTA_EXCEEDED", "SERVER_ERROR"] and i < len(keys) - 1:
-                    continue
+                if err_code in ["QUOTA_EXCEEDED", "SERVER_ERROR"] and i < len(keys) - 1: continue
                 if err_code == "QUOTA_EXCEEDED":
                     # Translators: Message of a dialog which may pop up while performing an AI call
                     err_msg = _("Error 429: Quota Exceeded (Try later)")
                 elif err_code == "SERVER_ERROR":
                     # Translators: Message of a dialog which may pop up while performing an AI call
                     err_msg = _("Server Error {code}: {reason}").format(code=e.code, reason=e.reason)
-                else:
-                    err_msg = err_code
+                else: err_msg = err_code
                 return ["ERROR:" + err_msg]
-            except Exception as e:
-                return ["ERROR:" + str(e)]
+            except Exception as e: return ["ERROR:" + str(e)]
         # Translators: Error when all available API keys fail
         return ["ERROR:" + _("All keys failed.")]
 
     @staticmethod
-    def chat(history, new_msg, file_uri, mime_type):
-        def _logic(key, hist, msg, uri, mime):
-            model = config.conf["VisionAssistant"]["model_name"]
-            proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-            base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
-            url = f"{base_url}/v1beta/models/{model}:generateContent"
+    def chat(history, new_msg, file_uri, mime_type, file_data=None):
+        def _logic(key, hist, msg, uri, mime, f_data):
+            url = AIHandler.get_endpoint("chat")
+            connector = "&" if "?" in url else "?"
+            full_url = f"{url}{connector}key={key}"
             
             contents = list(hist)
+            user_parts = []
             if uri: 
-                user_parts = [{"file_data": {"mime_type": mime, "file_uri": uri}}]
-            else:
-                user_parts = []
+                user_parts.append({"file_data": {"mime_type": mime, "file_uri": uri}})
+            elif f_data:
+                user_parts.append({"inline_data": {"mime_type": mime, "data": f_data}})
             user_parts.append({"text": msg})
             contents.append({"role": "user", "parts": user_parts})
             
-            req = request.Request(url, data=json.dumps({"contents": contents}).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": key})
+            req = request.Request(full_url, data=json.dumps({"contents": contents}).encode(), headers={"Content-Type": "application/json"})
             with GeminiHandler._get_opener().open(req, timeout=120) as r:
                 return json.loads(r.read().decode())['candidates'][0]['content']['parts'][0]['text']
         forced_key = GeminiHandler._get_registered_key(file_uri) if file_uri else None
         if forced_key:
-            return GeminiHandler._call_with_key(_logic, forced_key, history, new_msg, file_uri, mime_type)
-        return GeminiHandler._call_with_rotation(_logic, history, new_msg, file_uri, mime_type)
+            return GeminiHandler._call_with_key(_logic, forced_key, history, new_msg, file_uri, mime_type, file_data)
+        return GeminiHandler._call_with_rotation(_logic, history, new_msg, file_uri, mime_type, file_data)
 
     @staticmethod
     def upload_for_chat(file_path, mime_type):
+        p_active = config.conf["VisionAssistant"]["active_provider"]
+        if p_active == "custom" and not config.conf["VisionAssistant"].get("custom_upload_support", False):
+            return None
+            
         keys = GeminiHandler._get_api_keys()
         if not keys: return None
         opener = GeminiHandler._get_opener()
-        proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-        base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
-        
+        upload_url_base = AIHandler.get_endpoint("upload")
+        base_api_url = AIHandler.get_base_url(p_active).rstrip('/')
+        clean_base = base_api_url.lower().split("/v1beta")[0].split("/v1")[0].rstrip('/')
+        v_tag = "/v1beta"
+
         for key in keys:
             try:
                 f_size = os.path.getsize(file_path)
-                init_url = f"{base_url}/upload/v1beta/files"
                 headers = {"X-Goog-Upload-Protocol": "resumable", "X-Goog-Upload-Command": "start", "X-Goog-Upload-Header-Content-Length": str(f_size), "X-Goog-Upload-Header-Content-Type": mime_type, "Content-Type": "application/json", "x-goog-api-key": key}
-                req = request.Request(init_url, data=json.dumps({"file": {"display_name": os.path.basename(file_path)}}).encode(), headers=headers, method="POST")
+                req = request.Request(upload_url_base, data=json.dumps({"file": {"display_name": os.path.basename(file_path)}}).encode(), headers=headers, method="POST")
                 with opener.open(req, timeout=120) as r: upload_url = r.headers.get("x-goog-upload-url")
                 with open(file_path, 'rb') as f: f_data = f.read()
                 req_up = request.Request(upload_url, data=f_data, headers={"Content-Length": str(f_size), "X-Goog-Upload-Offset": "0", "X-Goog-Upload-Command": "upload, finalize"}, method="POST")
@@ -1483,7 +1561,8 @@ class GeminiHandler:
                     res = json.loads(r.read().decode())
                     uri, name = res['file']['uri'], res['file']['name']
                 for attempt in range(30):
-                    req_check = request.Request(f"{base_url}/v1beta/{name}", headers={"x-goog-api-key": key})
+                    check_url = f"{clean_base}{v_tag}/{name}?key={key}"
+                    req_check = request.Request(check_url)
                     with opener.open(req_check, timeout=30) as r:
                         state = json.loads(r.read().decode()).get('state')
                         if state == "ACTIVE":
@@ -1505,7 +1584,7 @@ class GeminiHandler:
                 if "pro" in main_model.lower():
                     tts_model = "gemini-2.5-pro-preview-tts"
                 else:
-                    tts_model = "gemini-2.5-flash-preview-tts"
+                    tts_model = "gemini-3.1-flash-tts-preview"
 
             proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
             base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
@@ -1587,6 +1666,22 @@ class AIHandler:
             return config.conf["VisionAssistant"].get("custom_api_url", "").strip().rstrip('/')
         
         proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
+        
+        if proxy_url:
+            if not (proxy_url.startswith("http://") or proxy_url.startswith("https://")):
+                proxy_url = "http://" + proxy_url
+            
+            try:
+                parsed = urlparse(proxy_url)
+                if parsed.hostname in ["127.0.0.1", "localhost"] or parsed.username:
+                    proxy_url = ""
+                else:
+                    netloc = parsed.hostname
+                    if parsed.port: netloc += f":{parsed.port}"
+                    proxy_url = f"{parsed.scheme}://{netloc}"
+            except:
+                pass
+
         if provider == "gemini":
             return proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
         elif provider == "openai":
@@ -1603,43 +1698,57 @@ class AIHandler:
         adv = config.conf["VisionAssistant"]["use_advanced_endpoints"]
         base = AIHandler.get_base_url(p)
         
+        model = model_override or ""
+        if not model:
+            if p == "custom":
+                target_model_map = {
+                    "vision": "custom_ocr_model",
+                    "ocr": "custom_ocr_model",
+                    "stt": "custom_stt_model",
+                    "tts": "custom_tts_model",
+                    "operator": "custom_operator_model"
+                }
+                if task_type in target_model_map:
+                    model = config.conf["VisionAssistant"].get(target_model_map[task_type], "").strip()
+                
+                if not model:
+                    model = config.conf["VisionAssistant"]["custom_model_name"].strip()
+            
+            if not model and config.conf["VisionAssistant"].get("advanced_model_routing", False):
+                model = config.conf["VisionAssistant"].get(f"{p}_{task_type}_model", "").strip()
+            
+            if not model:
+                m_key = "model_name" if p == "gemini" else f"{p}_model_name"
+                model = config.conf["VisionAssistant"].get(m_key, "")
+
+        if task_type == "tts" and AIHandler.is_gemini() and "gemini" in model.lower():
+            if "pro" in model.lower(): model = "gemini-2.5-pro-preview-tts"
+            else: model = "gemini-3.1-flash-tts-preview"
+
         if not base:
-            if p == "mistral": base = "https://api.mistral.ai"
-            elif p == "openai": base = "https://api.openai.com"
-            elif p == "groq": base = "https://api.groq.com/openai"
-            elif p == "gemini": base = "https://generativelanguage.googleapis.com"
-
+            base_map = {"mistral": "https://api.mistral.ai", "openai": "https://api.openai.com", "groq": "https://api.groq.com/openai", "gemini": "https://generativelanguage.googleapis.com"}
+            base = base_map.get(p, "")
+            
         if p == "custom" and adv:
-            target = ""
-            if task_type == "models": target = config.conf["VisionAssistant"]["custom_models_url"]
-            elif task_type in ["ocr", "vision"]: target = config.conf["VisionAssistant"]["custom_ocr_url"]
-            elif task_type == "stt": target = config.conf["VisionAssistant"]["custom_stt_url"]
-            elif task_type == "tts": target = config.conf["VisionAssistant"]["custom_tts_url"]
-            if target and target.lower().startswith("http"):
-                return target.strip()
+            target_map = {"models": "custom_models_url", "vision": "custom_ocr_url", "ocr": "custom_ocr_url", "stt": "custom_stt_url", "tts": "custom_tts_url", "operator": "custom_operator_url"}
+            target_key = target_map.get(task_type)
+            if target_key:
+                target = config.conf["VisionAssistant"].get(target_key, "").strip()
+                if target.lower().startswith("http"): return target
 
-        m_key = "model_name" if p == "gemini" else f"{p}_model_name"
-        model = model_override or config.conf["VisionAssistant"].get(m_key, "")
-
-        if p == "custom":
-            if task_type in ["vision", "ocr"] and config.conf["VisionAssistant"]["custom_ocr_model"].strip():
-                model = config.conf["VisionAssistant"]["custom_ocr_model"].strip()
-            elif task_type == "stt" and config.conf["VisionAssistant"]["custom_stt_model"].strip():
-                model = config.conf["VisionAssistant"]["custom_stt_model"].strip()
-            elif task_type == "tts" and config.conf["VisionAssistant"]["custom_tts_model"].strip():
-                model = config.conf["VisionAssistant"]["custom_tts_model"].strip()
-            elif not model:
-                model = config.conf["VisionAssistant"]["custom_model_name"].strip()
-
+        base = base.rstrip('/')
         if AIHandler.is_gemini():
-            base = base.rstrip('/')
-            if task_type == "models": return f"{base}/v1beta/models"
-            if task_type == "upload": return f"{base}/upload/v1beta/files"
-            return f"{base}/v1beta/models/{model}:generateContent"
-
+            if ":generateContent" in base: return base
+            clean_base = re.sub(r'/(v1|v1beta|v1alpha)$', '', base, flags=re.IGNORECASE)
+            v_tag = "/v1beta"
+            if task_type == "models": return f"{clean_base}{v_tag}/models"
+            if task_type == "upload":
+                return f"{clean_base}/upload{v_tag}/files"
+            return f"{clean_base}{v_tag}/models/{model}:generateContent"
+            
         v1_base = base if "/v1" in base.lower() else f"{base}/v1"
         if task_type == "models": return f"{v1_base}/models"
-        if task_type in ["chat", "vision", "ocr"]: return f"{v1_base}/chat/completions"
+        if task_type in ["chat", "vision", "ocr", "operator"]: return f"{v1_base}/chat/completions"
         if task_type == "upload": return f"{v1_base}/files"
         if task_type == "stt": return f"{v1_base}/audio/transcriptions"
         if task_type == "tts": return f"{v1_base}/audio/speech"
@@ -1658,34 +1767,60 @@ class AIHandler:
         p = config.conf["VisionAssistant"]["active_provider"]
         keys = AIHandler.get_keys(p)
         key = keys[0] if keys else ""
+        
+        custom_type = config.conf["VisionAssistant"].get("custom_api_type", "openai")
+        is_gemini_logic = (p == "gemini" or (p == "custom" and custom_type == "gemini"))
+        
         url = AIHandler.get_endpoint("models")
-        if AIHandler.is_gemini() and "key=" not in url and key:
+        
+        if not url:
+            return []
+            
+        if is_gemini_logic and key and "key=" not in url:
             url += ("&" if "?" in url else "?") + f"key={key}"
+            
         try:
+            import ssl
+            ssl_context = ssl.create_default_context()
+            proxy_opener = get_proxy_opener()
+            proxy_opener.add_handler(request.HTTPSHandler(context=ssl_context))
+            
             req = request.Request(url, method="GET")
-            req.add_header("User-Agent", "Mozilla/5.0")
+            req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
             req.add_header("Accept", "application/json")
-            if not AIHandler.is_gemini() and key:
+            
+            if not is_gemini_logic and key:
                 req.add_header("Authorization", f"Bearer {key}")
-            with get_proxy_opener().open(req, timeout=15) as r:
-                data = json.loads(r.read().decode('utf-8'))
+                
+            with proxy_opener.open(req, timeout=15) as r:
+                res_body = r.read().decode('utf-8')
+                data = json.loads(res_body)
                 models_info = []
-                if AIHandler.is_gemini():
-                    for m in data.get("models", []):
-                        m_id = m.get("name", "").split("/")[-1]
-                        if m_id: models_info.append((m_id, m.get("displayName", m_id)))
-                else:
-                    for m in data.get("data", []):
+
+                if "data" in data and isinstance(data["data"], list):
+                    for m in data["data"]:
                         m_id = m.get("id")
                         if m_id: models_info.append((m_id, m_id))
+                elif "models" in data and isinstance(data["models"], list):
+                    for m in data["models"]:
+                        full_name = m.get("name", "")
+                        m_id = full_name.split("/")[-1] if "/" in full_name else full_name
+                        if m_id: models_info.append((m_id, m.get("displayName", m_id)))
+                elif isinstance(data, list):
+                    for m in data:
+                        m_id = m.get("id") or m.get("name")
+                        if m_id: models_info.append((m_id, m_id))
+
                 return AIHandler.filter_models(p, models_info, task=task)
-        except: return []
+        except Exception as e:
+            log.error(f"Fetch models failed for {p}: {e}")
+            return []
 
     @staticmethod
-    def call(prompt, attachments=None, json_mode=False):
+    def call(prompt, attachments=None, json_mode=False, task="chat"):
         p = config.conf["VisionAssistant"]["active_provider"]
         if AIHandler.is_gemini():
-            return GeminiHandler._call_with_rotation(GeminiHandler._logic, prompt, attachments, json_mode)
+            return GeminiHandler._call_with_rotation(GeminiHandler._logic, prompt, attachments, json_mode, task)
         
         keys = AIHandler.get_keys(p)
         if not keys and p != "custom":
@@ -1693,33 +1828,17 @@ class AIHandler:
             return "ERROR:" + _("No API Keys configured.")
         if not keys: keys = [""]
 
-        is_audio = False
-        is_image = False
-        if attachments:
-            is_audio = any(a.get('mime_type', '').startswith('audio/') for a in attachments)
-            is_image = any(a.get('mime_type', '').startswith('image/') for a in attachments)
-        elif isinstance(prompt, list):
-            for msg in prompt:
-                if isinstance(msg.get("content"), list):
-                    for block in msg["content"]:
-                        if isinstance(block, dict) and block.get("type") == "image_url":
-                            is_image = True
-                            break
+        is_audio = any(a.get('mime_type', '').startswith('audio/') for a in attachments) if attachments else False
+        is_image = any(a.get('mime_type', '').startswith('image/') for a in attachments) if attachments else False
         
         if is_audio and not AIHandler.is_gemini():
             audio_att = next(a for a in attachments if a.get('mime_type', '').startswith('audio/'))
             url = AIHandler.get_endpoint("stt")
-            
-
-            if p == "groq":
-                model = "whisper-large-v3-turbo"
-            elif p == "mistral":
-                model = "voxtral-mini-latest"
-            else:
-                model = "whisper-1"
-
-            if p == "custom": 
-                model = config.conf["VisionAssistant"]["custom_stt_model"].strip() or model
+            model = "whisper-1"
+            if p == "groq": model = "whisper-large-v3-turbo"
+            elif p == "mistral": model = "voxtral-mini-latest"
+            if p == "custom":
+                model = config.conf["VisionAssistant"]["custom_stt_model"].strip() or config.conf["VisionAssistant"]["custom_model_name"].strip() or model
             elif config.conf["VisionAssistant"].get("advanced_model_routing", False):
                 adv_stt = config.conf["VisionAssistant"].get(f"{p}_stt_model", "").strip()
                 if adv_stt: model = adv_stt
@@ -1727,32 +1846,36 @@ class AIHandler:
 
         for key in keys:
             try:
-                url = AIHandler.get_endpoint("vision" if is_image else "chat")
-                m_key = "model_name" if p == "gemini" else f"{p}_model_name"
-                model = config.conf["VisionAssistant"].get(m_key, "")
+                current_task = "vision" if is_image and task == "chat" else task
+                url = AIHandler.get_endpoint(current_task)
                 
                 if p == "custom":
-                    if is_image and config.conf["VisionAssistant"]["custom_ocr_model"].strip(): model = config.conf["VisionAssistant"]["custom_ocr_model"].strip()
-                    elif not model: model = config.conf["VisionAssistant"]["custom_model_name"].strip()
-                elif config.conf["VisionAssistant"].get("advanced_model_routing", False) and is_image:
-                    adv_ocr = config.conf["VisionAssistant"].get(f"{p}_ocr_model", "").strip()
-                    if adv_ocr: 
-                        model = adv_ocr
-                    elif p == "groq" and "llama-4" not in model.lower(): 
-                        model = "meta-llama/llama-4-maverick-17b-128e-instruct"
-                elif p == "groq" and is_image:
-                    if "llama-4" not in model.lower(): 
-                        model = "meta-llama/llama-4-maverick-17b-128e-instruct"
+                    model = config.conf["VisionAssistant"]["custom_model_name"].strip()
+                    if current_task in ["vision", "ocr"]: model = config.conf["VisionAssistant"]["custom_ocr_model"].strip()
+                    if not model: model = config.conf["VisionAssistant"]["custom_model_name"].strip()
+                else:
+                    m_key = f"{p}_model_name"
+                    model = config.conf["VisionAssistant"].get(m_key, "")
+                    if config.conf["VisionAssistant"].get("advanced_model_routing", False):
+                        adv_model = config.conf["VisionAssistant"].get(f"{p}_{current_task}_model", "").strip()
+                        if adv_model: model = adv_model
 
-                contents = []
+                if not model:
+                    return "ERROR: Model name is empty."
+
                 if isinstance(prompt, str):
-                    if prompt: contents.append({"type": "text", "text": prompt})
                     if attachments:
+                        contents = []
+                        if prompt: contents.append({"type": "text", "text": prompt})
                         for att in attachments:
                             if "data" in att and att.get('mime_type', '').startswith('image/'):
                                 contents.append({"type": "image_url", "image_url": {"url": f"data:{att['mime_type']};base64,{att['data']}"}})
-                    messages = [{"role": "user", "content": contents}]
-                else: messages = prompt
+                        messages = [{"role": "user", "content": contents}]
+                    else:
+                        messages = [{"role": "user", "content": prompt}]
+                else:
+                    messages = prompt
+
                 temp = config.conf["VisionAssistant"].get("ai_temperature", 0.7)
                 payload = {"model": model, "messages": messages, "temperature": temp}
                 if json_mode: payload["response_format"] = {"type": "json_object"}
@@ -1760,23 +1883,11 @@ class AIHandler:
                 headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
                 if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
                 
-                req = request.Request(url, data=json.dumps(payload).encode(), headers=headers)
+                req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
                 with get_proxy_opener().open(req, timeout=180) as r:
-                    res = json.loads(r.read().decode())
+                    res = json.loads(r.read().decode('utf-8'))
                     return res["choices"][0]["message"]["content"]
-            except error.HTTPError as e:
-                err_body = ""
-                try:
-                    err_body = e.read().decode('utf-8')
-                    err_json = json.loads(err_body)
-                    if "error" in err_json:
-                        if isinstance(err_json["error"], dict) and "message" in err_json["error"]: err_body = err_json["error"]["message"]
-                        elif isinstance(err_json["error"], str): err_body = err_json["error"]
-                except: pass
-                if (e.code == 429 or e.code >= 500) and key != keys[-1]: continue
-                return f"ERROR: {e.code}{' - ' + err_body if err_body else ''}"
             except Exception as e:
-                log.error(f"AIHandler call failed (Provider: {p}): {e}", exc_info=True)
                 if key == keys[-1]: return f"ERROR: {str(e)}"
                 continue
 
@@ -1806,7 +1917,6 @@ class AIHandler:
     @staticmethod
     def _transcribe_helper(key, audio_att, url, model_name):
         try:
-            import uuid
             boundary = f"Boundary-{uuid.uuid4()}"
             body = []
             body.append(f"--{boundary}".encode()); body.append(b'Content-Disposition: form-data; name="file"; filename="audio.wav"'); body.append(f"Content-Type: {audio_att['mime_type']}".encode()); body.append(b''); body.append(base64.b64decode(audio_att['data'])); body.append(f"--{boundary}".encode()); body.append(b'Content-Disposition: form-data; name="model"'); body.append(b''); body.append(model_name.encode()); body.append(f"--{boundary}--".encode()); body.append(b'')
@@ -2236,11 +2346,13 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         self.customSizer.Add(wx.StaticText(self.customBox, label=_("API Type:")), 0, wx.ALL, 2)
         # Translators: AI API compatibility types
         self.customType = wx.Choice(self.customBox, choices=[_("OpenAI Compatible"), _("Gemini Compatible")])
+        self.customType.Bind(wx.EVT_CHOICE, self.onCustomTypeChange)
         self.customType.SetSelection(0 if config.conf["VisionAssistant"]["custom_api_type"] == "openai" else 1)
         self.customSizer.Add(self.customType, 0, wx.EXPAND | wx.ALL, 2)
 
         # Translators: Label for Custom Model Name input
-        self.customSizer.Add(wx.StaticText(self.customBox, label=_("Model Name:")), 0, wx.ALL, 2)
+        self.lbl_customModelName = wx.StaticText(self.customBox, label=_("Model Name (Manual):"))
+        self.customSizer.Add(self.lbl_customModelName, 0, wx.ALL, 2)
         self.customModelName = wx.TextCtrl(self.customBox, value=config.conf["VisionAssistant"]["custom_model_name"])
         self.customSizer.Add(self.customModelName, 0, wx.EXPAND | wx.ALL, 2)
                 
@@ -2270,7 +2382,8 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         advVBox.Add(self.customOcrUrl, 0, wx.EXPAND | wx.ALL, 2)
         
         # Translators: Label for Custom OCR Model
-        advVBox.Add(wx.StaticText(self.advEndpointBox, label=_("Custom OCR Model (Optional):")), 0, wx.ALL, 2)
+        self.lblCustomOcrModel = wx.StaticText(self.advEndpointBox, label=_("Custom OCR Model (Optional):"))
+        advVBox.Add(self.lblCustomOcrModel, 0, wx.ALL, 2)
         self.customOcrModel = wx.TextCtrl(self.advEndpointBox, value=config.conf["VisionAssistant"]["custom_ocr_model"])
         advVBox.Add(self.customOcrModel, 0, wx.EXPAND | wx.ALL, 2)
         
@@ -2280,19 +2393,32 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         advVBox.Add(self.customSttUrl, 0, wx.EXPAND | wx.ALL, 2)
 
         # Translators: Label for Custom STT Model
-        advVBox.Add(wx.StaticText(self.advEndpointBox, label=_("Custom STT Model (Optional):")), 0, wx.ALL, 2)
+        self.lblCustomSttModel = wx.StaticText(self.advEndpointBox, label=_("Custom STT Model (Optional):"))
+        advVBox.Add(self.lblCustomSttModel, 0, wx.ALL, 2)
         self.customSttModel = wx.TextCtrl(self.advEndpointBox, value=config.conf["VisionAssistant"]["custom_stt_model"])
         advVBox.Add(self.customSttModel, 0, wx.EXPAND | wx.ALL, 2)
-        
+
         # Translators: Label for Custom TTS URL
         advVBox.Add(wx.StaticText(self.advEndpointBox, label=_("Text-to-Speech (TTS) URL:")), 0, wx.ALL, 2)
         self.customTtsUrl = wx.TextCtrl(self.advEndpointBox, value=config.conf["VisionAssistant"]["custom_tts_url"])
         advVBox.Add(self.customTtsUrl, 0, wx.EXPAND | wx.ALL, 2)
 
         # Translators: Label for Custom TTS Model
-        advVBox.Add(wx.StaticText(self.advEndpointBox, label=_("Custom TTS Model (Optional):")), 0, wx.ALL, 2)
+        self.lblCustomTtsModel = wx.StaticText(self.advEndpointBox, label=_("Custom TTS Model (Optional):"))
+        advVBox.Add(self.lblCustomTtsModel, 0, wx.ALL, 2)
         self.customTtsModel = wx.TextCtrl(self.advEndpointBox, value=config.conf["VisionAssistant"]["custom_tts_model"])
         advVBox.Add(self.customTtsModel, 0, wx.EXPAND | wx.ALL, 2)
+
+        # Translators: Label for a text field in the "Custom Provider Settings" section of settings where the user enters the AI Operator URL.
+        advVBox.Add(wx.StaticText(self.advEndpointBox, label=_("AI Operator URL:")), 0, wx.ALL, 2)
+        self.customAssistantUrl = wx.TextCtrl(self.advEndpointBox, value=config.conf["VisionAssistant"].get("custom_operator_url", ""))
+        advVBox.Add(self.customAssistantUrl, 0, wx.EXPAND | wx.ALL, 2)
+
+        # Translators: Label for a text field in the "Custom Provider Settings" section of settings where the user manually enters the model name for AI Operator.
+        self.lblCustomOperatorModel = wx.StaticText(self.advEndpointBox, label=_("Custom Operator Model (Optional):"))
+        advVBox.Add(self.lblCustomOperatorModel, 0, wx.ALL, 2)
+        self.customAssistantModel = wx.TextCtrl(self.advEndpointBox, value=config.conf["VisionAssistant"]["custom_operator_model"])
+        advVBox.Add(self.customAssistantModel, 0, wx.EXPAND | wx.ALL, 2)
 
         # Translators: Label for Custom TTS Voice Name
         advVBox.Add(wx.StaticText(self.advEndpointBox, label=_("Custom TTS Voice Name (Optional):")), 0, wx.ALL, 2)
@@ -2313,7 +2439,8 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         # Translators: Label for AI Model selection choice box
         self.modelLabel = wx.StaticText(self.connectionBox, label=_("AI Model:"))
         cHelper.addItem(self.modelLabel)
-        self.model = wx.ComboBox(self.connectionBox, style=wx.TE_PROCESS_ENTER)
+# Translators: Accessible name for the AI model selection combo box.
+        self.model = wx.ComboBox(self.connectionBox, style=wx.TE_PROCESS_ENTER, name=_("AI Model:"))
         self.model.Bind(wx.EVT_TEXT, self.onModelFilter)
         cHelper.addItem(self.model)
 
@@ -2342,6 +2469,12 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         advRSizer.Add(self.lbl_advTts, 0, wx.ALL, 2)
         self.advTtsModel = wx.Choice(self.advRoutingBox, choices=[])
         advRSizer.Add(self.advTtsModel, 0, wx.EXPAND | wx.ALL, 2)
+
+        # Translators: Label for a dropdown menu in the "Advanced Model Routing" section of settings to choose a specific model for AI Operator tasks.
+        self.lbl_advOperator = wx.StaticText(self.advRoutingBox, label=_("AI Operator Model:"))
+        advRSizer.Add(self.lbl_advOperator, 0, wx.ALL, 2)
+        self.advOperatorModel = wx.Choice(self.advRoutingBox, choices=[])
+        advRSizer.Add(self.advOperatorModel, 0, wx.EXPAND | wx.ALL, 2)
         
         self.advRoutingBox.SetSizer(advRSizer)
         cHelper.addItem(self.advRoutingBox)
@@ -2520,32 +2653,64 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
     def updateCustomFieldsVisibility(self, provider):
         is_custom = (provider == "custom")
         self.customBox.Show(is_custom)
-        
-        self.advRoutingCheck.Show(not is_custom)
+        self.advRoutingCheck.Show(True)
         
         tts_supported = AIHandler.is_tts_supported(provider)
-        
-        routing_enabled = not is_custom and self.advRoutingCheck.Value
+        routing_enabled = self.advRoutingCheck.Value
         self.advRoutingBox.Show(routing_enabled)
         
         if routing_enabled:
+            self.advOcrModel.Show(True)
+            self.advSttModel.Show(True)
             self.advTtsModel.Show(tts_supported)
             self.lbl_advTts.Show(tts_supported)
+            self.advOperatorModel.Show(True)
+            self.lbl_advOperator.Show(True)
 
         self.voice_sel.Show(tts_supported)
         self.lbl_voice.Show(tts_supported)
-        
         self.btn_fetch.Show(True)
         
-        has_models = self.model.GetCount() > 0
+        has_fetched_models = self.model.GetCount() > 0
         if is_custom:
-            self.model.Show(has_models)
-            self.modelLabel.Show(has_models)
+            self.modelLabel.Show(has_fetched_models)
+            self.model.Show(has_fetched_models)
+            
+            if hasattr(self, 'lbl_customModelName'):
+                self.lbl_customModelName.Show(not has_fetched_models)
+            self.customModelName.Show(not has_fetched_models)
+            
             self.advEndpointBox.Show(self.useAdvancedEndpoints.Value)
+            
+            show_manual_fields = self.useAdvancedEndpoints.Value and not has_fetched_models
+            
+            if hasattr(self, 'lblCustomOcrModel'):
+                self.lblCustomOcrModel.Show(show_manual_fields)
+            self.customOcrModel.Show(show_manual_fields)
+            
+            if hasattr(self, 'lblCustomSttModel'):
+                self.lblCustomSttModel.Show(show_manual_fields)
+            self.customSttModel.Show(show_manual_fields)
+            
+            if hasattr(self, 'lblCustomTtsModel'):
+                self.lblCustomTtsModel.Show(show_manual_fields)
+            self.customTtsModel.Show(show_manual_fields)
+            
+            if hasattr(self, 'lblCustomOperatorModel'):
+                self.lblCustomOperatorModel.Show(show_manual_fields)
+            self.customAssistantModel.Show(show_manual_fields)
+            
+            self.customTtsVoice.Show(self.useAdvancedEndpoints.Value)
         else:
-            self.model.Show(True)
             self.modelLabel.Show(True)
-        
+            self.model.Show(True)
+            if hasattr(self, 'lbl_customModelName'):
+                self.lbl_customModelName.Show(False)
+            self.customModelName.Hide()
+
+        if hasattr(self, 'advEndpointBox'):
+            self.advEndpointBox.Layout()
+        self.Layout()
         p = self.connectionBox.GetParent()
         if p: p.Layout()
 
@@ -2575,6 +2740,9 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             if p: 
                 p.Layout()
 
+    def onCustomTypeChange(self, event):
+        self.updateCustomFieldsVisibility("custom")
+
     def onFetchModels(self, event):
         p_idx = self.provider_sel.GetSelection()
         p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
@@ -2586,6 +2754,9 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
         if p_name == "custom":
             config.conf["VisionAssistant"]["custom_api_url"] = self.customUrl.Value.strip()
+            config.conf["VisionAssistant"]["custom_api_type"] = "openai" if self.customType.GetSelection() == 0 else "gemini"
+            config.conf["VisionAssistant"]["use_advanced_endpoints"] = self.useAdvancedEndpoints.Value
+            config.conf["VisionAssistant"]["custom_models_url"] = self.customModelsUrl.Value.strip()
 
         self.btn_fetch.Disable()
         # Translators: Progress message shown while fetching AI models from the server
@@ -2599,62 +2770,79 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
     def _on_fetch_models_complete(self, p_name, models_info):
         self.btn_fetch.Enable()
         if models_info:
+            self.model.Freeze()
             self.model.Clear()
             self.advOcrModel.Clear()
             self.advSttModel.Clear()
             self.advTtsModel.Clear()
+            self.advOperatorModel.Clear()
             
-            # Translators: Default model routing option for advanced mode
-            default_label = _("Default (Auto)")
-            self.advOcrModel.Append(default_label, "")
-            self.advSttModel.Append(default_label, "")
-            self.advTtsModel.Append(default_label, "")
+            # Translators: Option to follow the main model selected in the primary dropdown
+            default_main_label = _("Default (Main Model)")
+            # Translators: Option for the system to automatically choose the best model for this specific task
+            auto_task_label = _("Auto (Optimized)")
+            
+            self.advOcrModel.Append(default_main_label, "")
+            self.advSttModel.Append(default_main_label, "")
+            self.advOperatorModel.Append(default_main_label, "")
+            self.advTtsModel.Append(auto_task_label, "")
 
             self._current_model_ids = []
             storage_parts = []
-            
             main_models = AIHandler.filter_models(p_name, models_info, task="main")
             for m_id, m_name in main_models:
                 self.model.Append(m_name, m_id)
                 self._current_model_ids.append(m_id)
-            
             for m_id, m_name in models_info:
                 self.advOcrModel.Append(m_name, m_id)
                 self.advSttModel.Append(m_name, m_id)
                 self.advTtsModel.Append(m_name, m_id)
+                self.advOperatorModel.Append(m_name, m_id)
                 storage_parts.append(f"{m_id}|{m_name}")
             
             config.conf["VisionAssistant"][f"{p_name}_models_list"] = ",".join(storage_parts)
             
-            if self.model.GetCount() > 0: self.model.SetSelection(0)
+            if self.model.GetCount() > 0:
+                self.model.SetSelection(0)
+                self.model.ChangeValue(self.model.GetString(0))
+            else:
+                self.model.SetValue("")
+            
+            self.model.Thaw()
+            
             self.advOcrModel.SetSelection(0)
             self.advSttModel.SetSelection(0)
             self.advTtsModel.SetSelection(0)
+            self.advOperatorModel.SetSelection(0)
+            
+            self._all_models_backup = [(self.model.GetString(i), self.model.GetClientData(i)) for i in range(self.model.GetCount())]
             
             self.updateCustomFieldsVisibility(p_name)
-            # Translators: Success message after AI models are successfully updated
+            # Translators: Status message when the AI models list is successfully refreshed.
             ui.message(_("Models updated"))
         else:
-            # Translators: Error message shown when models cannot be fetched from the API
+            # Translators: Error message shown when the add-on cannot retrieve the list of models from the server.
             ui.message(_("Failed to fetch models"))
-
-        self._all_models_backup = [(self.model.GetString(i), self.model.GetClientData(i)) for i in range(self.model.GetCount())]
 
     def refreshModelList(self, p_name):
         self.model.Clear()
         self.advOcrModel.Clear()
         self.advSttModel.Clear()
         self.advTtsModel.Clear()
+        self.advOperatorModel.Clear()
         
-        # Translators: Default model routing option for advanced mode
-        default_label = _("Default (Auto)")
-        self.advOcrModel.Append(default_label, "")
-        self.advSttModel.Append(default_label, "")
-        self.advTtsModel.Append(default_label, "")
+        # Translators: Option to follow the main model selected in the primary dropdown.
+        default_main_label = _("Default (Main Model)")
+        # Translators: Option for the system to automatically choose the best model for this task.
+        auto_task_label = _("Auto (Optimized)")
+        
+        self.advOcrModel.Append(default_main_label, "")
+        self.advSttModel.Append(default_main_label, "")
+        self.advOperatorModel.Append(default_main_label, "")
+        self.advTtsModel.Append(auto_task_label, "")
 
         self._current_model_ids = []
         saved_models_raw = config.conf["VisionAssistant"].get(f"{p_name}_models_list", "")
-        
         all_models = []
         if saved_models_raw:
             items = saved_models_raw.split(",")
@@ -2663,35 +2851,41 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
                     m_id, m_name = item.split("|", 1)
                     all_models.append((m_id, m_name))
         elif p_name == "gemini":
-            for m_name, m_id in MODELS:
-                all_models.append((m_id, m_name))
+            for m_name, m_id in MODELS: all_models.append((m_id, m_name))
 
         main_models = AIHandler.filter_models(p_name, all_models, task="main")
         for m_id, m_name in main_models:
             self.model.Append(m_name, m_id)
             self._current_model_ids.append(m_id)
-
         for m_id, m_name in all_models:
             self.advOcrModel.Append(m_name, m_id)
             self.advSttModel.Append(m_name, m_id)
             self.advTtsModel.Append(m_name, m_id)
-            if m_id not in self._current_model_ids:
-                self._current_model_ids.append(m_id)
+            self.advOperatorModel.Append(m_name, m_id)
+            if m_id not in self._current_model_ids: self._current_model_ids.append(m_id)
         
         m_key = "model_name" if p_name == "gemini" else f"{p_name}_model_name"
         curr_model = self._temp_models.get(p_name, config.conf["VisionAssistant"].get(m_key, ""))
-        
+        if p_name == "custom" and not curr_model:
+            curr_model = config.conf["VisionAssistant"].get("custom_model_name", "")
+
         for i in range(self.model.GetCount()):
             if self.model.GetClientData(i) == curr_model:
                 self.model.SetSelection(i)
+                self.model.ChangeValue(self.model.GetString(i))
                 break
         else:
-            if self.model.GetCount() > 0: self.model.SetSelection(0)
+            if self.model.GetCount() > 0:
+                self.model.SetSelection(0)
+                self.model.ChangeValue(self.model.GetString(0))
+            else:
+                self.model.ChangeValue("")
             
         for attr, conf_key in [
             (self.advOcrModel, f"{p_name}_ocr_model"),
             (self.advSttModel, f"{p_name}_stt_model"),
-            (self.advTtsModel, f"{p_name}_tts_model")
+            (self.advTtsModel, f"{p_name}_tts_model"),
+            (self.advOperatorModel, f"{p_name}_operator_model")
         ]:
             saved_id = config.conf["VisionAssistant"].get(conf_key, "")
             for i in range(attr.GetCount()):
@@ -2699,12 +2893,15 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
                     attr.SetSelection(i)
                     break
             else: attr.SetSelection(0)
-
         self._all_models_backup = [(self.model.GetString(i), self.model.GetClientData(i)) for i in range(self.model.GetCount())]
+        self.updateCustomFieldsVisibility(p_name)
+
+
     def onToggleAdvanced(self, event):
-        self.advEndpointBox.Show(self.useAdvancedEndpoints.Value)
-        p = self.connectionBox.GetParent()
-        if p: p.Layout()
+        p_idx = self.provider_sel.GetSelection()
+        if p_idx != wx.NOT_FOUND:
+            p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+            self.updateCustomFieldsVisibility(p_name)
 
     def onToggleApiVisibility(self, event):
         if self.showApiCheck.IsChecked():
@@ -2750,60 +2947,63 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             config.conf["VisionAssistant"][k_key] = val.strip()
             
             m_key = "model_name" if p_name == "gemini" else f"{p_name}_model_name"
-            
+            has_fetched_models = self.model.GetCount() > 0
             if p_name == "custom":
-                model_val = self.customModelName.Value.strip()
+                model_val = ""
+                if has_fetched_models and self.model.GetSelection() != wx.NOT_FOUND:
+                    model_val = self.model.GetClientData(self.model.GetSelection())
                 if not model_val:
-                    sel_idx = self.model.GetSelection()
-                    if sel_idx != wx.NOT_FOUND:
-                        model_val = self.model.GetClientData(sel_idx)
-                    elif self.model.GetCount() > 0:
-                        model_val = self.model.GetClientData(0)
-                
+                    model_val = self.customModelName.Value.strip()
                 if model_val:
                     config.conf["VisionAssistant"]["custom_model_name"] = model_val
                     config.conf["VisionAssistant"][m_key] = model_val
-                    config.conf["VisionAssistant"]["model_name"] = model_val
             else:
                 sel_idx = self.model.GetSelection()
                 if sel_idx != wx.NOT_FOUND:
                     model_val = self.model.GetClientData(sel_idx)
-                elif self.model.GetCount() > 0:
-                    model_val = self.model.GetClientData(0)
-                else:
-                    model_val = self.model.GetValue().strip()
-                
-                if model_val:
                     config.conf["VisionAssistant"][m_key] = model_val
-                    if p_name == "gemini":
-                        config.conf["VisionAssistant"]["model_name"] = model_val
                 
-                config.conf["VisionAssistant"]["advanced_model_routing"] = self.advRoutingCheck.Value
-                for attr, conf_key in [
-                    (self.advOcrModel, f"{p_name}_ocr_model"),
-                    (self.advSttModel, f"{p_name}_stt_model"),
-                    (self.advTtsModel, f"{p_name}_tts_model")
-                ]:
-                    idx = attr.GetSelection()
-                    if idx != wx.NOT_FOUND:
-                        config.conf["VisionAssistant"][conf_key] = attr.GetClientData(idx)
+            config.conf["VisionAssistant"]["advanced_model_routing"] = self.advRoutingCheck.Value
+            for attr, conf_key in [
+                (self.advOcrModel, f"{p_name}_ocr_model"),
+                (self.advSttModel, f"{p_name}_stt_model"),
+                (self.advTtsModel, f"{p_name}_tts_model"),
+                (self.advOperatorModel, f"{p_name}_operator_model")
+            ]:
+                idx = attr.GetSelection()
+                if idx != wx.NOT_FOUND:
+                    config.conf["VisionAssistant"][conf_key] = attr.GetClientData(idx)
 
-            v_idx = self.voice_sel.GetSelection()
-            if v_idx != wx.NOT_FOUND:
-                config.conf["VisionAssistant"]["tts_voice"] = self.voice_sel.GetClientData(v_idx)
+            if p_name == "custom":
+                config.conf["VisionAssistant"]["custom_api_url"] = self.customUrl.Value.strip()
+                config.conf["VisionAssistant"]["custom_api_type"] = "openai" if self.customType.GetSelection() == 0 else "gemini"
+                config.conf["VisionAssistant"]["custom_upload_support"] = self.customUploadSupport.Value
+                config.conf["VisionAssistant"]["use_advanced_endpoints"] = self.useAdvancedEndpoints.Value
+                config.conf["VisionAssistant"]["custom_models_url"] = self.customModelsUrl.Value.strip()
+                config.conf["VisionAssistant"]["custom_ocr_url"] = self.customOcrUrl.Value.strip()
+                config.conf["VisionAssistant"]["custom_stt_url"] = self.customSttUrl.Value.strip()
+                config.conf["VisionAssistant"]["custom_tts_url"] = self.customTtsUrl.Value.strip()
+                config.conf["VisionAssistant"]["custom_operator_url"] = self.customAssistantUrl.Value.strip()
+                if not has_fetched_models:
+                    config.conf["VisionAssistant"]["custom_ocr_model"] = self.customOcrModel.Value.strip()
+                    config.conf["VisionAssistant"]["custom_stt_model"] = self.customSttModel.Value.strip()
+                    config.conf["VisionAssistant"]["custom_tts_model"] = self.customTtsModel.Value.strip()
+                    config.conf["VisionAssistant"]["custom_operator_model"] = self.customAssistantModel.Value.strip()
+                
+                config.conf["VisionAssistant"]["custom_tts_voice"] = self.customTtsVoice.Value.strip()
+
+            final_voice = ""
+            if p_name == "custom" and self.customTtsVoice.Value.strip():
+                final_voice = self.customTtsVoice.Value.strip()
+            else:
+                v_idx = self.voice_sel.GetSelection()
+                if v_idx != wx.NOT_FOUND:
+                    final_voice = self.voice_sel.GetClientData(v_idx)
             
+            if final_voice:
+                config.conf["VisionAssistant"]["tts_voice"] = final_voice
+
             config.conf["VisionAssistant"]["ai_temperature"] = float(self.aiTemp.GetStringSelection())
-            config.conf["VisionAssistant"]["custom_api_url"] = self.customUrl.Value.strip()
-            config.conf["VisionAssistant"]["custom_api_type"] = "openai" if self.customType.GetSelection() == 0 else "gemini"
-            config.conf["VisionAssistant"]["custom_upload_support"] = self.customUploadSupport.Value
-            config.conf["VisionAssistant"]["use_advanced_endpoints"] = self.useAdvancedEndpoints.Value
-            config.conf["VisionAssistant"]["custom_models_url"] = self.customModelsUrl.Value.strip()
-            config.conf["VisionAssistant"]["custom_ocr_url"] = self.customOcrUrl.Value.strip()
-            config.conf["VisionAssistant"]["custom_ocr_model"] = self.customOcrModel.Value.strip()
-            config.conf["VisionAssistant"]["custom_stt_url"] = self.customSttUrl.Value.strip()
-            config.conf["VisionAssistant"]["custom_stt_model"] = self.customSttModel.Value.strip()
-            config.conf["VisionAssistant"]["custom_tts_url"] = self.customTtsUrl.Value.strip()
-            config.conf["VisionAssistant"]["custom_tts_model"] = self.customTtsModel.Value.strip()
             config.conf["VisionAssistant"]["proxy_url"] = self.proxyUrl.Value.strip()
             config.conf["VisionAssistant"]["source_language"] = SOURCE_NAMES[self.sourceLang.GetSelection()]
             config.conf["VisionAssistant"]["target_language"] = TARGET_NAMES[self.targetLang.GetSelection()]
@@ -2829,7 +3029,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         if sel != wx.NOT_FOUND:
             model_id = cb.GetClientData(sel)
             p_idx = self.provider_sel.GetSelection()
-            if p_idx == 4 and model_id: # Custom
+            if p_idx == 4 and model_id:
                 self.customModelName.SetValue(model_id)
             return
 
@@ -2866,7 +3066,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
 class RangeDialog(wx.Dialog):
     def __init__(self, parent, total_pages):
-        # Translators: Title of the PDF options dialog
+        # Translators: Title of the PDF and document options dialog (range, translation, etc.)
         super().__init__(parent, title=_("Options"), size=(350, 320))
         sizer = wx.BoxSizer(wx.VERTICAL)
         # Translators: Label showing total pages found
@@ -2991,7 +3191,7 @@ class ChatDialog(wx.Dialog):
             wx.CallAfter(self.Close)
 
     def on_ready(self):
-        # Translators: Message when ready to chat
+        # Translators: Message shown in the chat area when the file is uploaded and the AI is ready to answer questions.
         self.display.AppendText(_("Ready! Ask your questions.\n"))
         self.btn_send.Enable()
         self.input.SetFocus()
@@ -3007,13 +3207,21 @@ class ChatDialog(wx.Dialog):
 
     def do_chat(self, msg):
         if AIHandler.is_gemini():
-            resp = GeminiHandler.chat(self.history, msg, self.file_uri, self.mime_type)
+            f_data = getattr(self, "file_data", None) if not self.file_uri else None
+            resp = GeminiHandler.chat(self.history, msg, self.file_uri, self.mime_type, f_data)
             if str(resp).startswith("ERROR:"):
                 wx.CallAfter(show_error_dialog, resp[6:])
                 if _vision_assistant_instance: 
                     wx.CallAfter(setattr, _vision_assistant_instance, 'current_status', _("Idle"))
                 return
-            self.history.append({"role": "user", "parts": [{"text": msg}]})
+            if not self.history:
+                u_parts = []
+                if self.file_uri: u_parts.append({"file_data": {"mime_type": self.mime_type, "file_uri": self.file_uri}})
+                elif f_data: u_parts.append({"inline_data": {"mime_type": self.mime_type, "data": f_data}})
+                u_parts.append({"text": msg})
+                self.history.append({"role": "user", "parts": u_parts})
+            else:
+                self.history.append({"role": "user", "parts": [{"text": msg}]})
             self.history.append({"role": "model", "parts": [{"text": resp}]})
         else:
             messages = list(self.history)
@@ -3444,6 +3652,7 @@ class DocumentViewerDialog(wx.Dialog):
         try:
             audio_b64, is_raw_pcm = AIHandler.generate_speech(text, voice)
             if not audio_b64 or audio_b64.startswith("ERROR:"):
+                 # Translators: Fallback error message during text-to-speech generation.
                  err_msg = audio_b64[6:] if audio_b64 else _("Unknown Error")
                  # Translators: Error message shown when text-to-speech generation fails.
                  wx.CallAfter(wx.MessageBox, _("TTS Error: {error}").format(error=err_msg), _("Error"), wx.ICON_ERROR)
@@ -3555,7 +3764,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     _last_source_text = None
     _last_params = None
     update_timer = None
-    
+
+    is_ui_explorer_active = False
+
+    _operator_history = []
+    _operator_context = {}
+
     # Translators: Initial status when the add-on is doing nothing
     current_status = _("Idle")
 
@@ -3734,24 +3948,26 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
     def script_showHelp(self, gesture):
         if self.toggling: self.finish()
-        # Translators: Help description for the 'H' command in the Command Layer.
+    # Translators: Help text shown in a dialog listing all available commands in the Command Layer.
         help_msg = (
-            "T: " + _("Translates the selected text or navigator object.") + "\n" + \
-            "Shift+T: " + _("Translates the text currently in the clipboard.") + "\n" + \
-            "R: " + _("Opens a menu to Explain, Summarize, or Fix the selected text.") + "\n" + \
-            "O: " + _("Performs OCR and description on the entire screen.") + "\n" + \
-            "V: " + _("Describes the current object (Navigator Object).") + "\n" + \
-            "D: " + _("Opens the Document Reader for detailed page-by-page analysis (PDF/Images).") + "\n" + \
-            "F: " + _("Recognizes text from a selected image or PDF file.") + "\n" + \
-            "A: " + _("Transcribes a selected audio file.") + "\n" + \
-            "Shift+V: " + _("Analyzes a YouTube, Instagram, Twitter or TikTok video URL.") + "\n" + \
-            "C: " + _("Attempts to solve a CAPTCHA on the screen or navigator object.") + "\n" + \
-            "S: " + _("Records voice, transcribes it using AI, and types the result.") + "\n" + \
-            "L: " + _("Announces the current status of the add-on.") + "\n" + \
-            "U: " + _("Checks for updates manually.") + "\n" + \
-            "Space: " + _("Shows the last AI response in a chat dialog for review or follow-up questions.") + "\n" + \
+            "Shift+A: " + _("Asks the AI Operator to perform an action or describe the screen.") + "\n" +
+            "E: " + _("Toggles the interactive UI elements explorer.") + "\n" +
+            "T: " + _("Translates the selected text or navigator object.") + "\n" +
+            "Shift+T: " + _("Translates the text currently in the clipboard.") + "\n" +
+            "R: " + _("Opens a menu to Explain, Summarize, or Fix the selected text.") + "\n" +
+            "O: " + _("Performs OCR and description on the entire screen.") + "\n" +
+            "V: " + _("Describes the current object (Navigator Object).") + "\n" +
+            "D: " + _("Opens the Document Reader for detailed page-by-page analysis (PDF/Images).") + "\n" +
+            "F: " + _("Performs smart actions (OCR or Description) on a selected image or PDF file.") + "\n" +
+            "A: " + _("Transcribes a selected audio file.") + "\n" +
+            "Shift+V: " + _("Analyzes a YouTube, Instagram, Twitter or TikTok video URL.") + "\n" +
+            "C: " + _("Attempts to solve a CAPTCHA on the screen or navigator object.") + "\n" +
+            "S: " + _("Records voice, transcribes it using AI, and types the result.") + "\n" +
+            "L: " + _("Announces the current status of the add-on.") + "\n" +
+            "U: " + _("Checks for updates manually.") + "\n" +
+            "Space: " + _("Shows the last AI response in a chat dialog for review or follow-up questions.") + "\n" +
             "H: " + _("Shows a list of available commands in the layer.")
-)
+        )
         # Translators: Title of the help dialog
         ui.browseableMessage(help_msg, _("{name} Help").format(name=ADDON_NAME))
 
@@ -3834,33 +4050,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             show_error_dialog(msg)
             return None
 
-
-
-    def _call_gemini_safe(self, prompt_or_contents, attachments=[], json_mode=False):
-        def _has_parts(contents):
-            for item in contents:
-                if not isinstance(item, dict):
-                    continue
-                parts = item.get("parts", [])
-                for part in parts:
-                    if isinstance(part, dict) and part:
-                        return True
-            return False
-
-        if isinstance(prompt_or_contents, list):
-            if not _has_parts(prompt_or_contents):
-                # Translators: Error message when there's no content to send
-                err_msg = _("Nothing to send.")
-                self.report_status(_("Error"))
-                show_error_dialog(err_msg)
-                return None
-        else:
-            if not prompt_or_contents and not attachments:
-                # Translators: Error message when there's no content to send
-                err_msg = _("Nothing to send.")
-                self.report_status(_("Error"))
-                show_error_dialog(err_msg)
-                return None
 
         def _logic(key, p_or_c, atts, j_mode):
             model = config.conf["VisionAssistant"]["model_name"]
@@ -4116,7 +4305,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         tones.beep(1000, 100)
         wx.CallAfter(self._open_translation_dialog, text)
 
-    def _open_translation_dialog(self, text, force_show=False):
+    def _open_translation_dialog(self, text, force_show=False, is_recall=False):
         self._last_result_data = (self._open_translation_dialog, (text,))
         
         if config.conf["VisionAssistant"]["copy_to_clipboard"]:
@@ -4135,7 +4324,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
         self.translation_dlg = VisionQADialog(
             gui.mainFrame, 
-        # Translators: Dialog title for Translation results
+            # Translators: Dialog title for Translation results
             _("{name} - Translation").format(name=ADDON_NAME), 
             text, 
             None, 
@@ -4420,21 +4609,23 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
              wx.CallAfter(setattr, self, 'current_status', _("Idle"))
              wx.CallAfter(self._open_refine_result_dialog, res, attachments, captured_text, prompt_text)
 
-    def _open_refine_result_dialog(self, result_text, attachments, original_text, initial_prompt, force_show=False):
+    def _open_refine_result_dialog(self, result_text, attachments, original_text, initial_prompt, force_show=False, is_recall=False):
         self._last_result_data = (self._open_refine_result_dialog, (result_text, attachments, original_text, initial_prompt))
         
         if config.conf["VisionAssistant"]["copy_to_clipboard"]:
             api.copyToClip(result_text)
 
         if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
-            tones.beep(1000, 100)
+            if not is_recall: tones.beep(1000, 100)
             ui.message(clean_markdown(result_text))
             return
 
         if self.refine_dlg:
             try: self.refine_dlg.Destroy()
             except: pass
-        tones.beep(1000, 100)
+            
+        if not is_recall:
+            tones.beep(1000, 100)
 
         def refine_callback(ctx, q, history, extra):
             atts, orig, first_p = ctx
@@ -4460,7 +4651,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
         self.refine_dlg = VisionQADialog(
             gui.mainFrame, 
-        # Translators: Title of Refine Result dialog
+            # Translators: Title of Refine Result dialog
             _("{name} - Refine Result").format(name=ADDON_NAME), 
             result_text, 
             context, 
@@ -4473,23 +4664,22 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.refine_dlg.Raise()
 
     # Translators: Script description for Input Gestures dialog
-    @scriptHandler.script(description=_("Recognizes text from a selected image or PDF file."))
-    def script_fileOCR(self, gesture):
+    @scriptHandler.script(description=_("Performs smart actions on a selected image or PDF file."))
+    def script_smartFileAction(self, gesture):
         if self.toggling: self.finish()
-        wx.CallLater(100, self._open_file_ocr_dialog)
+        wx.CallLater(100, self._open_smart_file_dialog)
 	
-    def _open_file_ocr_dialog(self):
+    def _open_smart_file_dialog(self):
         wc = "Files|*.pdf;*.jpg;*.jpeg;*.png;*.webp;*.tif;*.tiff"
-        self._browse_and_run(self._pre_process_ocr, wc, multiple=True)
+        self._browse_and_run(self._pre_process_smart_file, wc, multiple=True)
 
-    def _pre_process_ocr(self, paths):
+    def _pre_process_smart_file(self, paths):
         engine = config.conf["VisionAssistant"]["ocr_engine"]
         is_single_image = len(paths) == 1 and paths[0].lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff'))
-        
         if is_single_image and engine == 'gemini':
+            time.sleep(0.5)
             wx.CallAfter(self._ask_file_action, paths[0])
             return
-
         try:
             if not fitz:
                 # Translators: Error when PyMuPDF is missing
@@ -4506,29 +4696,21 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             else:
                 wx.CallAfter(self._show_ocr_range_dialog, v_doc)
         except Exception as e:
-            log.error(f"Error preparing OCR: {e}")
+            log.error(f"Error preparing file: {e}")
 
     def _ask_file_action(self, path):
         # Translators: Options for the image file action menu
         choices = [_("Extract Text (OCR)"), _("Describe Image")]
-        
         gui.mainFrame.prePopup()
         try:
-            dlg = wx.SingleChoiceDialog(
-                gui.mainFrame,
-                # Translators: Title of the image action dialog
-                _("Choose action:"),
-                # Translators: Header of the image action dialog
-                _("Image File"),
-                choices
-            )
+            dlg = wx.SingleChoiceDialog(gui.mainFrame, _("Choose action:"), _("Image File"), choices)
             dlg.Raise()
-            dlg.SetFocus()
-            
             if dlg.ShowModal() == wx.ID_OK:
                 selection = dlg.GetSelection()
                 if selection == 0:
-                    threading.Thread(target=self._pre_process_file_ocr_single, args=(path,), daemon=True).start()
+                    v_doc = VirtualDocument([path])
+                    v_doc.scan()
+                    threading.Thread(target=self._process_file_ocr, args=(v_doc, 0, 0), daemon=True).start()
                 else:
                     # Translators: Status reported when an image file is being analyzed
                     self.report_status(_("Analyzing Image File..."))
@@ -4558,6 +4740,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         target_lang = config.conf["VisionAssistant"]["target_language"]
         p = config.conf["VisionAssistant"]["active_provider"]
         
+        upload_supported = AIHandler.is_gemini()
+        if p == "custom":
+            upload_supported = config.conf["VisionAssistant"]["custom_upload_support"]
+        
         # Translators: Message reported when extracting text from a file
         msg = _("Extracting Text...")
         wx.CallAfter(self.report_status, msg)
@@ -4584,7 +4770,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 wx.CallAfter(self._open_doc_chat_dialog, res,[], res, res)
             return
 
-        if engine == 'chrome' or not AIHandler.is_gemini():
+        if engine == 'chrome' or not upload_supported:
             def page_worker(page_idx):
                 try:
                     file_path, internal_idx = v_doc.get_page_info(page_idx)
@@ -4645,24 +4831,25 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         if self.toggling: self.finish()
         wx.CallAfter(self._open_document_reader)
 
-    def _open_doc_chat_dialog(self, init_msg, initial_attachments, doc_text, raw_text_for_save=None, force_show=False):
+    def _open_doc_chat_dialog(self, init_msg, initial_attachments, doc_text, raw_text_for_save=None, force_show=False, is_recall=False):
         self._last_result_data = (self._open_doc_chat_dialog, (init_msg, initial_attachments, doc_text, raw_text_for_save))
         
         if config.conf["VisionAssistant"]["copy_to_clipboard"]:
             api.copyToClip(raw_text_for_save if raw_text_for_save else init_msg)
 
         if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
-            tones.beep(1000, 100)
+            if not is_recall: tones.beep(1000, 100)
             ui.message(clean_markdown(init_msg))
             return
-
-            tones.beep(1000, 100)
 
         if self.doc_dlg:
             try: 
                 self.doc_dlg.Destroy()
             except: pass
             self.doc_dlg = None
+            
+        if not is_recall:
+            tones.beep(1000, 100)
 
         def doc_callback(ctx_atts, q, history, dum2):
             lang = config.conf["VisionAssistant"]["ai_response_language"]
@@ -4698,10 +4885,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 messages.append({"role": "user", "content": q})
                 return AIHandler.call(messages), None
             
-
         self.doc_dlg = VisionQADialog(
             gui.mainFrame, 
-        # Translators: Dialog title for a Chat dialog
+            # Translators: Dialog title for a Chat dialog
             _("{name} - Chat").format(name=ADDON_NAME), 
             init_msg, 
             initial_attachments, 
@@ -4788,20 +4974,23 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             # Translators: Initial status when the add-on is doing nothing
             wx.CallAfter(setattr, self, 'current_status', _("Idle"))
 
-    def _open_vision_dialog(self, text, atts, size, force_show=False):
+    def _open_vision_dialog(self, text, atts, size, force_show=False, is_recall=False):
         self._last_result_data = (self._open_vision_dialog, (text, atts, size))
         
         if config.conf["VisionAssistant"]["copy_to_clipboard"]:
             api.copyToClip(text)
 
         if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
-            tones.beep(1000, 100)
+            if not is_recall: tones.beep(1000, 100)
             ui.message(clean_markdown(text))
             return
 
         if self.vision_dlg:
             try: self.vision_dlg.Destroy()
             except: pass
+            self.vision_dlg = None
+            
+        if not is_recall:
             tones.beep(1000, 100)
 
         def cb(atts, q, history, sz):
@@ -4850,10 +5039,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 messages.append({"role": "user", "content": f"{q} ({followup_suffix})"})
                 return AIHandler.call(messages, attachments=atts), None
             
-
         self.vision_dlg = VisionQADialog(
             gui.mainFrame, 
-        # Translators: Dialog title for Image Analysis
+            # Translators: Dialog title for Image Analysis
             _("{name} - Image Analysis").format(name=ADDON_NAME), 
             text, 
             atts, 
@@ -4865,69 +5053,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.vision_dlg.Show()
         self.vision_dlg.Raise()
 
-    def _open_doc_chat_dialog(self, init_msg, initial_attachments, doc_text, raw_text_for_save=None, force_show=False):
-        self._last_result_data = (self._open_doc_chat_dialog, (init_msg, initial_attachments, doc_text, raw_text_for_save))
-        
-        if config.conf["VisionAssistant"]["copy_to_clipboard"]:
-            api.copyToClip(raw_text_for_save if raw_text_for_save else init_msg)
-
-        if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
-            ui.message(clean_markdown(init_msg))
-            return
-
-        if self.doc_dlg:
-            try: 
-                self.doc_dlg.Destroy()
-            except: pass
-            self.doc_dlg = None
-
-        def doc_callback(ctx_atts, q, history, dum2):
-            lang = config.conf["VisionAssistant"]["ai_response_language"]
-            system_template = get_prompt_text("document_chat_system")
-            system_instr = apply_prompt_template(system_template, [("response_lang", lang)])
-            
-            if AIHandler.is_gemini():
-                context_parts = []
-                if ctx_atts:
-                    for att in ctx_atts:
-                        if 'file_uri' in att:
-                            context_parts.append({"file_data": {"mime_type": att['mime_type'], "file_uri": att['file_uri']}})
-                        elif 'data' in att:
-                            context_parts.append({"inline_data": {"mime_type": att['mime_type'], "data": att['data']}})
-                else:
-                    context_parts.append({"text": f"Context content:\n{doc_text}"})
-                
-                context_parts.append({"text": f"Instruction: {system_instr}"})
-                messages = [{"role": "user", "parts": context_parts}]
-                ack_text = get_prompt_text("document_chat_ack") or "Context received. Ready for questions."
-                messages.append({"role": "model", "parts": [{"text": ack_text}]})
-                if history: messages.extend(history)
-                messages.append({"role": "user", "parts": [{"text": q}]})
-                return AIHandler.call(messages), None
-            else:
-                messages = []
-                messages.append({"role": "user", "content": f"{system_instr}\n\nContext content:\n{doc_text}"})
-                messages.append({"role": "assistant", "content": get_prompt_text("document_chat_ack") or "Context received."})
-                if history:
-                    for h in history:
-                        role = "assistant" if h["role"] == "model" else "user"
-                        messages.append({"role": role, "content": h["parts"][0]["text"]})
-                messages.append({"role": "user", "content": q})
-                return AIHandler.call(messages), None
-            
-        # Translators: Dialog title for a Chat dialog
-        self.doc_dlg = VisionQADialog(
-            gui.mainFrame, 
-            _("{name} - Chat").format(name=ADDON_NAME), 
-            init_msg, 
-            initial_attachments, 
-            doc_callback, 
-            extra_info={'skip_init_history': True},
-            raw_content=raw_text_for_save,
-            status_callback=self.report_status
-        )
-        self.doc_dlg.Show()
-        self.doc_dlg.Raise()
 
     # Translators: Script description for Input Gestures dialog
     @scriptHandler.script(description=_("Transcribes a selected audio file."))
@@ -5042,12 +5167,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             if is_insta or is_twitter or is_tiktok:
                 if is_insta:
                     direct_link = get_instagram_download_link(url)
+                    # Translators: Error message when the add-on fails to get a direct download link for an Instagram video.
                     err_msg = _("Error: Could not extract Instagram video.")
                 elif is_twitter:
                     direct_link = get_twitter_download_link(url)
+                    # Translators: Error message when the add-on fails to get a direct download link for a Twitter/X video.
                     err_msg = _("Error: Could not extract Twitter video.")
                 else:
                     direct_link = get_tiktok_download_link(url)
+                    # Translators: Error message when the add-on fails to get a direct download link for a TikTok video.
                     err_msg = _("Error: Could not extract TikTok video.")
 
                 if not direct_link:
@@ -5106,11 +5234,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
         except Exception as e:
             log.error(f"Video analysis thread failed: {e}", exc_info=True)
+            # Translators: Generic error message when something goes wrong during the online video analysis process.
             wx.CallAfter(self.report_status, _("Error processing video."))
             # Translators: Initial status when the add-on is doing nothing
             wx.CallAfter(setattr, self, 'current_status', _("Idle"))
 
-# Translators: Script description for Input Gestures dialog
+    # Translators: Script description for Input Gestures dialog
     @scriptHandler.script(description=_("Attempts to solve a CAPTCHA on the screen or navigator object."))
     def script_solveCaptcha(self, gesture):
         if self.toggling: self.finish()
@@ -5125,20 +5254,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         except: pass
 
         if d:
-            # Translators: Message reported when calling the CAPTCHA solving command
+            # Translators: Message reported by NVDA when the user triggers the CAPTCHA solving command.
             msg = _("Solving...")
             self.report_status(msg)
             threading.Thread(target=self._thread_cap, args=(d, m, is_gov), daemon=True).start()
         else: 
-            # Translators: Message reported when calling the CAPTCHA solving command
+            # Translators: Error message reported when screen or object capture fails for CAPTCHA solving.
             msg = _("Capture failed.")
             self.report_status(msg)
         
     def _thread_cap(self, d, m, is_gov):
-        cap_template = get_prompt_text("captcha_solver_base") or (
-            "Blind user. Return CAPTCHA code only. If NO CAPTCHA is detected in the image, "
-            "strictly return: [[[NO_CAPTCHA]]].{captcha_extra}"
-        )
+        cap_template = get_prompt_text("captcha_solver_base")
         cap_extra = " Read 5 Persian digits, convert to English." if is_gov else " Convert to English digits."
         p = apply_prompt_template(cap_template, [("captcha_extra", cap_extra)])
         
@@ -5149,34 +5275,32 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 wx.CallAfter(setattr, self, 'current_status', _("Idle"))
                 wx.CallAfter(show_error_dialog, r[6:])
                 return
+            
             wx.CallAfter(setattr, self, 'current_status', _("Idle"))
+            
             if "[[[NO_CAPTCHA]]]" in r:
-                # Translators: Message reported when AI cannot find any CAPTCHA in the image
+                # Translators: Message reported by NVDA when the AI cannot detect any CAPTCHA in the captured image.
                 wx.CallAfter(self.report_status, _("No CAPTCHA detected."))
             else:
-                wx.CallAfter(self._finish_captcha, r)
+                wx.CallAfter(self._finish_captcha, r.strip())
         else: 
             # Translators: Initial status when the add-on is doing nothing
             wx.CallAfter(setattr, self, 'current_status', _("Idle"))
 
     def _finish_captcha(self, text):
-        old_clip = ""
-        if not config.conf["VisionAssistant"]["copy_to_clipboard"]:
+        clean_text = re.sub(r'[^a-zA-Z0-9]', '', text) if not any(c.isdigit() for c in text) else text
+        for char in clean_text:
             try:
-                old_clip = api.getClipData()
-            except Exception:
-                pass
-
-        api.copyToClip(text)
-        send_ctrl_v()
+                keyboardHandler.KeyboardInputGesture.fromName(char).send()
+            except:
+                vk = winUser.user32.VkKeyScanW(ord(char)) & 0xFF
+                winUser.keybd_event(vk, 0, 0, 0)
+                winUser.keybd_event(vk, 0, 2, 0)
+            time.sleep(0.02)
         tones.beep(1000, 100)
-        
-        # Translators: Message reported when calling the CAPTCHA solving command
-        msg = _("Captcha: {text}").format(text=text)
-        wx.CallLater(200, self.report_status, msg)
-        
-        if not config.conf["VisionAssistant"]["copy_to_clipboard"] and old_clip:
-            wx.CallLater(500, api.copyToClip, old_clip)
+        # Translators: Message reported by NVDA after successfully solving a text CAPTCHA, announcing the characters found.
+        msg = _("Captcha: {text}").format(text=clean_text)
+        self.report_status(msg)
 
 
     # Translators: Script description for Input Gestures dialog
@@ -5262,7 +5386,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             return
         
         func, args = self._last_result_data
-        wx.CallAfter(func, *args, force_show=True)
+        wx.CallAfter(func, *args, force_show=True, is_recall=True)
 
     def on_settings_click(self, event):
         instance = getattr(gui.settingsDialogs.NVDASettingsDialog, "instance", None)
@@ -5323,7 +5447,315 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             os.startfile("https://t.me/VisionAssistantPro")
         except Exception as e:
             show_error_dialog(str(e))
-            
+
+    @scriptHandler.script(description=_("Toggles the interactive UI elements explorer."))
+    def script_toggleUIExplorer(self, gesture):
+        if self.toggling: self.finish()
+        if not self.is_ui_explorer_active:
+            self.is_ui_explorer_active = True
+            # Translators: Status message when UI Explorer starts
+            self.report_status(_("UI Explorer Active"))
+            wx.CallAfter(lambda: threading.Thread(target=self._thread_ui_explorer, daemon=True).start())
+        else:
+            self.is_ui_explorer_active = False
+            # Translators: Status message when UI Explorer stops
+            self.report_status(_("UI Explorer Stopped"))
+            tones.beep(200, 100)
+
+    def _thread_ui_explorer(self):
+        if not self.is_ui_explorer_active: return
+        time.sleep(0.5)
+        img, w, h, m = self._capture_fullscreen()
+        if not img: 
+            self.is_ui_explorer_active = False
+            return
+        tones.beep(800, 50)
+        fg_app = api.getForegroundObject().appModule.appName
+        prompt_template = get_prompt_text("ui_explorer_system")
+        prompt = apply_prompt_template(prompt_template, [("app_name", fg_app)])
+        res = AIHandler.call(prompt, attachments=[{'mime_type': m, 'data': img}], json_mode=True, task="operator")
+        if not res or res.startswith("ERROR:"):
+            self.is_ui_explorer_active = False
+            # Translators: Generic error message for AI failures
+            err_msg = res[6:] if res else _("Unknown AI Error")
+            wx.CallAfter(show_error_dialog, err_msg)
+            return
+        try:
+            clean_res = res.strip()
+            if "```json" in clean_res: clean_res = clean_res.split("```json")[1].split("```")[0].strip()
+            elif "```" in clean_res: clean_res = clean_res.split("```")[1].split("```")[0].strip()
+            elements = json.loads(clean_res)
+            tones.beep(1000, 100)
+            wx.CallAfter(self._show_elements_selector, elements, w, h)
+        except Exception as e:
+            log.error(f"UI Explorer parsing failed: {e}")
+            if self.is_ui_explorer_active:
+                self.is_ui_explorer_active = False
+                # Translators: Error shown when AI fails to find UI elements
+                wx.CallAfter(show_error_dialog, _("AI failed to identify UI elements."))
+
+    def _show_elements_selector(self, elements, sw, sh):
+        if not self.is_ui_explorer_active: return
+        choices, valid_elements = [], []
+        for el in elements:
+            label = el.get('label', '').strip()
+            if label and label not in choices:
+                choices.append(label)
+                valid_elements.append(el)
+        if not choices:
+            self.is_ui_explorer_active = False
+            return
+        gui.mainFrame.prePopup()
+        # Translators: Instruction for the elements list dialog
+        dlg = wx.SingleChoiceDialog(gui.mainFrame, _("Select an element to click:"), _("UI Elements Explorer"), choices)
+        if dlg.ShowModal() == wx.ID_OK:
+            idx = dlg.GetSelection()
+            target = valid_elements[idx]
+            x, y = int(target['x'] * sw / 1000), int(target['y'] * sh / 1000)
+            dlg.Destroy()
+            gui.mainFrame.postPopup()
+            self._do_mouse_action(x, y, "click")
+            wx.CallLater(2000, lambda: threading.Thread(target=self._thread_ui_explorer, daemon=True).start())
+        else:
+            self.is_ui_explorer_active = False
+            dlg.Destroy()
+            gui.mainFrame.postPopup()
+            # Translators: Status message when UI Explorer stops
+            self.report_status(_("UI Explorer Stopped"))
+
+    @scriptHandler.script(description=_("Asks the AI Operator to perform an action or describe the screen."))
+    def script_aiOperatorAction(self, gesture):
+        if self.toggling: self.finish()
+        def show_cmd_dialog():
+            gui.mainFrame.prePopup()
+            # Translators: Title and message for AI Operator command dialog
+            dlg = wx.TextEntryDialog(gui.mainFrame, _("What should I do or what is your question?"), _("AI Operator"))
+            if dlg.ShowModal() == wx.ID_OK:
+                command = dlg.GetValue()
+                dlg.Destroy()
+                gui.mainFrame.postPopup()
+                
+                time.sleep(0.5) 
+                
+                if command.strip():
+                    self._operator_history = []
+                    # Translators: Status reported when AI starts processing a command
+                    wx.CallLater(300, self.report_status, _("Processing..."))
+                    wx.CallLater(800, lambda: threading.Thread(target=self._thread_ai_computer_use, args=(command,), daemon=True).start())
+                return
+            dlg.Destroy()
+            gui.mainFrame.postPopup()
+        wx.CallAfter(show_cmd_dialog)
+
+    def _thread_ai_computer_use(self, user_command):
+        try:
+            max_turns = 5
+            current_command = user_command
+            if not self._operator_history: self._operator_history = []
+            resp_lang = config.conf["VisionAssistant"]["ai_response_language"]
+            fg_app = api.getForegroundObject().appModule.appName
+            is_gemini = AIHandler.is_gemini()
+            for turn in range(max_turns):
+                if turn > 0: time.sleep(3.5)
+                time.sleep(0.5)
+                img, w, h, m = self._capture_fullscreen()
+                if not img: break
+                tones.beep(800, 50)
+                system_template = get_prompt_text("ai_operator_system")
+                prompt = apply_prompt_template(system_template, [("user_command", current_command), ("response_lang", resp_lang), ("app_name", fg_app)])
+                messages = []
+                for item in self._operator_history:
+                    role = item["role"]; content = item.get("content") or item.get("parts", [{}])[0].get("text", "")
+                    if is_gemini: messages.append({"role": "user" if role == "user" else "model", "parts": [{"text": content}]})
+                    else: messages.append({"role": role if role != "model" else "assistant", "content": content})
+                if is_gemini: messages.append({"role": "user", "parts": [{"text": prompt}, {"inline_data": {"mime_type": m, "data": img}}]})
+                else: messages.append({"role": "user", "content": [{"type": "text", "text": prompt}, {"type": "image_url", "image_url": {"url": f"data:{m};base64,{img}"}}]})
+                res = AIHandler.call(messages, task="operator")
+                if not res or res.startswith("ERROR:"):
+                    # Translators: Fallback error message shown in the AI Operator if the server returns an empty or invalid response.
+                    wx.CallAfter(show_error_dialog, res[6:] if res else _("AI Error"))
+                    break
+                
+                display_text, is_finished, action_info = self._process_ai_action_logic(res, w, h)
+                
+                # Translators: Internal history label for user actions in operator sessions
+                hist_user = current_command if turn == 0 else _("Action performed. Checking result...")
+                self._operator_history.append({"role": "user", "content": hist_user})
+                self._operator_history.append({"role": "assistant", "content": res})
+                
+                self._last_result_data = (self._open_operator_chat_dialog, (display_text, {"last_w": w, "last_h": h}))
+                
+                wx.CallAfter(ui.message, clean_markdown(display_text))
+                
+                if action_info:
+                    time.sleep(2.0)
+                    act, rx, ry, txt_val, p_ent = action_info
+                    if act == "type" and txt_val:
+                        self._do_type(rx, ry, txt_val, p_ent)
+                    else:
+                        self._do_mouse_action(rx, ry, act)
+                    tones.beep(1000, 100)
+
+                if is_finished or ("{" not in res and not action_info):
+                    if config.conf["VisionAssistant"]["copy_to_clipboard"]:
+                        api.copyToClip(display_text)
+                    if not config.conf["VisionAssistant"]["skip_chat_dialog"]:
+                        wx.CallAfter(self._open_operator_chat_dialog, display_text, {"last_w": w, "last_h": h})
+                    break
+                time.sleep(2.5)             
+                current_command = "The action was initiated. Continue if necessary."
+        finally:
+            # Translators: Initial status when the add-on is doing nothing
+            self.current_status = _("Idle")
+
+    def _open_operator_chat_dialog(self, text, context, force_show=False, is_recall=False):
+        self._last_result_data = (self._open_operator_chat_dialog, (text, context))
+        if config.conf["VisionAssistant"]["skip_chat_dialog"] and not force_show:
+            return
+        if self.vision_dlg:
+            try: self.vision_dlg.Destroy()
+            except: pass
+            self.vision_dlg = None
+
+        def operator_callback(ctx, q, history, extra):
+            self._operator_history = []
+            for h in history:
+                role = "user" if h["role"] == "user" else "assistant"
+                text_val = h.get("content") or h.get("parts", [{}])[0].get("text", "")
+                self._operator_history.append({"role": role, "content": text_val})
+            wx.CallAfter(self.vision_dlg.Close)
+            threading.Thread(target=self._thread_ai_computer_use, args=(q,), daemon=True).start()
+            return None, None
+
+        if not is_recall:
+            tones.beep(1000, 100)
+
+        # Translators: The title of the interactive chat dialog for the AI Operator feature.
+        title_text = _("{name} - AI Operator").format(name=ADDON_NAME)
+        self.vision_dlg = VisionQADialog(gui.mainFrame, title_text, text, context, operator_callback, status_callback=self.report_status)
+        
+        if self._operator_history:
+            dialog_history = []
+            self.vision_dlg.outputArea.Clear()
+            for h in self._operator_history:
+                role = "user" if h["role"] == "user" else "model"
+                content = h.get("content") or h.get("parts", [{}])[0].get("text", "")
+                dialog_history.append({"role": role, "parts": [{"text": content}]})
+                # Translators: Labels for the AI and User in chat history
+                role_label = _("Operator") if h["role"] in ["assistant", "model"] else _("You")
+                content_only = ""
+                try:
+                    if "{" in content:
+                        json_match = re.search(r'\{.*\}', content, flags=re.DOTALL)
+                        if json_match:
+                            data = json.loads(json_match.group(0))
+                            content_only = data.get("explanation", "")
+                except: pass
+                if not content_only: 
+                    content_only = re.sub(r'\{.*\}', '', content, flags=re.DOTALL).strip()
+                if "Windows operator" not in content and content_only:
+                    self.vision_dlg.outputArea.AppendText(f"{role_label}: {clean_markdown(content_only)}\n\n")
+            self.vision_dlg.chat_history = dialog_history
+
+        self.vision_dlg.Show()
+        self.vision_dlg.Raise()
+        self.vision_dlg.SetFocus()
+
+    def _process_ai_action_logic(self, res, sw, sh):
+        is_finished = False
+        action_info = None
+        clean_text = res
+        exp_match = re.search(r'"explanation":\s*"([^"]*)"', res)
+        if exp_match:
+            clean_text = exp_match.group(1)
+        else:
+            clean_text = re.sub(r'\{.*\}', '', res, flags=re.DOTALL).strip()
+            if not clean_text: clean_text = res
+
+        try:
+            json_match = re.search(r'\{.*\}', res.replace('\n', ' '))
+            if json_match:
+                json_str = json_match.group(0)
+                try:
+                    data = json.loads(json_str)
+                    x, y = data.get("x"), data.get("y")
+                    action = data.get("action", "click")
+                    is_finished = data.get("finished", False)
+                    explanation = data.get("explanation", clean_text)
+                    t_val = data.get("text", "")
+                except:
+                    x_m = re.search(r'"x":\s*(\d+)', json_str)
+                    y_m = re.search(r'"y":\s*(\d+)', json_str) or re.search(r'"x":\s*\d+,\s*(\d+)', json_str)
+                    x = int(x_m.group(1)) if x_m else None
+                    y = int(y_m.group(1)) if y_m else None
+                    action = "click"
+                    act_m = re.search(r'"action":\s*"([^"]*)"', json_str)
+                    if act_m: action = act_m.group(1)
+                    is_finished = '"finished":\s*true' in json_str.lower()
+                    explanation = clean_text
+                    t_m = re.search(r'"text":\s*"([^"]*)"', json_str)
+                    t_val = t_m.group(1) if t_m else ""
+
+                if x is not None and y is not None:
+                    real_x, real_y = int(x * sw / 1000), int(y * sh / 1000)
+                    p_ent = action == "type" or t_val.endswith("\n") or "اینتر" in explanation or "enter" in explanation.lower()
+                    action_info = (action, real_x, real_y, t_val, p_ent)
+                
+                return explanation, is_finished, action_info
+            else:
+                return clean_text, True, None
+        except:
+            return clean_text, True, None
+
+    def _do_mouse_action(self, x, y, action_type):
+        winUser.setCursorPos(x, y)
+        time.sleep(0.5) 
+        if action_type == "right_click": 
+            mouseHandler.doSecondaryClick()
+        elif action_type == "double_click":
+            mouseHandler.doPrimaryClick()
+            time.sleep(0.1)
+            mouseHandler.doPrimaryClick()
+        else: 
+            mouseHandler.doPrimaryClick()
+        time.sleep(1.0)
+
+    def _do_type(self, x, y, text, press_enter=False):
+        winUser.setCursorPos(x, y)
+        time.sleep(0.2)
+        mouseHandler.doPrimaryClick()
+        time.sleep(0.8)
+        
+        winUser.keybd_event(0x23, 0, 1, 0)
+        time.sleep(0.05)
+        winUser.keybd_event(0x23, 0, 1 | 2, 0)
+        
+        time.sleep(0.2)
+        
+        for _ in range(30):
+            winUser.keybd_event(0x08, 0, 0, 0)
+            winUser.keybd_event(0x08, 0, 2, 0)
+            time.sleep(0.01)
+
+        old_clip_data = api.getClipData()
+        clean_text = text.replace('\n', '').replace("'", "").replace('"', '').strip()
+        api.copyToClip(clean_text)
+        time.sleep(0.2)
+        
+        winUser.keybd_event(0x11, 0, 0, 0)
+        winUser.keybd_event(0x56, 0, 0, 0)
+        winUser.keybd_event(0x56, 0, 2, 0)
+        winUser.keybd_event(0x11, 0, 2, 0)
+        time.sleep(0.5) 
+        
+        if old_clip_data:
+            api.copyToClip(old_clip_data)
+        
+        time.sleep(0.5)
+        winUser.keybd_event(0x0D, 0, 0, 0)
+        winUser.keybd_event(0x0D, 0, 2, 0)
+        time.sleep(0.2)
+
     __gestures = {
         "kb:NVDA+shift+v": "activateLayer",
     }
@@ -5334,7 +5766,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         "kb:o": "ocrFullScreen",
         "kb:v": "describeObject",
         "kb:d": "analyzeDocument",
-        "kb:f": "fileOCR",
+"kb:f": "smartFileAction",
         "kb:a": "transcribeAudio",
         "kb:c": "solveCaptcha",
         "kb:l": "announceStatus",
@@ -5344,4 +5776,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         "kb:shift+v": "analyzeOnlineVideo",
         "kb:space": "showLastResult",
         "kb:h": "showHelp",
+        "kb:e": "toggleUIExplorer",
+        "kb:shift+a": "aiOperatorAction",
     }

@@ -15,8 +15,8 @@ Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**.
 - **Fetch Models:** After entering your API key, press this button to download the latest list of available models from the provider.
 - **AI Model:** Select the main model used for general chat and analysis.
 
-### 1.2 Advanced Model Routing (Native Providers)
-*Available for Gemini, OpenAI, Groq, and Mistral.*
+### 1.2 Advanced Model Routing
+*Available for all providers including Gemini, OpenAI, Groq, Mistral, and Custom.*
 
 > **⚠️ Warning:** These settings are intended for **advanced users only**. If you are unsure what a specific model does, please leave this **unchecked**. Selecting an incompatible model for a task (e.g., a text-only model for Vision) will cause errors and stop the add-on from working.
 
@@ -24,6 +24,7 @@ Check **"Advanced Model Routing (Task-specific)"** to unlock detailed control. T
 - **OCR / Vision Model:** Choose a specialized model for analyzing images.
 - **Speech-to-Text (STT):** Choose a specific model for dictation.
 - **Text-to-Speech (TTS):** Choose a model for generating audio.
+- **AI Operator Model:** Select a specific model for autonomous computer operation tasks.
 *Note: Unsupported features (e.g., TTS for Groq) will be automatically hidden.*
 
 ### 1.3 Advanced Endpoint Configuration (Custom Provider)
@@ -37,8 +38,8 @@ Check **"Advanced Endpoint Configuration"** to manually input server details. Un
 - **Custom Models:** Manually type the model name (e.g., `llama3:8b`) for each task.
 
 ### 1.4 General Preferences
-- **OCR Engine:** Choose between **Chrome (Fast)** for quick results or **Gemini (Formatted)** for superior layout preservation.
-    - *Note:* If you select "Gemini (Formatted)" but your provider is set to OpenAI/Groq, the addon will intelligently route the image to your active provider's vision model.
+- **OCR Engine:** Choose between **Chrome (Fast)** for quick results or **AI (Advanced)** for superior layout preservation.
+    - *Note:* If you select "AI (Advanced)" but your provider is set to OpenAI/Groq, the addon will intelligently route the image to your active provider's vision model.
 - **TTS Voice:** Select your preferred voice style. This list updates dynamically based on your active provider.
 - **Creativity (Temperature):** Controls the randomness of the AI. Lower values are better for accurate translation/OCR.
 - **Proxy URL:** Configure this if AI services are restricted in your region (supports local proxies like `127.0.0.1` or bridge URLs).
@@ -51,6 +52,8 @@ To prevent keyboard conflicts, this add-on uses a **Command Layer**.
 
 | Key           | Function                 | Description                                                                 |
 |---------------|--------------------------|-----------------------------------------------------------------------------|
+| **Shift + A** | **AI Operator**         | **Autonomous Operation:** Tell the AI to perform a task on your screen.      |
+| **E**         | **UI Explorer**          | **Interactive Click:** Identifies and clicks UI elements in any app.        |
 | **T**         | Smart Translator         | Translates text under navigator cursor or selection.                        |
 | **Shift + T** | Clipboard Translator     | Translates content currently in the clipboard.                              |
 | **R**         | Text Refiner             | Summarize, Fix Grammar, Explain, or run **Custom Prompts**.                 |
@@ -58,14 +61,14 @@ To prevent keyboard conflicts, this add-on uses a **Command Layer**.
 | **O**         | Full Screen Vision       | Analyzes the entire screen layout and content.                              |
 | **Shift + V** | Online Video Analysis    | Analyze **YouTube**, **Instagram**, **TikTok**, or **Twitter (X)** videos.  |
 | **D**         | Document Reader          | Advanced reader for PDF and images with page range selection.               |
-| **F**         | File OCR                 | Direct text recognition from selected image, PDF, or TIFF files.            |
+| **F**         | **Smart File Action**    | Context-aware recognition from selected image, PDF, or TIFF files.          |
 | **A**         | Audio Transcription      | Transcribe MP3, WAV, or OGG files into text.                                |
 | **C**         | CAPTCHA Solver           | Captures and solves CAPTCHAs (Supports Gov portals).                        |
 | **S**         | Smart Dictation          | Converts speech to text. Press to start recording, again to stop/type.      |
 | **L**         | Status Reporting         | Announces current progress (e.g., "Scanning...", "Idle").                   |
 | **U**         | Update Check             | Manually check GitHub for the latest version of the add-on.                 |
 | **Space**     | Recall Last Result       | Shows the last AI response in a chat dialog for review or follow-up.        |
-| **H**         | Commands Help            | Displays a list of all available shortcuts within the command layer.        |
+| **H**         | Commands Help            | Displays a list of all available shortcuts.                                 |
 
 ### 2.1 Document Reader Shortcuts (Inside Viewer)
 - **Ctrl + PageDown:** Move to the next page.
@@ -98,6 +101,16 @@ Stay updated with the latest news, features, and releases:
 - **GitHub Issues:** For bug reports and feature requests.
 
 ---
+
+## Changes for 5.5 (The Automation Update)
+
+*   **AI Operator (Autonomous Control - Shift+A):** This is the crown jewel of v5.5. Vision Assistant Pro has graduated from being a passive assistant to becoming your personal **AI Operator**. It doesn't just describe the screen—it takes command.
+    *   *How it works:* You can now give verbal instructions to operate your PC. For example, in a completely inaccessible application where your screen reader stays silent, you can press **Shift+A** and type: *"Click on the Settings button"* or *"Find the search field, type 'Latest News' and press enter."* The AI visually identifies the elements, moves the mouse, and executes the task for you.
+    *   *Performance Note:* This feature is optimized for **Gemini 3.0 Flash (Preview)**, delivering incredibly fast and intelligent responses that can handle even the most complex UI layouts.
+    *   **⚠️ API Usage Warning:** Because the AI Operator needs to "see" exactly what's happening to be accurate, it sends a high-resolution screenshot with every step. Please note that frequent use will consume your API quota much faster than standard text-based tasks.
+*   **Visual UI Explorer (E):** Tired of navigating through "unlabeled buttons"? Press **E** to activate the UI Explorer. The AI will scan the entire window and generate a list of every clickable element it sees—including icons, graphics, and menus. Simply pick an item from the list, and the AI Operator will click it for you. It’s like having an "accessible layer" on top of any app.
+*   **Context-Aware Smart File Action (F):** The "F" key has been completely overhauled. It no longer assumes you only want OCR. When you select a single image, it now intelligently asks for your intent: you can choose a **Detailed Visual Description** to understand the scene or a **Structured Text Extraction (OCR)** for reading. The menu adapts dynamically based on the file type and your active AI engine.
+*   **Core Optimization:** We've performed a deep cleanup of the add-on’s internal logic, removing unused legacy functions and redundant code. This results in a leaner, faster, and more reliable experience for all users.
 
 ## Changes for 5.0
 
