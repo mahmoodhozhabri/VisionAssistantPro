@@ -76,27 +76,37 @@ jobs:
 
     - name: Send Telegram Notification
       run: |
-        head -c 3500 changelog.md > log_part.txt
-        sed -i 's/^## /🔹 /g' log_part.txt
-        sed -i 's/^# //g' log_part.txt
+        head -n 100 changelog.md > log_part.txt
+        sed -i 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' log_part.txt
+        
+        sed -i 's/\*\*\([^*]*\)\*\*/<b>\1<\/b>/g' log_part.txt
+        
+        sed -i "s/\*\([^*]*\)\*/<i>\1<\/i>/g" log_part.txt
+
+        sed -i 's/^## \(.*\)/<b>🔹 \1<\/b>/g' log_part.txt
+        
         sed -i 's/^\* /• /g' log_part.txt
+        sed -i 's/^[[:space:]]*• /  • /g' log_part.txt
 
         cat << 'EOF' > tg_msg.txt
-        *🚀 New Release: Vision Assistant Pro*
+        <b>🚀 New Release: Vision Assistant Pro</b>
 
-        *Version:* `${{ github.ref_name }}`
+        <b>Version:</b> <code>${{ github.ref_name }}</code>
 
-        *What's New:*
+        <b>What's New:</b>
         EOF
+        
         cat log_part.txt >> tg_msg.txt
+        
         cat << 'EOF' >> tg_msg.txt
 
-        [📦 View and Download on GitHub](${{ github.event.repository.html_url }}/releases/tag/${{ github.ref_name }})
+        <a href="${{ github.event.repository.html_url }}/releases/tag/${{ github.ref_name }}">📦 View and Download on GitHub</a>
 
         #NVDA #AI #VisionAssistant
         EOF
 
-        curl -v -f -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-          -d "chat_id=${{ secrets.TELEGRAM_TO }}" \
-          -d "parse_mode=Markdown" \
-          --data-urlencode "text@tg_msg.txt"
+        curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+          --data-urlencode "chat_id=${{ secrets.TELEGRAM_TO }}" \
+          --data-urlencode "text@tg_msg.txt" \
+          -d "parse_mode=HTML" \
+          -d "disable_web_page_preview=false"

@@ -26,7 +26,7 @@ Command Layer: Press NVDA+Shift+V, then:
 - Recall Last Result (Space),
 - Commands Help (H),
 """),
-    addon_version="5.5",
+    addon_version="5.5.1",
     # Brief changelog for this version
     # Translators: what's new content for the add-on version to be shown in the add-on store
     addon_changelog=_("""## Changes for 5.5 (The Automation Update)

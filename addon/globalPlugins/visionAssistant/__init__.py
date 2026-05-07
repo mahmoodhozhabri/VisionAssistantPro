@@ -5729,7 +5729,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         winUser.keybd_event(0x23, 0, 1, 0)
         time.sleep(0.05)
         winUser.keybd_event(0x23, 0, 1 | 2, 0)
-        
         time.sleep(0.2)
         
         for _ in range(30):
@@ -5737,19 +5736,31 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             winUser.keybd_event(0x08, 0, 2, 0)
             time.sleep(0.01)
 
-        old_clip_data = api.getClipData()
+        old_clip_data = None
+        try:
+            old_clip_data = api.getClipData()
+        except Exception as e:
+            log.debugWarning(f"VisionAssistant: Could not backup clipboard: {e}")
+
         clean_text = text.replace('\n', '').replace("'", "").replace('"', '').strip()
-        api.copyToClip(clean_text)
-        time.sleep(0.2)
         
-        winUser.keybd_event(0x11, 0, 0, 0)
-        winUser.keybd_event(0x56, 0, 0, 0)
-        winUser.keybd_event(0x56, 0, 2, 0)
-        winUser.keybd_event(0x11, 0, 2, 0)
-        time.sleep(0.5) 
-        
+        try:
+            api.copyToClip(clean_text)
+            time.sleep(0.3)
+            
+            winUser.keybd_event(0x11, 0, 0, 0)
+            winUser.keybd_event(0x56, 0, 0, 0)
+            winUser.keybd_event(0x56, 0, 2, 0)
+            winUser.keybd_event(0x11, 0, 2, 0)
+            time.sleep(0.5)
+        except Exception as e:
+            log.error(f"VisionAssistant: Typing via clipboard failed: {e}")
+
         if old_clip_data:
-            api.copyToClip(old_clip_data)
+            try:
+                api.copyToClip(old_clip_data)
+            except:
+                pass
         
         time.sleep(0.5)
         winUser.keybd_event(0x0D, 0, 0, 0)
