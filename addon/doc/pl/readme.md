@@ -61,7 +61,7 @@ Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy polec
 | **O**         | Rozpoznawanie ekranu          | Analizuje układ i zawartość całego ekranu.                                  |
 | **Shift + V** | Analiza wideo online          | Analizuj filmy z **YouTube**, **Instagrama**, **TikToka** lub **Twittera (X)**. |
 | **D**         | Czytnik dokumentów            | Czytnik PDF i obrazów z wyborem zakresu stron.                              |
-| **F**         | **Inteligentna akcja na pliku** | Rozpoznawanie zależne od kontekstu z wybranego obrazu, PDF lub TIFF.      |
+| **F**         | **Akcja na pliku**            | Rozpoznawanie zależne od kontekstu z wybranego obrazu, PDF lub TIFF.        |
 | **A**         | Transkrypcja audio            | Transkrybuje pliki MP3, WAV lub OGG na tekst.                               |
 | **C**         | Rozwiązywanie CAPTCHA         | Przechwytuje i rozwiązuje CAPTCHA.                                          |
 | **S**         | Dyktowanie                    | Zamienia mowę na tekst. Naciśnij raz, aby nagrywać, ponownie, aby zakończyć. |
@@ -100,7 +100,21 @@ Bądź na bieżąco z najnowszymi wiadomościami i aktualizacjami:
 - **Kanał w Telegramie:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** Zgłaszanie błędów i propozycje nowych funkcji.
 
+## 5. Patroni projektu
+
+Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładami finansowymi wspierają ciągły rozwój i utrzymanie tego projektu:
+
+*   **@Alyabani94**
+
+*Jeśli chcesz wesprzeć projekt finansowo i zobaczyć tutaj swoje imię, opcję **Wsparcie** znajdziesz w menu Narzędzia NVDA (podmenu Vision Assistant) albo podczas konfiguracji po instalacji.*
+
+
 ---
+## Zmiany w wersji 5.6
+
+* **Dodano silnik OCR „Wyodrębnij tekst (offline)”:** Teraz można wyodrębniać tekst bezpośrednio z plików PDF z warstwą tekstową, bez zużywania kredytów AI, co daje znaczne przyspieszenie i większą prywatność dokumentów tekstowych.
+* **Lepsza dokładność Eksploratora interfejsu:** Ulepszono prompt eksploratora, by trafniej rozpoznawał typy elementów (np. element listy) i precyzyjnie raportował stany takie jak „(zaznaczony)”, „(wybrany)” albo „(rozwinięty)”, pomijając jednocześnie komponenty systemu Windows jak pasek zadań i zegar.
+* **Przypomnienie o konfiguracji po instalacji:** Dodano powiadomienie po instalacji, które prowadzi do menu ustawień, by skonfigurować klucze API i preferencje.
 
 ## Zmiany w wersji 5.5.2
 
@@ -115,8 +129,8 @@ Bądź na bieżąco z najnowszymi wiadomościami i aktualizacjami:
     * *Uwaga o wydajności:* Funkcja jest zoptymalizowana dla **Gemini 3.0 Flash (Preview)**, dostarczając niezwykle szybkich i inteligentnych odpowiedzi, które poradzą sobie nawet z najbardziej złożonymi układami interfejsu.
     * **⚠️ Ostrzeżenie o zużyciu API:** Ponieważ Operator AI musi „widzieć" dokładnie to, co się dzieje, aby działać precyzyjnie, wysyła zrzut ekranu w wysokiej rozdzielczości na każdym kroku. Częste używanie znacznie szybciej zużyje Twój limit API niż standardowe zadania tekstowe.
 * **Wizualny Eksplorator interfejsu (E):** Zmęczony nawigacją po „nieoznaczonych przyciskach"? Naciśnij **E**, aby uruchomić Eksplorator interfejsu. AI przeskanuje całe okno i wygeneruje listę każdego klikalnego elementu, jaki widzi: ikon, grafik i menu. Wybierz element z listy, a Operator AI kliknie go za Ciebie. To jak „warstwa dostępności" nałożona na dowolną aplikację.
-* **Inteligentna akcja na pliku zależna od kontekstu (F):** Klawisz „F" został gruntownie przebudowany. Nie zakłada już, że chcesz tylko OCR. Gdy wybierzesz pojedynczy obraz, inteligentnie zapyta o Twoją intencję: możesz wybrać **Szczegółowy opis wizualny**, aby zrozumieć scenę, lub **Strukturalne wyodrębnienie tekstu (OCR)** do czytania. Menu dostosowuje się dynamicznie do typu pliku i aktywnego silnika AI.
-* **Optymalizacja rdzenia:** Wykonaliśmy głębokie czyszczenie wewnętrznej logiki dodatku, usuwając nieużywane funkcje legacy i zbędny kod. Daje to lżejsze, szybsze i bardziej niezawodne działanie dla wszystkich użytkowników.
+* **Akcja na pliku zależna od kontekstu (F):** Klawisz „F" został gruntownie przebudowany. Nie zakłada już, że chcesz tylko OCR. Gdy wybierzesz pojedynczy obraz, zapyta o Twoją intencję: możesz wybrać **Szczegółowy opis wizualny**, aby zrozumieć scenę, lub **Strukturalne wyodrębnienie tekstu (OCR)** do czytania. Menu dostosowuje się dynamicznie do typu pliku i aktywnego silnika AI.
+* **Optymalizacja rdzenia:** Wykonaliśmy głębokie czyszczenie wewnętrznej logiki dodatku, usuwając nieużywane funkcje legacy i zbędny kod. Daje to lżejsze, szybsze i bardziej niezawodne działanie.
 
 ## Zmiany w wersji 5.0
 
