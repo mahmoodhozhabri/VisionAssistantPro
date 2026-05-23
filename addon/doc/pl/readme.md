@@ -1,6 +1,6 @@
 # Pomoc Vision Assistant Pro
 
-**Vision Assistant Pro** to wielofunkcyjny asystent AI dla NVDA. Wykorzystuje silniki AI do odczytywania ekranu, tłumaczenia, dyktowania głosowego i analizy dokumentów.
+**Vision Assistant Pro** to wielofunkcyjny asystent AI dla NVDA wykorzystujący silniki AI do odczytywania ekranu, tłumaczenia, dyktowania głosowego i analizy dokumentów.
 
 _Ten dodatek został udostępniony społeczności z okazji Międzynarodowego Dnia Osób z Niepełnosprawnościami._
 
@@ -65,7 +65,9 @@ Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy polec
 | **A**         | Transkrypcja audio            | Transkrybuje pliki MP3, WAV lub OGG na tekst.                               |
 | **C**         | Rozwiązywanie CAPTCHA         | Przechwytuje i rozwiązuje CAPTCHA.                                          |
 | **S**         | Dyktowanie                    | Zamienia mowę na tekst. Naciśnij raz, aby nagrywać, ponownie, aby zakończyć. |
-| **L**         | Raport stanu                  | Odczytuje bieżący postęp (np. „Skanowanie...", „Bezczynny").                |
+| **I**         | Raport stanu                  | Odczytuje bieżący postęp (np. „Skanowanie...", „Bezczynny").                |
+| **L**         | **Oznacz obiekt**             | **Semantyczne etykietowanie AI:** Trwale oznacza bieżący element/ikonę.     |
+| **Shift + L** | **Zarządzaj / Skanuj etykiety** | Otwiera Menedżer etykiet (jeśli istnieją) lub skanuje aplikację w poszukiwaniu nieoznaczonych elementów. |
 | **U**         | Sprawdzanie aktualizacji      | Ręcznie sprawdza najnowszą wersję dodatku na GitHubie.                      |
 | **Spacja**    | Ostatnia odpowiedź AI         | Wyświetla ostatnią odpowiedź AI w oknie czatu do przeglądu lub kontynuacji. |
 | **H**         | Pomoc poleceń                 | Wyświetla listę wszystkich dostępnych skrótów w warstwie poleceń.           |
@@ -105,11 +107,18 @@ Bądź na bieżąco z najnowszymi wiadomościami i aktualizacjami:
 Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładami finansowymi wspierają ciągły rozwój i utrzymanie tego projektu:
 
 *   **@Alyabani94**
+*   **Ali Alamri**
 
 *Jeśli chcesz wesprzeć projekt finansowo i zobaczyć tutaj swoje imię, opcję **Wsparcie** znajdziesz w menu Narzędzia NVDA (podmenu Vision Assistant) albo podczas konfiguracji po instalacji.*
 
 
 ---
+## Zmiany w wersji 6.0
+
+*   **etykietowanie AI**: Teraz można trwale nadawać etykiety nienazwanym przyciskom i ikonom za pomocą AI. Naciśnij **L**, by oznaczyć bieżący obiekt nawigatora (obsługa zarówno fokusu Tab, jak i nawigacji obiektowej), lub **Shift+L**, by przeskanować i oznaczyć całą aplikację naraz.
+*   **Zarządzanie etykietami**: Nowe, w pełni dostępne okno Menedżer etykiet (przez **Shift+L**, jeśli etykiety istnieją) pozwala przeglądać, zmieniać nazwy i zbiorczo usuwać etykiety.
+*   **Bezpośrednia analiza pliku (z pominięciem okna dialogowego)**: Dodatek wykrywa, czy fokus znajduje się na pliku PDF lub graficznym w Eksploratorze Windows. Naciśnięcie **F (Akcja na pliku)** lub **D (Czytnik dokumentów)** na zaznaczonym pliku natychmiast go przetworzy, pomijając standardowe okno „Otwórz".
+
 ## Zmiany w wersji 5.6
 
 * **Dodano silnik OCR „Wyodrębnij tekst (offline)”:** Teraz można wyodrębniać tekst bezpośrednio z plików PDF z warstwą tekstową, bez zużywania kredytów AI, co daje znaczne przyspieszenie i większą prywatność dokumentów tekstowych.
