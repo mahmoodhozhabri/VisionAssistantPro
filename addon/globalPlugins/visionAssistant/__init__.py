@@ -54,6 +54,9 @@ import scriptHandler
 import mouseHandler
 import keyboardHandler
 import winUser
+import controlTypes
+import comtypes.client
+
 from .prompt_manager_dialog import PromptManagerDialog
 
 log = logging.getLogger(__name__)
@@ -79,7 +82,8 @@ MODELS = [
 
     # --- 2. Current Standard (Free & Fast) ---
     # Translators: AI Model info. [Free] = Generous usage limits. (Preview) = Experimental or early-access version.
-    (_("[Free]") + " Gemini 3.0 Flash " + _("(Preview)"), "gemini-3-flash-preview"),
+    (_("[Free]") + " Gemini 3.5 Flash", "gemini-3.5-flash"),
+    (_("[Free]") + " Gemini 3.1 Flash Lite", "gemini-3.1-flash-lite"),
     (_("[Free]") + " Gemini 2.5 Flash", "gemini-2.5-flash"),
     (_("[Free]") + " Gemini 2.5 Flash Lite", "gemini-2.5-flash-lite"),
 
@@ -179,6 +183,8 @@ OPENAI_VOICES = [
     # Translators: Adjective describing an energetic AI voice style.
     ("Cedar", _("Energetic"))
 ]
+
+LABELS_FILE = os.path.join(globalVars.appArgs.configPath, f"{ADDON_NAME}_labels.json")
 
 _LANG_CODES = [
     "af", "ar", "bg", "bn", "bs", "ca", "cs", "da", "de", "el", 
@@ -300,6 +306,7 @@ confspec = {
     "copy_to_clipboard": "boolean(default=False)",
     "skip_chat_dialog": "boolean(default=False)",
     "ocr_engine": "string(default='chrome')",
+    "ocr_batch_size": "integer(default=20, min=0, max=100)",
     "tts_voice": "string(default='Puck')"
 }
 
@@ -571,6 +578,41 @@ DEFAULT_SYSTEM_PROMPTS = (
             "3. SUB-MENUS: Only set \"finished\": false if you are opening an intermediate menu to reach a final target in the next step.\n"
             "4. ACTION: If action needed, output ONLY JSON: {{\"x\": int, \"y\": int, \"action\": \"click\"/\"right_click\"/\"double_click\"/\"type\", \"text\": \"...\", \"finished\": bool, \"explanation\": \"... (in {response_lang})\"}}.\n"
             "Coordinates scale: 0-1000. Ignore 'AI Operator' or 'NVDA' windows."
+        ),
+    },
+    {
+        "key": "label_single_system",
+        # Translators: Section header for labeling prompts in Prompt Manager.
+        "section": _("Vision"),
+        # Translators: Label for the prompt used to identify a single UI icon.
+        "label": _("Single Labeling Instruction"),
+        "requiredMarkers": ["{app_name}", "{response_lang}"],
+        "prompt": (
+            "Analyze this UI screenshot for the app: {app_name}. "
+            "Identify the focused element and provide a short descriptive name in {response_lang}. "
+            "IMPORTANT: Output ONLY the functional name, do NOT include the role (like 'button' or 'icon') in the label. "
+            "Output ONLY the raw name without any punctuation."
+        ),
+    },
+    {
+        "key": "label_batch_system",
+        # Translators: Section header for labeling prompts in Prompt Manager.
+        "section": _("Vision"),
+        # Translators: Label for the prompt used to identify multiple unnamed elements at once.
+        "label": _("Batch Labeling Instruction"),
+        "guarded": True,
+        # Translators: Feature name used in guarded prompt warnings for Batch Labeling.
+        "guardedFeatureLabel": _("Batch Labeling"),
+        "requiredMarkers": ["{app_name}", "{response_lang}"],
+        "prompt": (
+            "Task: Identify UI elements for the app: {app_name}.\n"
+            "Output Format: A strictly valid JSON array of objects. No intro/outro text.\n"
+            "Rules:\n"
+            "1. If an element has visible text in the image, return that exact text. DO NOT translate it.\n"
+            "2. If it is a purely visual icon, provide a functional name in {response_lang}.\n"
+            "3. Ensure every object in the JSON array is separated by a comma. Verify the syntax before responding.\n"
+            "JSON Template: [{\"label\": \"Name\", \"x\": 123, \"y\": 456}, ...]\n"
+            "Coordinates scale: 0-1000."
         ),
     },
 )
@@ -2590,7 +2632,11 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             o_idx = next(i for i, v in enumerate(OCR_ENGINES) if v[1] == curr_ocr)
             self.ocr_sel.SetSelection(o_idx)
         except: self.ocr_sel.SetSelection(0)
-        
+
+        # Translators: Label for the OCR batch size setting. Set to 0 to process all pages in a single request.
+        batch_label = _("OCR Batch Size (Pages per request, 0 to disable):")
+        self.batch_size = dHelper.addLabeledControl(batch_label, wx.SpinCtrl, min=0, max=100, initial=config.conf["VisionAssistant"]["ocr_batch_size"])
+
         # Translators: Label for TTS Voice selection (Assigning to self to toggle visibility)
         self.lbl_voice = wx.StaticText(self.docBox, label=_("TTS Voice:"))
         dHelper.addItem(self.lbl_voice)
@@ -3632,54 +3678,45 @@ class DocumentViewerDialog(wx.Dialog):
             wx.CallAfter(setattr, _vision_assistant_instance, 'current_status', msg)
         wx.CallAfter(ui.message, msg)
         
-        for i in range(self.start_page, self.end_page + 1):
-            if i in self.page_cache: del self.page_cache[i]
-        wx.CallAfter(self.update_view)
+        raw_batch_size = config.conf["VisionAssistant"].get("ocr_batch_size", 20)
+        total_pages = self.end_page - self.start_page + 1
         
-        count = (self.end_page - self.start_page) + 1
+        batch_size = total_pages if raw_batch_size == 0 else raw_batch_size
         
-        if AIHandler.is_gemini():
-            upload_path = self.v_doc.create_merged_pdf(self.start_page, self.end_page)
-            if not upload_path:
-                # Translators: Error message if PDF creation fails
-                wx.CallAfter(self.lbl_status.SetLabel, _("Error creating temporary PDF."))
-                if _vision_assistant_instance: 
-                    wx.CallAfter(setattr, _vision_assistant_instance, 'current_status', _("Idle"))
-                return
+        for i in range(self.start_page, self.end_page + 1, batch_size):
+            batch_end = min(i + batch_size - 1, self.end_page)
+            current_batch_count = batch_end - i + 1
+            
+            # Translators: Status message showing the progress of document scanning. {start} and {end} are page numbers.
+            progress_msg = _("Processing pages {start} to {end}...").format(start=i+1, end=batch_end+1)
+            wx.CallAfter(ui.message, progress_msg)
+
+            upload_path = self.v_doc.create_merged_pdf(i, batch_end)
+            if not upload_path: continue
 
             try:
-                results = GeminiHandler.upload_and_process_batch(upload_path, "application/pdf", count)
+                results = GeminiHandler.upload_and_process_batch(upload_path, "application/pdf", current_batch_count)
                 if results and not str(results[0]).startswith("ERROR:"):
-                    for i, text_part in enumerate(results):
-                        if i >= count: break
-                        clean = text_part.strip()
-                        if self.do_translate:
-                            clean = AIHandler.translate(clean, self.target_lang)
-                        self.page_cache[self.start_page + i] = clean
+                    for j, text_part in enumerate(results):
+                        page_idx = i + j
+                        if page_idx <= self.end_page:
+                            self.page_cache[page_idx] = text_part.strip()
                     wx.CallAfter(self.update_view)
-                    # Translators: Message when a single page scan or batch is finished.
-                    final_msg = _("Batch Scan Complete") if count > 1 else _("Scan Complete")
-                    wx.CallAfter(ui.message, final_msg)
                 else:
                     err_msg = results[0][6:] if results else "Unknown"
-                    # Translators: Message when the entire batch processing fails.
-                    wx.CallAfter(ui.message, _("Batch Scan Failed"))
-                    for i in range(self.start_page, self.end_page + 1):
+                    for j in range(i, batch_end + 1):
                         # Translators: Error message shown in the document viewer when a specific page scan fails. The {err} placeholder is replaced with the error details.
-                        self.page_cache[i] = _("[Scan failed: {err}]").format(err=err_msg)
+                        self.page_cache[j] = _("[Scan failed: {err}]").format(err=err_msg)
                     wx.CallAfter(self.update_view)
             finally:
                 if upload_path and os.path.exists(upload_path):
                     try: os.remove(upload_path)
                     except: pass
-        else:
-            for i in range(self.start_page, self.end_page + 1):
-                self.thread_pool.submit(self.process_page_worker, i)
-            # Translators: Spoken message for background batch processing.
-            wx.CallAfter(ui.message, _("AI is scanning {n} pages in background.").format(n=count))
 
         if _vision_assistant_instance: 
             wx.CallAfter(setattr, _vision_assistant_instance, 'current_status', _("Idle"))
+        # Translators: Success message shown when all batches of the document have been processed.
+        wx.CallAfter(ui.message, _("All document pages have been processed."))
 
     def on_tts(self, event):
         if not AIHandler.is_tts_supported():
@@ -3843,6 +3880,174 @@ class DocumentViewerDialog(wx.Dialog):
             wx.CallAfter(wx.MessageBox, _("Save Error: {error}").format(error=e), _("Error"), wx.ICON_ERROR)
         finally: wx.CallAfter(self.btn_save.Enable)
 
+class CustomLabelOverlay(NVDAObjects.NVDAObject):
+    @property
+    def name(self):
+        instance = _vision_assistant_instance
+        uniqueId = instance._getAppId(self) if instance else self.appModule.appName
+        loc = self.location
+        if not loc: return super().name
+        key = f"{int(self.role)}:{loc.left},{loc.top}"
+        cache = getattr(instance, "labels_cache", {})
+        if uniqueId in cache and key in cache[uniqueId]:
+            return cache[uniqueId][key]
+        return super().name
+
+class LabelManagerDialog(wx.Dialog):
+    def __init__(self, parent, app_name, labels_dict):
+        # Translators: Title of the Label Manager dialog.
+        title_text = _("Label Manager - {app}").format(app=app_name)
+        super().__init__(parent, title=title_text, size=(550, 700))
+        self.app_name = app_name
+        self.labels_dict = labels_dict
+        self.action_type = None
+        self.target_keys = []
+        self.new_name = ""
+
+        main_sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        # Translators: Instruction for managing labels using the list view.
+        instruction_text = _("Check items to delete, or select one to rename:")
+        instruction = wx.StaticText(self, label=instruction_text)
+        main_sizer.Add(instruction, 0, wx.ALL, 10)
+
+        self.list_ctrl = wx.ListCtrl(self, style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
+        self.list_ctrl.EnableCheckBoxes()
+        
+        # Translators: Header for the label name column in the manager list.
+        self.list_ctrl.InsertColumn(0, _("Label Name"), width=300)
+        # Translators: Header for the role column in the manager list.
+        self.list_ctrl.InsertColumn(1, _("Role"), width=150)
+
+        self.keys_list = list(labels_dict.keys())
+        import controlTypes
+        self.list_ctrl.Freeze()
+        for i, k in enumerate(self.keys_list):
+            try:
+                role_id = int(k.split(':')[0])
+                role_name = controlTypes.roleLabels.get(role_id, str(role_id))
+            except:
+                role_name = "Unknown"
+            self.list_ctrl.InsertItem(i, labels_dict[k])
+            self.list_ctrl.SetItem(i, 1, role_name)
+        self.list_ctrl.Thaw()
+
+        main_sizer.Add(self.list_ctrl, 1, wx.EXPAND | wx.LEFT | wx.RIGHT, 10)
+
+        selection_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        # Translators: Button to check all items in the list.
+        self.btn_select_all = wx.Button(self, label=_("Select &All"))
+        self.btn_select_all.Bind(wx.EVT_BUTTON, self.on_select_all)
+        # Translators: Button to uncheck all items in the list.
+        self.btn_deselect_all = wx.Button(self, label=_("Deselect A&ll"))
+        self.btn_deselect_all.Bind(wx.EVT_BUTTON, self.on_deselect_all)
+        
+        selection_sizer.Add(self.btn_select_all, 1, wx.RIGHT, 5)
+        selection_sizer.Add(self.btn_deselect_all, 1, wx.LEFT, 5)
+        main_sizer.Add(selection_sizer, 0, wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, 10)
+
+        btn_grid = wx.GridSizer(2, 2, 5, 5)
+        # Translators: Button to rename the currently focused label.
+        self.btn_rename = wx.Button(self, label=_("&Rename"))
+        self.btn_rename.Bind(wx.EVT_BUTTON, self.on_rename)
+        # Translators: Button to delete all checked labels.
+        self.btn_delete = wx.Button(self, label=_("&Delete Checked"))
+        self.btn_delete.Bind(wx.EVT_BUTTON, self.on_delete)
+        # Translators: Button to trigger a new full scan of the application.
+        btn_rescan = wx.Button(self, label=_("Re&scan"))
+        btn_rescan.Bind(wx.EVT_BUTTON, self.on_rescan)
+        # Translators: Button to close the label manager.
+        btn_close = wx.Button(self, wx.ID_CANCEL, label=_("&Close"))
+
+        btn_grid.Add(self.btn_rename, 0, wx.EXPAND)
+        btn_grid.Add(self.btn_delete, 0, wx.EXPAND)
+        btn_grid.Add(btn_rescan, 0, wx.EXPAND)
+        btn_grid.Add(btn_close, 0, wx.EXPAND)
+        
+        main_sizer.Add(btn_grid, 0, wx.EXPAND | wx.ALL, 10)
+        self.SetSizer(main_sizer)
+        
+        self.list_ctrl.Bind(wx.EVT_LIST_ITEM_CHECKED, self.update_ui)
+        self.list_ctrl.Bind(wx.EVT_LIST_ITEM_UNCHECKED, self.update_ui)
+        self.list_ctrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.update_ui)
+        self.list_ctrl.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.update_ui)
+        self.list_ctrl.Bind(wx.EVT_CHAR_HOOK, self.on_key_event)
+        
+        self.update_ui()
+        self.list_ctrl.SetFocus()
+
+    def on_key_event(self, event):
+        if event.ControlDown() and event.GetKeyCode() == ord('A'):
+            self.on_select_all(None)
+        else:
+            event.Skip()
+
+    def update_ui(self, event=None):
+        count = self.list_ctrl.GetItemCount()
+        checked_count = sum(1 for i in range(count) if self.list_ctrl.IsItemChecked(i))
+        selected_idx = self.list_ctrl.GetFirstSelected()
+        can_rename = (checked_count == 1) or (checked_count == 0 and selected_idx != -1)
+        self.btn_rename.Enable(can_rename)
+        self.btn_delete.Enable(checked_count > 0 or selected_idx != -1)
+
+    def on_select_all(self, event):
+        self.list_ctrl.Freeze()
+        for i in range(self.list_ctrl.GetItemCount()):
+            self.list_ctrl.CheckItem(i, True)
+        self.list_ctrl.Thaw()
+        self.update_ui()
+
+    def on_deselect_all(self, event):
+        self.list_ctrl.Freeze()
+        for i in range(self.list_ctrl.GetItemCount()):
+            self.list_ctrl.CheckItem(i, False)
+        self.list_ctrl.Thaw()
+        self.update_ui()
+
+    def on_rename(self, event):
+        idx = -1
+        for i in range(self.list_ctrl.GetItemCount()):
+            if self.list_ctrl.IsItemChecked(i):
+                idx = i
+                break
+        if idx == -1:
+            idx = self.list_ctrl.GetFirstSelected()
+        if idx == -1:
+            # Translators: Error message shown when no item is selected for renaming.
+            ui.message(_("Please select an item from the list to rename."))
+            return
+        
+        key = self.keys_list[idx]
+        current_name = self.labels_dict[key]
+        # Translators: Prompt message for entering a new label name.
+        rename_prompt = _("Enter new name:")
+        # Translators: Window title for the rename dialog.
+        rename_title = _("Rename Label")
+        
+        with wx.TextEntryDialog(self, rename_prompt, rename_title, value=current_name) as dlg:
+            if dlg.ShowModal() == wx.ID_OK:
+                self.action_type = "rename"
+                self.target_keys = [key]
+                self.new_name = dlg.GetValue()
+                self.EndModal(wx.ID_OK)
+
+    def on_delete(self, event):
+        self.target_keys = [self.keys_list[i] for i in range(self.list_ctrl.GetItemCount()) if self.list_ctrl.IsItemChecked(i)]
+        if not self.target_keys:
+            idx = self.list_ctrl.GetFirstSelected()
+            if idx != -1:
+                self.target_keys = [self.keys_list[idx]]
+        if not self.target_keys:
+            # Translators: Error message shown when no items are checked for deletion.
+            ui.message(_("Please check at least one item to delete."))
+            return
+        self.action_type = "delete"
+        self.EndModal(wx.ID_OK)
+
+    def on_rescan(self, event):
+        self.action_type = "rescan"
+        self.EndModal(wx.ID_OK)
+
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     scriptCategory = ADDON_NAME
     
@@ -3926,6 +4131,28 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.translation_dlg = None
         self.toggling = False
         self._last_result_data = None
+
+        self.labels_cache = {}
+        if os.path.exists(LABELS_FILE):
+            try:
+                with open(LABELS_FILE, "r", encoding="utf-8") as f:
+                    self.labels_cache = json.load(f)
+            except: pass
+
+    def _getFocusedExplorerFile(self):
+        try:
+            hwnd = api.getForegroundObject().windowHandle
+            shell = comtypes.client.CreateObject("Shell.Application")
+            windows = shell.Windows()
+            for win in windows:
+                try:
+                    if win.HWND == hwnd:
+                        selected = win.Document.SelectedItems()
+                        if selected.Count > 0:
+                            return selected.Item(0).Path
+                except: continue
+        except: pass
+        return None
 
     def _browse_and_run(self, worker_fn, wildcard, multiple=False):
         # Translators: Standard title for opening a file
@@ -4768,8 +4995,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     @scriptHandler.script(description=_("Performs smart actions on a selected image or PDF file."))
     def script_smartFileAction(self, gesture):
         if self.toggling: self.finish()
-        wx.CallLater(100, self._open_smart_file_dialog)
-	
+        focused_path = self._getFocusedExplorerFile()
+        
+        valid_exts = ('.pdf', '.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff')
+        if focused_path and focused_path.lower().endswith(valid_exts):
+            threading.Thread(target=self._pre_process_smart_file, args=([focused_path],), daemon=True).start()
+        else:
+            wx.CallLater(100, self._open_smart_file_dialog)
+
     def _open_smart_file_dialog(self):
         wc = "Files|*.pdf;*.jpg;*.jpeg;*.png;*.webp;*.tif;*.tiff"
         self._browse_and_run(self._pre_process_smart_file, wc, multiple=True)
@@ -4943,41 +5176,50 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             wx.CallAfter(self._open_doc_chat_dialog, full_text, [], full_text, full_text)
                 
         else:
-            upload_path = v_doc.create_merged_pdf(start_page, end_page)
-            if not upload_path:
-                # Translators: Error message reported when the add-on fails to generate a temporary PDF file for document processing.
-                wx.CallAfter(self.report_status, _("Error creating PDF."))
-                return
-            mime_type = "application/pdf"
-            file_uri = self._upload_file_to_gemini(upload_path, mime_type)
-            if not file_uri:
-                if os.path.exists(upload_path): os.remove(upload_path)
-                wx.CallAfter(setattr, self, 'current_status', _("Idle"))
-                return
+            raw_batch_size = config.conf["VisionAssistant"].get("ocr_batch_size", 20)
+            total_pages = end_page - start_page + 1
+            batch_size = total_pages if raw_batch_size == 0 else raw_batch_size
+            all_text_parts = []
+            
+            for i in range(start_page, end_page + 1, batch_size):
+                b_end = min(i + batch_size - 1, end_page)
+                upload_path = v_doc.create_merged_pdf(i, b_end)
+                if not upload_path: continue
+                
+                # Translators: Status message showing batch progress during file OCR.
+                wx.CallAfter(self.report_status, _("Analyzing batch {start}-{end}...").format(start=i+1, end=b_end+1))
+                
+                mime_type = "application/pdf"
+                file_uri = self._upload_file_to_gemini(upload_path, mime_type)
+                if not file_uri:
+                    if os.path.exists(upload_path): os.remove(upload_path)
+                    continue
 
-            attachments = [{'mime_type': mime_type, 'file_uri': file_uri}]
+                attachments = [{'mime_type': mime_type, 'file_uri': file_uri}]
+                p_text = apply_prompt_template(get_prompt_text("ocr_document_translate" if do_translate else "ocr_document_extract"), [("target_lang", target_lang)])
+                
+                res = AIHandler.call(p_text, attachments=attachments)
+                if os.path.exists(upload_path): os.remove(upload_path)
+                
+                if res and not res.startswith("ERROR:"):
+                    all_text_parts.append(res)
             
-            if do_translate:
-                ocr_prompt_key = "ocr_document_translate"
-                p_text = apply_prompt_template(get_prompt_text(ocr_prompt_key), [("target_lang", target_lang)])
-            else:
-                p_text = get_prompt_text("ocr_document_extract")
-            
-            res = AIHandler.call(p_text, attachments=attachments)
-            if os.path.exists(upload_path): os.remove(upload_path)
-            
-            if res:
-                if res.startswith("ERROR:"):
-                    wx.CallAfter(setattr, self, 'current_status', _("Idle"))
-                    wx.CallAfter(show_error_dialog, res[6:])
-                    return
-                wx.CallAfter(self._open_doc_chat_dialog, res, attachments, res, res)
+            wx.CallAfter(setattr, self, 'current_status', _("Idle"))
+            if all_text_parts:
+                final_combined = "\n\n".join(all_text_parts)
+                wx.CallAfter(self._open_doc_chat_dialog, final_combined, [], final_combined, final_combined)
 
     # Translators: Script description for Input Gestures dialog
     @scriptHandler.script(description=_("Opens the Document Reader for detailed page-by-page analysis (PDF/Images)."))
     def script_analyzeDocument(self, gesture):
         if self.toggling: self.finish()
-        wx.CallAfter(self._open_document_reader)
+        focused_path = self._getFocusedExplorerFile()
+        
+        valid_exts = ('.pdf', '.jpg', '.jpeg', '.png', '.tif', '.tiff')
+        if focused_path and focused_path.lower().endswith(valid_exts):
+            threading.Thread(target=self._scan_and_open, args=([focused_path],), daemon=True).start()
+        else:
+            wx.CallAfter(self._open_document_reader)
 
     def _open_doc_chat_dialog(self, init_msg, initial_attachments, doc_text, raw_text_for_save=None, force_show=False, is_recall=False):
         self._last_result_data = (self._open_doc_chat_dialog, (init_msg, initial_attachments, doc_text, raw_text_for_save))
@@ -5922,6 +6164,235 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             winUser.keybd_event(0x0D, 0, 0, 0)
             winUser.keybd_event(0x0D, 0, 2, 0)
 
+    def _getAppId(self, obj):
+        appName = obj.appModule.appName.lower()
+        if appName == "applicationframehost":
+            try:
+                fg = api.getForegroundObject()
+                if fg and fg.name:
+                    return f"{appName}_{fg.name}"
+            except: pass
+        return appName
+
+    def chooseNVDAObjectOverlayClasses(self, obj, clsList):
+        if not hasattr(self, "labels_cache"):
+            return
+        
+        if getattr(obj, "treeInterceptor", None):
+            return
+
+        uniqueId = self._getAppId(obj)
+        loc = obj.location
+        if not loc:
+            return
+        
+        key = f"{int(obj.role)}:{loc.left},{loc.top}"
+        
+        if uniqueId in self.labels_cache and key in self.labels_cache[uniqueId]:
+            clsList.insert(0, CustomLabelOverlay)
+
+    @scriptHandler.script(
+        # Translators: Script description for labeling.
+        description=_("Labels the current navigator object using AI.")
+    )
+    def script_labelObject(self, gesture):
+        if self.toggling: self.finish()
+        obj = api.getNavigatorObject()
+        if not obj or not obj.location: return
+        if obj.appModule.appName.lower() in ["chrome", "msedge", "firefox", "opera", "brave"]:
+            # Translators: Message shown when a user tries to use AI labeling in a web browser.
+            ui.message(_("AI Labeling is currently not supported in web browsers."))
+            return
+
+        uniqueId = self._getAppId(obj)
+        loc = obj.location
+        key = f"{int(obj.role)}:{loc.left},{loc.top}"
+        
+        if uniqueId in self.labels_cache and key in self.labels_cache[uniqueId]:
+            # Translators: Already labeled message.
+            ui.message(_("Already labeled as: {name}").format(name=self.labels_cache[uniqueId][key]))
+            return
+
+        tones.beep(800, 100)
+        # Translators: Status message.
+        self.current_status = _("Identifying object...")
+        ui.message(self.current_status)
+        
+        def worker():
+            img, w, h, m = self._capture_navigator()
+            if not img:
+                self.current_status = _("Idle")
+                return
+            # Translators: Status message.
+            self.current_status = _("Analyzing...")
+            wx.CallAfter(ui.message, self.current_status)
+            
+            resp_lang = get_lang_name("ai_response_language")
+            prompt_template = get_prompt_text("label_single_system")
+            prompt = apply_prompt_template(prompt_template, [
+                ("app_name", uniqueId),
+                ("response_lang", resp_lang)
+            ])
+            
+            res = AIHandler.call(prompt, attachments=[{'mime_type': m, 'data': img}], task="operator")
+            self.current_status = _("Idle")
+            
+            if res and not res.startswith("ERROR:"):
+                clean_name = clean_markdown(res)
+                if uniqueId not in self.labels_cache: self.labels_cache[uniqueId] = {}
+                self.labels_cache[uniqueId][key] = clean_name
+                self._save_all_labels()
+                tones.beep(1000, 100)
+                # Translators: Success message.
+                wx.CallAfter(ui.message, _("Labeled as: {name}").format(name=clean_name))
+            elif res and res.startswith("ERROR:"):
+                wx.CallAfter(show_error_dialog, res[6:])
+        
+        wx.CallLater(400, lambda: threading.Thread(target=worker, daemon=True).start())
+
+    @scriptHandler.script(
+        # Translators: Script description for managing existing labels or starting a full app scan.
+        description=_("Manages existing labels or scans the entire app to label unnamed elements.")
+    )
+    def script_manageOrScanApp(self, gesture):
+        if self.toggling: self.finish()
+        obj = api.getFocusObject()
+        app_name = obj.appModule.appName.lower()
+        if app_name in ["chrome", "msedge", "firefox", "opera", "brave"]:
+            # Translators: Message shown when a user tries to use AI labeling in a web browser.
+            ui.message(_("AI Labeling is currently not supported in web browsers."))
+            return
+        uniqueId = self._getAppId(obj)
+        
+        if uniqueId in self.labels_cache and self.labels_cache[uniqueId]:
+            def show_manager():
+                gui.mainFrame.prePopup()
+                dlg = LabelManagerDialog(gui.mainFrame, uniqueId, self.labels_cache[uniqueId])
+                if dlg.ShowModal() == wx.ID_OK:
+                    if dlg.action_type == "delete":
+                        for k in dlg.target_keys: del self.labels_cache[uniqueId][k]
+                    elif dlg.action_type == "rename":
+                        self.labels_cache[uniqueId][dlg.target_keys[0]] = dlg.new_name
+                    elif dlg.action_type == "rescan":
+                        wx.CallLater(600, self._batchLabelApp, uniqueId)
+                    
+                    if dlg.action_type in ["delete", "rename"]:
+                        self._save_all_labels()
+                        # Translators: Confirmation message shown after labels are deleted or renamed.
+                        ui.message(_("Labels updated."))
+                dlg.Destroy()
+                gui.mainFrame.postPopup()
+            wx.CallAfter(show_manager)
+        else:
+            self._batchLabelApp(uniqueId)
+
+    def _save_all_labels(self):
+        try:
+            with open(LABELS_FILE, "w", encoding="utf-8") as f:
+                json.dump(self.labels_cache, f, ensure_ascii=False, indent=4)
+        except: pass
+
+    def _batchLabelApp(self, unique_id):
+        tones.beep(800, 100)
+        # Translators: Status message shown when the add-on starts scanning the application UI for unnamed elements.
+        self.current_status = _("Scanning application UI...")
+        ui.message(self.current_status)
+        
+        def worker():
+            root = api.getForegroundObject()
+            candidates = []
+            stack = [(root, 0)]
+            target_roles = {
+                controlTypes.Role.BUTTON, controlTypes.Role.TOGGLEBUTTON, 
+                controlTypes.Role.CHECKBOX, controlTypes.Role.RADIOBUTTON, 
+                controlTypes.Role.MENUITEM, controlTypes.Role.LINK, 
+                controlTypes.Role.TAB, controlTypes.Role.DATAITEM, 
+                controlTypes.Role.LISTITEM, controlTypes.Role.COMBOBOX, 
+                controlTypes.Role.GRAPHIC, controlTypes.Role.ICON, 
+                controlTypes.Role.TABLECELL
+            }
+            
+            while stack and len(candidates) < 1500:
+                obj, depth = stack.pop()
+                if depth > 25: continue 
+                try:
+                    role = obj.role
+                    loc = obj.location
+                    name = obj.name
+                    if loc and role in target_roles and (not name or not name.strip()):
+                        candidates.append(obj)
+                    
+                    child = obj.firstChild
+                    while child:
+                        stack.append((child, depth + 1))
+                        child = child.next
+                except: continue
+
+            if not candidates:
+                self.current_status = _("Idle")
+                # Translators: Message shown when no unnamed elements are found in the application.
+                wx.CallAfter(ui.message, _("No unnamed elements found."))
+                return
+
+            # Translators: Status message shown when the add-on is analyzing the application with AI.
+            self.current_status = _("Analyzing application...")
+            wx.CallAfter(ui.message, self.current_status)
+            
+            img, w, h, m = self._capture_fullscreen()
+            prompt_template = get_prompt_text("label_batch_system")
+            prompt = apply_prompt_template(prompt_template, [
+                ("app_name", unique_id),
+                ("response_lang", get_lang_name("ai_response_language"))
+            ])
+            
+            res = AIHandler.call(prompt, attachments=[{'mime_type': m, 'data': img}], json_mode=True, task="operator")
+            self.current_status = _("Idle")
+            
+            if res and not res.startswith("ERROR:"):
+                try:
+                    raw_res = res.strip()
+                    start_idx = raw_res.find('[')
+                    end_idx = raw_res.rfind(']')
+                    
+                    if start_idx != -1 and end_idx != -1:
+                        clean_json = raw_res[start_idx:end_idx+1]
+                    else:
+                        clean_json = raw_res
+
+                    ai_items = json.loads(clean_json)
+                    if unique_id not in self.labels_cache: self.labels_cache[unique_id] = {}
+                    
+                    for item in ai_items:
+                        if not all(k in item for k in ('x', 'y', 'label')): continue
+                        
+                        ai_x, ai_y = int(item['x'] * w / 1000), int(item['y'] * h / 1000)
+                        best_match, min_dist = None, 100
+                        
+                        for cand in candidates:
+                            c_loc = cand.location
+                            cx, cy = c_loc.left + c_loc.width/2, c_loc.top + c_loc.height/2
+                            dist = ((cx - ai_x)**2 + (cy - ai_y)**2)**0.5
+                            if dist < min_dist:
+                                min_dist = dist
+                                best_match = cand
+                        
+                        if best_match:
+                            key = f"{int(best_match.role)}:{best_match.location.left},{best_match.location.top}"
+                            self.labels_cache[unique_id][key] = item['label']
+                    
+                    self._save_all_labels()
+                    tones.beep(1000, 100)
+                    # Translators: Success message shown when application labeling is complete.
+                    wx.CallAfter(ui.message, _("Application labeling complete."))
+                except Exception as e:
+                    log.error(f"Batch labeling mapping failed: {e}")
+                    # Translators: Error message shown when batch labeling fails to process.
+                    wx.CallAfter(ui.message, _("Batch labeling failed."))
+            elif res and res.startswith("ERROR:"):
+                wx.CallAfter(show_error_dialog, res[6:])
+        
+        wx.CallLater(400, lambda: threading.Thread(target=worker, daemon=True).start())
+
     __gestures = {
         "kb:NVDA+shift+v": "activateLayer",
     }
@@ -5935,7 +6406,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 "kb:f": "smartFileAction",
         "kb:a": "transcribeAudio",
         "kb:c": "solveCaptcha",
-        "kb:l": "announceStatus",
+        "kb:i": "announceStatus",
         "kb:s": "smartDictation",
         "kb:u": "checkUpdate",
         "kb:shift+t": "translateClipboard",
@@ -5944,4 +6415,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         "kb:h": "showHelp",
         "kb:e": "toggleUIExplorer",
         "kb:shift+a": "aiOperatorAction",
+        "kb:l": "labelObject",
+        "kb:shift+l": "manageOrScanApp",
     }

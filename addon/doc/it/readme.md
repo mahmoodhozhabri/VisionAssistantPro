@@ -1,115 +1,113 @@
-# Vision Assistant Pro Documentation
+# Documentazione di Vision Assistant Pro
 
-**Vision Assistant Pro** is an advanced, multi-modal AI assistant for NVDA. It leverages world-class AI engines to provide intelligent screen reading, translation, voice dictation, and document analysis.
+Vision Assistant Pro è un assistente IA multimodale avanzato per NVDA. Utilizza motori di intelligenza artificiale di alto livello per fornire lettura intelligente dello schermo, traduzione, dettatura vocale e analisi dei documenti.
 
-_This add-on was released to the community in honor of the International Day of Persons with Disabilities._
+_Questo componente aggiuntivo è stato rilasciato alla comunità in occasione della Giornata internazionale delle persone con disabilità._
 
-## 1. Setup & Configuration
+## 1. Configurazione e impostazioni
 
-Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**.
+Andare in **Menu NVDA > Preferenze > Impostazioni > Vision Assistant Pro**.
 
-### 1.1 Connection Settings
-- **Provider:** Select your preferred AI service. Supported providers include **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, and **Custom** (OpenAI-compatible servers like Ollama/LM Studio).
-- **Important Note:** We strongly recommend using **Google Gemini** for the best performance and accuracy (especially for image/file analysis).
-- **API Key:** Required. You can enter multiple keys (separated by commas or new lines) for automatic rotation.
-- **Fetch Models:** After entering your API key, press this button to download the latest list of available models from the provider.
-- **AI Model:** Select the main model used for general chat and analysis.
+### 1.1 Impostazioni di connessione
+- **Provider:** selezionare il servizio IA preferito. I provider supportati includono **Google Gemini**, **OpenAI**, **Mistral**, **Groq** e **Personalizzato** (server compatibili OpenAI come Ollama o LM Studio).
+- **Nota importante:** si consiglia vivamente di utilizzare **Google Gemini** per ottenere le migliori prestazioni e precisione, soprattutto per l’analisi di immagini e file.
+- **Chiave API:** obbligatoria. È possibile inserire più chiavi (separate da virgole o nuove righe) per consentire la rotazione automatica.
+- **Recupera modelli:** dopo aver inserito la chiave API, premere questo pulsante per scaricare dal provider l’elenco aggiornato dei modelli disponibili.
+- **Modello IA:** selezionare il modello principale utilizzato per la chat generale e l’analisi.
 
-### 1.2 Advanced Model Routing
-*Available for all providers including Gemini, OpenAI, Groq, Mistral, and Custom.*
+### 1.2 Instradamento avanzato dei modelli
+*Disponibile per tutti i provider, inclusi Gemini, OpenAI, Groq, Mistral e Personalizzato.*
 
-> **⚠️ Warning:** These settings are intended for **advanced users only**. If you are unsure what a specific model does, please leave this **unchecked**. Selecting an incompatible model for a task (e.g., a text-only model for Vision) will cause errors and stop the add-on from working.
+> **⚠️ Avviso:** queste impostazioni sono destinate esclusivamente agli **utenti avanzati**. Se non si conosce il funzionamento di un determinato modello, lasciare questa opzione **non selezionata**. La scelta di un modello incompatibile per una determinata attività (ad esempio un modello solo testuale per funzioni visive) provocherà errori e impedirà il funzionamento del componente aggiuntivo.
 
-Check **"Advanced Model Routing (Task-specific)"** to unlock detailed control. This allows you to select specific models from the dropdown list for different tasks:
-- **OCR / Vision Model:** Choose a specialized model for analyzing images.
-- **Speech-to-Text (STT):** Choose a specific model for dictation.
-- **Text-to-Speech (TTS):** Choose a model for generating audio.
-- **AI Operator Model:** Select a specific model for autonomous computer operation tasks.
-*Note: Unsupported features (e.g., TTS for Groq) will be automatically hidden.*
+Selezionare **“Instradamento avanzato dei modelli (specifico per attività)”** per sbloccare i controlli dettagliati. Questa funzione consente di scegliere modelli specifici dall’elenco per diverse attività:
+- **Modello OCR / Visione:** scegliere un modello specializzato per l’analisi delle immagini.
+- **Speech-to-Text (STT):** scegliere un modello specifico per la dettatura.
+- **Text-to-Speech (TTS):** scegliere un modello per la generazione dell’audio.
+- **Modello operatore IA:** selezionare un modello specifico per attività autonome di controllo del computer.
+*Nota: le funzioni non supportate (ad esempio il TTS per Groq) verranno nascoste automaticamente.*
 
-### 1.3 Advanced Endpoint Configuration (Custom Provider)
-*Available only when "Custom" is selected.*
+### 1.3 Configurazione avanzata degli endpoint (provider personalizzato)
+*Disponibile solo quando è selezionato “Personalizzato”.*
 
-> **⚠️ Warning:** This section allows for manual API configuration and is designed for **power users** running local servers or proxies. Incorrect URLs or model names will break connectivity. If you don't know exactly what these endpoints are, keep this **unchecked**.
+> **⚠️ Avviso:** questa sezione consente la configurazione manuale delle API ed è progettata per **utenti esperti** che utilizzano server locali o proxy. URL o nomi modello errati interromperanno la connettività. Se non si conosce esattamente il significato di questi endpoint, lasciare questa opzione **non selezionata**.
 
-Check **"Advanced Endpoint Configuration"** to manually input server details. Unlike native providers, here you must **type** the specific URLs and Model Names:
-- **Models List URL:** The endpoint to fetch available models.
-- **OCR/STT/TTS Endpoint URL:** Full URLs for specific services (e.g., `http://localhost:11434/v1/audio/speech`).
-- **Custom Models:** Manually type the model name (e.g., `llama3:8b`) for each task.
+Selezionare **“Configurazione avanzata degli endpoint”** per inserire manualmente i dettagli del server. A differenza dei provider nativi, qui è necessario **digitare** URL e nomi dei modelli specifici:
+- **URL elenco modelli:** endpoint utilizzato per recuperare i modelli disponibili.
+- **URL endpoint OCR/STT/TTS:** URL completi per servizi specifici (ad esempio `http://localhost:11434/v1/audio/speech`).
+- **Modelli personalizzati:** digitare manualmente il nome del modello (ad esempio `llama3:8b`) per ogni attività.
 
-### 1.4 General Preferences
-- **OCR Engine:** Choose between **Chrome (Fast)** for quick results or **AI (Advanced)** for superior layout preservation.
-    - *Note:* If you select "AI (Advanced)" but your provider is set to OpenAI/Groq, the addon will intelligently route the image to your active provider's vision model.
-- **TTS Voice:** Select your preferred voice style. This list updates dynamically based on your active provider.
-- **Creativity (Temperature):** Controls the randomness of the AI. Lower values are better for accurate translation/OCR.
-- **Proxy URL:** Configure this if AI services are restricted in your region (supports local proxies like `127.0.0.1` or bridge URLs).
+### 1.4 Preferenze generali
+- **Motore OCR:** scegliere tra **Chrome (veloce)** per risultati rapidi oppure **IA (avanzato)** per una migliore conservazione del layout.
+    - *Nota:* se viene selezionato “IA (avanzato)” mentre il provider attivo è OpenAI o Groq, il componente aggiuntivo instraderà automaticamente l’immagine verso il modello di visione del provider attivo.
+- **Voce TTS:** selezionare lo stile vocale preferito. Questo elenco viene aggiornato dinamicamente in base al provider attivo.
+- **Creatività (temperatura):** controlla il livello di casualità dell’IA. Valori più bassi sono preferibili per traduzioni e OCR accurati.
+- **URL proxy:** configurare questa opzione se i servizi IA sono limitati nella propria area geografica (supporta proxy locali come `127.0.0.1` oppure URL bridge).
 
-## 2. Command Layer & Shortcuts
+## 2. Livello comandi e scorciatoie da tastiera
+Per evitare conflitti da tastiera, questo componente aggiuntivo utilizza un **livello comandi**.
+1. Premere **NVDA + Shift + V** (tasto principale) per attivare il livello (verrà emesso un segnale acustico).
+2. Rilasciare i tasti, quindi premere uno dei seguenti tasti singoli:
 
-To prevent keyboard conflicts, this add-on uses a **Command Layer**.
-1. Press **NVDA + Shift + V** (Master Key) to activate the layer (you will hear a beep).
-2. Release keys, then press one of the following single keys:
+| Tasto         | Funzione                    | Descrizione                                                                 |
+|---------------|-----------------------------|------------------------------------------------------------------------------|
+| **Shift + A** | **Operatore IA**            | **Operazione autonoma:** consente all’IA di eseguire un’attività sullo schermo. |
+| **E**         | **Esploratore interfaccia** | **Clic interattivo:** identifica e fa clic sugli elementi dell’interfaccia in qualsiasi applicazione. |
+| **T**         | Traduttore intelligente     | Traduce il testo sotto il cursore navigatore o la selezione.                |
+| **Shift + T** | Traduttore appunti          | Traduce il contenuto attualmente presente negli appunti.                    |
+| **R**         | Rifinitore testo          | Riassume, corregge la grammatica, spiega o esegue **prompt personalizzati**. |
+| **V**         | Visione oggetto             | Descrive l’oggetto navigatore corrente.                                     |
+| **O**         | Visione schermo intero      | Analizza il layout e il contenuto dell’intero schermo.                      |
+| **Shift + V** | Analisi video online        | Analizza video di **YouTube**, **Instagram**, **TikTok** o **Twitter (X)**. |
+| **D**         | Lettore documenti           | Lettore avanzato per PDF e immagini con selezione dell’intervallo di pagine. |
+| **F**         | **Azione file intelligente**| Riconoscimento contestuale di immagini, PDF o file TIFF selezionati.        |
+| **A**         | Trascrizione audio          | Trascrive file MP3, WAV o OGG in testo.                                     |
+| **C**         | Risolutore CAPTCHA          | Cattura e risolve CAPTCHA (supporta portali governativi).                   |
+| **S**         | Dettatura intelligente      | Converte il parlato in testo. Premere per avviare la registrazione, di nuovo per interrompere e scrivere. |
+| **I**         | Segnalazione stato          | Annuncia lo stato corrente (ad esempio “Scansione...”, “Inattivo”).         |
+| **L**         | **Etichetta oggetto**       | **Etichettatura semantica IA:** assegna in modo permanente un’etichetta all’elemento o icona attualmente focalizzati. |
+| **Shift + L** | **Gestisci/scansiona etichette** | Apre il gestore etichette (se esistono etichette) oppure analizza l’applicazione alla ricerca di elementi senza nome. |
+| **U**         | Controllo aggiornamenti     | Controlla manualmente su GitHub la presenza di nuove versioni del componente aggiuntivo. |
+| **Spazio**    | Richiama ultimo risultato   | Mostra l’ultima risposta dell’IA in una finestra chat per revisione o domande successive. |
+| **H**         | Guida comandi               | Mostra un elenco di tutte le scorciatoie disponibili.                       |
 
-| Key           | Function                 | Description                                                                 |
-|---------------|--------------------------|-----------------------------------------------------------------------------|
-| **Shift + A** | **AI Operator**         | **Autonomous Operation:** Tell the AI to perform a task on your screen.      |
-| **E**         | **UI Explorer**          | **Interactive Click:** Identifies and clicks UI elements in any app.        |
-| **T**         | Smart Translator         | Translates text under navigator cursor or selection.                        |
-| **Shift + T** | Clipboard Translator     | Translates content currently in the clipboard.                              |
-| **R**         | Text Refiner             | Summarize, Fix Grammar, Explain, or run **Custom Prompts**.                 |
-| **V**         | Object Vision            | Describes the current navigator object.                                     |
-| **O**         | Full Screen Vision       | Analyzes the entire screen layout and content.                              |
-| **Shift + V** | Online Video Analysis    | Analyze **YouTube**, **Instagram**, **TikTok**, or **Twitter (X)** videos.  |
-| **D**         | Document Reader          | Advanced reader for PDF and images with page range selection.               |
-| **F**         | **Smart File Action**    | Context-aware recognition from selected image, PDF, or TIFF files.          |
-| **A**         | Audio Transcription      | Transcribe MP3, WAV, or OGG files into text.                                |
-| **C**         | CAPTCHA Solver           | Captures and solves CAPTCHAs (Supports Gov portals).                        |
-| **S**         | Smart Dictation          | Converts speech to text. Press to start recording, again to stop/type.      |
-| **I**         | Status Reporting         | Announces current progress (e.g., "Scanning...", "Idle").                   |
-| **L**         | **Label Object**         | **Semantic AI Labeling:** Permanently labels the current focused element/icon. |
-| **Shift + L** | **Manage/Scan Labels**   | Opens Label Manager (if labels exist) or scans the app for unnamed elements. |
-| **U**         | Update Check             | Manually check GitHub for the latest version of the add-on.                 |
-| **Space**     | Recall Last Result       | Shows the last AI response in a chat dialog for review or follow-up.        |
-| **H**         | Commands Help            | Displays a list of all available shortcuts.                                 |
+### 2.1 Scorciatoie del lettore documenti (all’interno del visualizzatore)
+- **Ctrl + Pagina giù:** passa alla pagina successiva.
+- **Ctrl + Pagina su:** passa alla pagina precedente.
+- **Alt + A:** apre una finestra chat per porre domande sul documento.
+- **Alt + R:** forza una **nuova scansione con IA** utilizzando il provider attivo.
+- **Alt + G:** genera e salva un file audio di alta qualità (WAV/MP3). *Nascosto se il provider non supporta il TTS.*
+- **Alt + S / Ctrl + S:** salva il testo estratto come file TXT o HTML.
 
-### 2.1 Document Reader Shortcuts (Inside Viewer)
-- **Ctrl + PageDown:** Move to the next page.
-- **Ctrl + PageUp:** Move to the previous page.
-- **Alt + A:** Open a chat dialog to ask questions about the document.
-- **Alt + R:** Force a **Re-scan with AI** using your active provider.
-- **Alt + G:** Generate and save a high-quality audio file (WAV/MP3). *Hidden if provider doesn't support TTS.*
-- **Alt + S / Ctrl + S:** Save the extracted text as a TXT or HTML file.
+## 3. Prompt personalizzati e variabili
 
-## 3. Custom Prompts & Variables
+È possibile gestire i prompt in **Impostazioni > Prompt > Gestisci prompt...**.
 
-You can manage prompts in **Settings > Prompts > Manage Prompts...**.
-
-### Supported Variables
-- `[selection]`: Currently selected text.
-- `[clipboard]`: Clipboard content.
-- `[screen_obj]`: Screenshot of the navigator object.
-- `[screen_full]`: Full screen screenshot.
-- `[file_ocr]`: Select image/PDF file for text extraction.
-- `[file_read]`: Select document for reading (TXT, Code, PDF).
-- `[file_audio]`: Select audio file for analysis (MP3, WAV, OGG).
-
+### Variabili supportate
+- `[selection]`: testo attualmente selezionato.
+- `[clipboard]`: contenuto degli appunti.
+- `[screen_obj]`: schermata dell’oggetto navigatore.
+- `[screen_full]`: schermata completa dello schermo.
+- `[file_ocr]`: seleziona un file immagine/PDF per l’estrazione del testo.
+- `[file_read]`: seleziona un documento da leggere (TXT, codice, PDF).
+- `[file_audio]`: seleziona un file audio da analizzare (MP3, WAV, OGG).
 ***
-**Note:** An active internet connection is required for all AI features. Multi-page documents are processed automatically.
+**Nota:** è necessaria una connessione Internet attiva per tutte le funzioni IA. I documenti multipagina vengono elaborati automaticamente.
 
-## 4. Support & Community
+## 4. Supporto e comunità
 
-Stay updated with the latest news, features, and releases:
-- **Telegram Channel:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
-- **GitHub Issues:** For bug reports and feature requests.
+Rimani aggiornato sulle ultime notizie, funzionalità e versioni:
+- **Canale Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
+- **Segnalazioni GitHub:** per segnalazioni di bug e richieste di nuove funzionalità.
 
-## 5. Project Supporters
+## 5. Sostenitori del progetto
 
-A heartfelt thank you to our community members who support the continuous development and maintenance of this project through their generous financial contributions:
+Un sentito ringraziamento ai membri della comunità che supportano lo sviluppo e la manutenzione continui di questo progetto tramite i loro generosi contributi economici:
 
 *   **@Alyabani94**
 *   **Ali Alamri**
 
-*If you wish to support the project financially and see your name here, you can find the **Donate** option in the NVDA Tools menu (Vision Assistant submenu) or during the setup process after installation.*
+*Se desideri sostenere economicamente il progetto e vedere il tuo nome qui, puoi trovare l’opzione **Dona** nel menu Strumenti di NVDA (sottomenu Vision Assistant) oppure durante la procedura di configurazione dopo l’installazione.*
 
 
 ---

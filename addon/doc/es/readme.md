@@ -50,25 +50,27 @@ Para evitar conflictos de teclado, este complemento usa una **Capa de comandos**
 1. Presiona **NVDA + Mayús + V** (tecla maestra) para activar la capa (escucharás un pitido).
 2. Suelta las teclas, luego presiona una de las siguientes teclas individuales:
 
-| Tecla         | Función                      | Descripción                                                                        |
-|---------------|------------------------------|------------------------------------------------------------------------------------|
-| **Mayús + A** | **Operador IA**              | **Operación autónoma:** Dile a la IA que realice una tarea en tu pantalla.         |
-| **E**         | **Explorador de UI**         | **Clic interactivo:** Identifica y hace clic en elementos de UI en cualquier app.  |
-| **T**         | Traductor inteligente        | Traduce el texto bajo el cursor del navegador o la selección.                      |
-| **Mayús + T** | Traductor de portapapeles    | Traduce el contenido actualmente en el portapapeles.                               |
-| **R**         | Refinador de texto           | Resumir, corregir gramática, explicar o ejecutar **prompts personalizados**.        |
-| **V**         | Visión del objeto            | Describe el objeto navegador actual.                                               |
-| **O**         | Visión de pantalla completa  | Analiza el diseño y contenido de toda la pantalla.                                 |
-| **Mayús + V** | Análisis de vídeo en línea   | Analiza vídeos de **YouTube**, **Instagram**, **TikTok** o **Twitter (X)**.        |
-| **D**         | Lector de documentos         | Lector avanzado de PDF e imágenes con selección de rango de páginas.               |
-| **F**         | **Acción inteligente de archivo** | Reconocimiento contextual de imágenes, PDF o archivos TIFF seleccionados.     |
-| **A**         | Transcripción de audio       | Transcribe archivos MP3, WAV u OGG a texto.                                        |
-| **C**         | Solucionador de CAPTCHA      | Captura y resuelve CAPTCHAs (compatible con portales gubernamentales).             |
-| **S**         | Dictado inteligente          | Convierte voz a texto. Presiona para iniciar la grabación, otra vez para detener.  |
-| **L**         | Informe de estado            | Anuncia el progreso actual (por ejemplo, "Escaneando...", "Inactivo").             |
-| **U**         | Buscar actualización         | Busca manualmente en GitHub la última versión del complemento.                     |
-| **Espacio**   | Recuperar último resultado   | Muestra la última respuesta de la IA en un diálogo de chat para revisión.         |
-| **H**         | Ayuda de comandos            | Muestra una lista de todos los atajos disponibles.                                 |
+| Tecla         | Función                       | Descripción                                                                                  |
+|---------------|-------------------------------|----------------------------------------------------------------------------------------------|
+| **Mayús + A** | **Operador IA**               | **Operación autónoma:** Dile a la IA que realice una tarea en tu pantalla.                   |
+| **E**         | **Explorador de UI**          | **Clic interactivo:** Identifica y hace clic en elementos de UI en cualquier app.            |
+| **T**         | Traductor inteligente         | Traduce el texto bajo el cursor del navegador o la selección.                                |
+| **Mayús + T** | Traductor de portapapeles     | Traduce el contenido actualmente en el portapapeles.                                         |
+| **R**         | Refinador de texto            | Resumir, corregir gramática, explicar o ejecutar **prompts personalizados**.                 |
+| **V**         | Visión del objeto             | Describe el objeto navegador actual.                                                         |
+| **O**         | Visión de pantalla completa   | Analiza el diseño y contenido de toda la pantalla.                                           |
+| **Mayús + V** | Análisis de vídeo en línea    | Analiza vídeos de **YouTube**, **Instagram**, **TikTok** o **Twitter (X)**.                  |
+| **D**         | Lector de documentos          | Lector avanzado de PDF e imágenes con selección de rango de páginas.                        |
+| **F**         | **Acción inteligente de archivo** | Reconocimiento contextual de imágenes, PDF o archivos TIFF seleccionados.               |
+| **A**         | Transcripción de audio        | Transcribe archivos MP3, WAV u OGG a texto.                                                  |
+| **C**         | Solucionador de CAPTCHA       | Captura y resuelve CAPTCHAs (compatible con portales gubernamentales).                       |
+| **S**         | Dictado inteligente           | Convierte voz a texto. Presiona para iniciar la grabación, otra vez para detener y escribir. |
+| **I**         | Informe de estado             | Anuncia el progreso actual (por ejemplo, "Escaneando...", "Inactivo").                       |
+| **L**         | **Etiquetar objeto**          | **Etiquetado semántico con IA:** Etiqueta de forma permanente el elemento o icono enfocado.  |
+| **Mayús + L** | **Gestionar/escanear etiquetas** | Abre el Gestor de etiquetas (si existen) o escanea la app en busca de elementos sin nombre. |
+| **U**         | Buscar actualización          | Busca manualmente en GitHub la última versión del complemento.                               |
+| **Espacio**   | Recuperar último resultado    | Muestra la última respuesta de la IA en un diálogo de chat para revisión o seguimiento.     |
+| **H**         | Ayuda de comandos             | Muestra una lista de todos los atajos disponibles.                                           |
 
 ### 2.1 Atajos del Lector de documentos (dentro del visor)
 - **Ctrl + Av Pág:** Ir a la página siguiente.
@@ -100,13 +102,28 @@ Mantente al día con las últimas noticias, funciones y versiones:
 - **Canal de Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **Issues de GitHub:** Para informes de errores y solicitudes de funciones.
 
+## 5. Patrocinadores del proyecto
+
+Un sincero agradecimiento a los miembros de la comunidad que apoyan el desarrollo y mantenimiento continuo de este proyecto mediante sus generosas contribuciones económicas:
+
+*   **@Alyabani94**
+*   **Ali Alamri**
+
+*Si deseas apoyar el proyecto económicamente y ver tu nombre aquí, puedes encontrar la opción **Donar** en el menú Herramientas de NVDA (submenú Vision Assistant) o durante el proceso de configuración tras la instalación.*
+
 ---
+
+## Cambios para la versión 6.0
+
+*   **Etiquetado semántico con IA:** Los usuarios ahora pueden etiquetar de forma permanente botones e iconos sin nombre usando IA. Presiona **L** para etiquetar el objeto navegador actual (compatible con foco por Tab y navegación por objetos) o **Mayús+L** para escanear y etiquetar toda la aplicación de una vez.
+*   **Gestor de etiquetas inteligente:** Se añadió un nuevo diálogo de Gestor de etiquetas completamente accesible (disponible con **Mayús+L** si ya existen etiquetas) para ver, renombrar o eliminar etiquetas personalizadas en bloque.
+*   **Análisis directo de archivos (sin diálogo de apertura):** El complemento ahora es lo suficientemente inteligente para detectar si estás enfocado en un archivo PDF o imagen en el Explorador de archivos de Windows. Al presionar **F (Acción inteligente de archivo)** o **D (Lector de documentos)** sobre un archivo resaltado, lo procesará de inmediato sin abrir el diálogo estándar de "Abrir".
 
 ## Cambios para la versión 5.6
 
-* **Añadido el motor OCR "Ninguno (Extraer capa de texto)"**: Ahora los usuarios pueden extraer texto directamente de PDFs con capa de texto sin usar créditos de IA, mejorando considerablemente la velocidad y la privacidad en documentos basados en texto.
-* **Mejorada la precisión del Explorador de UI**: Se optimizó el prompt del Explorador de UI para identificar mejor los tipos de elementos (como elementos de lista) y reportar correctamente estados como "(Marcado)", "(Seleccionado)" o "(Expandido)", ignorando al mismo tiempo componentes del sistema de Windows como la barra de tareas y el reloj.
-* **Recordatorio de configuración tras la instalación**: Se añadió una notificación después de la instalación para guiar a los usuarios al menú de configuración, donde pueden ajustar sus claves API y preferencias.
+*   **Motor OCR "Ninguno (Extraer capa de texto)" añadido:** Los usuarios ahora pueden extraer texto directamente de PDFs con texto sin usar créditos de IA, lo que mejora significativamente la velocidad y la privacidad para documentos basados en texto.
+*   **Precisión del Explorador de UI mejorada:** Se mejoró el prompt del Explorador de UI para identificar mejor los tipos de elementos (como elementos de lista) e informar con precisión los estados como "(Marcado)", "(Seleccionado)" o "(Expandido)", ignorando los componentes del sistema Windows como la barra de tareas y el reloj.
+*   **Recordatorio de configuración tras la instalación:** Se añadió una notificación después de la instalación para guiar a los usuarios al menú de configuración y configurar sus claves API y preferencias.
 
 ## Cambios para la versión 5.5.2
 
@@ -175,8 +192,8 @@ Mantente al día con las últimas noticias, funciones y versiones:
 *   **Contribución al proyecto:** Se añadió un diálogo de donación opcional para usuarios que deseen apoyar las actualizaciones futuras y el crecimiento continuo del proyecto.
 
 ## Cambios para la versión 3.5.0
-*   **Capa de comandos:** Se introdujo un sistema de Capa de comandos (predeterminado: `NVDA+Mayús+V`) para agrupar atajos bajo una sola tecla maestra. Por ejemplo, en lugar de presionar `NVDA+Control+Mayús+T` para traducción, ahora presionas `NVDA+Mayús+V` seguido de `T`.
-*   **Análisis de vídeo en línea:** Se añadió una nueva función para analizar vídeos de YouTube e Instagram directamente proporcionando una URL.
+\*   \*\*Capa de comandos:\*\* Se introdujo un sistema de Capa de comandos (predeterminado: `NVDA+Mayús+V`) para agrupar atajos bajo una sola tecla maestra. Por ejemplo, en lugar de presionar `NVDA+Control+Mayús+T` para traducción, ahora presionas `NVDA+Mayús+V` seguido de `T`.
+\*   \*\*Análisis de vídeo en línea:\*\* Se añadió una nueva función para analizar vídeos de YouTube e Instagram directamente proporcionando una URL.
 
 ## Cambios para la versión 3.1.0
 *   **Modo de salida directa:** Se añadió una opción para omitir el diálogo de chat y escuchar las respuestas de la IA directamente por voz para una experiencia más rápida y fluida.

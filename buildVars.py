@@ -8,7 +8,7 @@ addon_info = AddonInfo(
     # Translators: Summary/title for this add-on
     # to be shown on installation and add-on information found in add-on store
     addon_summary=_("Vision Assistant Pro"),
-    # Add-on description
+# Add-on description
     # Translators: Long description to be shown for this add-on on add-on information from add-on store
     addon_description=_("""An advanced AI assistant for NVDA using Gemini models.
 Command Layer: Press NVDA+Shift+V, then:
@@ -21,19 +21,22 @@ Command Layer: Press NVDA+Shift+V, then:
 - CAPTCHA Solver (C)
 - Audio Transcription (A)
 - Smart Dictation (S)
-- Announce Status (L)
+- Announce Status (I)
+- Label Object (L)
+- Manage/Scan Labels (Shift+L)
+- UI Explorer (E)
+- AI Operator (Shift+A)
 - Check Update (U)
-- Recall Last Result (Space),
-- Commands Help (H),
-"""),
-    addon_version="5.6",
+- Recall Last Result (Space)
+- Commands Help (H)"""),
+    addon_version="6.0",
     # Brief changelog for this version
     # Translators: what's new content for the add-on version to be shown in the add-on store
-    addon_changelog=_("""## Changes for 5.6
+    addon_changelog=_("""## Changes for 6.0
 
-*   **Added "None (Extract Text Layer)" OCR Engine**: Users can now extract text directly from searchable PDFs without using AI credits, significantly improving speed and privacy for text-based documents.
-*   **Refined UI Explorer Accuracy**: Improved the UI Explorer prompt to better identify element types (like List Items) and accurately report states such as "(Checked)", "(Selected)", or "(Expanded)" while ignoring Windows system components like the Taskbar and Clock.
-*   **Installation Setup Reminder**: Added a notification after installation to guide users to the settings menu for configuring their API keys and preferences."""),
+*   **Introducing Semantic AI Labeling**: Users can now permanently label unnamed buttons and icons using AI. Press **L** to label the current navigator object (supporting both Tab focus and object navigation) or **Shift+L** to scan and label the entire application at once.
+*   **Intelligent Label Management**: Added a new, fully accessible Label Manager dialog (via **Shift+L** if labels exist) to view, rename, or batch-delete custom labels.
+*   **Direct File Analysis (Bypass File Dialog)**: The add-on is now smart enough to detect if you are currently focusing on a PDF or image file in Windows File Explorer. Pressing **F (Smart File Action)** or **D (Document Reader)** on a highlighted file will immediately process it, bypassing the standard "Open" dialog entirely."""),
     addon_author="Mahmood Hozhabri",
     addon_url="https://github.com/mahmoodhozhabri/VisionAssistantPro",
     addon_sourceURL="https://github.com/mahmoodhozhabri/VisionAssistantPro",

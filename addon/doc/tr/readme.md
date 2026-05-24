@@ -69,11 +69,13 @@ Klavye çakışmalarını önlemek için bu eklenti bir **Komut Katmanı** kulla
 | **O**         | Tam Ekran Görsel Analizi | Tüm ekran düzenini ve içeriğini analiz eder.                                          |
 | **Shift + V** | Çevrim İçi Video Analizi | **YouTube**, **Instagram**, **TikTok** veya **Twitter (X)** videolarını analiz eder.  |
 | **D**         | Belge Okuyucu            | Sayfa aralığı seçimi olan PDF ve görseller için gelişmiş okuyucu.                     |
-| **F**         | Dosya OCR                | Seçilen görsel, PDF veya TIFF dosyalarından doğrudan metin tanıma.                    |
+| **F**         | **Akıllı Dosya Eylemi**    | Seçilen görüntü, PDF veya TIFF dosyalarından bağlama duyarlı tanıma.          |
 | **A**         | Ses Dökümü               | MP3, WAV veya OGG dosyalarını metne dönüştürür.                                       |
 | **C**         | CAPTCHA Çözücü           | CAPTCHA’ları yakalar ve çözer (Kamu portalları desteklenir).                          |
 | **S**         | Akıllı Dikte             | Konuşmayı metne dönüştürür. Başlatmak için basın, durdurmak/yazmak için tekrar basın. |
-| **L**         | Durumu Seslendir          | Geçerli durumu bildirir (ör. “Taranıyor…”, “Boşta”).                                  |
+| **I**         | Durumu Seslendir          | Geçerli durumu bildirir (ör. “Taranıyor…”, “Boşta”).                                  |
+| **L**         | **Nesne Etiketleme**         | **Anlamsal Yapay Zeka Etiketleme:** Odaklanılan geçerli öğeyi/simgeyi kalıcı olarak etiketler. |
+| **Shift + L** | **Etiketleri Yönet/Tara**   | Etiket Yöneticisini açar (etiketler varsa) veya uygulamayı adsız öğelere karşı tarar. |
 | **U**         | Güncellemeleri Denetle      | Eklentinin en son sürümü için GitHub’ı manuel olarak kontrol eder.                    |
 | **Boşluk Çubuğu**     | Son Sonucu Çağır         | Son yapay zekâ yanıtını inceleme veya devam için sohbet penceresinde gösterir.        |
 | **H**         | Komut Yardımı            | Komut katmanındaki tüm kısayolların listesini gösterir.                               |
@@ -117,11 +119,18 @@ En son haberler, özellikler ve sürümlerden haberdar olun:
 Cömert mali katkılarıyla bu projenin sürekli geliştirilmesini ve sürdürülmesini destekleyen topluluk üyelerimize yürekten teşekkür ederiz:
 
 * **@Alyabani94**
+*   **Ali Alamri**
 
 *Projeye finansal olarak destek olmak istiyorsanız ve adınızı burada görmek istiyorsanız, **Bağış Yap** seçeneğini NVDA Araçlar menüsünde (Profesyonel Görsel Asistan alt menüsü) veya kurulum sonrasında kurulum sürecinde bulabilirsiniz.*
 
 
 ---
+
+## 6.0 Sürümündeki Değişiklikler
+
+*   **Anlamsal YZ Etiketleme Özelliği**: Kullanıcılar artık YZ kullanarak isimsiz düğmeleri ve simgeleri kalıcı olarak etiketleyebilir. **L** tuşuna basarak mevcut gezgin nesnesini etiketleyebilir (hem Sekme tuşuyla odaklanma hem de nesne gezintisi desteklenir) veya **Shift+L** tuşlarına basarak tüm uygulamayı tek seferde tarayıp etiketleyebilirsiniz.
+*   **Akıllı Etiket Yönetimi**: Özel etiketleri görüntülemek, yeniden adlandırmak veya toplu olarak silmek için yeni, tamamen erişilebilir bir Etiket Yöneticisi iletişim kutusu eklendi (etiketler varsa **Shift+L** tuşlarıyla erişilebilir).
+*   **Doğrudan Dosya Analizi (Dosya İletişim Kutusunu Atla)**: Eklenti artık, Windows Dosya Gezgini'nde bir PDF veya görüntü dosyasına odaklandığınızı algılayacak kadar akıllıdır. Vurgulanan bir dosya üzerinde **F (Akıllı Dosya Eylemi)** veya **D (Belge Okuyucu)** tuşuna basıldığında, standart “Aç” iletişim kutusu tamamen atlanarak dosya hemen işlenir.
 
 ## 5.6 İçin Değişiklikler
 

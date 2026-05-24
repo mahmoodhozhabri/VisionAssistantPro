@@ -65,7 +65,9 @@ Pentru a preveni conflictele de tastatură, acest add-on folosește un **strat d
 | **A**         | Transcriere audio        | Transcrie fișiere MP3, WAV sau OGG în text.                                 |
 | **C**         | Rezolvare CAPTCHA        | Capturează și rezolvă CAPTCHA-uri. Acceptă portaluri guvernamentale.         |
 | **S**         | Dictare inteligentă      | Convertește vorbirea în text. Apasă pentru a porni înregistrarea, apasă din nou pentru a opri și scrie textul. |
-| **L**         | Raportare stare          | Anunță progresul curent, de exemplu „Se scanează...” sau „Inactiv”.          |
+| **I**         | Raportare stare          | Anunță progresul curent, de exemplu „Se scanează...” sau „Inactiv”.          |
+| **L**         | **Etichetează obiectul** | **Etichetare AI semantică:** Etichetează permanent elementul sau pictograma focalizată curent. |
+| **Shift + L** | **Gestionează/scanează etichetele** | Deschide Managerul de etichete, dacă există etichete, sau scanează aplicația pentru elemente fără nume. |
 | **U**         | Verificare actualizări   | Verifică manual pe GitHub cea mai recentă versiune a add-on-ului.            |
 | **Space**     | Reafișează ultimul rezultat | Arată ultimul răspuns AI într-un dialog de chat pentru revizuire sau continuare. |
 | **H**         | Ajutor comenzi           | Afișează lista tuturor scurtăturilor disponibile.                           |
@@ -105,11 +107,18 @@ Rămâi la curent cu cele mai recente noutăți, funcții și lansări:
 Le mulțumim membrilor comunității care susțin dezvoltarea și întreținerea continuă a acestui proiect prin contribuții financiare generoase:
 
 *   **@Alyabani94**
+*   **Ali Alamri**
 
 *Dacă vrei să susții financiar proiectul și să îți vezi numele aici, poți găsi opțiunea **Donează** în meniul Instrumente al NVDA, în submeniul Vision Assistant, sau în timpul configurării după instalare.*
 
 
 ---
+## Modificări pentru 6.0
+
+*   **Introducerea etichetării AI semantice**: Utilizatorii pot eticheta permanent butoane și pictograme fără nume folosind AI. Apasă **L** pentru a eticheta obiectul curent al navigatorului, cu suport pentru focalizarea prin Tab și navigarea pe obiecte, sau **Shift+L** pentru a scana și eticheta întreaga aplicație dintr-o singură acțiune.
+*   **Gestionare inteligentă a etichetelor**: A fost adăugat un dialog nou, complet accesibil, Manager de etichete, prin **Shift+L** dacă există etichete, pentru vizualizarea, redenumirea sau ștergerea în lot a etichetelor personalizate.
+*   **Analiză directă a fișierelor, fără dialogul de fișiere**: Add-on-ul poate detecta acum dacă focalizezi un fișier PDF sau imagine în Windows File Explorer. Când apeși **F (Acțiune inteligentă pentru fișiere)** sau **D (Cititor de documente)** pe un fișier evidențiat, acesta va fi procesat imediat, fără dialogul standard „Deschide”.
+
 ## Modificări pentru 5.6
 
 *   **A fost adăugat motorul OCR „None (Extract Text Layer)”**: Utilizatorii pot extrage acum text direct din PDF-uri căutabile fără a folosi credite AI. Acest lucru îmbunătățește mult viteza și confidențialitatea pentru documentele bazate pe text.
