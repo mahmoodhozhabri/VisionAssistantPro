@@ -1,5 +1,6 @@
 import addonHandler
 import gui
+import config
 import os.path
 import sys
 import wx
