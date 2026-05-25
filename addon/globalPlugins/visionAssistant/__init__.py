@@ -1174,6 +1174,17 @@ def get_file_path(title, wildcard, mode="open", multiple=False):
         gui.mainFrame.postPopup()
     return None
 
+def get_object_location(obj):
+    """Get object location or retourn None if no location can be retrieved.
+    """
+    if obj is None:
+        return None
+    try:
+        return obj.location
+    except NotImplementedError:
+        return None
+
+
 class VirtualDocument:
     def __init__(self, file_paths):
         self.file_paths = file_paths
@@ -3885,7 +3896,7 @@ class CustomLabelOverlay(NVDAObjects.NVDAObject):
     def name(self):
         instance = _vision_assistant_instance
         uniqueId = instance._getAppId(self) if instance else self.appModule.appName
-        loc = self.location
+        loc = get_object_location(self)
         if not loc: return super().name
         key = f"{int(self.role)}:{loc.left},{loc.top}"
         cache = getattr(instance, "labels_cache", {})
@@ -6178,11 +6189,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         if not hasattr(self, "labels_cache"):
             return
         
-        if obj.windowClassName == "Internet Explorer_Server" or obj.appModule.appName.lower() in ["chrome", "msedge", "firefox", "opera", "brave"]:
+        if getattr(obj, "windowClassName", None) == "Internet Explorer_Server" or obj.appModule.appName.lower() in ["chrome", "msedge", "firefox", "opera", "brave"]:
             return
 
         uniqueId = self._getAppId(obj)
-        loc = obj.location
+        loc = get_object_location(obj)
         if not loc:
             return
         
@@ -6198,7 +6209,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     def script_labelObject(self, gesture):
         if self.toggling: self.finish()
         obj = api.getNavigatorObject()
-        if not obj or not obj.location: return
+        if not obj or not get_object_location(obj): return
         if obj.appModule.appName.lower() in ["chrome", "msedge", "firefox", "opera", "brave"]:
             # Translators: Message shown when a user tries to use AI labeling in a web browser.
             ui.message(_("AI Labeling is currently not supported in web browsers."))
