@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 'VisionAssistant' '2.7.0'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-05-26 13:53+0330\n"
-"PO-Revision-Date: 2026-05-28 15:33+0200\n"
+"POT-Creation-Date: 2026-05-28 18:49+0330\n"
+"PO-Revision-Date: 2026-05-28 23:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -728,7 +728,7 @@ msgstr "Instruction de l'opérateur IA"
 
 #. Translators: Feature name shown in the warning dialog when a user tries to edit the AI Operator prompt.
 #: addon\globalPlugins\visionAssistant\__init__.py:571
-#: addon\globalPlugins\visionAssistant\__init__.py:6052
+#: addon\globalPlugins\visionAssistant\__init__.py:6061
 msgid "AI Operator"
 msgstr "Opérateur IA"
 
@@ -1076,11 +1076,11 @@ msgstr "Réflexion en cours..."
 #: addon\globalPlugins\visionAssistant\__init__.py:5809
 #: addon\globalPlugins\visionAssistant\__init__.py:5813
 #: addon\globalPlugins\visionAssistant\__init__.py:5822
-#: addon\globalPlugins\visionAssistant\__init__.py:6145
-#: addon\globalPlugins\visionAssistant\__init__.py:6385
-#: addon\globalPlugins\visionAssistant\__init__.py:6399
-#: addon\globalPlugins\visionAssistant\__init__.py:6495
-#: addon\globalPlugins\visionAssistant\__init__.py:6512
+#: addon\globalPlugins\visionAssistant\__init__.py:6188
+#: addon\globalPlugins\visionAssistant\__init__.py:6428
+#: addon\globalPlugins\visionAssistant\__init__.py:6442
+#: addon\globalPlugins\visionAssistant\__init__.py:6538
+#: addon\globalPlugins\visionAssistant\__init__.py:6555
 msgid "Idle"
 msgstr "Inactif"
 
@@ -2175,7 +2175,7 @@ msgstr "Choisir une action :"
 #. Translators: Message while processing request of the refine text command
 #. Translators: Status reported when AI starts processing a command
 #: addon\globalPlugins\visionAssistant\__init__.py:4939
-#: addon\globalPlugins\visionAssistant\__init__.py:6063
+#: addon\globalPlugins\visionAssistant\__init__.py:6072
 msgid "Processing..."
 msgstr "Traitement en cours..."
 
@@ -2191,7 +2191,7 @@ msgstr "Téléversement du fichier..."
 #: addon\globalPlugins\visionAssistant\__init__.py:5069
 #: addon\globalPlugins\visionAssistant\__init__.py:5623
 #: addon\globalPlugins\visionAssistant\__init__.py:5739
-#: addon\globalPlugins\visionAssistant\__init__.py:6388
+#: addon\globalPlugins\visionAssistant\__init__.py:6431
 msgid "Analyzing..."
 msgstr "Analyse en cours..."
 
@@ -2421,68 +2421,74 @@ msgstr "Choisissez un élément sur lequel cliquer :"
 msgid "UI Elements Explorer"
 msgstr "Explorateur d'éléments d'interface"
 
+#. Translators: Announcement when the AI Operator is manually stopped
+#: addon\globalPlugins\visionAssistant\__init__.py:6054
+#| msgid "AI Operator Model:"
+msgid "AI Operator stopped."
+msgstr "Opérateur IA arrêté."
+
 #. Translators: Title and message for AI Operator command dialog
-#: addon\globalPlugins\visionAssistant\__init__.py:6052
+#: addon\globalPlugins\visionAssistant\__init__.py:6061
 msgid "What should I do or what is your question?"
 msgstr "Que dois-je faire ou quelle est votre question ?"
 
 #. Translators: Fallback error message shown in the AI Operator if the server returns an empty or invalid response.
-#: addon\globalPlugins\visionAssistant\__init__.py:6113
+#: addon\globalPlugins\visionAssistant\__init__.py:6140
 msgid "AI Error"
 msgstr "Erreur IA"
 
 #. Translators: Internal history label for user actions in operator sessions
-#: addon\globalPlugins\visionAssistant\__init__.py:6119
+#: addon\globalPlugins\visionAssistant\__init__.py:6149
 msgid "Action performed. Checking result..."
 msgstr "Action effectuée. Vérification du résultat..."
 
 #. Translators: The title of the interactive chat dialog for the AI Operator feature.
-#: addon\globalPlugins\visionAssistant\__init__.py:6172
+#: addon\globalPlugins\visionAssistant\__init__.py:6215
 #, python-brace-format
 msgid "{name} - AI Operator"
 msgstr "{name} - Opérateur IA"
 
 #. Translators: Labels for the AI and User in chat history
-#: addon\globalPlugins\visionAssistant\__init__.py:6183
+#: addon\globalPlugins\visionAssistant\__init__.py:6226
 msgid "Operator"
 msgstr "Opérateur"
 
-#: addon\globalPlugins\visionAssistant\__init__.py:6183
+#: addon\globalPlugins\visionAssistant\__init__.py:6226
 msgid "You"
 msgstr "Vous"
 
 #. Translators: Script description for labeling.
-#: addon\globalPlugins\visionAssistant\__init__.py:6357
+#: addon\globalPlugins\visionAssistant\__init__.py:6400
 msgid "Labels the current navigator object using AI."
 msgstr "Étiquete l’objet navigateur courant à l’aide de l’IA."
 
 #. Translators: Message shown when a user tries to use AI labeling in a web browser.
-#: addon\globalPlugins\visionAssistant\__init__.py:6365
-#: addon\globalPlugins\visionAssistant\__init__.py:6426
+#: addon\globalPlugins\visionAssistant\__init__.py:6408
+#: addon\globalPlugins\visionAssistant\__init__.py:6469
 msgid "AI Labeling is currently not supported in web browsers."
 msgstr ""
 "L’étiquetage AI n’est actuellement pas pris en charge dans les navigateurs "
 "Web."
 
 #. Translators: Already labeled message.
-#: addon\globalPlugins\visionAssistant\__init__.py:6374
+#: addon\globalPlugins\visionAssistant\__init__.py:6417
 #, python-brace-format
 msgid "Already labeled as: {name}"
 msgstr "Déjà étiqueté comme : {name}"
 
 #. Translators: Status message.
-#: addon\globalPlugins\visionAssistant\__init__.py:6379
+#: addon\globalPlugins\visionAssistant\__init__.py:6422
 msgid "Identifying object..."
 msgstr "Identification d'objet..."
 
 #. Translators: Success message.
-#: addon\globalPlugins\visionAssistant\__init__.py:6412
+#: addon\globalPlugins\visionAssistant\__init__.py:6455
 #, python-brace-format
 msgid "Labeled as: {name}"
 msgstr "Étiqueté comme : {name}"
 
 #. Translators: Script description for managing existing labels or starting a full app scan.
-#: addon\globalPlugins\visionAssistant\__init__.py:6418
+#: addon\globalPlugins\visionAssistant\__init__.py:6461
 msgid ""
 "Manages existing labels or scans the entire app to label unnamed elements."
 msgstr ""
@@ -2490,32 +2496,32 @@ msgstr ""
 "pour étiqueter les éléments sans nom."
 
 #. Translators: Confirmation message shown after labels are deleted or renamed.
-#: addon\globalPlugins\visionAssistant\__init__.py:6445
+#: addon\globalPlugins\visionAssistant\__init__.py:6488
 msgid "Labels updated."
 msgstr "Étiquettes mises à jour."
 
 #. Translators: Status message shown when the add-on starts scanning the application UI for unnamed elements.
-#: addon\globalPlugins\visionAssistant\__init__.py:6461
+#: addon\globalPlugins\visionAssistant\__init__.py:6504
 msgid "Scanning application UI..."
 msgstr "Analyse de l'interface de l'application..."
 
 #. Translators: Message shown when no unnamed elements are found in the application.
-#: addon\globalPlugins\visionAssistant\__init__.py:6497
+#: addon\globalPlugins\visionAssistant\__init__.py:6540
 msgid "No unnamed elements found."
 msgstr "Aucun élément sans nom trouvé."
 
 #. Translators: Status message shown when the add-on is analyzing the application with AI.
-#: addon\globalPlugins\visionAssistant\__init__.py:6501
+#: addon\globalPlugins\visionAssistant\__init__.py:6544
 msgid "Analyzing application..."
 msgstr "Analyse de l'application..."
 
 #. Translators: Success message shown when application labeling is complete.
-#: addon\globalPlugins\visionAssistant\__init__.py:6551
+#: addon\globalPlugins\visionAssistant\__init__.py:6594
 msgid "Application labeling complete."
 msgstr "Étiquetage de l'application terminé."
 
 #. Translators: Error message shown when batch labeling fails to process.
-#: addon\globalPlugins\visionAssistant\__init__.py:6555
+#: addon\globalPlugins\visionAssistant\__init__.py:6598
 msgid "Batch labeling failed."
 msgstr "Échec de l'étiquetage par lots."
 
@@ -2584,6 +2590,10 @@ msgid ""
 "advanced proxy bypass mechanism. The add-on is now smart enough to completely "
 "bypass Windows system proxies for local loopback connections, ensuring stable "
 "local AI connections even when your VPN/TUN-mode is active.\n"
+"*   **AI Operator Emergency Cancel (Shift+A)**: Added a highly requested stop/"
+"cancel safety trigger. Pressing the AI Operator command (**Shift+A** inside "
+"the command layer) while an autonomous operation is running will instantly "
+"abort the loop and announce *\"AI Operator stopped.\"*\n"
 "*   **Ultra-Stable AI Labeling (v2)**: Replaced absolute screen coordinate "
 "keys with an advanced, hybrid **Object Signature** system. Labels now rely on "
 "programmatic identifiers (UIA **AutomationId** or Win32 **ControlID**) and "
@@ -2607,6 +2617,11 @@ msgstr ""
 "complètement les proxys du système Windows pour les connexions locales de "
 "type loopback, garantissant ainsi des connexions IA locales stables même "
 "lorsque votre mode VPN/TUN est actif.\n"
+"*   **Annulation d'urgence de l'opérateur IA (Maj+A)** : Ajout d'un "
+"déclencheur de sécurité d'arrêt/annulation très demandé. Un appui sur la "
+"commande Opérateur AI (**Maj+A** à l'intérieur d'une commande séquentielle) "
+"pendant qu'une opération autonome est en cours d'exécution annulera "
+"instantanément la boucle et annoncera *\"Opérateur AI arrêté.\"*\n"
 "*   **Étiquetage IA ultra-stable (v2)** : Remplacement des clés de "
 "coordonnées absolues de l'écran par un système avancé et hybride de "
 "**Signature d'objet**. Les étiquettes s'appuient désormais sur des "
