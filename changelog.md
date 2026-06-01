@@ -1,10 +1,7 @@
-## Changes for 6.1.0
+## Changes for 6.1.1
 
-*   **Universal Local AI Integration (Setup Local AI)**: Added a new **"Setup Local AI"** button in Custom Provider Settings. Users can now automatically configure local AI engines, including **Ollama**, **LM Studio**, **Jan.ai**, and **KoboldCPP** instantly.
-*   **Intelligent Local Proxy Bypass**: Rebuilt the connection logic with an advanced proxy bypass mechanism. The add-on is now smart enough to completely bypass Windows system proxies for local loopback connections, ensuring stable local AI connections even when your VPN/TUN-mode is active.
-*   **AI Operator Emergency Cancel (Shift+A)**: Added a highly requested stop/cancel safety trigger. Pressing the AI Operator command (**Shift+A** inside the command layer) while an autonomous operation is running will instantly abort the loop and announce *"AI Operator stopped."*
-*   **Ultra-Stable AI Labeling (v2)**: Replaced absolute screen coordinate keys with an advanced, hybrid **Object Signature** system. Labels now rely on programmatic identifiers (UIA **AutomationId** or Win32 **ControlID**) and window-relative coordinates, making your custom labels completely resistant to window resizing, moving, monitor switching, or scaling.
-*   **Seamless Automatic Label Migration**: Upgrading is completely transparent. The add-on will automatically migrate your older legacy coordinate-based labels to the new stable fingerprint format in the background upon first focus, with zero data loss.
+*   **Gemma 4 Thinking Output Fix**: Fixed an issue with Gemma 4 models where the entire internal thought process was displayed as the final response, or where disabling thinking resulted in empty responses. The add-on now correctly isolates and extracts only the final clean text response.
+*   **Batch OCR from File Explorer**: You can now select multiple photos or PDFs directly in Windows File Explorer and extract text or analyze them in batch. The add-on will automatically filter and process only the supported file formats.
 ---
 
 ### 🌟 Support the Future of Vision Assistant Pro

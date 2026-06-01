@@ -1287,6 +1287,31 @@ class SmartProgrammersOCREngine:
             pass
         return None
 
+def _apply_gemma_thinking_patch(payload, url_or_model):
+    model_name = ""
+    if url_or_model:
+        if "/models/" in url_or_model:
+            try:
+                model_name = url_or_model.split("/models/")[-1].split(":")[0].split("?")[0]
+            except Exception:
+                pass
+        else:
+            model_name = url_or_model
+
+    if model_name and ("gemma-4" in model_name.lower() or "gemma4" in model_name.lower()):
+        if "generationConfig" not in payload:
+            payload["generationConfig"] = {}
+        payload["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "MINIMAL"}
+    return payload
+
+def _extract_text_from_parts(parts):
+    if not parts:
+        return ""
+    text_parts = [part.get("text", "") for part in parts if not part.get("thought")]
+    if text_parts:
+        return "".join(text_parts)
+    return parts[0].get("text", "")
+
 class GoogleTranslator:
     @staticmethod
     def translate(text, target_lang):
@@ -1298,9 +1323,14 @@ class GoogleTranslator:
             quick_template = get_prompt_text("translate_quick") or "Translate to {target_lang}. Output ONLY translation."
             quick_prompt = apply_prompt_template(quick_template, [("target_lang", lang)])
             payload = {"contents": [{"parts": [{"text": quick_prompt}, {"text": txt}]}]}
+            
+            _apply_gemma_thinking_patch(payload, model)
+            
             req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
             with GeminiHandler._get_opener().open(req, timeout=90) as r:
-                return json.loads(r.read().decode())['candidates'][0]['content']['parts'][0]['text']
+                res = json.loads(r.read().decode())
+                parts = res['candidates'][0]['content'].get('parts', [])
+                return _extract_text_from_parts(parts)
         return GeminiHandler._call_with_rotation(_logic, text, target_lang)
 
 class GeminiHandler:
@@ -1419,6 +1449,8 @@ class GeminiHandler:
         }
         if json_mode: payload["generationConfig"]["response_mime_type"] = "application/json"
             
+        _apply_gemma_thinking_patch(payload, base_endpoint)
+            
         headers = {"Content-Type": "application/json"}
         req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
         
@@ -1441,7 +1473,7 @@ class GeminiHandler:
                     return "ERROR:" + _("The response was blocked mid-generation by safety filters.")
                 # Translators: Error shown when the response structure is unexpected or empty.
                 return "ERROR:" + _("AI returned an empty response structure.")
-            return parts[0].get('text', '')
+            return _extract_text_from_parts(parts)
 
     @staticmethod
     def _call_with_rotation(func_logic, *args):
@@ -1482,9 +1514,14 @@ class GeminiHandler:
             quick_template = get_prompt_text("translate_quick") or "Translate to {target_lang}. Output ONLY translation."
             quick_prompt = apply_prompt_template(quick_template, [("target_lang", lang)])
             payload = {"contents": [{"parts": [{"text": quick_prompt}, {"text": txt}]}]}
+            
+            _apply_gemma_thinking_patch(payload, model)
+            
             req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
             with GeminiHandler._get_opener().open(req, timeout=90) as r:
-                return json.loads(r.read().decode())['candidates'][0]['content']['parts'][0]['text']
+                res = json.loads(r.read().decode())
+                parts = res['candidates'][0]['content'].get('parts', [])
+                return _extract_text_from_parts(parts)
         return GeminiHandler._call_with_rotation(_logic, text, target_lang)
 
     @staticmethod
@@ -1496,9 +1533,14 @@ class GeminiHandler:
             
             ocr_image_prompt = get_prompt_text("ocr_image_extract")
             payload = {"contents": [{"parts": [{"inline_data": {"mime_type": "image/jpeg", "data": base64.b64encode(img_data).decode('utf-8')}}, {"text": ocr_image_prompt}]}]}
+            
+            _apply_gemma_thinking_patch(payload, url)
+            
             req = request.Request(full_url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
             with GeminiHandler._get_opener().open(req, timeout=120) as r:
-                return json.loads(r.read().decode())['candidates'][0]['content']['parts'][0]['text']
+                res = json.loads(r.read().decode())
+                parts = res['candidates'][0]['content'].get('parts', [])
+                return _extract_text_from_parts(parts)
         return GeminiHandler._call_with_rotation(_logic, image_bytes)
 
     @staticmethod
@@ -1578,11 +1620,15 @@ class GeminiHandler:
                 
                 prompt = get_prompt_text("ocr_document_extract")
                 contents = [{"parts": [{"file_data": {"mime_type": mime_type, "file_uri": uri}}, {"text": prompt}]}]
+
+                payload = {"contents": contents}
+                _apply_gemma_thinking_patch(payload, url)
                 
-                req_gen = request.Request(full_url, data=json.dumps({"contents": contents}).encode(), headers={"Content-Type": "application/json"})
+                req_gen = request.Request(full_url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
                 with opener.open(req_gen, timeout=180) as r:
                     res = json.loads(r.read().decode())
-                    text = res['candidates'][0]['content']['parts'][0]['text']
+                    parts = res['candidates'][0]['content'].get('parts', [])
+                    text = _extract_text_from_parts(parts)
                     return text.split('[[[PAGE_SEP]]]')
                     
             except error.HTTPError as e:
@@ -1616,9 +1662,14 @@ class GeminiHandler:
             user_parts.append({"text": msg})
             contents.append({"role": "user", "parts": user_parts})
             
-            req = request.Request(full_url, data=json.dumps({"contents": contents}).encode(), headers={"Content-Type": "application/json"})
+            payload = {"contents": contents}
+            _apply_gemma_thinking_patch(payload, url)
+            
+            req = request.Request(full_url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
             with GeminiHandler._get_opener().open(req, timeout=120) as r:
-                return json.loads(r.read().decode())['candidates'][0]['content']['parts'][0]['text']
+                res = json.loads(r.read().decode())
+                parts = res['candidates'][0]['content'].get('parts', [])
+                return _extract_text_from_parts(parts)
         forced_key = GeminiHandler._get_registered_key(file_uri) if file_uri else None
         if forced_key:
             return GeminiHandler._call_with_key(_logic, forced_key, history, new_msg, file_uri, mime_type, file_data)
@@ -4351,10 +4402,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     if win.HWND == hwnd:
                         selected = win.Document.SelectedItems()
                         if selected.Count > 0:
-                            return selected.Item(0).Path
+                            return [selected.Item(i).Path for i in range(selected.Count)]
                 except Exception: continue
         except Exception: pass
-        return None
+        return []
 
     def _browse_and_run(self, worker_fn, wildcard, multiple=False):
         # Translators: Standard title for opening a file
@@ -5126,11 +5177,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     @scriptHandler.script(description=_("Performs smart actions on a selected image or PDF file."))
     def script_smartFileAction(self, gesture):
         if self.toggling: self.finish()
-        focused_path = self._getFocusedExplorerFile()
+        focused_paths = self._getFocusedExplorerFile()
         
         valid_exts = ('.pdf', '.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff')
-        if focused_path and focused_path.lower().endswith(valid_exts):
-            threading.Thread(target=self._pre_process_smart_file, args=([focused_path],), daemon=True).start()
+        valid_paths = [p for p in focused_paths if p.lower().endswith(valid_exts)]
+        if valid_paths:
+            threading.Thread(target=self._pre_process_smart_file, args=(valid_paths,), daemon=True).start()
         else:
             wx.CallLater(100, self._open_smart_file_dialog)
 
@@ -5321,11 +5373,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     @scriptHandler.script(description=_("Opens the Document Reader for detailed page-by-page analysis (PDF/Images)."))
     def script_analyzeDocument(self, gesture):
         if self.toggling: self.finish()
-        focused_path = self._getFocusedExplorerFile()
+        focused_paths = self._getFocusedExplorerFile()
         
         valid_exts = ('.pdf', '.jpg', '.jpeg', '.png', '.tif', '.tiff')
-        if focused_path and focused_path.lower().endswith(valid_exts):
-            threading.Thread(target=self._scan_and_open, args=([focused_path],), daemon=True).start()
+        valid_paths = [p for p in focused_paths if p.lower().endswith(valid_exts)]
+        if valid_paths:
+            threading.Thread(target=self._scan_and_open, args=(valid_paths,), daemon=True).start()
         else:
             wx.CallAfter(self._open_document_reader)
 
@@ -6316,7 +6369,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             winUser.keybd_event(0x0D, 0, 2, 0)
 
     def _getAppId(self, obj):
-        appName = obj.appModule.appName.lower()
+        try:
+            appName = obj.appModule.appName.lower()
+        except Exception:
+            appName = "unknown_app"
+            
         if appName == "applicationframehost":
             try:
                 fg = api.getForegroundObject()
@@ -6324,8 +6381,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                     return f"{appName}_{fg.name}"
             except Exception: pass
         return appName
-
-
 
     def chooseNVDAObjectOverlayClasses(self, obj, clsList):
         if not hasattr(self, "labels_cache"):
@@ -6364,30 +6419,29 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                 clsList.insert(0, CustomLabelOverlay)
                 return
 
-    @scriptHandler.script(
-        # Translators: Script description for labeling.
-        description=_("Labels the current navigator object using AI.")
-    )
+    # Translators: Script description for the 'Label Object' command in the Input Gestures dialog. This command sends the current UI element to AI to generate a descriptive name.
+    @scriptHandler.script(description=_("Labels the current navigator object using AI."))
     def script_labelObject(self, gesture):
         if self.toggling: self.finish()
         obj = api.getNavigatorObject()
         if not obj or not obj.location: return
-        if obj.appModule.appName.lower() in ["chrome", "msedge", "firefox", "opera", "brave"]:
-            # Translators: Message shown when a user tries to use AI labeling in a web browser.
+        
+        uniqueId = self._getAppId(obj)
+        if uniqueId in ["chrome", "msedge", "firefox", "opera", "brave"]:
+            # Translators: Error message shown when the user attempts to run the AI labeling command inside a web browser (like Chrome or Edge), which is not supported due to dynamic web content.
             ui.message(_("AI Labeling is currently not supported in web browsers."))
             return
 
-        uniqueId = self._getAppId(obj)
         loc = obj.location
         key = f"{int(obj.role)}:{loc.left},{loc.top}"
         
         if uniqueId in self.labels_cache and key in self.labels_cache[uniqueId]:
-            # Translators: Already labeled message.
+            # Translators: Message spoken by NVDA when the current object already has a custom or AI-generated label. {name} is replaced with the existing label text.
             ui.message(_("Already labeled as: {name}").format(name=self.labels_cache[uniqueId][key]))
             return
 
         tones.beep(800, 100)
-        # Translators: Status message.
+        # Translators: Progress message spoken when the add-on starts taking a screenshot of the current focused object.
         self.current_status = _("Identifying object...")
         ui.message(self.current_status)
         
@@ -6396,7 +6450,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             if not img:
                 self.current_status = _("Idle")
                 return
-            # Translators: Status message.
+            # Translators: Progress message spoken when the add-on has sent the image to the AI and is waiting for the AI to return a label.
             self.current_status = _("Analyzing...")
             wx.CallAfter(ui.message, self.current_status)
             
@@ -6412,23 +6466,25 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             
             if res and not res.startswith("ERROR:"):
                 clean_name = clean_markdown(res)
-                if uniqueId not in self.labels_cache: self.labels_cache[uniqueId] = {}
                 
-
-                key = _generate_object_signature(obj)
-                if key:
-                    self.labels_cache[uniqueId][key] = clean_name
-                    self._save_all_labels()
-                    tones.beep(1000, 100)
-                    # Translators: Success message.
-                    wx.CallAfter(ui.message, _("Labeled as: {name}").format(name=clean_name))
+                def save_ui_thread():
+                    if uniqueId not in self.labels_cache: self.labels_cache[uniqueId] = {}
+                    sig_key = _generate_object_signature(obj)
+                    if sig_key:
+                        self.labels_cache[uniqueId][sig_key] = clean_name
+                        self._save_all_labels()
+                        tones.beep(1000, 100)
+                        # Translators: Success message spoken when the AI successfully assigns a new label to the object. {name} is replaced with the AI-generated label.
+                        ui.message(_("Labeled as: {name}").format(name=clean_name))
+                        
+                wx.CallAfter(save_ui_thread)
             elif res and res.startswith("ERROR:"):
                 wx.CallAfter(show_error_dialog, res[6:])
+        
+        threading.Thread(target=worker, daemon=True).start()
 
-    @scriptHandler.script(
-        # Translators: Script description for managing existing labels or starting a full app scan.
-        description=_("Manages existing labels or scans the entire app to label unnamed elements.")
-    )
+    # Translators: Script description for managing existing labels or starting a full app scan.
+    @scriptHandler.script(description=_("Manages existing labels or scans the entire app to label unnamed elements."))
     def script_manageOrScanApp(self, gesture):
         if self.toggling: self.finish()
         obj = api.getFocusObject()
@@ -6469,7 +6525,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
     def _batchLabelApp(self, unique_id):
         tones.beep(800, 100)
-        # Translators: Status message shown when the add-on starts scanning the application UI for unnamed elements.
+        # Translators: Progress message spoken when the add-on begins scanning the current application window to find UI elements (like buttons or icons) that do not have accessibility names.
         self.current_status = _("Scanning application UI...")
         ui.message(self.current_status)
         
@@ -6505,11 +6561,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
             if not candidates:
                 self.current_status = _("Idle")
-                # Translators: Message shown when no unnamed elements are found in the application.
+                # Translators: Message spoken when the add-on finishes the UI scan but finds no unnamed elements to label (everything already has a name).
                 wx.CallAfter(ui.message, _("No unnamed elements found."))
                 return
 
-            # Translators: Status message shown when the add-on is analyzing the application with AI.
+            # Translators: Progress message spoken when the add-on has found unnamed elements and is now sending the full application screenshot to AI for batch labeling.
             self.current_status = _("Analyzing application...")
             wx.CallAfter(ui.message, self.current_status)
             
@@ -6535,35 +6591,39 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                         clean_json = raw_res
 
                     ai_items = json.loads(clean_json)
-                    if unique_id not in self.labels_cache: self.labels_cache[unique_id] = {}
                     
-                    for item in ai_items:
-                        if not all(k in item for k in ('x', 'y', 'label')): continue
+                    def save_batch_ui_thread():
+                        if unique_id not in self.labels_cache: self.labels_cache[unique_id] = {}
                         
-                        ai_x, ai_y = int(item['x'] * w / 1000), int(item['y'] * h / 1000)
-                        best_match, min_dist = None, 100
+                        for item in ai_items:
+                            if not all(k in item for k in ('x', 'y', 'label')): continue
+                            
+                            ai_x, ai_y = int(item['x'] * w / 1000), int(item['y'] * h / 1000)
+                            best_match, min_dist = None, 100
+                            
+                            for cand in candidates:
+                                c_loc = cand.location
+                                if not c_loc: continue
+                                cx, cy = c_loc.left + c_loc.width/2, c_loc.top + c_loc.height/2
+                                dist = ((cx - ai_x)**2 + (cy - ai_y)**2)**0.5
+                                if dist < min_dist:
+                                    min_dist = dist
+                                    best_match = cand
+                            
+                            if best_match:
+                                sig_key = _generate_object_signature(best_match)
+                                if sig_key:
+                                    self.labels_cache[unique_id][sig_key] = item['label']
                         
-                        for cand in candidates:
-                            c_loc = cand.location
-                            cx, cy = c_loc.left + c_loc.width/2, c_loc.top + c_loc.height/2
-                            dist = ((cx - ai_x)**2 + (cy - ai_y)**2)**0.5
-                            if dist < min_dist:
-                                min_dist = dist
-                                best_match = cand
+                        self._save_all_labels()
+                        tones.beep(1000, 100)
+                        # Translators: Success message spoken when the AI finishes analyzing the app and successfully names multiple elements in the background.
+                        ui.message(_("Application labeling complete."))
                         
-                        if best_match:
-
-                            key = _generate_object_signature(best_match)
-                            if key:
-                                self.labels_cache[unique_id][key] = item['label']
-                    
-                    self._save_all_labels()
-                    tones.beep(1000, 100)
-                    # Translators: Success message shown when application labeling is complete.
-                    wx.CallAfter(ui.message, _("Application labeling complete."))
+                    wx.CallAfter(save_batch_ui_thread)
                 except Exception as e:
                     log.error(f"Batch labeling mapping failed: {e}")
-                    # Translators: Error message shown when batch labeling fails to process.
+                    # Translators: Error message spoken when the add-on fails to parse or map the labels returned by the AI (e.g., due to invalid AI response format).
                     wx.CallAfter(ui.message, _("Batch labeling failed."))
             elif res and res.startswith("ERROR:"):
                 wx.CallAfter(show_error_dialog, res[6:])
