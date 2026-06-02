@@ -588,10 +588,12 @@ DEFAULT_SYSTEM_PROMPTS = (
         "label": _("Single Labeling Instruction"),
         "requiredMarkers": ["{app_name}", "{response_lang}"],
         "prompt": (
-            "Analyze this UI screenshot for the app: {app_name}. "
-            "Identify the focused element and provide a short descriptive name in {response_lang}. "
-            "IMPORTANT: Output ONLY the functional name, do NOT include the role (like 'button' or 'icon') in the label. "
-            "Output ONLY the raw name without any punctuation."
+            "Analyze this UI screenshot for the app: {app_name}.\n"
+            "Identify the focused element and provide a short descriptive name.\n"
+            "Rules:\n"
+            "1. If the element has visible text in the image, return that exact text. DO NOT translate it.\n"
+            "2. If it is a purely visual icon, provide a functional name in {response_lang}.\n"
+            "3. Output ONLY the raw name without any punctuation. Do NOT include the role (like 'button' or 'icon') in the label."
         ),
     },
     {
@@ -1315,23 +1317,18 @@ def _extract_text_from_parts(parts):
 class GoogleTranslator:
     @staticmethod
     def translate(text, target_lang):
-        def _logic(key, txt, lang):
-            base_url = AIHandler.get_base_url("gemini")
-            model = config.conf["VisionAssistant"]["model_name"]
-            url = f"{base_url}/v1beta/models/{model}:generateContent?key={key}"
-            
-            quick_template = get_prompt_text("translate_quick") or "Translate to {target_lang}. Output ONLY translation."
-            quick_prompt = apply_prompt_template(quick_template, [("target_lang", lang)])
-            payload = {"contents": [{"parts": [{"text": quick_prompt}, {"text": txt}]}]}
-            
-            _apply_gemma_thinking_patch(payload, model)
-            
-            req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
-            with GeminiHandler._get_opener().open(req, timeout=90) as r:
-                res = json.loads(r.read().decode())
-                parts = res['candidates'][0]['content'].get('parts', [])
-                return _extract_text_from_parts(parts)
-        return GeminiHandler._call_with_rotation(_logic, text, target_lang)
+        try:
+            url = f"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={target_lang}&dt=t&q={quote(text)}"
+            opener = get_proxy_opener()
+            req = request.Request(url)
+            with opener.open(req, timeout=15) as r:
+                res = json.loads(r.read().decode('utf-8'))
+                if res and isinstance(res, list) and res[0]:
+                    translated_parts = [sentence[0] for sentence in res[0] if sentence[0]]
+                    return "".join(translated_parts).strip()
+        except Exception as e:
+            log.error(f"GoogleTranslator failed, falling back to original text: {e}")
+        return text
 
 class GeminiHandler:
     _working_key_idx = 0 
@@ -1509,8 +1506,11 @@ class GeminiHandler:
     @staticmethod
     def translate(text, target_lang):
         def _logic(key, txt, lang):
+
+            base_url = AIHandler.get_base_url("gemini")
             model = config.conf["VisionAssistant"]["model_name"]
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+            url = f"{base_url}/v1beta/models/{model}:generateContent"
+            
             quick_template = get_prompt_text("translate_quick") or "Translate to {target_lang}. Output ONLY translation."
             quick_prompt = apply_prompt_template(quick_template, [("target_lang", lang)])
             payload = {"contents": [{"parts": [{"text": quick_prompt}, {"text": txt}]}]}
@@ -4019,9 +4019,11 @@ class DocumentViewerDialog(wx.Dialog):
             wx.CallAfter(wx.MessageBox, _("TTS Error: {error}").format(error=e), _("Error"), wx.ICON_ERROR)
 
     def on_ask(self, event):
-        if not config.conf["VisionAssistant"]["api_key"]:
-        # Translators: Warning message when the Gemini key is missing for specific features.
-            wx.MessageBox(_("Please configure Gemini API Key."), _("Error"), wx.ICON_ERROR)
+        p = config.conf["VisionAssistant"]["active_provider"]
+        keys = AIHandler.get_keys(p)
+        if not keys and p != "custom":
+            # Translators: Error when no API keys are found in settings
+            wx.MessageBox(_("No API Keys configured."), _("Error"), wx.ICON_ERROR)
             return
         if ChatDialog.instance:
             ChatDialog.instance.Raise()
@@ -4542,7 +4544,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             "Shift+V: " + _("Analyzes a YouTube, Instagram, Twitter or TikTok video URL.") + "\n" +
             "C: " + _("Attempts to solve a CAPTCHA on the screen or navigator object.") + "\n" +
             "S: " + _("Records voice, transcribes it using AI, and types the result.") + "\n" +
-            "L: " + _("Announces the current status of the add-on.") + "\n" +
+            "I: " + _("Announces the current status of the add-on.") + "\n" +
+            "L: " + _("Labels the current navigator object using AI.") + "\n" +
+            "Shift+L: " + _("Manages existing labels or scans the entire app to label unnamed elements.") + "\n" +
             "U: " + _("Checks for updates manually.") + "\n" +
             "Space: " + _("Shows the last AI response in a chat dialog for review or follow-up questions.") + "\n" +
             "H: " + _("Shows a list of available commands in the layer.")
@@ -5839,7 +5843,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             wx.CallAfter(setattr, self, 'current_status', _("Idle"))
 
     def _finish_captcha(self, text):
-        clean_text = re.sub(r'[^a-zA-Z0-9]', '', text) if not any(c.isdigit() for c in text) else text
+        clean_text = re.sub(r'[^a-zA-Z0-9]', '', text)
         for char in clean_text:
             try:
                 keyboardHandler.KeyboardInputGesture.fromName(char).send()
@@ -6428,16 +6432,27 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         
         uniqueId = self._getAppId(obj)
         if uniqueId in ["chrome", "msedge", "firefox", "opera", "brave"]:
-            # Translators: Error message shown when the user attempts to run the AI labeling command inside a web browser (like Chrome or Edge), which is not supported due to dynamic web content.
+            # Translators: Message shown when a user tries to use AI labeling in a web browser.
             ui.message(_("AI Labeling is currently not supported in web browsers."))
             return
 
         loc = obj.location
-        key = f"{int(obj.role)}:{loc.left},{loc.top}"
+        sig_key = _generate_object_signature(obj)
+        old_key = f"{int(obj.role)}:{loc.left},{loc.top}" if loc else None
         
-        if uniqueId in self.labels_cache and key in self.labels_cache[uniqueId]:
+        is_labeled = False
+        found_label = ""
+        if uniqueId in self.labels_cache:
+            if sig_key and sig_key in self.labels_cache[uniqueId]:
+                is_labeled = True
+                found_label = self.labels_cache[uniqueId][sig_key]
+            elif old_key and old_key in self.labels_cache[uniqueId]:
+                is_labeled = True
+                found_label = self.labels_cache[uniqueId][old_key]
+                
+        if is_labeled:
             # Translators: Message spoken by NVDA when the current object already has a custom or AI-generated label. {name} is replaced with the existing label text.
-            ui.message(_("Already labeled as: {name}").format(name=self.labels_cache[uniqueId][key]))
+            ui.message(_("Already labeled as: {name}").format(name=found_label))
             return
 
         tones.beep(800, 100)
@@ -6598,7 +6613,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
                         for item in ai_items:
                             if not all(k in item for k in ('x', 'y', 'label')): continue
                             
-                            ai_x, ai_y = int(item['x'] * w / 1000), int(item['y'] * h / 1000)
+                            try:
+                                x_val = float(item['x'])
+                                y_val = float(item['y'])
+                            except (ValueError, TypeError, KeyError):
+                                continue
+                            
+                            ai_x, ai_y = int(x_val * w / 1000), int(y_val * h / 1000)
                             best_match, min_dist = None, 100
                             
                             for cand in candidates:
