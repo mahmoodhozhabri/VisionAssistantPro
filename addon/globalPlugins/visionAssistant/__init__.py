@@ -249,6 +249,13 @@ confspec = {
     "openai_api_key": "string(default='')",
     "mistral_api_key": "string(default='')",
     "groq_api_key": "string(default='')",
+    "minimax_api_key": "string(default='')",
+    "minimax_model_name": "string(default='MiniMax-M3')",
+    "minimax_vision_model": "string(default='MiniMax-VL-01')",
+    "minimax_ocr_model": "string(default='MiniMax-VL-01')",
+    "minimax_stt_model": "string(default='asr-01')",
+    "minimax_tts_model": "string(default='speech-2.8-hd')",
+    "minimax_tts_voice": "string(default='Calm_Woman')",
     "custom_api_key": "string(default='')",
     "custom_api_url": "string(default='')",
     "custom_api_type": "string(default='openai')",
@@ -1757,7 +1764,7 @@ class AIHandler:
     def is_tts_supported(provider=None):
         p = provider if provider else config.conf["VisionAssistant"]["active_provider"]
         
-        if p in ["gemini", "openai"]:
+        if p in ["gemini", "openai", "minimax"]:
             return True
         
         if p == "custom":
@@ -1830,6 +1837,8 @@ class AIHandler:
             return proxy_url.rstrip('/') if proxy_url else "https://api.mistral.ai"
         elif provider == "groq":
             return proxy_url.rstrip('/') if proxy_url else "https://api.groq.com/openai"
+        elif provider == "minimax":
+            return proxy_url.rstrip('/') if proxy_url else "https://api.minimax.io/v1"
         return ""
 
     @staticmethod
@@ -1866,7 +1875,7 @@ class AIHandler:
             else: model = "gemini-3.1-flash-tts-preview"
 
         if not base:
-            base_map = {"mistral": "https://api.mistral.ai", "openai": "https://api.openai.com", "groq": "https://api.groq.com/openai", "gemini": "https://generativelanguage.googleapis.com"}
+            base_map = {"mistral": "https://api.mistral.ai", "openai": "https://api.openai.com", "groq": "https://api.groq.com/openai", "gemini": "https://generativelanguage.googleapis.com", "minimax": "https://api.minimax.io/v1"}
             base = base_map.get(p, "")
             
         if p == "custom" and adv:
@@ -1989,6 +1998,7 @@ class AIHandler:
             model = "whisper-1"
             if p == "groq": model = "whisper-large-v3-turbo"
             elif p == "mistral": model = "voxtral-mini-latest"
+            elif p == "minimax": model = config.conf["VisionAssistant"]["minimax_stt_model"].strip() or "asr-01"
             if p == "custom":
                 model = config.conf["VisionAssistant"]["custom_stt_model"].strip() or config.conf["VisionAssistant"]["custom_model_name"].strip() or model
             elif config.conf["VisionAssistant"].get("advanced_model_routing", False):
@@ -2121,15 +2131,42 @@ class AIHandler:
         m_key = "model_name" if p == "gemini" else f"{p}_model_name"
         model = model_override or config.conf["VisionAssistant"].get(m_key, "")
         
-        if p == "custom": 
+        if p == "custom":
             model = config.conf["VisionAssistant"]["custom_tts_model"].strip() or "tts-1"
         elif config.conf["VisionAssistant"].get("advanced_model_routing", False):
             adv_tts = config.conf["VisionAssistant"].get(f"{p}_tts_model", "").strip()
             if adv_tts: model = adv_tts
             elif p == "openai": model = "tts-1"
-        elif p == "openai": 
+        elif p == "openai":
             model = "tts-1"
-            
+
+        # MiniMax TTS uses a custom payload (text + voice_setting + audio_setting)
+        # and returns audio as hex inside JSON (data.audio field).
+        if p == "minimax":
+            minimax_tts_url = "https://api.minimax.io/v1/t2a_v2"
+            minimax_voice = voice_name if voice_name else config.conf["VisionAssistant"]["minimax_tts_voice"].strip() or "Calm_Woman"
+            minimax_payload = {
+                "model": model,
+                "text": text,
+                "voice_setting": {"voice_id": minimax_voice, "speed": 1.0, "vol": 1.0, "pitch": 0},
+                "audio_setting": {"sample_rate": 32000, "bitrate": 128000, "format": "mp3", "channel": 1}
+            }
+            for key in keys:
+                try:
+                    headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
+                    if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
+                    req = request.Request(minimax_tts_url, data=json.dumps(minimax_payload).encode(), headers=headers)
+                    with get_proxy_opener().open(req, timeout=120) as r:
+                        resp_json = json.loads(r.read().decode("utf-8"))
+                        hex_audio = resp_json.get("data", {}).get("audio", "")
+                        if not hex_audio:
+                            return "ERROR: MiniMax TTS returned no audio data.", False
+                        audio_bytes = bytes.fromhex(hex_audio)
+                        return base64.b64encode(audio_bytes).decode("utf-8"), False
+                except Exception as e:
+                    if key == keys[-1]: return f"ERROR: {str(e)}", False
+                    continue
+
         payload = {"model": model, "input": text, "voice": voice_name.lower(), "response_format": "mp3"}
         for key in keys:
             try:
@@ -2487,6 +2524,8 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             (_("Mistral AI"), "mistral"),
             # Translators: Name of the Groq AI provider
             (_("Groq"), "groq"),
+            # Translators: Name of the MiniMax AI provider
+            (_("MiniMax"), "minimax"),
             # Translators: Option for a user-defined custom AI provider
             (_("Custom"), "custom")
         ]
@@ -2915,7 +2954,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
     def onProviderChange(self, event):
         p_idx = self.provider_sel.GetSelection()
-        p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+        p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
         
         key_name = "api_key" if p_name == "gemini" else (f"{p_name}_api_key" if p_name != "custom" else "custom_api_key")
         val = config.conf["VisionAssistant"].get(key_name, "")
@@ -3011,7 +3050,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
     def onFetchModels(self, event):
         p_idx = self.provider_sel.GetSelection()
-        p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+        p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
         
         val = self.apiKeyCtrl_visible.Value if self.showApiCheck.IsChecked() else self.apiKeyCtrl_hidden.Value
         k_key = "api_key" if p_name == "gemini" else (f"{p_name}_api_key" if p_name != "custom" else "custom_api_key")
@@ -3166,7 +3205,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
     def onToggleAdvanced(self, event):
         p_idx = self.provider_sel.GetSelection()
         if p_idx != wx.NOT_FOUND:
-            p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+            p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
             self.updateCustomFieldsVisibility(p_name)
 
     def onToggleApiVisibility(self, event):
@@ -3187,7 +3226,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             model_id = cb.GetClientData(sel)
             if model_id:
                 p_idx = self.provider_sel.GetSelection()
-                p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+                p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
                 self._temp_models[p_name] = model_id
                 if p_name == "custom":
                     self.customModelName.SetValue(model_id)
@@ -3198,14 +3237,14 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             voice_id = self.voice_sel.GetClientData(sel)
             p_idx = self.provider_sel.GetSelection()
             if p_idx != wx.NOT_FOUND:
-                p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+                p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
                 if p_name == "custom":
                     self.customTtsVoice.SetValue(voice_id)
 
     def onSave(self):
         try:
             p_idx = self.provider_sel.GetSelection()
-            p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+            p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
             config.conf["VisionAssistant"]["active_provider"] = p_name
             
             val = self.apiKeyCtrl_visible.Value if self.showApiCheck.IsChecked() else self.apiKeyCtrl_hidden.Value
