@@ -1,9 +1,8 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Arabic translation for Vision Assistant Pro 6.5.0.
+# Copyright (C) 2025 Mahmood Hozhabri
 # This file is distributed under the same license as the 'VisionAssistant' package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Hassan AlBarshoumy <hassanalbarshoumy@example.com>, 2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 'VisionAssistant' '6.5.0'\n"
