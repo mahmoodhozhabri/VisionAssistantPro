@@ -9,7 +9,7 @@ _Add-on ini dirilis untuk komunitas dalam rangka memperingati Hari Internasional
 Buka **Menu NVDA > Preferensi > Pengaturan > Vision Assistant Pro**.
 
 ### 1.1 Pengaturan Koneksi
-- **Penyedia:** Pilih layanan AI yang ingin Anda gunakan. Penyedia yang didukung meliputi **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, dan **Kustom** (server yang kompatibel dengan OpenAI seperti Ollama/LM Studio).
+- **Penyedia:** Pilih layanan AI yang ingin Anda gunakan. Penyedia yang didukung meliputi **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, dan **Kustom** (server yang kompatibel dengan OpenAI seperti Ollama, LM Studio, Jan.ai, atau KoboldCPP).
 - **Catatan penting:** Kami sangat menyarankan **Google Gemini** untuk performa dan akurasi terbaik, terutama untuk analisis gambar dan file.
 - **Kunci API:** Wajib diisi. Anda dapat memasukkan beberapa kunci sekaligus, dipisahkan dengan koma atau baris baru, agar add-on bisa melakukan rotasi otomatis.
 - **Ambil Model:** Setelah kunci API dimasukkan, tekan tombol ini untuk mengunduh daftar model terbaru dari penyedia.
@@ -36,6 +36,21 @@ Centang **"Konfigurasi Titik Akhir Lanjutan"** untuk mengisi detail server secar
 - **URL Daftar Model:** Titik akhir untuk mengambil daftar model yang tersedia.
 - **URL Titik Akhir OCR/STT/TTS:** URL lengkap untuk layanan tertentu, misalnya `http://localhost:11434/v1/audio/speech`.
 - **Model Kustom:** Ketik nama model secara manual, misalnya `llama3:8b`, untuk setiap tugas.
+
+### 1.3.1 Siapkan AI Lokal (Konfigurasi Satu Tindakan)
+Untuk memudahkan integrasi AI lokal yang sepenuhnya offline, tersedia tombol khusus **"Siapkan AI Lokal"** di dalam Pengaturan Penyedia Kustom.
+
+Jika Anda menjalankan server model AI lokal di komputer:
+1. Pilih **Kustom** sebagai Penyedia.
+2. Tekan tombol **Siapkan AI Lokal**.
+3. Pilih mesin AI lokal dari dialog yang aksesibel:
+   - **Ollama** (bawaan `http://127.0.0.1:11434`)
+   - **LM Studio** (bawaan `http://127.0.0.1:1234`)
+   - **Jan.ai** (bawaan `http://127.0.0.1:1337`)
+   - **KoboldCPP** (bawaan `http://127.0.0.1:5001`)
+4. Add-on akan langsung mengatur URL lokal, jenis API, dan mengambil model offline yang aktif untuk mengisi kotak pilihan **Model AI**.
+
+*Catatan tentang Jaringan & Proksi:* Mesin koneksi lokal ini memiliki mekanisme bypass proksi lanjutan. Walaupun VPN sistem atau proksi mode TUN sedang aktif, permintaan AI lokal akan melewatinya sepenuhnya, sehingga koneksi offline tetap stabil tanpa error 502 Bad Gateway.
 
 ### 1.4 Preferensi Umum
 - **Mesin OCR:** Pilih **Chrome (Cepat)** untuk hasil cepat, atau **AI (Lanjutan)** untuk mempertahankan tata letak dengan lebih baik.
@@ -65,7 +80,9 @@ Untuk mencegah konflik tombol keyboard, add-on ini memakai **Lapisan Perintah**.
 | **A**         | Transkripsi Audio      | Mengubah file MP3, WAV, atau OGG menjadi teks.                             |
 | **C**         | Pemecah CAPTCHA        | Menangkap dan memecahkan CAPTCHA, termasuk pada portal pemerintah.         |
 | **S**         | Dikte Cerdas           | Mengubah ucapan menjadi teks. Tekan untuk mulai merekam, tekan lagi untuk berhenti dan mengetik hasilnya. |
-| **L**         | Laporan Status         | Mengumumkan progres saat ini, misalnya "Memindai..." atau "Diam".        |
+| **I**         | Laporan Status         | Mengumumkan progres saat ini, misalnya "Memindai..." atau "Diam".        |
+| **L**         | **Label Objek**        | **Pelabelan AI semantik:** Memberi label permanen pada elemen atau ikon yang sedang fokus. |
+| **Shift + L** | **Kelola/Pindai Label** | Membuka Pengelola Label jika label sudah ada, atau memindai aplikasi untuk elemen tanpa nama. |
 | **U**         | Cek Pembaruan          | Mengecek versi terbaru add-on di GitHub secara manual.                     |
 | **Space**     | Buka Hasil Terakhir    | Menampilkan respons AI terakhir di dialog obrolan untuk ditinjau atau ditindaklanjuti. |
 | **H**         | Bantuan Perintah       | Menampilkan daftar semua pintasan yang tersedia.                           |
@@ -105,11 +122,26 @@ Ikuti kabar terbaru, fitur baru, dan rilis terbaru:
 Terima kasih sebesar-besarnya kepada anggota komunitas yang mendukung pengembangan dan pemeliharaan proyek ini melalui kontribusi finansial:
 
 *   **@Alyabani94**
+*   **Ali Alamri**
+*   **Ilya**
 
 *Jika Anda ingin mendukung proyek secara finansial dan ingin nama Anda ditampilkan di sini, buka opsi **Donasi** di menu Tools NVDA (submenu Vision Assistant) atau pada proses pengaturan setelah instalasi.*
 
 
 ---
+## Perubahan untuk 6.1.0
+
+*   **Integrasi AI Lokal Universal (Siapkan AI Lokal)**: Menambahkan tombol **"Siapkan AI Lokal"** baru di Pengaturan Penyedia Kustom. Pengguna kini dapat mengonfigurasi mesin AI lokal seperti **Ollama**, **LM Studio**, **Jan.ai**, dan **KoboldCPP** secara otomatis dan instan.
+*   **Bypass Proksi Lokal Cerdas**: Logika koneksi dibangun ulang dengan mekanisme bypass proksi lanjutan. Add-on kini dapat melewati proksi sistem Windows sepenuhnya untuk koneksi loopback lokal, sehingga koneksi AI lokal tetap stabil meskipun VPN atau mode TUN sedang aktif.
+*   **Pelabelan AI Sangat Stabil (v2)**: Kunci berbasis koordinat layar absolut diganti dengan sistem **Object Signature** hibrida yang lebih canggih. Label kini mengandalkan pengenal programatik seperti UIA **AutomationId** atau Win32 **ControlID**, serta koordinat relatif jendela, sehingga label kustom tahan terhadap perubahan ukuran atau posisi jendela, perpindahan monitor, dan scaling.
+*   **Migrasi Label Otomatis yang Mulus**: Proses upgrade berjalan transparan. Add-on akan memigrasikan label lama berbasis koordinat ke format sidik jari baru yang stabil di latar belakang saat fokus pertama kali, tanpa kehilangan data.
+
+## Perubahan untuk 6.0
+
+*   **Memperkenalkan Pelabelan AI Semantik**: Pengguna kini dapat memberi label permanen pada tombol dan ikon tanpa nama menggunakan AI. Tekan **L** untuk memberi label pada objek navigator saat ini (mendukung fokus Tab dan navigasi objek), atau **Shift+L** untuk memindai dan memberi label seluruh aplikasi sekaligus.
+*   **Pengelolaan Label Cerdas**: Menambahkan dialog Pengelola Label baru yang sepenuhnya aksesibel (melalui **Shift+L** jika label sudah ada) untuk melihat, mengganti nama, atau menghapus banyak label kustom sekaligus.
+*   **Analisis File Langsung (Tanpa Dialog File)**: Add-on kini dapat mendeteksi saat fokus berada pada file PDF atau gambar di Windows File Explorer. Menekan **F (Aksi File Cerdas)** atau **D (Pembaca Dokumen)** pada file yang disorot akan langsung memprosesnya, tanpa membuka dialog "Open" standar.
+
 ## Perubahan untuk 5.6
 
 *   **Menambahkan Mesin OCR "Tidak Ada (Ambil Lapisan Teks)"**: Pengguna kini dapat mengambil teks langsung dari PDF yang sudah memiliki lapisan teks tanpa memakai kredit AI. Ini membuat proses lebih cepat dan lebih privat untuk dokumen berbasis teks.

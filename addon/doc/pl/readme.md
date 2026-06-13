@@ -9,7 +9,7 @@ _Ten dodatek został udostępniony społeczności z okazji Międzynarodowego Dni
 Przejdź do **Menu NVDA > Preferencje > Ustawienia > Vision Assistant Pro**.
 
 ### 1.1 Ustawienia połączenia
-- **Dostawca:** Wybierz preferowaną usługę AI. Obsługiwani dostawcy to **Google Gemini**, **OpenAI**, **Mistral**, **Groq** oraz **Niestandardowy** (serwery zgodne z OpenAI, np. Ollama/LM Studio).
+- **Dostawca:** Wybierz preferowaną usługę AI. Obsługiwani dostawcy to **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, **MiniMax** oraz **Niestandardowy** (serwery zgodne z OpenAI, np. Ollama/LM Studio).
 - **Ważne:** Zalecamy korzystanie z **Google Gemini**, który zapewnia najlepszą jakość (szczególnie przy analizie obrazów i plików).
 - **Klucz API:** Wymagany. Można podać wiele kluczy (rozdzielonych przecinkami lub w osobnych wierszach), aby dodatek rotował je automatycznie.
 - **Pobierz modele:** Po wprowadzeniu klucza API naciśnij ten przycisk, aby pobrać aktualną listę dostępnych modeli od dostawcy.
@@ -65,6 +65,7 @@ Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy polec
 | **A**         | Transkrypcja audio            | Transkrybuje pliki MP3, WAV lub OGG na tekst.                               |
 | **C**         | Rozwiązywanie CAPTCHA         | Przechwytuje i rozwiązuje CAPTCHA.                                          |
 | **S**         | Dyktowanie                    | Zamienia mowę na tekst. Naciśnij raz, aby nagrywać, ponownie, aby zakończyć. |
+| **Control+L** | **Asystent głosowy**          | **W czasie rzeczywistym (tylko Gemini):** Rozpoczyna lub kończy rozmowę głosową i ekranową z asystentem AI. |
 | **I**         | Raport stanu                  | Odczytuje bieżący postęp (np. „Skanowanie...", „Bezczynny").                |
 | **L**         | **Oznacz obiekt**             | **Semantyczne etykietowanie AI:** Trwale oznacza bieżący element/ikonę.     |
 | **Shift + L** | **Zarządzaj / Skanuj etykiety** | Otwiera Menedżer etykiet (jeśli istnieją) lub skanuje aplikację w poszukiwaniu nieoznaczonych elementów. |
@@ -82,7 +83,7 @@ Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy polec
 
 ## 3. Polecenia niestandardowe i zmienne
 
-Zarządzaj poleceniami w **Ustawienia > Polecenia > Zarządzaj poleceniami...**.
+Tymi poleceniami można zarządzać w **Ustawienia > Polecenia > Zarządzaj poleceniami...**.
 
 ### Obsługiwane zmienne
 - `[selection]`: Aktualnie zaznaczony tekst.
@@ -108,9 +109,45 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 
 *   **@Alyabani94**
 *   **Ali Alamri**
+*   **Anonimowy wspierający** (`UQDd...CnMY`)
+*   **leonardo0216**
 
 *Jeśli chcesz wesprzeć projekt finansowo i zobaczyć tutaj swoje imię, opcję **Wsparcie** znajdziesz w menu Narzędzia NVDA (podmenu Vision Assistant) albo podczas konfiguracji po instalacji.*
 
+
+---
+## Zmiany w wersji 6.5.0
+
+*   **Asystent głosowy**: Dodano funkcję asystenta głosowego i ekranowego w czasie rzeczywistym, dostępną wyłącznie dla dostawcy Google Gemini (lub zgodnych z Gemini dostawców niestandardowych). Obejmuje interaktywną zmianę głosu i głębi myślenia bezpośrednio w oknie dialogowym, z automatycznym ponownym połączeniem po zmianie ustawień.
+*   **Dostawca MiniMax**: Zintegrowano MiniMax jako równorzędnego dostawcę z pełną obsługą multimodalną (czat, obraz, OCR), własnym TTS z ponad 300 dynamicznymi głosami oraz automatycznym usuwaniem bloków rozumowania (np. `<think>...</think>`) z odpowiedzi.
+*   **Tłumaczenie w czytniku dokumentów**: Naprawiono ciche niepowodzenie tłumaczenia u osób korzystających z NVDA w językach innych niż angielski, dbając o to, by do Google Translate trafiał standardowy dwuliterowy kod języka zamiast zlokalizowanej nazwy.
+*   **Ponawianie skanowania wsadowego PDF**: Wprowadzono zoptymalizowaną, osobną i cichą logikę ponawiania przy skanowaniu wsadowym dokumentów PDF, aby zapobiec zbędnym przesłaniom i uniknąć uciążliwych okienek z błędami podczas ponawiania.
+*   **Status czytnika dokumentów**: Naprawiono błąd, przez który ogólny status dodatku (sprawdzany przez `I`) pozostawał zatrzymany na „Rozpoczęto przetwarzanie wsadowe" podczas długiego skanowania dokumentów.
+*   **Naprawiona awaria wątkowania**: Naprawiono poważną awarię (`IsMain() failed in wxTimerImpl`) przy otwieraniu dokumentów z wątku działającego w tle, przenosząc kolejkę wywołań GUI na `wx.CallAfter`.
+
+---
+## Zmiany w wersji 6.1.2
+
+*   **Wstępne sprawdzanie duplikatów etykiet**: Naprawiono błąd w pojedynczym etykietowaniu, w którym sprawdzanie duplikatów używało starych kluczy współrzędnych, przez co NVDA wysyłał zduplikowane zapytania AI dla już oznaczonych obiektów zamiast odczytać istniejącą etykietę.
+*   **Czat z dokumentem dla dostawców innych niż Gemini**: Naprawiono zbyt rygorystyczne sprawdzanie klucza API w czacie z dokumentem (`on_ask`), aby na OpenAI, Groq lub lokalnych dostawcach niestandardowych (jak Ollama) dało się rozmawiać z dokumentami bez blokady.
+*   **Szybkie tłumaczenie OCR w Chrome**: Przywrócono darmowe API tłumaczenia bez klucza dla OCR w Chrome. Tłumaczenie wyodrębnionego tekstu pomija teraz Gemini AI, oszczędzając limity API i przyspieszając proces tłumaczenia.
+*   **Filtr alfanumeryczny CAPTCHA**: Poprawiono logikę filtrowania w rozwiązywaniu CAPTCHA, aby znaki niealfanumeryczne były prawidłowo usuwane we wszystkich sytuacjach.
+*   **Aktualizacja pomocy poleceń**: Poprawiono w menu pomocy skrót do raportowania stanu z `L` na `I` oraz dodano do listy oba polecenia etykietowania (`L` i `Shift+L`).
+
+---
+## Zmiany w wersji 6.1.1
+
+*   **Poprawka myślenia w modelach Gemma 4**: Naprawiono błąd w modelach Gemma 4, w którym cały wewnętrzny proces myślenia był wyświetlany jako finalna odpowiedź, lub w którym wyłączenie myślenia skutkowało pustymi odpowiedziami. Dodatek poprawnie wyodrębnia teraz tylko czysty, finalny tekst odpowiedzi.
+*   **Wsadowy OCR z Eksploratora plików**: Teraz można zaznaczyć wiele zdjęć lub plików PDF bezpośrednio w Eksploratorze plików Windows i wsadowo wyodrębnić z nich tekst lub je przeanalizować. Dodatek automatycznie odfiltruje i przetworzy tylko obsługiwane formaty plików.
+
+---
+## Zmiany w wersji 6.1.0
+
+*   **Uniwersalna integracja lokalnej AI (Konfiguracja lokalnej AI)**: Dodano nowy przycisk **„Konfiguracja lokalnej AI"** w ustawieniach niestandardowego dostawcy. Teraz można od razu automatycznie skonfigurować lokalne silniki AI, w tym **Ollama**, **LM Studio**, **Jan.ai** i **KoboldCPP**.
+*   **Ominięcie lokalnego proxy**: Przebudowano logikę połączenia z zaawansowanym mechanizmem omijania proxy. Dodatek całkowicie omija systemowe proxy Windows przy połączeniach lokalnych, dzięki czemu połączenie z lokalną AI jest stabilne nawet przy aktywnym VPN lub trybie TUN.
+*   **Awaryjne zatrzymanie Operatora AI (Shift+A)**: Dodano wyzwalacz zatrzymania. Naciśnięcie polecenia Operatora AI (**Shift+A** w warstwie poleceń) podczas trwającej operacji autonomicznej natychmiast przerywa pętlę i ogłasza *„Operator AI zatrzymany."*
+*   **Bardzo stabilne etykietowanie AI (v2)**: Zastąpiono klucze oparte na bezwzględnych współrzędnych ekranu zaawansowanym, hybrydowym systemem **sygnatur obiektów**. Etykiety opierają się teraz na identyfikatorach programowych (UIA **AutomationId** lub Win32 **ControlID**) oraz współrzędnych względem okna, dzięki czemu są one całkowicie odporne na zmianę rozmiaru, przesuwanie, zmianę monitora czy skalowanie okna.
+*   **Płynna automatyczna migracja etykiet**: Aktualizacja jest całkowicie przezroczysta. Dodatek automatycznie przeniesie starsze etykiety oparte na współrzędnych do nowego, stabilnego formatu sygnatur w tle przy pierwszym ustawieniu fokusu, bez utraty danych.
 
 ---
 ## Zmiany w wersji 6.0

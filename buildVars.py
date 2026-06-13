@@ -29,14 +29,16 @@ Command Layer: Press NVDA+Shift+V, then:
 - Check Update (U)
 - Recall Last Result (Space)
 - Commands Help (H)"""),
-    addon_version="6.0.2",
+    addon_version="6.1.2",
     # Brief changelog for this version
     # Translators: what's new content for the add-on version to be shown in the add-on store
-    addon_changelog=_("""## Changes for 6.0
+    addon_changelog=_("""## Changes for 6.1.2
 
-*   **Introducing Semantic AI Labeling**: Users can now permanently label unnamed buttons and icons using AI. Press **L** to label the current navigator object (supporting both Tab focus and object navigation) or **Shift+L** to scan and label the entire application at once.
-*   **Intelligent Label Management**: Added a new, fully accessible Label Manager dialog (via **Shift+L** if labels exist) to view, rename, or batch-delete custom labels.
-*   **Direct File Analysis (Bypass File Dialog)**: The add-on is now smart enough to detect if you are currently focusing on a PDF or image file in Windows File Explorer. Pressing **F (Smart File Action)** or **D (Document Reader)** on a highlighted file will immediately process it, bypassing the standard "Open" dialog entirely."""),
+*   **Duplicate Label Pre-Check**: Fixed an issue in single labeling where the duplicate check used old coordinate keys, causing NVDA to make duplicate AI requests for already labeled objects instead of announcing the existing label.
+*   **Document Chat for Non-Gemini Providers**: Fixed a strict API key check in Document Chat (`on_ask`) to ensure that users on OpenAI, Groq, or local Custom providers (like Ollama) can successfully chat with documents without being blocked.
+*   **Fast Chrome OCR Translation**: Restored the free, keyless translation API for Chrome OCR. Translating extracted text now bypasses Gemini AI, saving API quotas and speeding up the translation process.
+*   **CAPTCHA Alphanumeric Filter**: Corrected the filtering logic in the CAPTCHA solver to ensure non-alphanumeric characters are properly cleaned in all situations.
+*   **Command Layer Help Update**: Corrected the status announcement shortcut in the help menu from `L` to `I`, and added both labeling commands (`L` and `Shift+L`) to the list."""),
     addon_author="Mahmood Hozhabri",
     addon_url="https://github.com/mahmoodhozhabri/VisionAssistantPro",
     addon_sourceURL="https://github.com/mahmoodhozhabri/VisionAssistantPro",

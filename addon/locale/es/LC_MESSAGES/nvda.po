@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 'VisionAssistant' '6.0'\n"
+"Project-Id-Version: 'VisionAssistant' '6.1.0'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-05-22 10:09+0330\n"
-"PO-Revision-Date: 2026-05-22 00:00+0000\n"
+"POT-Creation-Date: 2026-05-27 22:51+0330\n"
+"PO-Revision-Date: 2026-05-27 00:00+0000\n"
 "Last-Translator: Un duende <harrypotterfansdelasaga@gmail.com>\n"
 "Language-Team: Un duende <harrypotterfansdelasaga@gmail.com>\n"
 "Language: es\n"
@@ -613,6 +613,7 @@ msgstr "OCR de documento + Traducir"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:515
 #: addon\globalPlugins\visionAssistant\__init__.py:2650
+#: addon\globalPlugins\visionAssistant\__init__.py:2650
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
@@ -1070,9 +1071,18 @@ msgstr "Modelo de Operador personalizado (opcional):"
 msgid "Custom TTS Voice Name (Optional):"
 msgstr "Nombre de voz TTS personalizado (opcional):"
 
+#. Translators: Button label to automatically configure local AI engines (Ollama, LM Studio, etc.)
+#. Translators: Title of the local AI setup dialog
+#: addon\globalPlugins\visionAssistant\__init__.py:2433
+#: addon\globalPlugins\visionAssistant\__init__.py:2852
+msgid "Setup Local AI"
+msgstr "Configurar IA local"
+
 #: addon\globalPlugins\visionAssistant\__init__.py:2515
 msgid "Fetch Models"
 msgstr "Obtener modelos"
+
+#. Translators: Prompt message to select local AI engine
 
 #: addon\globalPlugins\visionAssistant\__init__.py:2520
 #: addon\globalPlugins\visionAssistant\__init__.py:2523
@@ -1195,6 +1205,27 @@ msgstr "Prompts predeterminados: {defaultCount}, Prompts personalizados: {custom
 #: addon\globalPlugins\visionAssistant\__init__.py:2851
 msgid "Fetching models..."
 msgstr "Obteniendo modelos..."
+
+#. Translators: Prompt message to select local AI engine
+#: addon\globalPlugins\visionAssistant\__init__.py:2854
+msgid "Select the local AI engine you are running:"
+msgstr "Selecciona el motor de IA local que estás ejecutando:"
+
+#. Translators: Progress message shown when testing connection to local AI
+#: addon\globalPlugins\visionAssistant\__init__.py:2875
+msgid "Connecting to Local AI..."
+msgstr "Conectando con la IA local..."
+
+#. Translators: Error message when connection to local AI fails
+#: addon\globalPlugins\visionAssistant\__init__.py:2905
+#, python-brace-format
+msgid "Could not connect to the selected local AI. Make sure it is running on {url}"
+msgstr "No se pudo conectar con la IA local seleccionada. Asegúrate de que esté en ejecución en {url}"
+
+#. Translators: Announcement message when local AI setup succeeds
+#: addon\globalPlugins\visionAssistant\__init__.py:2918
+msgid "Local AI configured successfully!"
+msgstr "¡IA local configurada correctamente!"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:2869
 #: addon\globalPlugins\visionAssistant\__init__.py:2923
@@ -2078,6 +2109,11 @@ msgstr "Etiquetado de la aplicación completado."
 msgid "Batch labeling failed."
 msgstr "El etiquetado por lotes falló."
 
+#. Translators: Announcement when the AI Operator is manually stopped
+#: addon\globalPlugins\visionAssistant\__init__.py:6054
+msgid "AI Operator stopped."
+msgstr "Operador IA detenido."
+
 #: buildVars.py:10
 msgid "Vision Assistant Pro"
 msgstr "Vision Assistant Pro"
@@ -2105,11 +2141,11 @@ msgid ""
 "- Commands Help (H)"
 msgstr ""
 "Un asistente de IA avanzado para NVDA que usa modelos Gemini.\n"
-"Capa de comandos: Presiona NVDA+Mayús+V, luego:\n"
-"- Traductor inteligente (T) / Portapapeles (Mayús+T)\n"
+"Capa de comandos: Presiona NVDA+Shift+V, luego:\n"
+"- Traductor inteligente (T) / Portapapeles (Shift+T)\n"
 "- Refinador de texto (R)\n"
 "- Describir objeto (V) / Pantalla completa (O)\n"
-"- Análisis de vídeo en línea (Mayús+V)\n"
+"- Análisis de vídeo en línea (Shift+V)\n"
 "- Lector de documentos (D)\n"
 "- OCR de archivo (F)\n"
 "- Solucionador de CAPTCHA (C)\n"
@@ -2117,40 +2153,57 @@ msgstr ""
 "- Dictado inteligente (S)\n"
 "- Anunciar estado (I)\n"
 "- Etiquetar objeto (L)\n"
-"- Gestionar/escanear etiquetas (Mayús+L)\n"
+"- Gestionar/escanear etiquetas (Shift+L)\n"
 "- Explorador de UI (E)\n"
-"- Operador IA (Mayús+A)\n"
+"- Operador IA (Shift+A)\n"
 "- Buscar actualización (U)\n"
 "- Recuperar último resultado (Espacio)\n"
 "- Ayuda de comandos (H)"
 
 #: buildVars.py:35
 msgid ""
-"## Changes for 6.0\n"
+"## Changes for 6.1.0\n"
 "\n"
-"*   **Introducing Semantic AI Labeling**: Users can now permanently label "
-"unnamed buttons and icons using AI. Press **L** to label the current "
-"navigator object (supporting both Tab focus and object navigation) or "
-"**Shift+L** to scan and label the entire application at once.\n"
-"*   **Intelligent Label Management**: Added a new, fully accessible Label "
-"Manager dialog (via **Shift+L** if labels exist) to view, rename, or batch-"
-"delete custom labels.\n"
-"*   **Direct File Analysis (Bypass File Dialog)**: The add-on is now smart "
-"enough to detect if you are currently focusing on a PDF or image file in "
-"Windows File Explorer. Pressing **F (Smart File Action)** or **D (Document "
-"Reader)** on a highlighted file will immediately process it, bypassing the "
-"standard \"Open\" dialog entirely."
+"*   **Universal Local AI Integration (Setup Local AI)**: Added a new "
+"**\"Setup Local AI\"** button in Custom Provider Settings. Users can now "
+"automatically configure local AI engines, including **Ollama**, **LM "
+"Studio**, **Jan.ai**, and **KoboldCPP** instantly.\n"
+"*   **Intelligent Local Proxy Bypass**: Rebuilt the connection logic with an "
+"advanced proxy bypass mechanism. The add-on is now smart enough to "
+"completely bypass Windows system proxies for local loopback connections, "
+"ensuring stable local AI connections even when your VPN/TUN-mode is active.\n"
+"*   **AI Operator Emergency Cancel (Shift+A)**: Added a highly requested "
+"stop/cancel safety trigger. Pressing the AI Operator command (**Shift+A** "
+"inside the command layer) while an autonomous operation is running will "
+"instantly abort the loop and announce *\"AI Operator stopped.\"*\n"
+"*   **Ultra-Stable AI Labeling (v2)**: Replaced absolute screen coordinate "
+"keys with an advanced, hybrid **Object Signature** system. Labels now rely "
+"on programmatic identifiers (UIA **AutomationId** or Win32 **ControlID**) "
+"and window-relative coordinates, making your custom labels completely "
+"resistant to window resizing, moving, monitor switching, or scaling.\n"
+"*   **Seamless Automatic Label Migration**: Upgrading is completely "
+"transparent. The add-on will automatically migrate your older legacy "
+"coordinate-based labels to the new stable fingerprint format in the "
+"background upon first focus, with zero data loss."
 msgstr ""
-"## Cambios para la versión 6.0\n"
+"## Cambios para la versión 6.1.0\n"
 "\n"
-"*   **Etiquetado semántico con IA**: Los usuarios ahora pueden etiquetar de forma permanente "
-"botones e iconos sin nombre usando IA. Presiona **L** para etiquetar el objeto navegador actual "
-"(compatible con foco por Tab y navegación por objetos) o "
-"**Mayús+L** para escanear y etiquetar toda la aplicación de una vez.\n"
-"*   **Gestor de etiquetas inteligente**: Se añadió un nuevo diálogo de Gestor de etiquetas completamente accesible "
-"(disponible con **Mayús+L** si ya existen etiquetas) para ver, renombrar o eliminar "
-"etiquetas personalizadas en bloque.\n"
-"*   **Análisis directo de archivos (sin diálogo de apertura)**: El complemento ahora es lo suficientemente inteligente "
-"para detectar si estás enfocado en un archivo PDF o imagen en el Explorador de archivos de Windows. "
-"Al presionar **F (Acción inteligente de archivo)** o **D (Lector de documentos)** sobre un archivo resaltado, "
-"lo procesará de inmediato sin abrir el diálogo estándar de \"Abrir\"."
+"*   **Integración universal de IA local (Configurar IA local)**: Se añadió un nuevo botón "
+"**\"Configurar IA local\"** en la Configuración del proveedor personalizado. Los usuarios ahora pueden "
+"configurar automáticamente motores de IA local, incluyendo **Ollama**, **LM "
+"Studio**, **Jan.ai** y **KoboldCPP** de forma instantánea.\n"
+"*   **Omisión inteligente de proxy local**: Se reconstruyó la lógica de conexión con un "
+"mecanismo avanzado de omisión de proxy. El complemento ahora omite completamente los proxies "
+"del sistema Windows para conexiones de bucle local, garantizando conexiones estables "
+"con la IA local incluso cuando tu VPN/modo TUN está activo.\n"
+"*   **Cancelación de emergencia del Operador IA (Shift+A)**: Se añadió una función de parada/cancelación de seguridad muy solicitada. Presionar el comando del Operador IA (**Shift+A** "
+"dentro de la capa de comandos) mientras una operación autónoma está en curso "
+"detendrá inmediatamente el bucle y anunciará *\"Operador IA detenido.\"*\n"
+"*   **Etiquetado con IA ultraestable (v2)**: Se reemplazaron las coordenadas absolutas de "
+"pantalla por un sistema híbrido avanzado de **firma de objeto**. Las etiquetas se basan "
+"en identificadores programáticos (UIA **AutomationId** o Win32 **ControlID**) "
+"y coordenadas relativas a la ventana, siendo completamente resistentes al redimensionamiento, "
+"movimiento, cambio de monitor o escalado.\n"
+"*   **Migración automática de etiquetas sin interrupciones**: La actualización es completamente "
+"transparente. El complemento migrará automáticamente las etiquetas antiguas al nuevo "
+"formato de huella digital estable en segundo plano al primer enfoque, sin pérdida de datos."

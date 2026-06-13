@@ -9,7 +9,7 @@ _Acest add-on a fost lansat pentru comunitate cu ocazia Zilei Internaționale a 
 Mergi la **Meniul NVDA > Preferințe > Setări > Vision Assistant Pro**.
 
 ### 1.1 Setări de conexiune
-- **Furnizor:** Selectează serviciul AI preferat. Furnizorii acceptați includ **Google Gemini**, **OpenAI**, **Mistral**, **Groq** și **Personalizat** (servere compatibile OpenAI, cum ar fi Ollama/LM Studio).
+- **Furnizor:** Selectează serviciul AI preferat. Furnizorii acceptați includ **Google Gemini**, **OpenAI**, **Mistral**, **Groq** și **Personalizat** (servere compatibile OpenAI, cum ar fi Ollama, LM Studio, Jan.ai sau KoboldCPP).
 - **Notă importantă:** Recomandăm **Google Gemini** pentru cea mai bună performanță și acuratețe, mai ales pentru analiza imaginilor și fișierelor.
 - **Cheie API:** Obligatorie. Poți introduce mai multe chei, separate prin virgulă sau pe linii diferite, pentru rotație automată.
 - **Preia modelele:** După ce introduci cheia API, apasă acest buton pentru a descărca lista recentă de modele disponibile de la furnizor.
@@ -37,6 +37,21 @@ Bifează **"Configurare avansată a endpointurilor"** pentru a introduce manual 
 - **URL endpoint OCR/STT/TTS:** URL-uri complete pentru servicii specifice, de exemplu `http://localhost:11434/v1/audio/speech`.
 - **Modele personalizate:** Tastează manual numele modelului, de exemplu `llama3:8b`, pentru fiecare sarcină.
 
+### 1.3.1 Configurare AI local (configurare dintr-o singură acțiune)
+Pentru a face integrarea AI locală, complet offline, foarte simplă, un buton dedicat **„Configurează AI local”** este disponibil în Setările furnizorului personalizat.
+
+Dacă rulezi un server de modele AI local pe computer:
+1. Selectează **Personalizat** ca furnizor.
+2. Apasă butonul **Configurează AI local**.
+3. Alege motorul AI local din dialogul accesibil:
+   - **Ollama** (implicit `http://127.0.0.1:11434`)
+   - **LM Studio** (implicit `http://127.0.0.1:1234`)
+   - **Jan.ai** (implicit `http://127.0.0.1:1337`)
+   - **KoboldCPP** (implicit `http://127.0.0.1:5001`)
+4. Add-on-ul configurează instant URL-ul local corect, tipul API și preia automat modelele tale offline active pentru a completa caseta de selecție **Model AI**.
+
+*Notă despre rețea și proxy-uri:* Acest motor de conexiune locală include un mecanism avansat de ocolire a proxy-ului. Chiar dacă rulezi un VPN de sistem activ sau un proxy în modul TUN, solicitările tale către AI local îl vor ocoli complet, asigurând conexiuni offline stabile fără erori 502 Bad Gateway.
+
 ### 1.4 Preferințe generale
 - **Motor OCR:** Alege între **Chrome (Rapid)** pentru rezultate rapide sau **AI (Avansat)** pentru păstrarea mai bună a structurii.
     - *Notă:* Dacă selectezi „AI (Avansat)”, dar furnizorul tău este setat la OpenAI/Groq, add-on-ul va direcționa inteligent imaginea către modelul Vision al furnizorului activ.
@@ -52,7 +67,7 @@ Pentru a preveni conflictele de tastatură, acest add-on folosește un **strat d
 
 | Tastă         | Funcție                  | Descriere                                                                   |
 |---------------|--------------------------|-----------------------------------------------------------------------------|
-| **Shift + A** | **AI Operator**          | **Operare autonomă:** Spune-i AI-ului să execute o sarcină pe ecranul tău.   |
+| **Shift + A** | **AI Operator**          | **Operare autonomă:** Spune-i AI-ului să execute o sarcină pe ecranul tău. Dacă o apeși din nou, oprește instant operațiile active. |
 | **E**         | **UI Explorer**          | **Click interactiv:** Identifică și apasă elemente UI în orice aplicație.    |
 | **T**         | Traducător inteligent    | Traduce textul de sub cursorul navigatorului sau selecția.                  |
 | **Shift + T** | Traducător clipboard     | Traduce conținutul aflat acum în clipboard.                                 |
@@ -108,11 +123,19 @@ Le mulțumim membrilor comunității care susțin dezvoltarea și întreținerea
 
 *   **@Alyabani94**
 *   **Ali Alamri**
+*   **Ilya**
 
 *Dacă vrei să susții financiar proiectul și să îți vezi numele aici, poți găsi opțiunea **Donează** în meniul Instrumente al NVDA, în submeniul Vision Assistant, sau în timpul configurării după instalare.*
 
 
 ---
+## Modificări pentru 6.1.0
+
+*   **Integrare universală cu AI local (Configurează AI local)**: A fost adăugat un nou buton **„Configurează AI local”** în Setările furnizorului personalizat. Utilizatorii pot configura automat și instant motoare AI locale, inclusiv **Ollama**, **LM Studio**, **Jan.ai** și **KoboldCPP**.
+*   **Ocolire inteligentă a proxy-ului local**: Logica de conexiune a fost reconstruită cu un mecanism avansat de ocolire a proxy-ului. Add-on-ul poate acum ocoli complet proxy-urile de sistem Windows pentru conexiunile locale de tip loopback, asigurând conexiuni stabile cu AI local chiar și când VPN-ul sau proxy-ul în modul TUN este activ.
+*   **Etichetare AI ultra-stabilă (v2)**: Cheile bazate pe coordonate absolute de ecran au fost înlocuite cu un sistem avansat, hibrid, de **Semnătură a obiectului**. Etichetele se bazează acum pe identificatori programatici (UIA **AutomationId** sau Win32 **ControlID**) și pe coordonate relative la fereastră, făcând etichetele tale personalizate rezistente la redimensionarea, mutarea sau scalarea ferestrei și la schimbarea monitorului.
+*   **Migrare automată fără întreruperi a etichetelor**: Actualizarea este complet transparentă. Add-on-ul va migra automat etichetele tale vechi, bazate pe coordonate moștenite, în noul format stabil de amprentă în fundal, la prima focalizare, fără pierdere de date.
+
 ## Modificări pentru 6.0
 
 *   **Introducerea etichetării AI semantice**: Utilizatorii pot eticheta permanent butoane și pictograme fără nume folosind AI. Apasă **L** pentru a eticheta obiectul curent al navigatorului, cu suport pentru focalizarea prin Tab și navigarea pe obiecte, sau **Shift+L** pentru a scana și eticheta întreaga aplicație dintr-o singură acțiune.
