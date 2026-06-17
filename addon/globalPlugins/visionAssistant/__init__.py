@@ -1158,7 +1158,7 @@ def get_instagram_download_link(insta_url):
     }
     try:
         cookie_handler = request.HTTPCookieProcessor()
-        opener = get_proxy_opener()
+        opener = get_proxy_opener("https://indown.io/en1")
         opener.add_handler(cookie_handler)
         
         req_get = request.Request("https://indown.io/en1", headers=headers)
@@ -1202,7 +1202,7 @@ def get_tiktok_download_link(tiktok_url):
         params = {'url': tiktok_url, 'hd': '1'}
         data = urlencode(params).encode('utf-8')
         req = request.Request(api_url, data=data, headers=headers, method='POST')
-        opener = get_proxy_opener()
+        opener = get_proxy_opener(api_url)
         with opener.open(req, timeout=120) as response:
             res = json.loads(response.read().decode('utf-8'))
             if res.get('code') == 0:
@@ -1306,7 +1306,7 @@ class ChromeOCREngine:
         payload = {"imageRequests": [{"engineParameters": [{"ocrParameters": {}}], "imageBytes": base64.b64encode(image_bytes).decode('utf-8'), "imageId": str(uuid4())}]}
         try:
             req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method="POST")
-            opener = get_proxy_opener()
+            opener = get_proxy_opener(url)
             with opener.open(req, timeout=120) as response:
                 if response.status == 200:
                     data = json.loads(response.read().decode('utf-8'))
@@ -1336,7 +1336,7 @@ class SmartProgrammersOCREngine:
         body.append(b'')
         try:
             req = request.Request(url, data=b'\r\n'.join(body), headers={'Content-Type': f"multipart/form-data; boundary={boundary.decode('utf-8')}"}, method="POST")
-            opener = get_proxy_opener()
+            opener = get_proxy_opener(url)
             with opener.open(req, timeout=120) as response:
                 if response.status == 200:
                     data = json.loads(response.read().decode('utf-8'))
@@ -1379,7 +1379,7 @@ class GoogleTranslator:
     def translate(text, target_lang):
         try:
             url = f"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={target_lang}&dt=t&q={quote(text)}"
-            opener = get_proxy_opener()
+            opener = get_proxy_opener(url)
             req = request.Request(url)
             with opener.open(req, timeout=15) as r:
                 res = json.loads(r.read().decode('utf-8'))
@@ -1402,7 +1402,10 @@ class GeminiHandler:
         if p == "custom" and config.conf["VisionAssistant"]["custom_api_type"] == "gemini":
             raw = config.conf["VisionAssistant"]["custom_api_key"]
         clean_raw = raw.replace('\r\n', ',').replace('\n', ',')
-        return [k.strip() for k in clean_raw.split(',') if k.strip()]
+        keys = [k.strip() for k in clean_raw.split(',') if k.strip()]
+        if not keys and p == "custom":
+            keys = [""]
+        return keys
 
     @staticmethod
     def _get_opener(url=None):
@@ -1410,6 +1413,21 @@ class GeminiHandler:
 
     @staticmethod
     def _handle_error(e):
+        server_msg = None
+        if hasattr(e, 'read'):
+            try:
+                raw_err = e.read().decode('utf-8')
+                if raw_err:
+                    err_json = json.loads(raw_err)
+                    err_val = err_json.get("error")
+                    if isinstance(err_val, dict):
+                        server_msg = err_val.get("message")
+                    else:
+                        server_msg = err_val or err_json.get("message")
+            except Exception:
+                pass
+        if server_msg:
+            return server_msg
         if hasattr(e, 'code'):
             # Translators: Error message for Bad Request (400)
             if e.code == 400: return _("Error 400: Bad Request (Check API Key)")
@@ -1469,11 +1487,7 @@ class GeminiHandler:
     @staticmethod
     def _logic(key, prompt, attachments, json_mode, task="chat"):
         p_active = config.conf["VisionAssistant"]["active_provider"]
-        model = ""
-        if p_active == "custom":
-            model = config.conf["VisionAssistant"]["custom_model_name"].strip()
-        
-        base_endpoint = AIHandler.get_endpoint(task, model_override=model if model else None)
+        base_endpoint = AIHandler.get_endpoint(task)
         connector = "&" if "?" in base_endpoint else "?"
         url = f"{base_endpoint}{connector}key={key}"
         
@@ -1511,8 +1525,16 @@ class GeminiHandler:
         headers = {"Content-Type": "application/json"}
         req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
         
-        with GeminiHandler._get_opener().open(req, timeout=120) as r:
+        with GeminiHandler._get_opener(url).open(req, timeout=120) as r:
             res = json.loads(r.read().decode())
+            if 'error' in res:
+                err_val = res.get("error")
+                if isinstance(err_val, dict):
+                    server_msg = err_val.get("message")
+                else:
+                    server_msg = err_val or res.get("message")
+                if server_msg:
+                    return "ERROR:" + server_msg
             candidates = res.get('candidates')
             if not candidates:
                 if 'promptFeedback' in res and 'blockReason' in res['promptFeedback']:
@@ -1566,10 +1588,17 @@ class GeminiHandler:
     @staticmethod
     def translate(text, target_lang):
         def _logic(key, txt, lang):
-
-            base_url = AIHandler.get_base_url("gemini")
-            model = config.conf["VisionAssistant"]["model_name"]
-            url = f"{base_url}/v1beta/models/{model}:generateContent"
+            p_active = config.conf["VisionAssistant"]["active_provider"]
+            if p_active == "custom":
+                base_url = AIHandler.get_base_url("custom")
+                model = config.conf["VisionAssistant"]["custom_model_name"].strip()
+            else:
+                base_url = AIHandler.get_base_url("gemini")
+                model = config.conf["VisionAssistant"]["model_name"]
+            
+            clean_base = re.sub(r'/(v1|v1beta|v1alpha)$', '', base_url, flags=re.IGNORECASE)
+            v_tag = "/v1beta"
+            url = f"{clean_base}{v_tag}/models/{model}:generateContent"
             
             quick_template = get_prompt_text("translate_quick") or "Translate to {target_lang}. Output ONLY translation."
             quick_prompt = apply_prompt_template(quick_template, [("target_lang", lang)])
@@ -1578,9 +1607,20 @@ class GeminiHandler:
             _apply_gemma_thinking_patch(payload, model)
             
             req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
-            with GeminiHandler._get_opener().open(req, timeout=90) as r:
+            with GeminiHandler._get_opener(url).open(req, timeout=90) as r:
                 res = json.loads(r.read().decode())
-                parts = res['candidates'][0]['content'].get('parts', [])
+                if 'error' in res:
+                    err_val = res.get("error")
+                    if isinstance(err_val, dict):
+                        server_msg = err_val.get("message")
+                    else:
+                        server_msg = err_val or res.get("message")
+                    if server_msg:
+                        raise Exception(server_msg)
+                candidates = res.get('candidates')
+                if not candidates:
+                    raise Exception("No candidates in response")
+                parts = candidates[0]['content'].get('parts', [])
                 return _extract_text_from_parts(parts)
         return GeminiHandler._call_with_rotation(_logic, text, target_lang)
 
@@ -1597,9 +1637,20 @@ class GeminiHandler:
             _apply_gemma_thinking_patch(payload, url)
             
             req = request.Request(full_url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
-            with GeminiHandler._get_opener().open(req, timeout=120) as r:
+            with GeminiHandler._get_opener(full_url).open(req, timeout=120) as r:
                 res = json.loads(r.read().decode())
-                parts = res['candidates'][0]['content'].get('parts', [])
+                if 'error' in res:
+                    err_val = res.get("error")
+                    if isinstance(err_val, dict):
+                        server_msg = err_val.get("message")
+                    else:
+                        server_msg = err_val or res.get("message")
+                    if server_msg:
+                        raise Exception(server_msg)
+                candidates = res.get('candidates')
+                if not candidates:
+                    raise Exception("No candidates in response")
+                parts = candidates[0]['content'].get('parts', [])
                 return _extract_text_from_parts(parts)
         return GeminiHandler._call_with_rotation(_logic, image_bytes)
 
@@ -1629,15 +1680,15 @@ class GeminiHandler:
                 doc.close()
                 if not prompt:
                     prompt = get_prompt_text("ocr_document_extract")
-                contents = [{"parts": [{"file_data": {"mime_type": mime_type, "file_uri": uri}}, {"text": prompt}]}]
+                parts.append({"text": prompt})
                 res_text = GeminiHandler._call_with_rotation(GeminiHandler._logic, [{"parts": parts}], None, False, "ocr")
                 if res_text.startswith("ERROR:"): return [res_text]
                 return res_text.split('[[[PAGE_SEP]]]')
             except Exception as e:
                 return ["ERROR:" + str(e)]
 
-        opener = GeminiHandler._get_opener()
         upload_url_base = AIHandler.get_endpoint("upload")
+        opener = GeminiHandler._get_opener(upload_url_base)
         
         for i, key in enumerate(keys):
             try:
@@ -1689,7 +1740,18 @@ class GeminiHandler:
                 req_gen = request.Request(full_url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
                 with opener.open(req_gen, timeout=180) as r:
                     res = json.loads(r.read().decode())
-                    parts = res['candidates'][0]['content'].get('parts', [])
+                    if 'error' in res:
+                        err_val = res.get("error")
+                        if isinstance(err_val, dict):
+                            server_msg = err_val.get("message")
+                        else:
+                            server_msg = err_val or res.get("message")
+                        if server_msg:
+                            raise Exception(server_msg)
+                    candidates = res.get('candidates')
+                    if not candidates:
+                        raise Exception("No candidates in response")
+                    parts = candidates[0]['content'].get('parts', [])
                     text = _extract_text_from_parts(parts)
                     return text.split('[[[PAGE_SEP]]]')
                     
@@ -1728,9 +1790,20 @@ class GeminiHandler:
             _apply_gemma_thinking_patch(payload, url)
             
             req = request.Request(full_url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
-            with GeminiHandler._get_opener().open(req, timeout=120) as r:
+            with GeminiHandler._get_opener(full_url).open(req, timeout=120) as r:
                 res = json.loads(r.read().decode())
-                parts = res['candidates'][0]['content'].get('parts', [])
+                if 'error' in res:
+                    err_val = res.get("error")
+                    if isinstance(err_val, dict):
+                        server_msg = err_val.get("message")
+                    else:
+                        server_msg = err_val or res.get("message")
+                    if server_msg:
+                        raise Exception(server_msg)
+                candidates = res.get('candidates')
+                if not candidates:
+                    raise Exception("No candidates in response")
+                parts = candidates[0]['content'].get('parts', [])
                 return _extract_text_from_parts(parts)
         forced_key = GeminiHandler._get_registered_key(file_uri) if file_uri else None
         if forced_key:
@@ -1745,8 +1818,8 @@ class GeminiHandler:
             
         keys = GeminiHandler._get_api_keys()
         if not keys: return None
-        opener = GeminiHandler._get_opener()
         upload_url_base = AIHandler.get_endpoint("upload")
+        opener = GeminiHandler._get_opener(upload_url_base)
         base_api_url = AIHandler.get_base_url(p_active).rstrip('/')
         clean_base = base_api_url.lower().split("/v1beta")[0].split("/v1")[0].rstrip('/')
         v_tag = "/v1beta"
@@ -1778,19 +1851,34 @@ class GeminiHandler:
     @staticmethod
     def generate_speech(text, voice_name):
         def _logic(key, txt, voice):
-            adv_tts = config.conf["VisionAssistant"].get("gemini_tts_model", "").strip()
+            p_active = config.conf["VisionAssistant"]["active_provider"]
+            if p_active == "custom":
+                main_model = config.conf["VisionAssistant"]["custom_model_name"].strip()
+                adv_tts = config.conf["VisionAssistant"].get("custom_tts_model", "").strip()
+            else:
+                main_model = config.conf["VisionAssistant"]["model_name"]
+                adv_tts = config.conf["VisionAssistant"].get("gemini_tts_model", "").strip()
+            
             if config.conf["VisionAssistant"].get("advanced_model_routing", False) and adv_tts:
                 tts_model = adv_tts
             else:
-                main_model = config.conf["VisionAssistant"]["model_name"]
-                if "pro" in main_model.lower():
-                    tts_model = "gemini-2.5-pro-preview-tts"
+                if p_active == "custom":
+                    tts_model = main_model
                 else:
-                    tts_model = "gemini-3.1-flash-tts-preview"
+                    if "pro" in main_model.lower():
+                        tts_model = "gemini-2.5-pro-preview-tts"
+                    else:
+                        tts_model = "gemini-3.1-flash-tts-preview"
 
-            proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
-            base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
-            url = f"{base_url}/v1beta/models/{tts_model}:generateContent"
+            if p_active == "custom":
+                base_url = AIHandler.get_base_url("custom")
+            else:
+                proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
+                base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+            
+            clean_base = re.sub(r'/(v1|v1beta|v1alpha)$', '', base_url, flags=re.IGNORECASE)
+            v_tag = "/v1beta"
+            url = f"{clean_base}{v_tag}/models/{tts_model}:generateContent"
             
             payload = {
                 "contents": [{"parts": [{"text": txt}]}],
@@ -1800,7 +1888,7 @@ class GeminiHandler:
                 }
             }
             req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
-            with GeminiHandler._get_opener().open(req, timeout=600) as r:
+            with GeminiHandler._get_opener(url).open(req, timeout=600) as r:
                 res = json.loads(r.read().decode())
                 candidates = res.get('candidates', [])
                 if not candidates: raise Exception("No candidates returned")
@@ -2297,7 +2385,7 @@ class AIHandler:
                     headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
                     if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
                     req = request.Request(minimax_tts_url, data=json.dumps(minimax_payload).encode(), headers=headers)
-                    with get_proxy_opener().open(req, timeout=600) as r:
+                    with get_proxy_opener(minimax_tts_url).open(req, timeout=600) as r:
                         resp_json = json.loads(r.read().decode("utf-8"))
                         hex_audio = resp_json.get("data", {}).get("audio", "")
                         if not hex_audio:
@@ -5700,7 +5788,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             for key in keys:
                 try:
                     req = request.Request(url, data=b'\r\n'.join(body), headers={"Authorization": f"Bearer {key}", "Content-Type": f"multipart/form-data; boundary={boundary}"}, method="POST")
-                    with get_proxy_opener().open(req, timeout=120) as r:
+                    with get_proxy_opener(url).open(req, timeout=120) as r:
                         res = json.loads(r.read().decode())
                         return res.get("id") or res.get("name")
                 except Exception: continue
@@ -5712,12 +5800,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             file_size = os.path.getsize(file_path)
             headers_init = {"X-Goog-Upload-Protocol": "resumable", "X-Goog-Upload-Command": "start", "X-Goog-Upload-Header-Content-Length": str(file_size), "X-Goog-Upload-Header-Content-Type": mime_type, "Content-Type": "application/json", "x-goog-api-key": api_key}
             req_init = request.Request(base_upload_url, data=json.dumps({"file": {"display_name": os.path.basename(file_path)}}).encode(), headers=headers_init, method="POST")
-            with get_proxy_opener().open(req_init, timeout=30) as r:
+            with get_proxy_opener(base_upload_url).open(req_init, timeout=30) as r:
                 upload_url = r.headers.get("x-goog-upload-url")
             if not upload_url: return None
             with open(file_path, "rb") as f: data = f.read()
             req_up = request.Request(upload_url, data=data, headers={"Content-Length": str(file_size), "X-Goog-Upload-Offset": "0", "X-Goog-Upload-Command": "upload, finalize"}, method="POST")
-            with get_proxy_opener().open(req_up, timeout=300) as r:
+            with get_proxy_opener(upload_url).open(req_up, timeout=300) as r:
                 res = json.loads(r.read().decode())
                 file_name_id = res['file']['name']
             
@@ -5725,7 +5813,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             check_url = f"{p_base}/v1beta/{file_name_id}"
             for attempt in range(30):
                 req_check = request.Request(check_url, headers={"x-goog-api-key": api_key})
-                with get_proxy_opener().open(req_check, timeout=10) as r:
+                with get_proxy_opener(check_url).open(req_check, timeout=10) as r:
                     data = json.loads(r.read().decode())
                     if data.get('state') == "ACTIVE":
                         uri = data.get('uri')
