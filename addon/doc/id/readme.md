@@ -67,7 +67,7 @@ Untuk mencegah konflik tombol keyboard, add-on ini memakai **Lapisan Perintah**.
 
 | Tombol        | Fungsi                 | Deskripsi                                                                  |
 |---------------|------------------------|----------------------------------------------------------------------------|
-| **Shift + A** | **Operator AI**        | **Operasi otomatis:** Minta AI melakukan tugas di layar Anda.              |
+| **Shift + A** | **Operator AI**        | **Operasi otomatis:** Minta AI melakukan tugas di layar Anda. Tekan lagi untuk langsung membatalkan operasi yang sedang berjalan. |
 | **E**         | **UI Explorer**        | **Klik interaktif:** Mengenali dan mengklik elemen UI di aplikasi apa pun. |
 | **T**         | Penerjemah Cerdas      | Menerjemahkan teks di kursor navigator atau teks yang dipilih.             |
 | **Shift + T** | Penerjemah Papan Klip  | Menerjemahkan isi papan klip saat ini.                                     |
@@ -80,8 +80,8 @@ Untuk mencegah konflik tombol keyboard, add-on ini memakai **Lapisan Perintah**.
 | **A**         | Transkripsi Audio      | Mengubah file MP3, WAV, atau OGG menjadi teks.                             |
 | **C**         | Pemecah CAPTCHA        | Menangkap dan memecahkan CAPTCHA, termasuk pada portal pemerintah.         |
 | **S**         | Dikte Cerdas           | Mengubah ucapan menjadi teks. Tekan untuk mulai merekam, tekan lagi untuk berhenti dan mengetik hasilnya. |
-| **Control+L** | **Asisten Langsung**   | **Kopilot Real-time (Khusus Gemini):** Memulai atau mengakhiri percakapan suara dan layar langsung dengan asisten AI. |
-| **I**         | Laporan Status         | Mengumumkan progres saat ini, misalnya "Memindai..." atau "Diam".        |
+| **Control+L** | **Asisten Langsung**   | **Kopilot real-time (khusus Gemini):** Memulai atau mengakhiri percakapan suara dan layar langsung dengan asisten AI. |
+| **I**         | Laporan Status         | Mengumumkan progres saat ini, misalnya "Memindai..." atau "Diam".         |
 | **L**         | **Label Objek**        | **Pelabelan AI semantik:** Memberi label permanen pada elemen atau ikon yang sedang fokus. |
 | **Shift + L** | **Kelola/Pindai Label** | Membuka Pengelola Label jika label sudah ada, atau memindai aplikasi untuk elemen tanpa nama. |
 | **U**         | Cek Pembaruan          | Mengecek versi terbaru add-on di GitHub secara manual.                     |
@@ -96,7 +96,36 @@ Untuk mencegah konflik tombol keyboard, add-on ini memakai **Lapisan Perintah**.
 - **Alt + G:** Membuat dan menyimpan file audio berkualitas tinggi (WAV/MP3). *Disembunyikan jika penyedia tidak mendukung TTS.*
 - **Alt + S / Ctrl + S:** Menyimpan teks hasil ekstraksi sebagai file TXT atau HTML.
 
-## 3. Prompt Kustom & Variabel
+## 3. Operator AI - Kontrol Komputer Mandiri
+
+**Operator AI** mengubah Vision Assistant Pro dari pembaca pasif menjadi asisten aktif yang dapat berinteraksi dengan komputer atas nama Anda. Anda dapat memintanya mendeskripsikan layar, menjawab pertanyaan tentang apa yang terlihat, atau bahkan mengambil kendali: mengklik tombol, menyeret item, mengetik teks, dan menavigasi aplikasi memakai perintah bahasa alami.
+
+Keuntungan terbesarnya adalah fitur ini tetap bekerja pada software yang sama sekali tidak aksesibel. Jika Anda terjebak di aplikasi kustom, remote desktop, atau situs web yang membuat pembaca layar tidak memberi informasi apa pun, Operator AI tetap bisa membantu. Karena ia "melihat" layar secara visual, ia dapat menemukan, membaca, dan berinteraksi dengan elemen yang tidak memiliki label aksesibilitas.
+
+### Cara Kerja
+1. Tekan **NVDA + Shift + V**, lalu tekan **Shift + A** (atau gunakan pintasan langsung) untuk membuka dialog Operator AI.
+2. Ketik apa yang ingin Anda lakukan dengan bahasa biasa, misalnya "Klik tombol Simpan", "Apa isi pesan error ini?", atau "Ubah nama file menjadi final.pdf".
+3. AI akan menganalisis layar, mengenali elemen yang relevan, lalu menjalankan tindakan atau memberikan jawaban. Jika tugas memerlukan beberapa langkah, operator akan terus bekerja sampai selesai.
+4. Tekan **Shift + A** lagi kapan saja untuk langsung membatalkan operasi yang sedang berjalan.
+
+### Tindakan yang Didukung
+Operator memahami banyak jenis perintah:
+- **Deskripsikan & Jawab**: "Deskripsikan tata letak layar" atau "Apa isi pesan error ini?"
+- **Klik**: "Klik tombol Simpan"
+- **Klik Kanan**: "Klik kanan file itu"
+- **Klik Ganda**: "Klik ganda dokumen itu"
+- **Seret & Lepas**: "Seret dokumen ke folder Arsip"
+- **Ketik**: "Ketik 'Halo Dunia' di kotak pencarian"
+- **Gulir**: "Gulir ke bawah tiga kali"
+- **Tekan Tombol**: "Tekan Enter", "Tekan Tab", "Tekan Escape"
+- **Tugas Multi-Langkah**: "Buka File Explorer, cari laporan, lalu ubah namanya menjadi final.pdf"
+
+### Catatan Penting
+- **Peringatan Penggunaan API**: Karena operator perlu "melihat" persis apa yang terjadi di layar, ia mengirim tangkapan layar resolusi tinggi pada setiap langkah. Penggunaan yang sering akan menghabiskan kuota API jauh lebih cepat daripada fitur berbasis teks biasa.
+- **Aplikasi Administrator**: Jika NVDA tidak berjalan dengan hak Administrator, operator mungkin tidak dapat berinteraksi dengan jendela yang memerlukan izin lebih tinggi. Ini adalah batasan keamanan Windows, bukan bug pada add-on.
+- **Praktik Terbaik**: Untuk hasil terbaik, berikan perintah yang jelas dan spesifik. "Klik tombol Kirim berwarna biru di bagian bawah formulir" hampir selalu lebih baik daripada hanya "Klik tombol".
+
+## 4. Prompt Kustom & Variabel
 
 Anda dapat mengelola prompt di **Pengaturan > Prompt > Kelola Prompt...**.
 
@@ -104,6 +133,7 @@ Anda dapat mengelola prompt di **Pengaturan > Prompt > Kelola Prompt...**.
 - `[selection]`: Teks yang sedang dipilih.
 - `[clipboard]`: Isi papan klip.
 - `[screen_obj]`: Tangkapan layar objek navigator.
+- `[screen_fg_obj]`: Tangkapan layar jendela aktif di latar depan.
 - `[screen_full]`: Tangkapan layar penuh.
 - `[file_ocr]`: Memilih file gambar/PDF untuk ekstraksi teks.
 - `[file_read]`: Memilih dokumen untuk dibaca (TXT, kode, PDF).
@@ -112,36 +142,63 @@ Anda dapat mengelola prompt di **Pengaturan > Prompt > Kelola Prompt...**.
 ***
 **Catatan:** Koneksi internet aktif diperlukan untuk semua fitur AI. Dokumen multi-halaman akan diproses otomatis.
 
-## 4. Dukungan & Komunitas
+## 5. Dukungan & Komunitas
 
 Ikuti kabar terbaru, fitur baru, dan rilis terbaru:
 - **Kanal Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** Untuk laporan bug dan permintaan fitur.
 
-## 5. Pendukung Proyek
+## 6. Pendukung Proyek
 
 Terima kasih sebesar-besarnya kepada anggota komunitas yang mendukung pengembangan dan pemeliharaan proyek ini melalui kontribusi finansial:
 
 *   **@Alyabani94**
 *   **Ali Alamri**
 *   **Ilya**
+*   **Anonymous Supporter** (`UQDd...CnMY`)
+*   **leonardo0216**
+*   **Sergei Fleytin**
 
 *Jika Anda ingin mendukung proyek secara finansial dan ingin nama Anda ditampilkan di sini, buka opsi **Donasi** di menu Tools NVDA (submenu Vision Assistant) atau pada proses pengaturan setelah instalasi.*
 
 
 ---
+## Perubahan untuk 7.0.0
+
+*   **Melanjutkan Pemindaian yang Belum Selesai**: Menambahkan fitur lanjutkan untuk Pembaca Dokumen dan Aksi File Cerdas. Jika pemindaian terputus, sekarang Anda dapat melanjutkan dari titik terakhir alih-alih memulai lagi dari awal.
+*   **Variabel `[screen_fg_obj]` Baru**: Menambahkan variabel prompt kustom untuk mengambil tangkapan layar hanya dari jendela aktif di latar depan, bukan seluruh layar.
+*   **Coba Ulang Cerdas & Rotasi Kunci**: Add-on kini diam-diam mencoba ulang hingga 5 kali pada kunci yang sama saat terjadi beban server sementara, seperti "permintaan tinggi" atau respons tidak valid. Jika percobaan ulang gagal, add-on otomatis beralih ke kunci API berikutnya dalam daftar Anda.
+*   **Deteksi Screen Curtain**: Menambahkan pemeriksaan untuk mencegah pengambilan tangkapan layar saat Screen Curtain aktif, baik aktif permanen maupun dinyalakan sementara dengan hotkey. Add-on akan memperingatkan Anda dan berhenti, sehingga Anda tidak mengirim gambar hitam dan membuang token API.
+*   **Penyempurnaan Pembaca Dokumen**: Dialog rentang PDF kini otomatis memilih bahasa target default dari pengaturan add-on. Penanganan thread juga ditingkatkan agar tugas latar belakang berhenti dengan bersih saat pembaca ditutup.
+*   **Integrasi OCR Mistral Bawaan**: Mengintegrasikan API Document OCR bawaan Mistral. Dokumen multi-halaman otomatis digabung, diunggah, dan diproses secara batch memakai endpoint khusus `/v1/ocr` milik Mistral, sedangkan gambar satu halaman diproses langsung tanpa konversi PDF yang tidak perlu [1].
+*   **Penangan URL Kustom Dinamis**: Mengubah URL API Kustom kini langsung menghapus cache daftar model dan mengembalikan kotak teks entri model manual. Ini memastikan kompatibilitas penuh dengan endpoint kustom, seperti Cloudflare AI Gateway, yang tidak mendukung endpoint daftar `/v1/models` standar.
+*   **Mesin Input Operator AI Dirombak**: Sistem simulasi mouse dan keyboard dasar untuk Operator AI ditulis ulang sepenuhnya. API lama `mouse_event` diganti dengan API Windows modern `SendInput`, sehingga kompatibilitas dengan aplikasi modern, jendela yang dilindungi UAC, dan tampilan high-DPI jauh lebih baik.
+*   **Operasi Seret & Lepas Diperbaiki**: Aksi seret dan lepas di Operator AI kini jauh lebih stabil dan andal. Mesin baru memakai kurva "easing" yang natural, posisi kursor presisi, timing yang dioptimalkan, dan teknik "nudge" cerdas agar Windows dan aplikasi mengenali serta menjalankan gestur seret-dan-lepas dengan benar tanpa gagal di tengah jalan.
+*   **Dukungan Multi-Monitor**: Operator AI kini mendukung penuh setup multi-monitor. Gerakan dan klik mouse bekerja benar di semua monitor memakai flag `MOUSEEVENTF_VIRTUALDESK`, sehingga posisi tetap akurat di monitor mana pun aplikasi target berada.
+*   **Simulasi Keyboard Ditingkatkan**: Injeksi tombol ditingkatkan agar mendukung penuh "Extended Keys", seperti tombol panah, Home, End, Page Up/Down, Insert, Delete, dan F1-F12. Ini memastikan navigasi dan perintah pintasan yang dikirim Operator AI berjalan lancar di semua aplikasi.
+*   **Dukungan Gambar HEIC/HEIF**: Menambahkan dukungan bawaan untuk format foto iPhone. Sekarang Anda dapat langsung memilih file `.heic` dan `.heif` untuk deskripsi AI, OCR, atau Pembacaan Dokumen tanpa konversi lebih dulu.
+
 ## Perubahan untuk 6.5.0
 
-*   **Asisten Langsung**: Menambahkan fitur asisten suara dan layar secara real-time, tersedia secara eksklusif untuk penyedia Google Gemini (atau penyedia kustom yang kompatibel dengan Gemini). Termasuk kustomisasi suara interaktif dan kedalaman pemikiran langsung di dalam dialog, dengan rekoneksi otomatis setelah mengubah pengaturan.
+*   **Asisten Langsung**: Menambahkan fitur asisten suara dan layar secara real-time, tersedia secara eksklusif untuk penyedia Google Gemini (atau penyedia kustom yang kompatibel dengan Gemini). Termasuk kustomisasi suara interaktif dan kedalaman berpikir langsung di dalam dialog, dengan rekoneksi otomatis setelah mengubah pengaturan.
 *   **Penyedia AI MiniMax**: Mengintegrasikan MiniMax sebagai penyedia setara dengan dukungan multimodal penuh (obrolan, visi, OCR), TTS kustom menggunakan lebih dari 300+ suara dinamis, dan penghapusan blok penalaran secara otomatis (misalnya, `<think>...</think>`) dari keluaran.
 *   **Terjemahan Penampil Dokumen**: Memperbaiki kegagalan terjemahan diam-diam untuk pengguna NVDA non-Inggris dengan memastikan kode bahasa 2 huruf standar dikirim ke Google Translate alih-alih nama bahasa yang dilokalkan.
 *   **Coba Lagi Pemindaian Batch PDF**: Mengimplementasikan logika coba lagi yang sangat dioptimalkan, terpisah, dan diam-diam untuk pemindaian batch dokumen PDF guna mencegah pengunggahan berulang dan menghindari popup kesalahan yang mengganggu selama proses coba lagi.
 *   **Status Penampil Dokumen**: Memperbaiki bug di mana status keseluruhan plugin (diperiksa melalui `I`) tetap macet di "Pemrosesan Batch Dimulai" selama pemindaian dokumen yang panjang.
-*   **Perbaikan Crash Threading**: Memperbaiki crash pernyataan thread `IsMain() failed in wxTimerImpl` yang parah saat membuka dokumen dari thread latar belakang dengan mentransisikan antrean panggilan balik GUI ke `wx.CallAfter`.
+*   **Perbaikan Crash Threading**: Memperbaiki crash pernyataan thread `IsMain() failed in wxTimerImpl` yang parah saat membuka dokumen dari thread latar belakang dengan memindahkan antrean callback GUI ke `wx.CallAfter`.
 
 ## Perubahan untuk 6.1.2
 
-*   **Pemeriksaan Awal Label Duplikat**: Memperbaiki masalah pada pelabelan tunggal di mana pemeriksaan duplikat menggunakan kunci koordinat lama, menyebabkan NVDA membuat permintaan AI ganda untuk objek yang sudah diberi label alih-alih mengumumkan label yang ada.
+*   **Pemeriksaan Awal Label Duplikat**: Memperbaiki masalah pada pelabelan tunggal ketika pemeriksaan duplikat masih memakai kunci koordinat lama, sehingga NVDA membuat permintaan AI ganda untuk objek yang sudah diberi label alih-alih mengumumkan label yang ada.
+*   **Obrolan Dokumen untuk Penyedia Non-Gemini**: Memperbaiki pemeriksaan kunci API yang terlalu ketat di Obrolan Dokumen (`on_ask`) agar pengguna OpenAI, Groq, atau penyedia Kustom lokal seperti Ollama dapat mengobrol dengan dokumen tanpa diblokir.
+*   **Terjemahan OCR Chrome Cepat**: Mengembalikan API terjemahan gratis tanpa kunci untuk OCR Chrome. Terjemahan teks hasil ekstraksi kini melewati AI Gemini, sehingga kuota API lebih hemat dan proses terjemahan lebih cepat.
+*   **Filter Alfanumerik CAPTCHA**: Memperbaiki logika filter di pemecah CAPTCHA agar karakter non-alfanumerik dibersihkan dengan benar dalam semua situasi.
+*   **Pembaruan Bantuan Lapisan Perintah**: Memperbaiki pintasan pengumuman status di menu bantuan dari `L` menjadi `I`, dan menambahkan kedua perintah pelabelan (`L` dan `Shift+L`) ke daftar.
+
+## Perubahan untuk 6.1.1
+
+*   **Perbaikan Output Thinking Gemma 4**: Memperbaiki masalah pada model Gemma 4 ketika seluruh proses berpikir internal ditampilkan sebagai respons akhir, atau ketika menonaktifkan thinking menghasilkan respons kosong. Add-on kini memisahkan dan mengambil hanya teks akhir yang bersih.
+*   **OCR Batch dari File Explorer**: Anda kini dapat memilih beberapa foto atau PDF langsung di Windows File Explorer dan mengekstrak teks atau menganalisisnya secara batch. Add-on akan otomatis memfilter dan memproses hanya format file yang didukung.
 
 ## Perubahan untuk 6.1.0
 
