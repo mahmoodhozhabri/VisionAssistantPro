@@ -2815,8 +2815,6 @@ msgstr ""
 #, python-brace-format
 #~ msgid "AI is scanning {n} pages in background."
 #~ msgstr "L'IA sta scansionando {n} pagine in background."
-msgid ""
-msgstr ""
 
 #~ msgid "Nothing to send."
 #~ msgstr "Niente da inviare."
@@ -2860,14 +2858,10 @@ msgstr ""
 #, python-brace-format
 #~ msgid "Upload Connection Error: {reason}"
 #~ msgstr "Errore di connessione durante il caricamento: {reason}"
-msgid ""
-msgstr ""
 
 #, python-brace-format
 #~ msgid "Upload Server Error {code}: {reason}"
 #~ msgstr "Errore del server di caricamento {code}: {reason}"
-msgid ""
-msgstr ""
 
 #~ msgid "Failed."
 #~ msgstr "Fallito."
@@ -2917,8 +2911,6 @@ msgstr ""
 #, python-brace-format
 #~ msgid "Connection Error: {reason}"
 #~ msgstr "Errore di connessione: {reason}"
-msgid ""
-msgstr ""
 
 #~ msgid "Uploading & Analyzing..."
 #~ msgstr "Caricamento e analisi..."
@@ -2987,6 +2979,3 @@ msgstr ""
 
 #~ msgid "Select an audio file..."
 #~ msgstr "Seleziona un file audio..."
-
-#~ msgid "Please configure Gemini API Key."
-#~ msgstr "Per favore, configura la chiave api."
