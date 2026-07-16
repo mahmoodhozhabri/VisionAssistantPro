@@ -59,7 +59,8 @@ Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy polec
 | **R**         | Poprawianie tekstu            | Podsumuj, popraw gramatykę, wyjaśnij lub uruchom **niestandardowe polecenie**. |
 | **V**         | Opis obiektu                  | Opisuje bieżący obiekt nawigatora.                                          |
 | **O**         | Rozpoznawanie ekranu          | Analizuje układ i zawartość całego ekranu.                                  |
-| **Shift + V** | Analiza wideo online          | Analizuj filmy z **YouTube**, **Instagrama**, **TikToka** lub **Twittera (X)**. |
+| **Shift + V** | Analiza wideo online          | Analizuj filmy z **YouTube**, **Instagrama**, **TikToka** lub **Twittera (X)**, a także lokalne pliki wideo. |
+| **Control + V** | Nagrywanie ekranu           | **Analiza lokalnego nagrania:** Nagrywa bezgłośny film z ekranu, po czym AI opisuje scenę, układ i akcję. |
 | **D**         | Czytnik dokumentów            | Czytnik PDF i obrazów z wyborem zakresu stron.                              |
 | **F**         | **Akcja na pliku**            | Rozpoznawanie zależne od kontekstu z wybranego obrazu, PDF lub TIFF.        |
 | **A**         | Transkrypcja audio            | Transkrybuje pliki MP3, WAV lub OGG na tekst.                               |
@@ -115,6 +116,15 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 
 *Jeśli chcesz wesprzeć projekt finansowo i zobaczyć tutaj swoje imię, opcję **Wsparcie** znajdziesz w menu Narzędzia NVDA (podmenu Vision Assistant) albo podczas konfiguracji po instalacji.*
 
+
+---
+## Zmiany w wersji 2026.07.15
+
+* **Filtrowanie modeli API:** Przebudowano system filtrowania modeli na czarną listę zamiast białych list, z mocniejszymi słowami kluczowymi, dzięki czemu lista głównego modelu czatu pozostaje czysta, a wszystkie wyspecjalizowane modele są nadal dostępne w sekcji osobnego modelu dla każdego zadania.
+* **Wyszukiwanie w przydziale modeli:** Wszystkie listy rozwijane osobnego modelu dla każdego zadania (OCR, STT, TTS, Operator, Wideo, Asystent głosowy) oraz wybór wariantu eSpeak są teraz przeszukiwalne. Wystarczy wpisać frazę, aby przefiltrować i znaleźć żądany model lub wariant.
+* **Nowe skróty:** ustawienia (**Alt + S**), raport kluczy z wyczerpanym dziennym limitem wraz z modelem i czasem resetu (**Alt + Q**) oraz audyt bieżącej konfiguracji modeli (**Alt + M**).
+* **Całkowita przebudowa analizy wideo:** Analizator wideo, który wcześniej dawał jedynie podstawowy opis filmów online, robi teraz znacznie więcej. Doszło lokalne nagrywanie ekranu (**Control + V**) z szczegółowym opisem sceny, układu i akcji, generowanie audiodeskrypcji w formacie SRT z dopasowaniem opisów do naturalnych pauz i dosłownym OCR tekstu na ekranie, oraz zsynchronizowana narracja dźwiękowa z eksportem do MP3, z automatycznym przyciszaniem tła podczas opisów. Dodano też akcję na lokalnym pliku wideo, śledzenie postaci z globalnym słownikiem postaci oraz osobne modele wideo w przydziale modeli.
+* **Zarządzanie limitami API:** Ulepszono obsługę błędów 429 (dzienny limit) przez śledzenie limitów osobno dla każdego modelu. Klucz, który wyczerpie limit na jednym modelu, jest izolowany tylko dla niego i pozostaje dostępny dla pozostałych modeli.
 
 ---
 ## Zmiany w wersji 7.0.0
