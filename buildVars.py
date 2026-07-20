@@ -33,7 +33,7 @@ Command Layer: Press NVDA+Shift+V, then:
 - Open Settings (Alt+S)
 - Report Quota Exhausted Keys (Alt+Q)
 - Report Advanced Routing (Alt+M)"""),
-    addon_version="2026.07.15",
+    addon_version="2026.07.16",
     # Brief changelog for this version
     # Translators: what's new content for the add-on version to be shown in the add-on store
     addon_changelog=_("""## Changes for 2026.07.15

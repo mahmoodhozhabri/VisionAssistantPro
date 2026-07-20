@@ -9540,7 +9540,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         try:
             # Translators: Instruction prompt and window title for the menu that appears when a user performs an action on a single image file.
             dlg = wx.SingleChoiceDialog(gui.mainFrame, _("Choose action:"), _("Image File"), choices)
-            dlg.Raise()
             if dlg.ShowModal() == wx.ID_OK:
                 selection = dlg.GetSelection()
                 if selection == 0:
@@ -10150,8 +10149,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         try:
             # Translators: Title of the quick action dialog.
             dlg = wx.SingleChoiceDialog(gui.mainFrame, _("Choose action:"), _("Video Action"), choices)
-            dlg.Raise()
-            dlg.SetFocus()
             
             if dlg.ShowModal() == wx.ID_OK:
                 selection = dlg.GetSelection()
@@ -10713,8 +10710,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             gui.mainFrame.prePopup()
             try:
                 dlg = wx.MessageDialog(gui.mainFrame, message, title, wx.YES_NO | wx.ICON_QUESTION)
-                dlg.Raise()
-                dlg.SetFocus()
                 user_choice[0] = dlg.ShowModal()
                 dlg.Destroy()
             finally:
