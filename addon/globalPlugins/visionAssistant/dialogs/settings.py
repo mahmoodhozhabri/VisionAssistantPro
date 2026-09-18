@@ -18,6 +18,12 @@ import ui
 from .. import vision_config
 from .. import plugin_state
 from ..ai.core import AIHandler
+from ..utils.secure_credentials import (
+    get_credential,
+    protect_credential,
+    prepare_backup_credentials,
+    prepare_restored_credentials,
+)
 from ..prompt_utils import (
     normalize_ptt_key,
     ptt_key_display,
@@ -80,7 +86,10 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         apiLabel = wx.StaticText(self.connectionBox, label=_("API Key (Separate multiple keys with comma or newline):"))
         cHelper.addItem(apiLabel)
 
-        curr_key = nvda_config.conf["VisionAssistant"]["api_key" if curr_p == "gemini" else (f"{curr_p}_api_key" if curr_p != "custom" else "custom_api_key")]
+        curr_key = get_credential(
+            nvda_config.conf["VisionAssistant"],
+            "api_key" if curr_p == "gemini" else (f"{curr_p}_api_key" if curr_p != "custom" else "custom_api_key"),
+        )
         self.apiKeyCtrl_hidden = wx.TextCtrl(self.connectionBox, value=curr_key, style=wx.TE_PASSWORD)
         self.apiKeyCtrl_visible = wx.TextCtrl(self.connectionBox, value=curr_key, style=wx.TE_MULTILINE | wx.TE_DONTWRAP, size=(-1, 60))
         self.apiKeyCtrl_visible.Hide()
@@ -524,17 +533,35 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
         # Translators: Group box title for the settings backup and restore buttons
         backupBox = wx.StaticBox(advBox, label=_("Backup and Restore"))
-        backupSizer = wx.StaticBoxSizer(backupBox, wx.HORIZONTAL)
+        backupSizer = wx.StaticBoxSizer(backupBox, wx.VERTICAL)
+
+        # Translators: Checkbox controlling whether API keys remain encrypted in settings backup files.
+        self.protectBackupKeysCheck = wx.CheckBox(
+            advBox,
+            label=_("Protect API keys in backup files (recommended)"),
+        )
+        self.protectBackupKeysCheck.SetValue(
+            nvda_config.conf["VisionAssistant"].get("protect_api_keys_in_backups", True)
+        )
+        self.protectBackupKeysCheck.SetToolTip(
+            _("When disabled, backup JSON files contain plaintext API keys so they can be transferred to another Windows account or computer.")
+        )
+        self.protectBackupKeysCheck.Bind(wx.EVT_CHECKBOX, self.onToggleBackupKeyProtection)
+        backupSizer.Add(self.protectBackupKeysCheck, 0, wx.ALL, 5)
+
+        backupButtonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         # Translators: Button to save add-on settings and data to a backup file
         self.btnBackupSettings = wx.Button(advBox, label=_("Backup..."))
         self.btnBackupSettings.Bind(wx.EVT_BUTTON, self.onBackupSettings)
-        backupSizer.Add(self.btnBackupSettings, 0, wx.ALL, 5)
+        backupButtonSizer.Add(self.btnBackupSettings, 0, wx.ALL, 5)
 
         # Translators: Button to restore add-on settings and data from a backup file
         self.btnRestoreSettings = wx.Button(advBox, label=_("Restore..."))
         self.btnRestoreSettings.Bind(wx.EVT_BUTTON, self.onRestoreSettings)
-        backupSizer.Add(self.btnRestoreSettings, 0, wx.ALL, 5)
+        backupButtonSizer.Add(self.btnRestoreSettings, 0, wx.ALL, 5)
+
+        backupSizer.Add(backupButtonSizer, 0, wx.EXPAND)
 
         aHelper.addItem(backupSizer)
         advBox.SetSizer(advSizer)
@@ -784,7 +811,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
 
         key_name = "api_key" if p_name == "gemini" else (f"{p_name}_api_key" if p_name != "custom" else "custom_api_key")
-        val = nvda_config.conf["VisionAssistant"].get(key_name, "")
+        val = get_credential(nvda_config.conf["VisionAssistant"], key_name)
 
         self.Freeze()
         try:
@@ -883,7 +910,8 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
         val = self.apiKeyCtrl_visible.Value if self.showApiCheck.IsChecked() else self.apiKeyCtrl_hidden.Value
         k_key = "api_key" if p_name == "gemini" else (f"{p_name}_api_key" if p_name != "custom" else "custom_api_key")
-        nvda_config.conf["VisionAssistant"][k_key] = val.strip()
+        # DPAPI failure aborts model fetching; plaintext is never persisted.
+        nvda_config.conf["VisionAssistant"][k_key] = protect_credential(val)
         nvda_config.conf["VisionAssistant"]["active_provider"] = p_name
 
         if p_name == "custom":
@@ -1208,6 +1236,17 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         self.pttKeyCtrl.Show(show)
         self.livePanel.Layout()
 
+    def onToggleBackupKeyProtection(self, event):
+        if self.protectBackupKeysCheck.IsChecked():
+            return
+        # Translators: Warning shown when the user chooses to export transferable plaintext API keys in backup files.
+        gui.messageBox(
+            _("API keys in newly created backup JSON files will be stored as readable plaintext. Anyone who can access a backup file can use those keys. NVDA's configuration and log files will remain protected."),
+            _("Unprotected Backup API Keys"),
+            wx.OK | wx.ICON_WARNING,
+            parent=self,
+        )
+
     def isValid(self):
         if not self.pttCheck.Value or normalize_ptt_key(self.pttKeyCtrl.Value):
             return True
@@ -1237,7 +1276,8 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
             val = self.apiKeyCtrl_visible.Value if self.showApiCheck.IsChecked() else self.apiKeyCtrl_hidden.Value
             k_key = "api_key" if p_name == "gemini" else (f"{p_name}_api_key" if p_name != "custom" else "custom_api_key")
-            nvda_config.conf["VisionAssistant"][k_key] = val.strip()
+            # DPAPI failure aborts the save; plaintext is never used as a fallback.
+            nvda_config.conf["VisionAssistant"][k_key] = protect_credential(val)
 
             m_key = "model_name" if p_name == "gemini" else f"{p_name}_model_name"
             has_fetched_models = self.model.GetCount() > 0
@@ -1323,6 +1363,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             nvda_config.conf["VisionAssistant"]["video_chars_as_subtitle"] = self.vid_chars_as_sub.Value
             nvda_config.conf["VisionAssistant"]["video_add_disclaimer"] = self.vid_add_disclaimer.Value
             nvda_config.conf["VisionAssistant"]["enable_file_logging"] = self.enableFileLogging.Value
+            nvda_config.conf["VisionAssistant"]["protect_api_keys_in_backups"] = self.protectBackupKeysCheck.Value
             l_idx = self.logLevelSel.GetSelection()
             if l_idx != wx.NOT_FOUND:
                 nvda_config.conf["VisionAssistant"]["log_level"] = self.logLevels[l_idx][1]
@@ -1409,8 +1450,25 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             scope_dlg.Destroy()
         finally:
             gui.mainFrame.postPopup()
+        protect_backup_keys = self.protectBackupKeysCheck.IsChecked()
+        if not protect_backup_keys:
+            gui.mainFrame.prePopup()
+            try:
+                # Translators: Confirmation before saving a portable backup containing plaintext API keys.
+                if gui.messageBox(
+                    _("This backup will contain your API keys as readable plaintext so they can be transferred to another Windows account or computer. Anyone with access to the file can use the keys. Do you want to continue?"),
+                    _("Create Backup With Plaintext API Keys?"),
+                    wx.YES_NO | wx.ICON_WARNING,
+                    parent=self,
+                ) != wx.YES:
+                    return
+            finally:
+                gui.mainFrame.postPopup()
         try:
             settings_data = nvda_config.conf["VisionAssistant"].dict()
+            # This transforms only the copied backup data. Live NVDA configuration
+            # always retains DPAPI-protected credentials.
+            prepare_backup_credentials(settings_data, protect=protect_backup_keys)
             settings_data["custom_prompts_v2"] = serialize_custom_prompts_v2(self.customPromptItems)
             settings_data["default_refine_prompts"] = serialize_default_prompt_overrides(self.defaultPromptItems)
             payload = {
@@ -1482,7 +1540,12 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         finally:
             gui.mainFrame.postPopup()
         try:
-            nvda_config.conf["VisionAssistant"] = payload["settings"]
+            restored_settings = payload["settings"]
+            # Protect legacy plaintext credentials and clear DPAPI values that
+            # belong to another Windows user or computer before installing the
+            # restored configuration.
+            unavailable_credentials = prepare_restored_credentials(restored_settings)
+            nvda_config.conf["VisionAssistant"] = restored_settings
         except Exception as e:
             log.error(f"onRestoreSettings failed to apply: {e}", exc_info=True)
             gui.mainFrame.prePopup()
@@ -1516,8 +1579,30 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
                     inst.labels_cache = payload["data"].get("labels", {})
             except Exception as e:
                 log.warning(f"Restore: failed to reload labels: {e}")
-        # Translators: Message announced after a successful restore.
-        ui.message(_("Backup restored successfully."))
+        if unavailable_credentials:
+            provider_names = {
+                "api_key": "Gemini",
+                "openai_api_key": "OpenAI",
+                "mistral_api_key": "Mistral",
+                "groq_api_key": "Groq",
+                "minimax_api_key": "MiniMax",
+                "custom_api_key": _("Custom provider"),
+            }
+            unavailable_providers = ", ".join(
+                provider_names[field] for field in unavailable_credentials
+            )
+            gui.mainFrame.prePopup()
+            try:
+                # Translators: Warning after restoring a backup whose encrypted API keys were created by another Windows user or computer. {providers} is a comma-separated list of provider names.
+                message = _(
+                    "The backup was restored, but these API keys could not be recovered because they were protected by a different Windows account or computer: {providers}. The unavailable keys have been cleared. Enter them again in Vision Assistant Settings."
+                ).format(providers=unavailable_providers)
+                gui.messageBox(message, _("API Keys Required"), wx.OK | wx.ICON_WARNING)
+            finally:
+                gui.mainFrame.postPopup()
+        else:
+            # Translators: Message announced after a successful restore.
+            ui.message(_("Backup restored successfully."))
 
     def _reloadControlsFromConfig(self):
         conf = nvda_config.conf["VisionAssistant"]
@@ -1530,7 +1615,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         self.provider_sel.SetSelection(p_idx)
 
         k_key = "api_key" if curr_p == "gemini" else (f"{curr_p}_api_key" if curr_p != "custom" else "custom_api_key")
-        key_val = conf.get(k_key, "")
+        key_val = get_credential(conf, k_key)
         self.apiKeyCtrl_hidden.SetValue(key_val)
         self.apiKeyCtrl_visible.SetValue(key_val)
         self.showApiCheck.SetValue(False)
@@ -1593,6 +1678,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         self.captchaMode.SetSelection(0 if conf.get("captcha_mode", "navigator") == "navigator" else 1)
 
         self.enableFileLogging.SetValue(conf.get("enable_file_logging", False))
+        self.protectBackupKeysCheck.SetValue(conf.get("protect_api_keys_in_backups", True))
         lvl = conf.get("log_level", "DEBUG")
         lvl_idx = next((i for i, x in enumerate(self.logLevels) if x[1] == lvl), 0)
         self.logLevelSel.SetSelection(lvl_idx)

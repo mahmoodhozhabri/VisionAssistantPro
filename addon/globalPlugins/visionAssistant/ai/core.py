@@ -195,10 +195,11 @@ class AIHandler:
 
     @staticmethod
     def get_keys(provider):
+        from ..utils.secure_credentials import get_credential
         if provider == "gemini": key_name = "api_key"
         elif provider == "custom": key_name = "custom_api_key"
         else: key_name = f"{provider}_api_key"
-        raw = nvda_config.conf["VisionAssistant"].get(key_name, "")
+        raw = get_credential(nvda_config.conf["VisionAssistant"], key_name)
         return [k.strip() for k in str(raw).replace('\r\n', ',').replace('\n', ',').split(',') if k.strip()]
 
     @staticmethod
@@ -217,7 +218,10 @@ class AIHandler:
             
         if is_gemini_logic:
             url += ("&" if "?" in url else "?") + "pageSize=1000"
-        if is_gemini_logic and key and "key=" not in url:
+        # Native Gemini authorization keys must be sent in the documented
+        # x-goog-api-key header. Keep query authentication for third-party
+        # Gemini-compatible custom endpoints for backwards compatibility.
+        if p == "custom" and is_gemini_logic and key and "key=" not in url:
             url += ("&" if "?" in url else "?") + f"key={key}"
             
         try:
@@ -229,8 +233,10 @@ class AIHandler:
             req = request.Request(url, method="GET")
             req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
             req.add_header("Accept", "application/json")
-            
-            if not is_gemini_logic and key:
+
+            if p == "gemini" and key:
+                req.add_header("x-goog-api-key", key)
+            elif not is_gemini_logic and key:
                 req.add_header("Authorization", f"Bearer {key}")
                 
             with proxy_opener.open(req, timeout=15) as r:

@@ -22,6 +22,21 @@ from ..core import _apply_gemma_thinking_patch, _extract_text_from_parts
 
 log = logging.getLogger(__name__)
 
+
+def _request_with_api_key(url, key, **kwargs):
+    """Build a Gemini request using auth-key headers for Google's API.
+
+    Custom Gemini-compatible endpoints retain the legacy query parameter
+    because not all third-party servers implement Google's auth header.
+    """
+    headers = dict(kwargs.pop("headers", {}) or {})
+    if nvda_config.conf["VisionAssistant"]["active_provider"] == "gemini":
+        headers["x-goog-api-key"] = key
+    else:
+        connector = "&" if "?" in url else "?"
+        url = f"{url}{connector}key={key}"
+    return request.Request(url, headers=headers, **kwargs)
+
 addonHandler.initTranslation()
 
 
@@ -75,6 +90,7 @@ class GeminiHandler:
 
     @staticmethod
     def _is_key_banned(key, model=None, task=None):
+        from ...utils.secure_credentials import credential_fingerprint
         banned_str = nvda_config.conf["VisionAssistant"].get("banned_gemini_keys", "{}")
         try:
             banned = json.loads(banned_str)
@@ -83,7 +99,7 @@ class GeminiHandler:
 
         if model is None:
             model = GeminiHandler._get_current_model_for_ban(task=task)
-        key_model = f"{key}::{model}"
+        key_model = f"{credential_fingerprint(key)}::{model}"
 
         ban_time = banned.get(key_model)
         if not ban_time: return False
@@ -101,6 +117,7 @@ class GeminiHandler:
 
     @staticmethod
     def _ban_key(key, minutes=None, model=None):
+        from ...utils.secure_credentials import credential_fingerprint
         if isinstance(minutes, bool):
             if minutes:
                 minutes = None
@@ -126,7 +143,7 @@ class GeminiHandler:
 
         if model is None:
             model = GeminiHandler._get_current_model_for_ban()
-        key_model = f"{key}::{model}"
+        key_model = f"{credential_fingerprint(key)}::{model}"
 
         banned[key_model] = reset_ts
 
@@ -137,12 +154,9 @@ class GeminiHandler:
 
     @staticmethod
     def _get_api_keys(task=None):
+        from ..core import AIHandler
         p = nvda_config.conf["VisionAssistant"]["active_provider"]
-        raw = nvda_config.conf["VisionAssistant"]["api_key"]
-        if p == "custom" and nvda_config.conf["VisionAssistant"]["custom_api_type"] == "gemini":
-            raw = nvda_config.conf["VisionAssistant"]["custom_api_key"]
-        clean_raw = raw.replace('\r\n', ',').replace('\n', ',')
-        keys = [k.strip() for k in clean_raw.split(',') if k.strip()]
+        keys = AIHandler.get_keys(p)
         if not keys and p == "custom":
             keys = [""]
 
@@ -216,8 +230,8 @@ class GeminiHandler:
 
             for attempt in range(150):
                 if abort_checker and abort_checker(): return None, None
-                check_url = f"{clean_base}/v1beta/{name}?key={key}"
-                req_check = request.Request(check_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"})
+                check_url = f"{clean_base}/v1beta/{name}"
+                req_check = _request_with_api_key(check_url, key, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"})
                 try:
                     with opener.open(req_check, timeout=30) as r:
                         data = json.loads(r.read().decode())
@@ -424,8 +438,7 @@ class GeminiHandler:
             model = nvda_config.conf["VisionAssistant"]["custom_model_name"].strip()
 
         base_endpoint = AIHandler.get_endpoint(task, model_override=model if model else None)
-        connector = "&" if "?" in base_endpoint else "?"
-        url = f"{base_endpoint}{connector}key={key}"
+        url = base_endpoint
 
         temp = nvda_config.conf["VisionAssistant"].get("ai_temperature", 0.7)
         if isinstance(prompt, list):
@@ -470,8 +483,8 @@ class GeminiHandler:
         if task == "video" and ":generateContent" in base_endpoint:
             stream_endpoint = base_endpoint.replace(":generateContent", ":streamGenerateContent")
             s_connector = "&" if "?" in stream_endpoint else "?"
-            stream_url = f"{stream_endpoint}{s_connector}alt=sse&key={key}"
-            req = request.Request(stream_url, data=json.dumps(payload).encode('utf-8'), headers=headers)
+            stream_url = f"{stream_endpoint}{s_connector}alt=sse"
+            req = _request_with_api_key(stream_url, key, data=json.dumps(payload).encode('utf-8'), headers=headers)
 
             collected = []
             block_reason = None
@@ -508,7 +521,7 @@ class GeminiHandler:
             # Translators: Generic error message when Gemini returns an empty response.
             return "ERROR:" + _("AI failed to provide a response. This might be due to safety filters or a temporary server issue.")
 
-        req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
+        req = _request_with_api_key(url, key, data=json.dumps(payload).encode('utf-8'), headers=headers)
 
         with GeminiHandler._get_opener(url).open(req, timeout=600) as r:
             res = json.loads(r.read().decode())
@@ -610,15 +623,14 @@ class GeminiHandler:
         def _logic(key, img_data):
             from ..core import AIHandler
             url = AIHandler.get_endpoint("ocr")
-            connector = "&" if "?" in url else "?"
-            full_url = f"{url}{connector}key={key}"
+            full_url = url
 
             ocr_image_prompt = get_prompt_text("ocr_image_extract")
             payload = {"contents": [{"parts": [{"inlineData": {"mimeType": "image/jpeg", "data": base64.b64encode(img_data).decode('utf-8')}}, {"text": ocr_image_prompt}]}]}
 
             _apply_gemma_thinking_patch(payload, url)
 
-            req = request.Request(full_url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
+            req = _request_with_api_key(full_url, key, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
             with GeminiHandler._get_opener(full_url).open(req, timeout=120) as r:
                 res = json.loads(r.read().decode())
                 parts = res['candidates'][0]['content'].get('parts', [])
@@ -773,8 +785,7 @@ class GeminiHandler:
         def _logic(key, hist, msg, uri, mime, f_data):
             from ..core import AIHandler
             url = AIHandler.get_endpoint("chat")
-            connector = "&" if "?" in url else "?"
-            full_url = f"{url}{connector}key={key}"
+            full_url = url
 
             contents = list(hist)
             user_parts = []
@@ -788,7 +799,7 @@ class GeminiHandler:
             payload = {"contents": contents}
             _apply_gemma_thinking_patch(payload, url)
 
-            req = request.Request(full_url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
+            req = _request_with_api_key(full_url, key, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
             with GeminiHandler._get_opener().open(req, timeout=120) as r:
                 res = json.loads(r.read().decode())
                 parts = res['candidates'][0]['content'].get('parts', [])

@@ -135,6 +135,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin, VisionMixin, ScreenCaptureM
     def __init__(self):
         super(GlobalPlugin, self).__init__()
 
+        # Migrate legacy plaintext credentials before any provider or logger can
+        # consume them. Encryption errors fail closed and prevent add-on startup.
+        from .utils.secure_credentials import migrate_credentials
+        if migrate_credentials(nvda_config.conf["VisionAssistant"]):
+            nvda_config.conf.save()
+
         plugin_state.plugin_instance = self
         log.info("Vision Assistant loaded")
         
@@ -427,8 +433,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin, VisionMixin, ScreenCaptureM
             time_str = time.strftime("%H:%M", time.localtime(max_time))
             # Translators: Prefix for time when the daily quota resets on the next day
             if ban_date > today: time_str = _("tomorrow at {time}").format(time=time_str)
-            # Translators: Shows detailed information for a banned API key. {key} is the API key, {model} is the model name, {time_str} is the reset time.
-            key_info = _("Key: {key}\nModel: {model}\nResets around: {time_str}\n").format(key=k, model=model_str, time_str=time_str)
+            # Translators: Shows detailed information for a banned API key fingerprint. {key} is a non-secret hash, {model} is the model name, {time_str} is the reset time.
+            key_info = _("Key fingerprint: {key}\nModel: {model}\nResets around: {time_str}\n").format(key=k, model=model_str, time_str=time_str)
             msg_parts.append(key_info)
         model_counts = {}
         for models in unique_keys.values():

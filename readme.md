@@ -12,6 +12,7 @@ Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**. The setting
 
 ### 1.1 Connection Tab
 - **Provider:** Select your preferred AI service. Supported providers include **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, **MiniMax**, and **Custom** (OpenAI-compatible servers like Ollama, LM Studio, Jan.ai, or KoboldCPP).
+- **Gemini API keys:** Vision Assistant supports newer Gemini authorization API keys created in Google AI Studio and compatible Gemini API keys created in Google Cloud Console for the Generative Language API. Whether an older Cloud Console key remains usable depends on Google's current key-type, API, and application-restriction requirements.
 - **API Key:** Enter single or multiple API keys (separated by commas or newlines) for automatic rotation.
 - **Fetch Models:** Press this button after entering your API key to download the latest available model list from the provider.
 - **AI Model:** Select the main model used for general chat and analysis.
@@ -61,11 +62,24 @@ Navigate to the **Advanced** tab to configure global add-on logging:
 - **Log Level:** Select verbosity between **Debug (All Details)**, **Info (General Information)**, **Warning (Warnings Only)**, and **Error (Errors Only)**.
 - **Keep Logs For:** Set automatic retention periods to automatically clean up older log entries (ranging from 1 hour to 90 days).
 - **Log Management Controls:** Use **Open Log File**, **Open Log Folder**, or **Clear Log File** to inspect or clear log data directly without restarting NVDA or interfering with standard NVDA logs.
+- **Log Privacy:** The dedicated log is a readable plaintext diagnostic file, not an encrypted credential store. Vision Assistant removes configured API keys, DPAPI-protected credential values, authorization headers, and credential-bearing URLs before writing log entries. Debug logging may still contain prompts, AI responses, file paths, and error details, so use **Info** or a less verbose level unless troubleshooting, and review the file before sharing it.
 
-### 1.10 Settings Backup & Restore
+### 1.10 API Key Security
+Vision Assistant protects saved API keys and other provider credentials with Windows Data Protection API (DPAPI):
+- Credentials are encrypted for the current Windows user before they are written to NVDA's configuration. The saved values cannot be used as API keys without first being decrypted by Windows.
+- Existing plaintext credentials are automatically migrated to protected values when the add-on starts. If encryption fails, Vision Assistant does not save the credential as plaintext.
+- Protected credentials are decrypted only when Vision Assistant needs to make an authenticated request. Credential values are also redacted from the add-on's diagnostic logging.
+- DPAPI protection is tied to the Windows user account and computer where the credential was saved. Copying NVDA's configuration or a Vision Assistant backup to another computer or Windows account does not make the encrypted API keys portable.
+- After moving to a new computer, using a different Windows account, or setting up a separate portable copy of NVDA that does not already have usable credentials, open Vision Assistant Settings and enter each API key again. A portable copy used by the same Windows account on the same computer may still be able to decrypt copied values, but users should not rely on this when moving or reinstalling.
+
+This protection prevents API keys from being stored as readable text. It does not protect a key from malicious software running as the same Windows user while that user is signed in, so normal Windows account and device security remain important.
+
+### 1.11 Settings Backup & Restore
 The **Advanced** tab also includes a **Backup and Restore** section:
+- **Protect API keys in backup files (recommended):** Enabled by default. Saved API keys remain DPAPI-encrypted and can normally be restored only by the same Windows user on the same computer.
+- **Portable API-key backups:** If you disable protection, newly created backup JSON files contain readable plaintext API keys so they can be transferred to another computer or Windows account. Vision Assistant displays a warning and asks for confirmation before writing such a backup. Store the file securely and delete it when it is no longer needed. This option never permits plaintext keys in `nvda.ini`, `nvda.log`, or `vision_assistant.log`.
 - **Backup:** Saves your configuration into a single JSON file. When you click it, you choose what to include: **Everything** (settings, custom labels, OCR progress, and history) or **Settings Only**.
-- **Restore:** Loads a previously saved backup to restore your configuration and data at any time, on any machine, or after reinstalling NVDA. You will be asked to confirm first, since restoring replaces all of your current settings and data.
+- **Restore:** Loads a previously saved backup and replaces your current settings and selected data after confirmation. Settings such as models, prompts, and preferences are portable. If an encrypted API key cannot be recovered because the backup was created on another computer or under another Windows account, Vision Assistant clears that key, restores the remaining settings, and tells you which provider keys must be entered again.
 
 ## 2. Command Layer & Shortcuts
 
@@ -327,6 +341,15 @@ A heartfelt thank you to our community members who support the continuous develo
 
 
 ---
+## Changes for 2026.09.02
+
+*   **Google AI Studio API Keys**: Added support for the newer Gemini authorization API keys created in Google AI Studio. Compatible Gemini API keys created in Google Cloud Console will continue to be supported.
+*   **Encrypted API Credentials**: API keys are now encrypted with Windows DPAPI before being stored in `nvda.ini`. Existing API keys stored in plaintext by earlier versions are automatically converted to DPAPI-encrypted values when the add-on starts, and plaintext fallback is refused if encryption fails. Plaintext keys are never retained in `nvda.ini`; both plaintext keys and DPAPI-protected values are removed from `nvda.log` and Vision Assistant's dedicated log file.
+*   **Protected or Portable Settings Backups**: API keys remain encrypted in backups by default. Users can optionally create a transferable plaintext-key backup after accepting a security warning. Restored keys are immediately encrypted on the destination system. Disabling backup protection never permits plaintext keys in:
+    *   `nvda.ini`
+    *   `nvda.log`
+    *   Vision Assistant's dedicated log file
+
 ## Changes for 2026.09.01
 
 *   **History (Control + H)**: The Command Layer now includes a **History** dialog (`Control + H`) that lists your past chats and documents with filters for All, Chats, and Documents. Reopen any chat with its full conversation — attached files are re-attached automatically — or reopen a document and keep reading. Press **Delete** on any item to remove it, or clear everything at once.

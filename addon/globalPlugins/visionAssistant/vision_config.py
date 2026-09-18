@@ -329,6 +329,7 @@ confspec = {
     "video_chars_as_subtitle": "boolean(default=True)",
     "video_add_disclaimer": "boolean(default=True)",
     "enable_file_logging": "boolean(default=False)",
+    "protect_api_keys_in_backups": "boolean(default=True)",
     "log_level": "string(default='DEBUG')",
     "log_retention_hours": "integer(default=168, min=1, max=2160)",
     "tts_voice": "string(default='Puck')",

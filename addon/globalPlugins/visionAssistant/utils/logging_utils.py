@@ -6,11 +6,41 @@ import threading
 import globalVars
 import config as nvda_config
 
+from .secure_credentials import CREDENTIAL_FIELDS, credential_redaction_values, is_protected, redact_text
+
 _LOG_DIR = os.path.join(globalVars.appArgs.configPath, "VisionAssistant", "logs")
 _LOG_FILE = os.path.join(_LOG_DIR, "vision_assistant.log")
 
 _file_handler = None
 _logger_initialized = False
+
+
+def _configured_secrets():
+    secrets = []
+    try:
+        configuration = nvda_config.conf["VisionAssistant"]
+        for field in CREDENTIAL_FIELDS:
+            value = str(configuration.get(field, "") or "")
+            if is_protected(value):
+                try:
+                    secrets.extend(credential_redaction_values(value))
+                except Exception:
+                    # Even when DPAPI recovery fails, do not expose its protected
+                    # envelope through a configuration or exception dump.
+                    secrets.append(value)
+    except Exception:
+        pass
+    return secrets
+
+
+class RedactingFormatter(logging.Formatter):
+    def format(self, record):
+        rendered = super().format(record)
+        return redact_text(rendered, _configured_secrets())
+
+    def formatException(self, exc_info):
+        rendered = super().formatException(exc_info)
+        return redact_text(rendered, _configured_secrets())
 
 
 def get_log_file_path():
@@ -104,7 +134,7 @@ def setup_file_logging():
                     self.flush()
 
             _file_handler = ImmediateFlushHandler(_LOG_FILE, mode="a", encoding="utf-8")
-            formatter = logging.Formatter(
+            formatter = RedactingFormatter(
                 fmt="%(asctime)s [%(levelname)s] [%(name)s:%(threadName)s] %(message)s",
                 datefmt="%Y-%m-%d %H:%M:%S"
             )
