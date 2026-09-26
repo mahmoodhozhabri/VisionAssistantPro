@@ -2,13 +2,13 @@
 
 <!-- DOWNLOAD_COUNT_START --> Pobrań łącznie: 61 000+ <!-- DOWNLOAD_COUNT_END -->
 
-**Vision Assistant Pro** to wielomodalny asystent AI dla NVDA. Korzysta z czołowych silników AI, żeby odczytywać ekran, tłumaczyć, zapisywać mowę i analizować dokumenty.
+**Vision Assistant Pro** to wielomodalny asystent AI dla NVDA. Korzysta z silników AI, żeby odczytywać ekran, tłumaczyć, zapisywać mowę i analizować dokumenty.
 
 _Dodatek trafił do społeczności z okazji Międzynarodowego Dnia Osób z Niepełnosprawnościami._
 
 ## 1. Konfiguracja
 
-Przejdź do **menu NVDA > Preferencje > Ustawienia > Vision Assistant Pro**. Okno ustawień jest podzielone na 9 zakładek: **Połączenie**, **Asystent na żywo**, **Zachowanie AI**, **Języki tłumaczenia**, **Czytnik dokumentów**, **Wideo**, **CAPTCHA**, **Polecenia** i **Zaawansowane**.
+Przejdź do **menu NVDA > Preferencje > Ustawienia > Vision Assistant Pro**. Okno ustawień jest podzielone na 9 zakładek: **Połączenie**, **Asystent głosowy**, **Zachowanie AI**, **Języki tłumaczenia**, **Czytnik dokumentów**, **Wideo**, **CAPTCHA**, **Polecenia** i **Zaawansowane**.
 
 ### 1.1 Zakładka Połączenie
 - **Dostawca:** wybór usługi AI. Obsługiwani dostawcy to **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, **MiniMax** oraz **Niestandardowy** (serwery zgodne z OpenAI, na przykład Ollama, LM Studio, Jan.ai albo KoboldCPP).
@@ -18,11 +18,12 @@ Przejdź do **menu NVDA > Preferencje > Ustawienia > Vision Assistant Pro**. Okn
 - **Ustawienia niestandardowego dostawcy:** konfiguracja lokalnych i własnych adresów usług. Są tu dwie rzeczy: przycisk **Konfiguracja lokalnej AI**, który jednym kliknięciem ustawia Ollama, LM Studio, Jan.ai albo KoboldCPP, oraz **Adresy usług** do ręcznego wpisania własnego adresu.
 - **Osobny model dla każdego zadania:** można wskazać osobne modele dla OCR, STT, TTS, Operatora AI, wideo i asystenta głosowego.
 - **Opcje połączenia i wyjścia:** adres proxy, sprawdzanie aktualizacji przy starcie, czyszczenie Markdownu w czacie, kopiowanie odpowiedzi AI do schowka, tryb bezpośredni (nie pokazuje okna czatu) oraz tryb bezpośredni asystenta głosowego.
+- **Zapisuj czaty w historii:** decyduje, czy rozmowy trafiają na listę historii.
 
-### 1.2 Zakładka Asystent na żywo
-- **Asystent na żywo: wyjście bezpośrednie (bez okna):** uruchamia asystenta bez okna rozmowy; można je otworzyć później klawiszem przywołania ostatniego wyniku (`Spacja`).
+### 1.2 Zakładka Asystent głosowy
+- **Asystent głosowy: tryb bezpośredni (bez okna):** uruchamia asystenta bez okna rozmowy; można je otworzyć później klawiszem przywołania ostatniego wyniku (`Spacja`).
 - **Naciśnij i mów:** włącza tryb naciśnij i mów. Gdy jest aktywny, mikrofon wysyła dźwięk tylko wtedy, gdy trzymasz przypisany klawisz.
-- **Klawisz funkcji Naciśnij i mów:** naciśnij klawisze, aby zapisać skrót (na przykład `F12` lub `Ctrl+F12`) — możesz przypisać nawet sam modyfikator, taki jak `lewy Ctrl`. Przytrzymaj klawisz, aby mówić, i zwolnij go po zakończeniu; każde naciśnięcie i zwolnienie potwierdza krótki sygnał.
+- **Klawisz funkcji Naciśnij i mów:** naciśnij klawisze, aby zapisać skrót (na przykład `F12` lub `Ctrl+F12`). Możesz przypisać nawet sam modyfikator, taki jak `lewy Ctrl`. Przytrzymaj klawisz, aby mówić, i zwolnij go po zakończeniu; każde naciśnięcie i zwolnienie potwierdza krótki sygnał.
 
 Uwaga: ta zakładka pojawia się tylko wtedy, gdy aktywnym dostawcą jest **Google Gemini** (lub zgodny z Gemini dostawca niestandardowy).
 
@@ -36,28 +37,30 @@ Uwaga: ta zakładka pojawia się tylko wtedy, gdy aktywnym dostawcą jest **Goog
 - **Zamiana:** automatycznie zamienia język źródłowy z docelowym na podstawie wykrytego wejścia.
 
 ### 1.5 Zakładka Czytnik dokumentów
-- **Silnik OCR:** do wyboru **Chrome (szybki)** dla szybkich wyników albo **AI (zaawansowany)** dla lepszego zachowania układu strony.
+- **Silnik OCR:** do wyboru **Chrome (szybki)** albo **AI (zaawansowany)**, który lepiej zachowuje układ strony.
 - **Porcja OCR:** liczba stron na jedno żądanie (0 wyłącza dzielenie i wysyła wszystko w jednym żądaniu).
 - **Wplataj opisy obrazów w tekst:** przy wyodrębnianiu treści dokumentu opis obrazu ląduje dokładnie tam, gdzie w dokumencie znajduje się obraz, a nie osobno na końcu.
 - **Numery stron przy eksporcie:** włącza numery stron i separatory w dokumentach wielostronicowych.
 - **Głos TTS:** domyślny styl głosu przy generowaniu mowy.
+- **Zapisuj dokumenty w historii:** decyduje, czy otwierane dokumenty trafiają na listę historii. Zapamiętany tekst OCR i dane do wznowienia są zapisywane niezależnie od tej opcji.
 
 ### 1.6 Zakładka Wideo
 - **Rozmiar fragmentu wideo:** długość odcinka w minutach przy generowaniu audiodeskrypcji (0 wyłącza dzielenie i przetwarza cały plik).
 - **Dodaj listę postaci:** wstawia listę postaci jako pierwszy napis.
 - **Dodaj informację o AI:** wstawia informację o udziale AI na początku napisów SRT do wideo.
+- **Słownik postaci i seriale:** można dodawać, edytować, importować i porządkować imiona postaci, ich wygląd i role osobno dla każdego serialu. AI sama dopasowuje rozpoznane postacie do słownika i dopisuje nowe z każdym kolejnym analizowanym odcinkiem. Własne notatki zawsze mają pierwszeństwo przed zmianami wprowadzanymi przez AI, a opisy wyglądu pozostają aktualne między odcinkami.
 
 ### 1.7 Zakładka CAPTCHA
 
-Dodatek radzi sobie z **dwoma rodzajami CAPTCHA**, a wybiera między nimi sam. Obsługuje je jeden skrót — **C** w warstwie poleceń — i nie trzeba z góry wiedzieć, na którą się trafiło.
+Dodatek radzi sobie z **dwoma rodzajami CAPTCHA**, a wybiera między nimi sam. Obsługuje je jeden skrót, **C** w warstwie poleceń, więc nie trzeba z góry wiedzieć, na którą się trafiło.
 
 - **Klasyczna CAPTCHA tekstowa** to zniekształcony ciąg liter i cyfr do przepisania. AI odczytuje znaki z obrazu i wpisuje je za Ciebie.
 - **CAPTCHA obrazkowa** to zagadka, w której trzeba klikać w obrazki o zadanych cechach: „zaznacz wszystkie pola z sygnalizatorem świetlnym”, „wybierz koty bez ogona”.
 
-Po naciśnięciu **C** dodatek sprawdza, z czym ma do czynienia. Jeśli wykryje zagadkę obrazkową, mówi o tym i przechodzi w tryb rozwiązywania — to trwa dłużej niż odczytanie kodu. Jeśli obrazkowa jest wyłączona w ustawieniach, usłyszysz o tym.
+Po naciśnięciu **C** dodatek sprawdza, z czym ma do czynienia. Jeśli wykryje zagadkę obrazkową, mówi o tym i przechodzi w tryb rozwiązywania. To trwa dłużej niż odczytanie kodu. Jeśli obrazkowa jest wyłączona w ustawieniach, usłyszysz o tym.
 
 Ustawienia:
-- **Włącz rozwiązywanie CAPTCHA obrazkowej:** włącza i wyłącza obsługę zagadek obrazkowych (hCaptcha, reCAPTCHA). Wyłączenie nie rusza CAPTCHA tekstowej — ta działa dalej.
+- **Włącz rozwiązywanie CAPTCHA obrazkowej:** włącza i wyłącza obsługę zagadek obrazkowych (hCaptcha, reCAPTCHA). Wyłączenie nie rusza CAPTCHA tekstowej, ta działa dalej.
 - **Metoda dla CAPTCHA tekstowej:** przechwytywanie **obiektu nawigatora** albo **całego ekranu**. Dotyczy wyłącznie kodów do przepisania.
 
 ### 1.8 Zakładka Polecenia
@@ -69,6 +72,7 @@ W zakładce **Zaawansowane** konfiguruje się globalny dziennik dodatku:
 - **Poziom szczegółowości dziennika:** **Diagnostyka (wszystkie szczegóły)**, **Informacje (ogólne)**, **Ostrzeżenia (tylko ostrzeżenia)** albo **Błędy (tylko błędy)**.
 - **Przechowuj dziennik przez:** automatyczne czyszczenie starszych wpisów, od godziny do 90 dni.
 - **Zarządzanie dziennikiem:** **Otwórz plik dziennika**, **Otwórz folder dziennika** i **Wyczyść plik dziennika** pozwalają zajrzeć do danych albo je usunąć bez restartu NVDA i bez mieszania się do standardowego dziennika NVDA.
+- **Jeden folder na dane:** wszystkie pliki danych dodatku (historia, seriale, etykiety, postęp OCR, pamięć podręczna i dzienniki) leżą w jednym folderze `VisionAssistant` w katalogu konfiguracji NVDA. Wszystko jest w jednym miejscu, a ręczna kopia zapasowa nie wymaga szukania.
 
 ### 1.10 Kopia zapasowa i przywracanie ustawień
 Zakładka **Zaawansowane** zawiera także sekcję **Kopia zapasowa i przywracanie**:
@@ -95,10 +99,10 @@ Aby uniknąć konfliktów skrótów klawiszowych, dodatek używa **warstwy polec
 | **D** | Czytnik dokumentów | Zaawansowany czytnik PDF i obrazów z wyborem zakresu stron. |
 | **F** | **Akcja na pliku** | Rozpoznawanie zależne od kontekstu dla zaznaczonego obrazu, pliku PDF albo TIFF. |
 | **M** | Transkrypcja i dubbing mediów | Transkrybuje albo dubbinguje pliki dźwiękowe i wideo (MP3, WAV, MP4 i inne) na język docelowy. |
-| **C** | Rozwiązywanie CAPTCHA | Przechwytuje i rozwiązuje CAPTCHA — **tekstową i obrazkową, jednym skrótem**; rodzaj rozpoznaje sam. |
+| **C** | Rozwiązywanie CAPTCHA | Przechwytuje i rozwiązuje CAPTCHA, **tekstową i obrazkową jednym skrótem**. Rodzaj rozpoznaje sam. |
 | **Shift + C** | Czat | Otwiera okno rozmowy tekstowej z AI. |
 | **S** | Dyktowanie | Zamienia mowę na tekst. Naciśnij, żeby zacząć nagrywanie, i ponownie, żeby zakończyć i wpisać. |
-| **Control + T** | Tłumaczenie mowy | transkrybuje wypowiedź, tłumaczy ją i wpisuje wynik zgodnie z ustawieniami języków. |
+| **Control + T** | Tłumaczenie mowy | Transkrybuje wypowiedź, tłumaczy ją i wpisuje wynik zgodnie z ustawieniami języków. |
 | **Control + L** | **Asystent głosowy** | **Rozmowa w czasie rzeczywistym (tylko Gemini):** rozpoczyna albo kończy rozmowę głosową i ekranową z asystentem. |
 | **I** | Ogłoś stan | Ogłasza bieżący postęp (na przykład „Skanowanie...”, „Bezczynny”). |
 | **L** | **Etykietuj obiekt** | **Etykietowanie semantyczne:** trwale nazywa bieżący element albo ikonę. |
@@ -121,13 +125,15 @@ Gdy okno czatu jest otwarte (czat bezpośredni, czat z dokumentem, dopracowywani
 - **Alt + C:** kopiuje bieżącą wiadomość.
 
 ### 3.2 Historia (Control + H)
-Naciśnij **Control + H** w warstwie poleceń, aby otworzyć okno **Historii** z wcześniejszymi czatami i dokumentami, z możliwością filtrowania według typu (Wszystko / Czaty / Dokumenty). Otwórz czat, aby kontynuować rozmowę — wraz z załączonymi plikami, które dołączą się automatycznie — albo otwórz dokument i czytaj dalej. Naciśnij **Delete** na wybranej pozycji, aby ją usunąć, albo **Wyczyść wszystko**, aby opróżnić listę.
+Naciśnij **Control + H** w warstwie poleceń, aby otworzyć okno **Historii** z wcześniejszymi czatami i dokumentami, z możliwością filtrowania według typu (Wszystko / Czaty / Dokumenty). Otwórz czat, aby kontynuować rozmowę razem z załączonymi plikami (dołączą się automatycznie), albo otwórz dokument i czytaj dalej. Naciśnij **Delete** na wybranej pozycji, aby ją usunąć, albo **Wyczyść wszystko**, aby opróżnić listę. Przy dokumentach Delete pyta, czy usunąć tylko wpis w historii, czy także zapamiętany tekst OCR tego dokumentu, żeby przy następnym otwarciu dokument zeskanował się od nowa. Pole **Nie pytaj ponownie** zapamiętuje wybór.
 
-## 4. Operator AI — autonomiczne sterowanie komputerem
+Można też zdecydować, co lista zapamiętuje. **Zapisuj czaty w historii** (zakładka Połączenie) i **Zapisuj dokumenty w historii** (zakładka Czytnik dokumentów) są domyślnie włączone i obie można przełączać w szybkich ustawieniach. Opcja dokumentów dotyczy wyłącznie wpisu w historii: zapamiętany tekst OCR i dane do wznowienia są zawsze zachowywane.
+
+## 4. Operator AI: autonomiczne sterowanie komputerem
 
 **Operator AI** zamienia Vision Assistant Pro z czytnika w asystenta, który działa na komputerze w Twoim imieniu. Można poprosić go o opis ekranu, o odpowiedź na pytanie o to, co widzi, albo oddać mu sterowanie: klikanie przycisków, przeciąganie elementów, wpisywanie tekstu i poruszanie się po aplikacjach zwykłym językiem.
 
-Największa zaleta? Działa w oprogramowaniu całkowicie niedostępnym. Jeśli firmowa aplikacja, pulpit zdalny albo strona nie dają się obsłużyć, bo czytnik ekranu przy nich milczy, operatorowi to nie przeszkadza. Ponieważ „widzi” ekran wizualnie, potrafi znaleźć, odczytać i obsłużyć elementy pozbawione jakichkolwiek etykiet dostępności.
+Największa zaleta? Działa w oprogramowaniu całkowicie niedostępnym. Jeśli firmowa aplikacja, pulpit zdalny albo strona nie dają się obsłużyć, bo czytnik ekranu przy nich milczy, operatorowi to nie przeszkadza. Ponieważ „widzi” obraz ekranu, potrafi znaleźć, odczytać i obsłużyć elementy pozbawione jakichkolwiek etykiet dostępności.
 
 ### Jak to działa
 1. Naciśnij **NVDA + Shift + V**, potem **Shift + A** (albo użyj skrótu bezpośredniego), żeby otworzyć okno Operatora AI.
@@ -136,7 +142,7 @@ Największa zaleta? Działa w oprogramowaniu całkowicie niedostępnym. Jeśli f
 4. Ponowne **Shift + A** w dowolnym momencie natychmiast przerywa trwającą operację.
 
 ### Obsługiwane działania
-Operator rozumie szeroki zakres poleceń:
+Operator rozumie między innymi takie polecenia:
 - **Opis i odpowiedź**: „Opisz układ ekranu” albo „Co mówi komunikat błędu?”
 - **Kliknięcie**: „Kliknij przycisk Zapisz”
 - **Kliknięcie prawym przyciskiem**: „Kliknij plik prawym przyciskiem”
@@ -154,14 +160,14 @@ Operator rozumie szeroki zakres poleceń:
 
 ## 5. Analiza wideo i audiodeskrypcja
 
-> **Uwaga:** analiza wideo i audiodeskrypcja działają wyłącznie na dostawcy **Google Gemini**. Upewnij się, że w ustawieniach dodatku aktywnym dostawcą jest Google Gemini.
+> **Uwaga:** analiza wideo i audiodeskrypcja działają wyłącznie z dostawcą **Google Gemini**. Upewnij się, że w ustawieniach dodatku aktywnym dostawcą jest Google Gemini.
 
-Vision Assistant Pro przetwarza wideo z myślą o osobach niewidomych. Analizuje zarówno filmy online, jak i lokalne nagrania ekranu, dając szczegółowe opisy wizualne oraz gotowe skrypty audiodeskrypcji w formacie SRT.
+Vision Assistant Pro przetwarza wideo z myślą o osobach niewidomych. Analizuje zarówno filmy online, jak i lokalne nagrania ekranu. Daje szczegółowe opisy wizualne i gotowe skrypty audiodeskrypcji w formacie SRT.
 
 ### 5.1 Nagrywanie ekranu (Control + V)
 Jeśli trafisz na bezgłośne wideo, animację albo poradnik na ekranie, możesz nagrać go bezpośrednio:
 1. Naciśnij **NVDA + Shift + V**, żeby wejść w warstwę poleceń, potem **Control + V**.
-2. Dodatek zacznie po cichu nagrywać ekran w tle.
+2. Dodatek zacznie nagrywać ekran w tle.
 3. Ponowne **Control + V** kończy nagrywanie.
 4. AI przeanalizuje nagrany fragment i szczegółowo opisze scenę, postacie i przebieg zdarzeń.
 
@@ -169,18 +175,20 @@ Jeśli trafisz na bezgłośne wideo, animację albo poradnik na ekranie, możesz
 Analizować można zarówno lokalne pliki, jak i filmy online. Wystarczy zaznaczyć plik wideo w Eksploratorze Windows albo skopiować link do schowka. Można też nacisnąć **Shift + V** w dowolnym miejscu (na przykład w odtwarzaczu), żeby otworzyć okno, w którym wskazuje się plik albo wkleja adres ręcznie.
 - **Obsługiwane serwisy:** YouTube, Instagram, TikTok i Twitter (X).
 - Dodatek sam rozpozna plik lokalny albo adres, przetworzy wideo i poda pełny opis wizualny oraz podsumowanie dźwięku.
+- **48-godzinna pamięć podręczna plików wideo:** wideo wysłane do Gemini jest pamiętane przez 48 godzin. Można ponownie wygenerować plik SRT albo MP3 dla tego samego wideo bez ponownego wysyłania, nawet po restarcie NVDA. Pamięć podręczna jest powiązana z kluczem API i unieważnia się sama, gdy klucz się zmieni.
 
 ### 5.3 Generowanie audiodeskrypcji (SRT)
 Dodatek tworzy skrypty audiodeskrypcji w standardowym formacie SubRip (SRT).
 - **Dopasowanie do pauz:** AI słucha ścieżki dźwiękowej i zaczepia opisy o naturalne pauzy i ciszę, żeby jak najmniej nachodziły na dialog.
-- **Śledzenie postaci:** silnik najpierw wyodrębnia poszczególne postacie po niezmiennych cechach twarzy. Buduje globalny słownik, dzięki czemu rozpoznaje i nazywa te same osoby w różnych scenach bez pomyłek.
-- **Dosłowny OCR tekstu:** każdy tekst pojawiający się na ekranie, taki jak np. napisy końcowe jest cytowany dosłownie.
+- **Śledzenie postaci:** silnik najpierw wyodrębnia poszczególne postacie po niezmiennych cechach twarzy. Buduje globalny słownik, dzięki czemu rozpoznaje i nazywa te same osoby w różnych scenach bez pomyłek. Silnik zapamiętuje też **pierwsze pojawienie się** każdej postaci: opisuje jej wygląd tylko raz, w chwili gdy pojawia się po raz pierwszy, a w kolejnych scenach używa już samego imienia. Narracja się przez to nie powtarza.
+- **Dosłowny OCR tekstu:** tekst widoczny na ekranie, na przykład szyldy, ekrany telefonów czy napisy końcowe, jest cytowany dosłownie.
+- **Wygodniejszy zapis:** przy zapisie plików SRT lub MP3 okno zapisu otwiera się domyślnie w folderze wideo źródłowego, niezależnie od tego, czy wideo otwarto przez okno wyboru pliku, czy skrótem Shift+V z Eksploratora.
 - **Jak z tego skorzystać:** żeby odsłuchać wygenerowane napisy, umieść plik `.srt` w tym samym folderze co wideo i nadaj mu dokładnie tę samą nazwę. Potem ustaw w odtwarzaczu (na przykład VLC albo PotPlayer) przekazywanie tekstu napisów wprost do czytnika ekranu albo silnika TTS podczas odtwarzania.
 
 ### 5.4 Zsynchronizowana narracja dźwiękowa (eksport MP3)
-Dodatek nie kończy na plikach SRT — jest pełnym narzędziem produkcyjnym audiodeskrypcji: syntezuje opisy na mowę i miksuje je z wideo. Jako silnik głosu można teraz wybrać **Gemini Live TTS**, który przez Gemini Live API tworzy bardzo naturalną narrację bez ograniczeń długości. Przy generowaniu MP3 dla plików lokalnych dostępnych jest kilka trybów miksowania:
+Dodatek nie kończy na plikach SRT. Zamienia opisy na mowę i miksuje je z wideo. Jako silnik głosu można wybrać **Gemini Live TTS**, który przez Gemini Live API tworzy bardzo naturalną narrację bez ograniczeń długości. Przy generowaniu MP3 dla plików lokalnych dostępnych jest kilka trybów miksowania:
 - **Standardowa audiodeskrypcja (miks głosu):** narracja nakłada się bezpośrednio na dźwięk wideo. Pojawi się pytanie, czy zastosować **przyciszanie tła** podczas opisów, żeby narracja była wyraźna.
-- **Rozszerzona audiodeskrypcja (pauza dźwięku):** silnik zatrzymuje oryginalny dźwięk na czas opisu, dzięki czemu nie umknie ani słowo dialogu, ani narracji.
+- **Rozszerzona audiodeskrypcja (pauza dźwięku):** silnik zatrzymuje oryginalny dźwięk na czas opisu, dzięki czemu nie umknie ani słowo dialogu, ani narracji. Do wykrywania ciszy służy teraz sieć neuronowa **Silero VAD** (pobierana automatycznie przy pierwszym użyciu, tak samo jak ffmpeg i eSpeak), która precyzyjnie dobiera przerwy i odróżnia naturalne pauzy w dialogu od muzyki i szumu tła.
 - **Filmy z YouTube:** dla źródeł z YouTube (które nie są pobierane lokalnie) eksport MP3 zawiera wyłącznie zsynchronizowaną ścieżkę głosu AI, bez dźwięku tła.
 
 ## 6. Transkrypcja i dubbing mediów (M)
@@ -191,17 +199,17 @@ Moduł transkrypcji został napisany od nowa i obsługuje zarówno pliki dźwię
 
 ## 7. Zaawansowany czytnik dokumentów i obrazów
 
-**Czytnik dokumentów** zamienia dokumenty w czysty, czytelny tekst — dzięki czemu możesz czytać, tłumaczyć i słuchać wszystkiego, od zeskanowanej książki po stos zdjęć. Obsługuje wielostronicowe pliki PDF, złożone obrazy, format HEIC z iPhone'a, a nawet zwykłe pliki tekstowe (`.txt`) oraz HTML (`.html`, `.htm`), które otwierają się natychmiast, bez OCR i bez przetwarzania przez AI. Możesz wybrać kilka plików naraz — zostaną scalone w jeden ciągły dokument w kolejności stron. Dostępne są trzy silniki OCR: **Chrome (szybki)**, **AI (zaawansowany)** dla lepszego zachowania układu oraz **Wyodrębnij tekst (offline)** dla plików PDF z warstwą tekstową; wybiera się je w Ustawieniach → Czytnik dokumentów.
+**Czytnik dokumentów** zamienia dokumenty w czysty, czytelny tekst. Tak przeczytasz, przetłumaczysz i odsłuchasz wszystko, od zeskanowanej książki po stos zdjęć. Obsługuje wielostronicowe pliki PDF, złożone obrazy, format HEIC z iPhone'a, a nawet zwykłe pliki tekstowe (`.txt`) oraz HTML (`.html`, `.htm`), które otwierają się natychmiast, bez OCR i bez przetwarzania przez AI. Możesz wybrać kilka plików naraz. Zostaną scalone w jeden ciągły dokument w kolejności stron. Dostępne są trzy silniki OCR: **Chrome (szybki)**, **AI (zaawansowany)** dla lepszego zachowania układu oraz **Wyodrębnij tekst (offline)** dla plików PDF z warstwą tekstową; wybiera się je w Ustawieniach → Czytnik dokumentów.
 
 ### Jak to działa
-1. Naciśnij **NVDA + Shift + V**, a następnie **D**, aby otworzyć czytnik dokumentów — albo zaznacz najpierw plik w Eksploratorze plików i naciśnij **D** lub **F**, aby całkiem pominąć okno wyboru pliku.
+1. Naciśnij **NVDA + Shift + V**, a następnie **D**, aby otworzyć czytnik dokumentów. Możesz też najpierw zaznaczyć plik w Eksploratorze plików i nacisnąć **D** lub **F**, żeby pominąć okno wyboru pliku.
 2. Wybierz jeden lub więcej plików PDF albo obrazów. Dodatek przeskanuje je i poda łączną liczbę stron.
 3. W oknie **Opcje** wybierz zakres stron (Od/Do). Możesz też zaznaczyć **Tłumacz wynik** i wskazać język docelowy albo włączyć **Opisuj obrazy w trakcie OCR**.
-4. Wyodrębnianie tekstu rusza w tle, partiami. Okno możesz zamknąć w dowolnej chwili i wrócić później — nic nie ginie.
+4. Wyodrębnianie tekstu rusza w tle, partiami. Okno możesz zamknąć w dowolnej chwili i wrócić później. Nic nie ginie.
 5. Gdy strony są gotowe, czytaj je w podglądzie: przechodź między stronami, skocz do dowolnej strony, zadawaj pytania AI, zapisz tekst albo wygeneruj narrację dźwiękową.
 
 ### 7.1 Przetwarzanie wsadowe i wznawianie
-Nie trzeba czytać wielkiego dokumentu za jednym razem. Podaj zakres stron (na przykład `1-20`), a AI przetworzy je w tle. Jeśli NVDA ulegnie awarii albo przerwiesz skanowanie, dodatek zapamięta postęp i zaproponuje **wznowienie** dokładnie w miejscu przerwania.
+Nie trzeba czytać wielkiego dokumentu za jednym razem. Podaj zakres stron (na przykład `1-20`), a AI przetworzy je w tle. Jeśli NVDA przestanie działać albo przerwiesz skanowanie, dodatek zapamięta postęp i zaproponuje **wznowienie** dokładnie w miejscu przerwania.
 
 ### 7.2 Akcja na pliku
 Nie zawsze trzeba najpierw otwierać dokument. W Eksploratorze plików Windows wystarczy zaznaczyć plik PDF albo obraz i w warstwie poleceń nacisnąć **D** (czytnik dokumentów) albo **F** (akcja na pliku). Dodatek pominie okno wyboru pliku i od razu zacznie przetwarzanie zaznaczonego dokumentu.
@@ -224,7 +232,7 @@ Gdy okno czytnika jest otwarte, działają następujące skróty:
 - **Poprzednia / Następna:** przechodzenie między stronami (to samo co skróty Ctrl+PageUp i Ctrl+PageDown).
 
 ### 7.4 Ostatnie dokumenty (D)
-Naciśnięcie **D** w warstwie poleceń pokazuje najpierw ostatnio czytane dokumenty. Wybierz jeden, aby kontynuować od strony, na której skończyłeś — nawet jeśli OCR już się zakończył — albo naciśnij **Otwórz plik...** (`Ctrl + O`), aby wybrać plik jak zwykle.
+Naciśnięcie **D** w warstwie poleceń pokazuje najpierw ostatnio czytane dokumenty. Wybierz jeden, aby kontynuować od strony, na której przerwano czytanie (nawet jeśli OCR już się zakończył), albo naciśnij **Otwórz plik...** (`Ctrl + O`), aby wybrać plik jak zwykle.
 
 ## 8. Etykietowanie semantyczne i Eksplorator interfejsu
 
@@ -232,7 +240,7 @@ Aplikacja, w której wszędzie słychać „nieoznaczony przycisk”? Silnik ety
 
 ### 8.1 Trwałe etykietowanie obiektu (L)
 Ustaw czytnik na nieoznaczonej grafice albo przycisku i naciśnij **L** w warstwie poleceń. AI obejrzy przycisk, rozpozna jego funkcję i nada mu trwałą etykietę.
-*W odróżnieniu od starszych narzędzi do etykietowania, ten dodatek korzysta z hybrydowego systemu „sygnatury obiektu” (AutomationId/ControlID). Własne etykiety przetrwają zmianę rozmiaru okna, przełączenie monitora i aktualizację aplikacji.*
+*W odróżnieniu od starszych narzędzi do etykietowania ten dodatek korzysta z hybrydowego systemu „sygnatury obiektu” (AutomationId/ControlID). Własne etykiety przetrwają zmianę rozmiaru okna, przełączenie monitora i aktualizację aplikacji.*
 
 ### 8.2 Skanowanie całej aplikacji (Shift + L)
 Naciśnij **Shift + L**, żeby przeskanować całe aktywne okno naraz. AI znajdzie wszystkie nieoznaczone elementy i nazwie je za jednym razem. Etykiety można potem przeglądać, zmieniać i usuwać zbiorczo we wbudowanym menedżerze etykiet.
@@ -247,7 +255,8 @@ Asystent głosowy zamienia Vision Assistant Pro w interaktywnego pomocnika dzia�
 
 - **Uruchomienie:** naciśnij **Control + L** w warstwie poleceń, żeby otworzyć okno asystenta głosowego.
 - **Rozmowa w czasie rzeczywistym:** mów swobodnie do mikrofonu. AI jednocześnie słucha i patrzy na aktywny ekran. Można pytać na przykład „Na co teraz patrzę?” albo „Przeczytaj mi trzeci akapit”.
-- **Naciśnij i mów:** włącz opcję **Naciśnij i mów** w zakładce ustawień asystenta na żywo (albo przełącz ją bezpośrednio w oknie asystenta), a potem przytrzymuj przypisany klawisz, żeby mówić, i zwalniaj go po zakończeniu. Mikrofon pozostaje wyciszony, dopóki nie naciśniesz klawisza — idealne w głośnym otoczeniu.
+- **Naciśnij i mów:** włącz opcję **Naciśnij i mów** w zakładce ustawień asystenta głosowego (albo przełącz ją bezpośrednio w oknie asystenta), a potem przytrzymuj przypisany klawisz, żeby mówić, i zwalniaj go po zakończeniu. Mikrofon pozostaje wyciszony, dopóki nie naciśniesz klawisza. Przydaje się w głośnym otoczeniu.
+- **Obraz z kamery:** zaznacz **Użyj kamery** w oknie asystenta głosowego, żeby wysyłać do AI obraz z kamery zamiast ekranu, i pytaj o przedmioty, wydrukowane dokumenty albo otoczenie. Jeśli ffmpeg nie jest jeszcze zainstalowany, zaznaczenie pola pobierze go jednorazowo, za zgodą. Opcja jest niedostępna, gdy nie wykryto kamery albo ustawienia prywatności Windows blokują do niej dostęp.
 - **Dostosowanie:** w oknie można zmienić styl głosu AI (na przykład profesjonalny, przyjazny, energiczny) oraz **głębię myślenia**, czyli to, jak dokładnie AI rozważa odpowiedź.
 
 ## 10. Polecenia niestandardowe i zmienne
@@ -257,7 +266,7 @@ Poleceniami zarządza się w **Ustawienia > Polecenia > Zarządzaj poleceniami..
 ### Skróty poleceń niestandardowych
 Nadaj dowolnemu poleceniu niestandardowemu własny skrót klawiszowy bezpośrednio w menedżerze poleceń i uruchamiaj je natychmiast z bieżącym zaznaczeniem lub kontekstem:
 - **Pojedynczy klawisz** (na przykład `1`, `p` albo `F3`): działa w warstwie poleceń, a także globalnie jako `NVDA + Shift + klawisz`.
-- **Kombinacja klawiszy** (na przykład `Control + Shift + 1`, `Alt + P` albo `Insert + 1`): działa globalnie samodzielnie.
+- **Kombinacja klawiszy** (na przykład `Control + Shift + 1`, `Alt + P` albo `Insert + 1`): działa globalnie, bez warstwy poleceń.
 
 ### Obsługiwane zmienne
 - `[selection]`: zaznaczony tekst.
@@ -292,7 +301,7 @@ Vision Assistant Pro ma dużo narzędzi. Poniżej typowe sytuacje, które pomog�
   *Rozwiązanie:* naciśnij **L**, żeby trwale nazwać konkretny przycisk przy pomocy AI. Albo **Shift + L**, żeby przeskanować i nazwać całe okno naraz. Jeśli chcesz tylko szybko coś kliknąć, naciśnij **E** (Eksplorator interfejsu) po listę wszystkich klikalnych elementów.
 
 - **Sytuacja: musisz przejść przez niedostępną CAPTCHA.**
-  *Rozwiązanie:* naciśnij **C** (rozwiązywanie CAPTCHA) — **ten sam skrót niezależnie od rodzaju zagadki**. Przy kodzie do przepisania AI odczyta znaki i wpisze je w pole. Przy zagadce obrazkowej w rodzaju „zaznacz wszystkie sygnalizatory” rozpozna obrazki i sam poklika, co trzeba; usłyszysz wtedy, że wszedł w tryb rozwiązywania, bo to trwa dłużej.
+  *Rozwiązanie:* naciśnij **C** (rozwiązywanie CAPTCHA). To **ten sam skrót niezależnie od rodzaju zagadki**. Przy kodzie do przepisania AI odczyta znaki i wpisze je w pole. Przy zagadce obrazkowej w rodzaju „zaznacz wszystkie sygnalizatory” rozpozna obrazki i sam poklika, co trzeba; usłyszysz wtedy, że wszedł w tryb rozwiązywania, bo to trwa dłużej.
 
 - **Sytuacja: chcesz przeczytać długi, pięćdziesięciostronicowy dokument PDF.**
   *Rozwiązanie:* naciśnij **D** (czytnik dokumentów), ustaw dostawcę na Google Gemini i podaj zakres stron `1-50`. Dodatek dokładnie wyodrębni tekst w tle.
@@ -313,7 +322,7 @@ Bądź na bieżąco z nowościami, funkcjami i wydaniami:
 - **GitHub Issues:** zgłoszenia błędów i propozycje funkcji.
 
 ### Zgłaszanie błędów i dzienniki
-Otwierając zgłoszenie na GitHubie albo prosząc o pomoc, podaj aktywnego dostawcę AI, model i wersję NVDA. Jeśli masz problemy z połączeniem albo nieoczekiwane awarie, włącz osobny plik dziennika w **Ustawienia > Zaawansowane**, powtórz sytuację i dołącz plik `vision_assistant.log` — to znacznie przyspieszy rozwiązanie problemu.
+Otwierając zgłoszenie na GitHubie albo prosząc o pomoc, podaj aktywnego dostawcę AI, model i wersję NVDA. Jeśli masz problemy z połączeniem albo nieoczekiwane awarie, włącz osobny plik dziennika w **Ustawienia > Zaawansowane**, powtórz sytuację i dołącz plik `vision_assistant.log`. To przyspieszy rozwiązanie problemu.
 
 ## 13. Patroni projektu
 
@@ -322,14 +331,28 @@ Serdecznie dziękujemy osobom ze społeczności, które wspierają rozwój i utr
 *   **@Alyabani94**
 *   **Ali Alamri**
 *   **Ilya**
-*   **Anonimowy darczyńca** (`UQDd...CnMY`)
 *   **leonardo0216**
 *   **Sergei Fleytin**
-*   **Suman Gayen**
+*   **Arne Siebert**
+*   **Schalkefan**
+*   **[avalai.org](https://avalai.org)**
 
 *Jeśli chcesz wesprzeć projekt finansowo i zobaczyć tutaj swoje imię, opcję **Wsparcie** znajdziesz w menu Narzędzia NVDA (podmenu Vision Assistant) albo podczas konfiguracji po instalacji.*
 
 ---
+## Zmiany w wersji 2026.10.01
+
+*   **Słownik postaci i seriale**: okno analizy wideo ma teraz **słownik postaci**. Można dodawać, edytować, importować i porządkować imiona postaci, ich wygląd i role osobno dla każdego serialu. AI sama dopasowuje rozpoznane postacie do słownika i dopisuje nowe z każdym kolejnym analizowanym odcinkiem. Własne notatki zawsze mają pierwszeństwo przed zmianami wprowadzanymi przez AI, a opisy wyglądu pozostają aktualne między odcinkami. Słownik jest zapisywany dla serialu i używany przy każdym wideo z tego serialu. Na liście postaci **F2** edytuje zaznaczoną postać, a **Delete** ją usuwa.
+*   **48-godzinna pamięć podręczna plików wideo**: wideo wysłane do Gemini jest teraz pamiętane przez 48 godzin. Można ponownie wygenerować plik SRT albo MP3 dla tego samego wideo bez ponownego wysyłania, nawet po restarcie NVDA. Pamięć podręczna jest powiązana z kluczem API i unieważnia się sama, gdy klucz się zmieni.
+*   **Wykrywanie ciszy przez AI (Silero VAD)**: rozszerzona AD korzysta teraz z sieci neuronowej Silero VAD, która dokładnie wykrywa ciszę i odróżnia naturalne pauzy w dialogu od muzyki i szumu tła. Model pobiera się automatycznie przy pierwszym użyciu (za zgodą), tak samo jak ffmpeg i eSpeak.
+*   **Opis postaci tylko przy pierwszym pojawieniu się**: AI opisuje wygląd każdej postaci tylko raz, gdy pojawia się w wideo po raz pierwszy. Później podaje już samo imię, więc opisy nie powtarzają się w kolejnych fragmentach, a narracja zostaje świeża i naturalna.
+*   **Jeden folder na dane**: wszystkie pliki danych dodatku (historia, seriale, etykiety, postęp OCR, pamięć podręczna i dzienniki) zostały przeniesione do jednego folderu `VisionAssistant` w katalogu konfiguracji NVDA. Wszystko jest w jednym miejscu, a ręczna kopia zapasowa nie wymaga szukania.
+*   **Wygodniejszy zapis wideo**: przy zapisie plików SRT lub MP3 okno zapisu otwiera się domyślnie w folderze wideo źródłowego, niezależnie od tego, czy wideo otwarto przez okno wyboru pliku, czy skrótem Shift+V z Eksploratora.
+*   **Usuwanie dokumentów z zapamiętanym tekstem lub bez niego**: okno historii (`Control + H`) daje teraz dwa sposoby usunięcia dokumentu. Po naciśnięciu Delete można wybrać **Usuń tylko z historii** albo **Usuń z historii razem z zapamiętanym tekstem**. Druga opcja kasuje zapamiętany tekst OCR tego dokumentu, więc przy następnym otwarciu zostanie on zeskanowany od nowa. To przydaje się po nieudanym skanie. Pole **Nie pytaj ponownie** zapamiętuje wybór na przyszłość. Dane do wznowienia przerwanych operacji nigdy nie są ruszane.
+*   **Pamięć podręczna OCR w czytniku dokumentów osobna dla każdego silnika i uzupełniana**: zapamiętany tekst OCR jest teraz przechowywany osobno dla każdego silnika OCR, więc po zmianie silnika dokument zawsze skanuje się nowym silnikiem, zamiast odtwarzać stary wynik. Przy ponownym otwarciu dokumentu znów pojawia się okno zakresu stron (z ostatnim wyborem). Zeskanowane już strony są używane od razu, a skanowane są tylko brakujące. Pamięć podręczna uzupełnia się strona po stronie zamiast się nadpisywać, więc każdy przeczytany zakres zostaje na później.
+*   **Obraz z kamery w asystencie głosowym**: okno asystenta głosowego ma teraz pole **Użyj kamery**, które wysyła do AI obraz z kamery zamiast ekranu. Przydaje się przy pytaniach o przedmioty, dokumenty albo otoczenie. Jeśli ffmpeg nie jest jeszcze zainstalowany, zaznaczenie pola go pobiera (jednorazowo, za zgodą). Opcja jest niedostępna, gdy nie wykryto kamery albo ustawienia prywatności Windows blokują do niej dostęp. Wtedy obok jest przycisk otwierający ustawienia prywatności kamery. Jeśli kamera jest włączona, ale nie daje obrazu, problem trafia do dziennika NVDA, zamiast po cichu przełączać się z powrotem na ekran.
+*   **Poprawki błędów i stabilności**: naprawiono zawieszanie się generowania MP3 po zamknięciu okna postępu w trakcie pracy, usunięto wyścig przy zapisie słownika postaci, dodano właściwe zgłaszanie błędów kodowania MP3 i poprawiono pętlę oczekiwania czytnika dokumentów, żeby respektowała anulowanie.
+
 ## Zmiany w wersji 2026.09.01
 
 *   **Historia (Control + H)**: warstwa poleceń zawiera teraz okno **Historii** (`Control + H`), które wypisuje wcześniejsze czaty i dokumenty, z filtrami Wszystko, Czaty i Dokumenty. Możesz otworzyć ponownie dowolny czat wraz z całą rozmową — załączone pliki dołączają się automatycznie — albo wrócić do dokumentu i czytać dalej. Naciśnij **Delete** na wybranej pozycji, aby ją usunąć, lub wyczyść wszystko naraz.
