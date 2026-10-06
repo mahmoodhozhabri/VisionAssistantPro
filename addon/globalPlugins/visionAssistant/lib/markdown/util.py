@@ -56,7 +56,7 @@ BLOCK_LEVEL_ELEMENTS: list[str] = [
     'canvas', 'colgroup', 'dd', 'body', 'dt', 'group', 'html', 'iframe', 'li', 'legend',
     'math', 'map', 'noscript', 'output', 'object', 'option', 'progress', 'script',
     'style', 'summary', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'tr', 'video',
-    'center'
+    'center',
 ]
 """
 List of HTML tags which get treated as block-level elements. Same as the `block_level_elements`
@@ -93,7 +93,7 @@ RTL_BIDI_RANGES = (
     # Hebrew (0590-05FF), Arabic (0600-06FF),
     # Syriac (0700-074F), Arabic supplement (0750-077F),
     # Thaana (0780-07BF), Nko (07C0-07FF).
-    ('\u2D30', '\u2D7F')  # Tifinagh
+    ('\u2D30', '\u2D7F'),  # Tifinagh
 )
 
 
@@ -130,7 +130,7 @@ def deprecated(message: str, stacklevel: int = 2):
             warnings.warn(
                 f"'{func.__name__}' is deprecated. {message}",
                 category=DeprecationWarning,
-                stacklevel=stacklevel
+                stacklevel=stacklevel,
             )
             return func(*args, **kwargs)
         return deprecated_func
@@ -255,9 +255,11 @@ class HtmlStash:
 
     def store_tag(self, tag: str, attrs: dict[str, str], left_index: int, right_index: int) -> str:
         """Store tag data and return a placeholder."""
-        self.tag_data.append({'tag': tag, 'attrs': attrs,
-                              'left_index': left_index,
-                              'right_index': right_index})
+        self.tag_data.append({
+            'tag': tag, 'attrs': attrs,
+            'left_index': left_index,
+            'right_index': right_index,
+        })
         placeholder = TAG_PLACEHOLDER % str(self.tag_counter)
         self.tag_counter += 1  # equal to the tag's index in `self.tag_data`
         return placeholder
@@ -359,7 +361,7 @@ class Registry(Generic[_T]):
         if name in self:
             self._sort()
             return self._priority.index(
-                [x for x in self._priority if x.name == name][0]
+                [x for x in self._priority if x.name == name][0],
             )
         raise ValueError('No item named "{}" exists.'.format(name))
 

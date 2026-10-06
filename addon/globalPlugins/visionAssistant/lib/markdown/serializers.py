@@ -58,8 +58,8 @@ RE_AMP = re.compile(r'&(?!(?:\#[0-9]+|\#x[0-9a-f]+|[0-9a-z]+);)', re.I)
 
 def _raise_serialization_error(text: str) -> NoReturn:  # pragma: no cover
     raise TypeError(
-        "cannot serialize {!r} (type {})".format(text, type(text).__name__)
-        )
+        "cannot serialize {!r} (type {})".format(text, type(text).__name__),
+    )
 
 
 def _escape_cdata(text) -> str:

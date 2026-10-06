@@ -344,8 +344,8 @@ def get_textpage_ocr(
                     compress=False,
                     language=language,
                     tessdata=tessdata,
-                    ),
-                )
+                ),
+        )
         ocr_page = ocr_pdf.load_page(0)
         unzoom = page.rect.width / ocr_page.rect.width
         ctm = pymupdf.Matrix(unzoom, unzoom) * page.derotation_matrix
@@ -378,7 +378,7 @@ def get_textpage_ocr(
             imgdoc = pymupdf.Document(
                     "pdf",
                     pix.pdfocr_tobytes(language=language, tessdata=tessdata),
-                    )  # pdf with OCRed page
+            )  # pdf with OCRed page
             imgpage = imgdoc.load_page(0)  # read image as a page
             pix = None
             # compute matrix to transform coordinates back to that of 'page'
@@ -457,7 +457,7 @@ def get_text(
         )
     if option == "blocks":
         return get_text_blocks(
-            page, clip=clip, flags=flags, textpage=textpage, sort=sort
+            page, clip=clip, flags=flags, textpage=textpage, sort=sort,
         )
 
     if option == "text" and sort:
@@ -597,7 +597,7 @@ def getDestStr(xref: int, ddict: dict) -> str:
         return dest
 
     if ddict["kind"] == pymupdf.LINK_URI:
-        dest = str_uri(pymupdf.get_pdf_str(ddict["uri"]),)
+        dest = str_uri(pymupdf.get_pdf_str(ddict["uri"]))
         return dest
 
     if ddict["kind"] == pymupdf.LINK_LAUNCH:
@@ -688,7 +688,7 @@ def getLinkText(page: pymupdf.Page, lnk: dict) -> str:
 
     # add a /NM PDF key to the object definition
     link_names = dict(  # existing ids and their xref
-        [(x[0], x[2]) for x in page.annot_xrefs() if x[1] == pymupdf.PDF_ANNOT_LINK]   # pylint: disable=no-member
+        [(x[0], x[2]) for x in page.annot_xrefs() if x[1] == pymupdf.PDF_ANNOT_LINK],   # pylint: disable=no-member
     )
 
     old_name = lnk.get("id", "")  # id value in the argument
@@ -1088,7 +1088,7 @@ def recover_line_quad(line: dict, spans: list = None) -> pymupdf.Quad:
     small = pymupdf.TOOLS.set_small_glyph_heights()  # small glyph heights?
 
     h = max(
-        [s["size"] * (1 if small else (s["ascender"] - s["descender"])) for s in spans]
+        [s["size"] * (1 if small else (s["ascender"] - s["descender"])) for s in spans],
     )
 
     line_rect = pymupdf.Rect(0, -h, x_lr.x, 0)  # line rectangle

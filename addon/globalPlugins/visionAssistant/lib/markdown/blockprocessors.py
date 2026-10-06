@@ -175,9 +175,13 @@ class ListIndentProcessor(BlockProcessor):
     def test(self, parent: etree.Element, block: str) -> bool:
         return block.startswith(' '*self.tab_length) and \
             not self.parser.state.isstate('detabbed') and \
-            (parent.tag in self.ITEM_TYPES or
-                (len(parent) and parent[-1] is not None and
-                    (parent[-1].tag in self.LIST_TYPES)))
+            (
+                parent.tag in self.ITEM_TYPES or
+                (
+                    len(parent) and parent[-1] is not None and
+                    (parent[-1].tag in self.LIST_TYPES)
+                )
+            )
 
     def run(self, parent: etree.Element, blocks: list[str]) -> None:
         block = blocks.pop(0)
@@ -237,8 +241,10 @@ class ListIndentProcessor(BlockProcessor):
         # Step through children of tree to find matching indent level.
         while indent_level > level:
             child = self.lastChild(parent)
-            if (child is not None and
-               (child.tag in self.LIST_TYPES or child.tag in self.ITEM_TYPES)):
+            if (
+                child is not None and
+                (child.tag in self.LIST_TYPES or child.tag in self.ITEM_TYPES)
+            ):
                 if child.tag in self.LIST_TYPES:
                     level += 1
                 parent = child
@@ -259,15 +265,17 @@ class CodeBlockProcessor(BlockProcessor):
         sibling = self.lastChild(parent)
         block = blocks.pop(0)
         theRest = ''
-        if (sibling is not None and sibling.tag == "pre" and
-           len(sibling) and sibling[0].tag == "code"):
+        if (
+            sibling is not None and sibling.tag == "pre" and
+            len(sibling) and sibling[0].tag == "code"
+        ):
             # The previous block was a code block. As blank lines do not start
             # new code blocks, append this block to the previous, adding back
             # line breaks removed from the split into a list.
             code = sibling[0]
             block, theRest = self.detab(block)
             code.text = util.AtomicString(
-                '{}\n{}\n'.format(code.text, util.code_escape(block.rstrip()))
+                '{}\n{}\n'.format(code.text, util.code_escape(block.rstrip())),
             )
         else:
             # This is a new code block. Create the elements and insert text.
@@ -299,7 +307,7 @@ class BlockQuoteProcessor(BlockProcessor):
             self.parser.parseBlocks(parent, [before])
             # Remove `> ` from beginning of each line.
             block = '\n'.join(
-                [self.clean(line) for line in block[m.start():].split('\n')]
+                [self.clean(line) for line in block[m.start():].split('\n')],
             )
         sibling = self.lastChild(parent)
         if sibling is not None and sibling.tag == "blockquote":
@@ -348,11 +356,15 @@ class OListProcessor(BlockProcessor):
         # Detect an item (`1. item`). `group(1)` contains contents of item.
         self.RE = re.compile(r'^[ ]{0,%d}\d+\.[ ]+(.*)' % (self.tab_length - 1))
         # Detect items on secondary lines. they can be of either list type.
-        self.CHILD_RE = re.compile(r'^[ ]{0,%d}((\d+\.)|[*+-])[ ]+(.*)' %
-                                   (self.tab_length - 1))
+        self.CHILD_RE = re.compile(
+            r'^[ ]{0,%d}((\d+\.)|[*+-])[ ]+(.*)' %
+            (self.tab_length - 1),
+        )
         # Detect indented (nested) items of either type
-        self.INDENT_RE = re.compile(r'^[ ]{%d,%d}((\d+\.)|[*+-])[ ]+.*' %
-                                    (self.tab_length, self.tab_length * 2 - 1))
+        self.INDENT_RE = re.compile(
+            r'^[ ]{%d,%d}((\d+\.)|[*+-])[ ]+.*' %
+            (self.tab_length, self.tab_length * 2 - 1),
+        )
 
     def test(self, parent: etree.Element, block: str) -> bool:
         return bool(self.RE.match(block))
@@ -567,18 +579,20 @@ class EmptyBlockProcessor(BlockProcessor):
                 # Add remaining lines to master blocks for later.
                 blocks.insert(0, theRest)
         sibling = self.lastChild(parent)
-        if (sibling is not None and sibling.tag == 'pre' and
-           len(sibling) and sibling[0].tag == 'code'):
+        if (
+            sibling is not None and sibling.tag == 'pre' and
+            len(sibling) and sibling[0].tag == 'code'
+        ):
             # Last block is a code block. Append to preserve whitespace.
             sibling[0].text = util.AtomicString(
-                '{}{}'.format(sibling[0].text, filler)
+                '{}{}'.format(sibling[0].text, filler),
             )
 
 
 class ReferenceProcessor(BlockProcessor):
     """ Process link references. """
     RE = re.compile(
-        r'^[ ]{0,3}\[([^\[\]]*)\]:[ ]*\n?[ ]*([^\s]+)[ ]*(?:\n[ ]*)?((["\'])(.*)\4[ ]*|\((.*)\)[ ]*)?$', re.MULTILINE
+        r'^[ ]{0,3}\[([^\[\]]*)\]:[ ]*\n?[ ]*([^\s]+)[ ]*(?:\n[ ]*)?((["\'])(.*)\4[ ]*|\((.*)\)[ ]*)?$', re.MULTILINE,
     )
 
     def test(self, parent: etree.Element, block: str) -> bool:

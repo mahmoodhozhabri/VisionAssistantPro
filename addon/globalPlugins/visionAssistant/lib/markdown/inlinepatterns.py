@@ -77,13 +77,13 @@ def build_inlinepatterns(md: Markdown, **kwargs: Any) -> util.Registry[InlinePro
     inlinePatterns.register(LinkInlineProcessor(LINK_RE, md), 'link', 160)
     inlinePatterns.register(ImageInlineProcessor(IMAGE_LINK_RE, md), 'image_link', 150)
     inlinePatterns.register(
-        ImageReferenceInlineProcessor(IMAGE_REFERENCE_RE, md), 'image_reference', 140
+        ImageReferenceInlineProcessor(IMAGE_REFERENCE_RE, md), 'image_reference', 140,
     )
     inlinePatterns.register(
-        ShortReferenceInlineProcessor(REFERENCE_RE, md), 'short_reference', 130
+        ShortReferenceInlineProcessor(REFERENCE_RE, md), 'short_reference', 130,
     )
     inlinePatterns.register(
-        ShortImageReferenceInlineProcessor(IMAGE_REFERENCE_RE, md), 'short_image_ref', 125
+        ShortImageReferenceInlineProcessor(IMAGE_REFERENCE_RE, md), 'short_image_ref', 125,
     )
     inlinePatterns.register(AutolinkInlineProcessor(AUTOLINK_RE, md), 'autolink', 120)
     inlinePatterns.register(AutomailInlineProcessor(AUTOMAIL_RE, md), 'automail', 110)
@@ -236,8 +236,10 @@ class Pattern:  # pragma: no cover
 
         """
         self.pattern = pattern
-        self.compiled_re = re.compile(r"^(.*?)%s(.*)$" % pattern,
-                                      re.DOTALL | re.UNICODE)
+        self.compiled_re = re.compile(
+            r"^(.*?)%s(.*)$" % pattern,
+            re.DOTALL | re.UNICODE,
+        )
 
         self.md = md
 
@@ -548,7 +550,7 @@ class AsteriskProcessor(InlineProcessor):
         EmStrongItem(re.compile(STRONG_EM_RE, re.DOTALL | re.UNICODE), 'double', 'em,strong'),
         EmStrongItem(re.compile(STRONG_EM3_RE, re.DOTALL | re.UNICODE), 'double2', 'strong,em'),
         EmStrongItem(re.compile(STRONG_RE, re.DOTALL | re.UNICODE), 'single', 'strong'),
-        EmStrongItem(re.compile(EMPHASIS_RE, re.DOTALL | re.UNICODE), 'single', 'em')
+        EmStrongItem(re.compile(EMPHASIS_RE, re.DOTALL | re.UNICODE), 'single', 'em'),
     ]
     """ The various strong and emphasis patterns handled by this processor. """
 
@@ -587,7 +589,7 @@ class AsteriskProcessor(InlineProcessor):
         return el1
 
     def parse_sub_patterns(
-        self, data: str, parent: etree.Element, last: etree.Element | None, idx: int
+        self, data: str, parent: etree.Element, last: etree.Element | None, idx: int,
     ) -> None:
         """
         Parses sub patterns.
@@ -682,7 +684,7 @@ class UnderscoreProcessor(AsteriskProcessor):
         EmStrongItem(re.compile(STRONG_EM2_RE, re.DOTALL | re.UNICODE), 'double', 'em,strong'),
         EmStrongItem(re.compile(SMART_STRONG_EM_RE, re.DOTALL | re.UNICODE), 'double2', 'strong,em'),
         EmStrongItem(re.compile(SMART_STRONG_RE, re.DOTALL | re.UNICODE), 'single', 'strong'),
-        EmStrongItem(re.compile(SMART_EMPHASIS_RE, re.DOTALL | re.UNICODE), 'single', 'em')
+        EmStrongItem(re.compile(SMART_EMPHASIS_RE, re.DOTALL | re.UNICODE), 'single', 'em'),
     ]
     """ The various strong and emphasis patterns handled by this processor. """
 
@@ -990,7 +992,9 @@ class AutomailInlineProcessor(InlineProcessor):
         el.text = util.AtomicString(''.join(letters))
 
         mailto = "mailto:" + email
-        mailto = "".join([util.AMP_SUBSTITUTE + '#%d;' %
-                          ord(letter) for letter in mailto])
+        mailto = "".join([
+            util.AMP_SUBSTITUTE + '#%d;' %
+            ord(letter) for letter in mailto
+        ])
         el.set('href', mailto)
         return el, m.start(0), m.end(0)

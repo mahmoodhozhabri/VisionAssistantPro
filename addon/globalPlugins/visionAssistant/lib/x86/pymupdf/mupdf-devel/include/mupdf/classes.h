@@ -312,7 +312,7 @@ struct FzAes
 		which must match what was initially set up) length bytes (which
 		must be a multiple of 16), using (and modifying) the insertion
 		vector iv, reading from input, and writing to output.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_aes_crypt_cbc(int mode, size_t length, unsigned char iv[16], const unsigned char *input, unsigned char *output) const;
@@ -321,9 +321,9 @@ struct FzAes
 	/**
 		AES decryption initialization. Fills in the supplied context
 		and prepares for decryption using the given key.
-	
+
 		Returns non-zero for error (key size other than 128/192/256).
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION int fz_aes_setkey_dec(const unsigned char *key, int keysize) const;
@@ -332,9 +332,9 @@ struct FzAes
 	/**
 		AES encryption initialization. Fills in the supplied context
 		and prepares for encryption using the given key.
-	
+
 		Returns non-zero for error (key size other than 128/192/256).
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION int fz_aes_setkey_enc(const unsigned char *key, int keysize) const;
@@ -428,7 +428,7 @@ struct FzArc4
 	/**
 		RC4 block encrypt operation; encrypt src into dst (both of
 		length len) updating the RC4 state as we go.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_arc4_encrypt(unsigned char *dest, const unsigned char *src, size_t len) const;
@@ -436,7 +436,7 @@ struct FzArc4
 	/** Class-aware wrapper for `::fz_arc4_final()`.  */
 	/**
 		RC4 finalization. Zero the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_arc4_final() const;
@@ -445,7 +445,7 @@ struct FzArc4
 	/**
 		RC4 initialization. Begins an RC4 operation, writing a new
 		context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_arc4_init(const unsigned char *key, size_t len) const;
@@ -509,7 +509,7 @@ struct FzArchive
 	/** Constructor using `fz_new_tree_archive()`. */
 	/**
 		Create an archive that holds named buffers.
-	
+
 		tree can either be a preformed tree with fz_buffers as values,
 		or it can be NULL for an empty tree.
 	*/
@@ -527,7 +527,7 @@ struct FzArchive
 	/**
 		Return a pointer to a string describing the format of the
 		archive.
-	
+
 		The lifetime of the string is unspecified (in current
 		implementations the string will persist until the archive
 		is closed, but this is not guaranteed).
@@ -537,9 +537,9 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_count_archive_entries()`.  */
 	/**
 		Number of entries in archive.
-	
+
 		Will always return a value >= 0.
-	
+
 		May throw an exception if this type of archive cannot count the
 		entries (such as a directory).
 	*/
@@ -548,10 +548,10 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_has_archive_entry()`.  */
 	/**
 		Check if entry by given name exists.
-	
+
 		If named entry does not exist 0 will be returned, if it does
 		exist 1 is returned.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
 	*/
@@ -560,11 +560,11 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_list_archive_entry()`.  */
 	/**
 		Get listed name of entry position idx.
-	
+
 		idx: Must be a value >= 0 < return value from
 		fz_count_archive_entries. If not in range NULL will be
 		returned.
-	
+
 		May throw an exception if this type of archive cannot list the
 		entries (such as a directory).
 	*/
@@ -574,7 +574,7 @@ struct FzArchive
 	/**
 		Add an archive to the set of archives handled by a multi
 		archive.
-	
+
 		If path is NULL, then the archive contents will appear at the
 		top level, otherwise, the archives contents will appear prefixed
 		by path.
@@ -584,10 +584,10 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_open_archive_entry()`.  */
 	/**
 		Opens an archive entry as a stream.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
-	
+
 		Throws an exception if a matching entry cannot be found.
 	*/
 	FZ_FUNCTION FzStream fz_open_archive_entry(const char *name) const;
@@ -595,7 +595,7 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_parse_xml_archive_entry()`.  */
 	/**
 		Parse the contents of an archive entry into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
 	*/
 	FZ_FUNCTION FzXml fz_parse_xml_archive_entry(const char *filename, int preserve_white) const;
@@ -604,10 +604,10 @@ struct FzArchive
 	/**
 		Reads all bytes in an archive entry
 		into a buffer.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
-	
+
 		Throws an exception if a matching entry cannot be found.
 	*/
 	FZ_FUNCTION FzBuffer fz_read_archive_entry(const char *name) const;
@@ -615,7 +615,7 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_tree_archive_add_buffer()`.  */
 	/**
 		Add a named buffer to an existing tree archive.
-	
+
 		The tree will take a new reference to the buffer. Ownership
 		is not transferred.
 	*/
@@ -624,7 +624,7 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_tree_archive_add_data()`.  */
 	/**
 		Add a named block of data to an existing tree archive.
-	
+
 		The data will be copied into a buffer, and so the caller
 		may free it as soon as this returns.
 	*/
@@ -633,7 +633,7 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_try_open_archive_entry()`.  */
 	/**
 		Opens an archive entry as a stream.
-	
+
 		Returns NULL if a matching entry cannot be found, otherwise
 		behaves exactly as fz_open_archive_entry.
 	*/
@@ -642,9 +642,9 @@ struct FzArchive
 	/** Class-aware wrapper for `::fz_try_parse_xml_archive_entry()`.  */
 	/**
 		Try and parse the contents of an archive entry into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
-	
+
 		Will return NULL if the archive entry can't be found. Otherwise behaves
 		the same as fz_parse_xml_archive_entry. May throw exceptions.
 	*/
@@ -654,10 +654,10 @@ struct FzArchive
 	/**
 		Reads all bytes in an archive entry
 		into a buffer.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
-	
+
 		Returns NULL if a matching entry cannot be found. Otherwise behaves
 		the same as fz_read_archive_entry. Exceptions may be thrown.
 	*/
@@ -845,7 +845,7 @@ struct FzBandWriter
 	/** Constructor using `fz_new_pdfocr_band_writer()`. */
 	/**
 		Create a new band writer, outputting pdfocr.
-	
+
 		Ownership of output stays with the caller, the band writer
 		borrows the reference. The caller must keep the output around
 		for the duration of the band writer, and then close/drop as
@@ -933,13 +933,13 @@ struct FzBandWriter
 	/**
 		Cause a band writer to write the next band
 		of data for an image.
-	
+
 		stride: The byte offset from the first byte of the data
 		for a pixel to the first byte of the data for the same pixel
 		on the row below.
-	
+
 		band_height: The number of lines in this band.
-	
+
 		samples: Pointer to first byte of the data.
 	*/
 	FZ_FUNCTION void fz_write_band(int stride, int band_height, const unsigned char *samples) const;
@@ -950,17 +950,17 @@ struct FzBandWriter
 		a banded image with the given properties/dimensions etc. This
 		also configures the bandwriter for the format of the data to be
 		passed in future calls.
-	
+
 		w, h: Width and Height of the entire page.
-	
+
 		n: Number of components (including spots and alphas).
-	
+
 		alpha: Number of alpha components.
-	
+
 		xres, yres: X and Y resolutions in dpi.
-	
+
 		cs: Colorspace (NULL for bitmaps)
-	
+
 		seps: Separation details (or NULL).
 	*/
 	FZ_FUNCTION void fz_write_header(int w, int h, int n, int alpha, int xres, int yres, int pagenum, const FzColorspace& cs, const FzSeparations& seps) const;
@@ -1010,13 +1010,13 @@ struct FzBitmap
 	/** Constructor using `fz_new_bitmap()`. */
 	/**
 		Create a new bitmap.
-	
+
 		w, h: Width and Height for the bitmap
-	
+
 		n: Number of color components (assumed to be a divisor of 8)
-	
+
 		xres, yres: X and Y resolutions (in pixels per inch).
-	
+
 		Returns pointer to created bitmap structure. The bitmap
 		data is uninitialised.
 	*/
@@ -1025,12 +1025,12 @@ struct FzBitmap
 	/** Constructor using `fz_new_bitmap_from_image()`. */
 	/**
 		Make a bitmap from a pixmap and a halftone.
-	
+
 		img: The image to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -1039,12 +1039,12 @@ struct FzBitmap
 	/** Constructor using `fz_new_bitmap_from_pixmap()`. */
 	/**
 		Make a bitmap from a pixmap and a halftone.
-	
+
 		pix: The pixmap to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -1055,15 +1055,15 @@ struct FzBitmap
 		Make a bitmap from a pixmap and a
 		halftone, allowing for the position of the pixmap within an
 		overall banded rendering.
-	
+
 		pix: The pixmap to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		band_start: Vertical offset within the overall banded rendering
 		(in pixels)
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -1081,22 +1081,22 @@ struct FzBitmap
 	/* == Methods. */
 
 	/** Class-aware wrapper for `::fz_bitmap_details()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_bitmap_details()` => `(int w, int h, int n, int stride)`
 	 */
 	/**
 		Retrieve details of a given bitmap.
-	
+
 		bitmap: The bitmap to query.
-	
+
 		w: Pointer to storage to retrieve width (or NULL).
-	
+
 		h: Pointer to storage to retrieve height (or NULL).
-	
+
 		n: Pointer to storage to retrieve number of color components (or
 		NULL).
-	
+
 		stride: Pointer to storage to retrieve bitmap stride (or NULL).
 	*/
 	FZ_FUNCTION void fz_bitmap_details(int *w, int *h, int *n, int *stride) const;
@@ -1104,7 +1104,7 @@ struct FzBitmap
 	/** Class-aware wrapper for `::fz_clear_bitmap()`.  */
 	/**
 		Set the entire bitmap to 0.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_clear_bitmap() const;
@@ -1112,7 +1112,7 @@ struct FzBitmap
 	/** Class-aware wrapper for `::fz_invert_bitmap()`.  */
 	/**
 		Invert bitmap.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_invert_bitmap() const;
@@ -1206,14 +1206,14 @@ struct FzBuffer
 	/** Constructor using `fz_new_buffer_from_data()`. */
 	/**
 		Create a new buffer with existing data.
-	
+
 		data: Pointer to existing data.
 		size: Size of existing data.
-	
+
 		Takes ownership of data. Does not make a copy. Calls fz_free on
 		the data when the buffer is deallocated. Do not use 'data' after
 		passing to this function.
-	
+
 		Returns pointer to new buffer. Throws exception on allocation
 		failure.
 	*/
@@ -1231,7 +1231,7 @@ struct FzBuffer
 	/** Constructor using `fz_new_buffer_from_image_as_png()`. */
 	/**
 		Re-encode a given image as a PNG into a buffer.
-	
+
 		Ownership of the buffer is returned.
 	*/
 	FZ_FUNCTION FzBuffer(const FzImage& image, const FzColorParams& color_params);
@@ -1245,7 +1245,7 @@ struct FzBuffer
 	/** Constructor using `fz_new_buffer_from_page_with_format()`. */
 	/**
 		Returns an fz_buffer containing a page after conversion to specified format.
-	
+
 		page: The page to convert.
 		format, options: Passed to fz_new_document_writer_with_output() internally.
 		transform, cookie: Passed to fz_run_page() internally.
@@ -1261,7 +1261,7 @@ struct FzBuffer
 	/** Constructor using `fz_new_buffer_from_pixmap_as_png()`. */
 	/**
 		Re-encode a given pixmap as a PNG into a buffer.
-	
+
 		Ownership of the buffer is returned.
 	*/
 	FZ_FUNCTION FzBuffer(const FzPixmap& pixmap, const FzColorParams& color_params);
@@ -1352,7 +1352,7 @@ struct FzBuffer
 	/**
 		Append the contents of the source buffer onto the end of the
 		destination buffer, extending automatically as required.
-	
+
 		Ownership of buffers does not change.
 	*/
 	FZ_FUNCTION void fz_append_buffer(const FzBuffer& source) const;
@@ -1363,7 +1363,7 @@ struct FzBuffer
 	/** Class-aware wrapper for `::fz_append_data()`.  */
 	/**
 		fz_append_*: Append data to a buffer.
-	
+
 		The buffer will automatically grow as required.
 	*/
 	FZ_FUNCTION void fz_append_data(const void *data, size_t len) const;
@@ -1390,7 +1390,7 @@ struct FzBuffer
 	/**
 		fz_append_pdf_string: Append a string with PDF syntax quotes and
 		escapes.
-	
+
 		The buffer will automatically grow as required.
 	*/
 	FZ_FUNCTION void fz_append_pdf_string(const char *text) const;
@@ -1412,36 +1412,36 @@ struct FzBuffer
 	FZ_FUNCTION void fz_append_vprintf(const char *fmt, va_list args) const;
 
 	/** Class-aware wrapper for `::fz_buffer_extract()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_buffer_extract()` => `(size_t, unsigned char *data)`
 	 */
 	/**
 		Take ownership of buffer contents.
-	
+
 		Performs the same task as fz_buffer_storage, but ownership of
 		the data buffer returns with this call. The buffer is left
 		empty.
-	
+
 		Note: Bad things may happen if this is called on a buffer with
 		multiple references that is being used from multiple threads.
-	
+
 		data: Pointer to place to retrieve data pointer.
-	
+
 		Returns length of stream.
 	*/
 	FZ_FUNCTION size_t fz_buffer_extract(unsigned char **data) const;
 
 	/** Class-aware wrapper for `::fz_buffer_storage()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_buffer_storage()` => `(size_t, unsigned char *datap)`
 	 */
 	/**
 		Retrieve internal memory of buffer.
-	
+
 		datap: Output parameter that will be pointed to the data.
-	
+
 		Returns the current size of the data in bytes.
 	*/
 	FZ_FUNCTION size_t fz_buffer_storage(unsigned char **datap) const;
@@ -1450,7 +1450,7 @@ struct FzBuffer
 	/**
 		Empties the buffer. Storage is not freed, but is held ready
 		to be reused as the buffer is refilled.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_clear_buffer() const;
@@ -1472,7 +1472,7 @@ struct FzBuffer
 	/** Class-aware wrapper for `::fz_load_jbig2_globals()`.  */
 	/**
 		Create a jbig2 globals record from a buffer.
-	
+
 		Immutable once created.
 	*/
 	FZ_FUNCTION FzJbig2Globals fz_load_jbig2_globals() const;
@@ -1480,13 +1480,13 @@ struct FzBuffer
 	/** Class-aware wrapper for `::fz_md5_buffer()`.  */
 	/**
 		Create an MD5 digest from buffer contents.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_md5_buffer(unsigned char digest[16]) const;
 
 	/** Class-aware wrapper for `::fz_new_display_list_from_svg()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_new_display_list_from_svg(const char *base_uri, ::fz_archive *dir)` => `(fz_display_list *, float w, float h)`
 	 */
@@ -1512,10 +1512,10 @@ struct FzBuffer
 	/** Class-aware wrapper for `::fz_open_buffer()`.  */
 	/**
 		Open a buffer as a stream.
-	
+
 		buf: The buffer to open. Ownership of the buffer is NOT passed
 		in (this function takes its own reference).
-	
+
 		Returns pointer to newly created stream. May throw exceptions on
 		failure to allocate.
 	*/
@@ -1524,7 +1524,7 @@ struct FzBuffer
 	/** Class-aware wrapper for `::fz_parse_xml()`.  */
 	/**
 		Parse the contents of buffer into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
 	*/
 	FZ_FUNCTION FzXml fz_parse_xml(int preserve_white) const;
@@ -1540,7 +1540,7 @@ struct FzBuffer
 	/**
 		Ensure that a buffer has a given capacity,
 		truncating data if required.
-	
+
 		capacity: The desired capacity for the buffer. If the current
 		size of the buffer contents is smaller than capacity, it is
 		truncated.
@@ -1556,11 +1556,11 @@ struct FzBuffer
 	/** Class-aware wrapper for `::fz_slice_buffer()`.  */
 	/**
 		Create a new buffer with a (subset of) the data from the buffer.
-	
+
 		start: if >= 0, offset from start of buffer, if < 0 offset from end of buffer.
-	
+
 		end: if >= 0, offset from start of buffer, if < 0 offset from end of buffer.
-	
+
 	*/
 	FZ_FUNCTION FzBuffer fz_slice_buffer(int64_t start, int64_t end) const;
 
@@ -1572,14 +1572,14 @@ struct FzBuffer
 	FZ_FUNCTION const char *fz_string_from_buffer() const;
 
 	/** Class-aware wrapper for `::fz_subset_cff_for_gids()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_subset_cff_for_gids(int num_gids, int symbolic, int cidfont)` => `(fz_buffer *, int gids)`
 	 */
 	FZ_FUNCTION FzBuffer fz_subset_cff_for_gids(int *gids, int num_gids, int symbolic, int cidfont) const;
 
 	/** Class-aware wrapper for `::fz_subset_ttf_for_gids()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_subset_ttf_for_gids(int num_gids, int symbolic, int cidfont)` => `(fz_buffer *, int gids)`
 	 */
@@ -1588,12 +1588,12 @@ struct FzBuffer
 	/** Class-aware wrapper for `::fz_terminate_buffer()`.  */
 	/**
 		Zero-terminate buffer in order to use as a C string.
-	
+
 		This byte is invisible and does not affect the length of the
 		buffer as returned by fz_buffer_storage. The zero byte is
 		written *after* the data, and subsequent writes will overwrite
 		the terminating byte.
-	
+
 		Subsequent changes to the size of the buffer (such as by
 		fz_buffer_trim, fz_buffer_grow, fz_resize_buffer, etc) may
 		invalidate this.
@@ -1708,10 +1708,10 @@ struct FzColorspace
 	/** Constructor using `fz_new_cal_gray_colorspace()`. */
 	/**
 		Create a calibrated gray colorspace.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace(float wp[3], float bp[3], float gamma);
@@ -1719,10 +1719,10 @@ struct FzColorspace
 	/** Constructor using `fz_new_cal_rgb_colorspace()`. */
 	/**
 		Create a calibrated rgb colorspace.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace(float wp[3], float bp[3], float gamma[3], float matrix[9]);
@@ -1730,13 +1730,13 @@ struct FzColorspace
 	/** Constructor using `fz_new_colorspace()`. */
 	/**
 		Creates a new colorspace instance and returns a reference.
-	
+
 		No internal checking is done that the colorspace type (e.g.
 		CMYK) matches with the flags (e.g. FZ_COLORSPACE_HAS_CMYK) or
 		colorant count (n) or name.
-	
+
 		The reference should be dropped when it is finished with.
-	
+
 		Colorspaces are immutable once created (with the exception of
 		setting up colorant names for separation spaces).
 	*/
@@ -1745,16 +1745,16 @@ struct FzColorspace
 	/** Constructor using `fz_new_icc_colorspace()`. */
 	/**
 		Create a colorspace from an ICC profile supplied in buf.
-	
+
 		Limited checking is done to ensure that the colorspace type is
 		appropriate for the supplied ICC profile.
-	
+
 		An additional reference is taken to buf, which will be dropped
 		on destruction. Ownership is NOT passed in.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace(enum fz_colorspace_type type, int flags, const char *name, const FzBuffer& buf);
@@ -1762,20 +1762,20 @@ struct FzColorspace
 	/** Constructor using `fz_new_indexed_colorspace()`. */
 	/**
 		Create an indexed colorspace.
-	
+
 		The supplied lookup table is high palette entries long. Each
 		entry is n bytes long, where n is given by the number of
 		colorants in the base colorspace, one byte per colorant.
-	
+
 		Ownership of lookup is passed it; it will be freed on
 		destruction, so must be heap allocated.
-	
+
 		The colorspace will keep an additional reference to the base
 		colorspace that will be dropped on destruction.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace(const FzColorspace& base, int high, unsigned char *lookup);
@@ -1797,18 +1797,18 @@ struct FzColorspace
 	/** Class-aware wrapper for `::fz_base_colorspace()`.  */
 	/**
 		Get the 'base' colorspace for a colorspace.
-	
+
 		For indexed colorspaces, this is the colorspace the index
 		decodes into. For all other colorspaces, it is the colorspace
 		itself.
-	
+
 		The returned colorspace is 'borrowed' (i.e. no additional
 		references are taken or dropped).
 	*/
 	FZ_FUNCTION FzColorspace fz_base_colorspace() const;
 
 	/** Class-aware wrapper for `::fz_clamp_color()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_clamp_color(const float *in)` => float out
 	 */
@@ -1821,7 +1821,7 @@ struct FzColorspace
 	/** Class-aware wrapper for `::fz_colorspace_colorant()`.  */
 	/**
 		Retrieve a the name for a colorant.
-	
+
 		Returns a pointer with the same lifespan as the colorspace.
 	*/
 	FZ_FUNCTION const char *fz_colorspace_colorant(int n) const;
@@ -1896,7 +1896,7 @@ struct FzColorspace
 	/** Class-aware wrapper for `::fz_colorspace_name()`.  */
 	/**
 		Query the name of a colorspace.
-	
+
 		The returned string has the same lifespan as the colorspace
 		does. Caller should not free it.
 	*/
@@ -1905,7 +1905,7 @@ struct FzColorspace
 	/** Class-aware wrapper for `::fz_colorspace_name_colorant()`.  */
 	/**
 		Assign a name for a given colorant in a colorspace.
-	
+
 		Used while initially setting up a colorspace. The string is
 		copied into local storage, so need not be retained by the
 		caller.
@@ -1919,7 +1919,7 @@ struct FzColorspace
 	FZ_FUNCTION enum fz_colorspace_type fz_colorspace_type() const;
 
 	/** Class-aware wrapper for `::fz_convert_color()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_convert_color(const float *sv, ::fz_colorspace *ds, ::fz_colorspace *is, ::fz_color_params params)` => float dv
 	 */
@@ -1931,7 +1931,7 @@ struct FzColorspace
 	FZ_FUNCTION void fz_convert_color(const float *sv, const FzColorspace& ds, float *dv, const FzColorspace& is, const FzColorParams& params) const;
 
 	/** Class-aware wrapper for `::fz_convert_separation_colors()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_convert_separation_colors(const float *src_color, ::fz_separations *dst_seps, ::fz_colorspace *dst_cs, ::fz_color_params color_params)` => float dst_color
 	 */
@@ -1951,20 +1951,20 @@ struct FzColorspace
 	/** Class-aware wrapper for `::fz_new_indexed_colorspace()`.  */
 	/**
 		Create an indexed colorspace.
-	
+
 		The supplied lookup table is high palette entries long. Each
 		entry is n bytes long, where n is given by the number of
 		colorants in the base colorspace, one byte per colorant.
-	
+
 		Ownership of lookup is passed it; it will be freed on
 		destruction, so must be heap allocated.
-	
+
 		The colorspace will keep an additional reference to the base
 		colorspace that will be dropped on destruction.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace fz_new_indexed_colorspace(int high, unsigned char *lookup) const;
@@ -1972,18 +1972,18 @@ struct FzColorspace
 	/** Class-aware wrapper for `::fz_new_pixmap()`.  */
 	/**
 		Create a new pixmap, with its origin at (0,0)
-	
+
 		cs: The colorspace to use for the pixmap, or NULL for an alpha
 		plane/mask.
-	
+
 		w: The width of the pixmap (in pixels)
-	
+
 		h: The height of the pixmap (in pixels)
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -1992,21 +1992,21 @@ struct FzColorspace
 	/** Class-aware wrapper for `::fz_new_pixmap_with_bbox()`.  */
 	/**
 		Create a pixmap of a given size, location and pixel format.
-	
+
 		The bounding box specifies the size of the created pixmap and
 		where it will be located. The colorspace determines the number
 		of components per pixel. Alpha is always present. Pixmaps are
 		reference counted, so drop references using fz_drop_pixmap.
-	
+
 		colorspace: Colorspace format used for the created pixmap. The
 		pixmap will keep a reference to the colorspace.
-	
+
 		bbox: Bounding box specifying location/size of created pixmap.
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -2016,23 +2016,23 @@ struct FzColorspace
 	/**
 		Create a pixmap of a given size, location and pixel format,
 		using the supplied data block.
-	
+
 		The bounding box specifies the size of the created pixmap and
 		where it will be located. The colorspace determines the number
 		of components per pixel. Alpha is always present. Pixmaps are
 		reference counted, so drop references using fz_drop_pixmap.
-	
+
 		colorspace: Colorspace format used for the created pixmap. The
 		pixmap will keep a reference to the colorspace.
-	
+
 		rect: Bounding box specifying location/size of created pixmap.
-	
+
 		seps: Details of separations.
-	
+
 		alpha: Number of alpha planes (0 or 1).
-	
+
 		samples: The data block to keep the samples in.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -2042,23 +2042,23 @@ struct FzColorspace
 	/**
 		Create a new pixmap, with its origin at
 		(0,0) using the supplied data block.
-	
+
 		cs: The colorspace to use for the pixmap, or NULL for an alpha
 		plane/mask.
-	
+
 		w: The width of the pixmap (in pixels)
-	
+
 		h: The height of the pixmap (in pixels)
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		stride: The byte offset from the pixel data in a row to the
 		pixel data in the next row.
-	
+
 		samples: The data block to keep the samples in.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure to
 		allocate.
 	*/
@@ -2158,7 +2158,7 @@ struct FzCompressedBuffer
 	/**
 		Return the storage size used for a buffer and its data.
 		Used in implementing store handling.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION size_t fz_compressed_buffer_size() const;
@@ -2170,14 +2170,14 @@ struct FzCompressedBuffer
 	FZ_FUNCTION FzStream fz_open_compressed_buffer() const;
 
 	/** Class-aware wrapper for `::fz_open_image_decomp_stream_from_buffer()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_open_image_decomp_stream_from_buffer()` => `(fz_stream *, int l2factor)`
 	 */
 	/**
 		Open a stream to read the decompressed version of a buffer,
 		with optional log2 subsampling.
-	
+
 		l2factor = NULL for no subsampling, or a pointer to an integer
 		containing the maximum log2 subsample factor acceptable (0 =
 		none, 1 = halve dimensions, 2 = quarter dimensions etc). If
@@ -2447,12 +2447,12 @@ struct FzDefaultColorspaces
 	/**
 		Create a new default colorspace structure with values inherited
 		from the context, and return a reference to it.
-	
+
 		These can be overridden using fz_set_default_xxxx.
-	
+
 		These should not be overridden while more than one caller has
 		the reference for fear of race conditions.
-	
+
 		The caller should drop this reference once finished with it.
 	*/
 	FZ_FUNCTION FzDefaultColorspaces();
@@ -2469,7 +2469,7 @@ struct FzDefaultColorspaces
 	/**
 		Returns a reference to a newly cloned default colorspaces
 		structure.
-	
+
 		The new clone may safely be altered without fear of race
 		conditions as the caller is the only reference holder.
 	*/
@@ -2481,10 +2481,10 @@ struct FzDefaultColorspaces
 	/** Class-aware wrapper for `::fz_default_gray()`.  */
 	/**
 		Retrieve default colorspaces (typically page local).
-	
+
 		If default_cs is non NULL, the default is retrieved from there,
 		otherwise the global default is retrieved.
-	
+
 		These return borrowed references that should not be dropped,
 		unless they are kept first.
 	*/
@@ -2502,10 +2502,10 @@ struct FzDefaultColorspaces
 	/** Class-aware wrapper for `::fz_set_default_gray()`.  */
 	/**
 		Set new defaults within the default colorspace structure.
-	
+
 		New references are taken to the new default, and references to
 		the old defaults dropped.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_set_default_gray(const FzColorspace& cs) const;
@@ -2565,7 +2565,7 @@ struct FzDevice
 	/**
 		Create a device to compute the bounding
 		box of all marks on a page.
-	
+
 		The returned bounding box will be the union of all bounding
 		boxes of all objects on a page.
 	*/
@@ -2584,13 +2584,13 @@ struct FzDevice
 	/** Constructor using `fz_new_draw_device()`. */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
 	*/
@@ -2599,16 +2599,16 @@ struct FzDevice
 	/** Constructor using `fz_new_draw_device_with_bbox()`. */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
-	
+
 		clip: Bounding box to restrict any marking operations of the
 		draw device.
 	*/
@@ -2617,19 +2617,19 @@ struct FzDevice
 	/** Constructor using `fz_new_draw_device_with_bbox_proof()`. */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
-	
+
 		clip: Bounding box to restrict any marking operations of the
 		draw device.
-	
+
 		proof_cs: Color space to render to prior to mapping to color
 		space defined by pixmap.
 	*/
@@ -2638,12 +2638,12 @@ struct FzDevice
 	/** Constructor using `fz_new_draw_device_with_options()`. */
 	/**
 		Create a new pixmap and draw device, using the specified options.
-	
+
 		options: Options to configure the draw device, and choose the
 		resolution and colorspace.
-	
+
 		mediabox: The bounds of the page in points.
-	
+
 		pixmap: An out parameter containing the newly created pixmap.
 	*/
 	FZ_FUNCTION FzDevice(FzDrawOptions& options, const FzRect& mediabox, FzPixmap& pixmap);
@@ -2651,16 +2651,16 @@ struct FzDevice
 	/** Constructor using `fz_new_draw_device_with_proof()`. */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
-	
+
 		proof_cs: Intermediate color space to map though when mapping to
 		color space defined by pixmap.
 	*/
@@ -2669,14 +2669,14 @@ struct FzDevice
 	/** Constructor using `fz_new_list_device()`. */
 	/**
 		Create a rendering device for a display list.
-	
+
 		When the device is rendering a page it will populate the
 		display list with drawing commands (text, images, etc.). The
 		display list can later be reused to render a page many times
 		without having to re-interpret the page from the document file
 		for each rendering. Once the device is no longer needed, free
 		it with fz_drop_device.
-	
+
 		list: A display list that the list device takes a reference to.
 	*/
 	FZ_FUNCTION FzDevice(const FzDisplayList& list);
@@ -2684,43 +2684,43 @@ struct FzDevice
 	/** Constructor using `fz_new_ocr_device()`. */
 	/**
 		Create a device to OCR the text on the page.
-	
+
 		Renders the page internally to a bitmap that is then OCRd. Text
 		is then forwarded onto the target device.
-	
+
 		target: The target device to receive the OCRd text.
-	
+
 		ctm: The transform to apply to the mediabox to get the size for
 		the rendered page image. Also used to calculate the resolution
 		for the page image. In general, this will be the same as the CTM
 		that you pass to fz_run_page (or fz_run_display_list) to feed
 		this device.
-	
+
 		mediabox: The mediabox (in points). Combined with the CTM to get
 		the bounds of the pixmap used internally for the rendered page
 		image.
-	
+
 		with_list: If with_list is false, then all non-text operations
 		are forwarded instantly to the target device. This results in
 		the target device seeing all NON-text operations, followed by
 		all the text operations (derived from OCR).
-	
+
 		If with_list is true, then all the marking operations are
 		collated into a display list which is then replayed to the
 		target device at the end.
-	
+
 		language: NULL (for "eng"), or a pointer to a string to describe
 		the languages/scripts that should be used for OCR (e.g.
 		"eng,ara").
-	
+
 		datadir: NULL (for ""), or a pointer to a path string otherwise
 		provided to Tesseract in the TESSDATA_PREFIX environment variable.
-	
+
 		progress: NULL, or function to be called periodically to indicate
 		progress. Return 0 to continue, or 1 to cancel. progress_arg is
 		returned as the void *. The int is a value between 0 and 100 to
 		indicate progress.
-	
+
 		progress_arg: A void * value to be parrotted back to the progress
 		function.
 	*/
@@ -2729,17 +2729,17 @@ struct FzDevice
 	/** Constructor using `fz_new_stext_device()`. */
 	/**
 		Create a device to extract the text on a page.
-	
+
 		Gather the text on a page into blocks and lines.
-	
+
 		The reading order is taken from the order the text is drawn in
 		the source file, so may not be accurate.
-	
+
 		page: The text page to which content should be added. This will
 		usually be a newly created (empty) text page, but it can be one
 		containing data already (for example when merging multiple
 		pages, or watermarking).
-	
+
 		options: Options to configure the stext device.
 	*/
 	FZ_FUNCTION FzDevice(const FzStextPage& page, FzStextOptions& options);
@@ -2748,33 +2748,33 @@ struct FzDevice
 	/**
 		Create a device to extract the text on a page into an existing
 		fz_stext_page structure.
-	
+
 		Gather the text on a page into blocks and lines.
-	
+
 		The reading order is taken from the order the text is drawn in
 		the source file, so may not be accurate.
-	
+
 		stext_page: The text page to which content should be added. This will
 		usually be a newly created (empty) text page, but it can be one
 		containing data already (for example when merging multiple
 		pages, or watermarking).
-	
+
 		options: Options to configure the stext device.
-	
+
 		The next 2 parameters are copied into the fz_stext_page structure's
 		ids section, so only have to be valid if you expect to interrogate
 		that section later.
-	
+
 		chapter_num: The chapter number that this page came from.
-	
+
 		page_num: The page number that this page came from.
-	
+
 		The final parameter is copied into the fz_stext_page structure's
 		ids section. The mediabox for the enture fz_stext_page is unioned
 		with this, so pass fz_empty_bbox if you don't care about getting
 		a valid value back from the ids section, but you don't want to
 		upset the value in the page->mediabox field.
-	
+
 		mediabox: The mediabox for this page.
 	*/
 	FZ_FUNCTION FzDevice(const FzStextPage& stext_page, FzStextOptions& opts, int chapter_num, int page_num, const FzRect& mediabox);
@@ -2783,7 +2783,7 @@ struct FzDevice
 	/**
 		Create a device that outputs (single page) SVG files to
 		the given output stream.
-	
+
 		Equivalent to fz_new_svg_device_with_id passing id = NULL.
 	*/
 	FZ_FUNCTION FzDevice(const FzOutput& out, float page_width, float page_height, int text_format, int reuse_images);
@@ -2792,19 +2792,19 @@ struct FzDevice
 	/**
 		Create a device that outputs (single page) SVG files to
 		the given output stream.
-	
+
 		output: The output stream to send the constructed SVG page to.
-	
+
 		page_width, page_height: The page dimensions to use (in points).
-	
+
 		text_format: How to emit text. One of the following values:
 			FZ_SVG_TEXT_AS_TEXT: As <text> elements with possible
 			layout errors and mismatching fonts.
 			FZ_SVG_TEXT_AS_PATH: As <path> elements with exact
 			visual appearance.
-	
+
 		reuse_images: Share image resources using <symbol> definitions.
-	
+
 		id: ID parameter to keep generated IDs unique across SVG files.
 	*/
 	FZ_FUNCTION FzDevice(const FzOutput& out, float page_width, float page_height, int text_format, int reuse_images, int *id);
@@ -2812,27 +2812,27 @@ struct FzDevice
 	/** Constructor using `fz_new_test_device()`. */
 	/**
 		Create a device to test for features.
-	
+
 		Currently only tests for the presence of non-grayscale colors.
-	
+
 		is_color: Possible values returned:
 			0: Definitely greyscale
 			1: Probably color (all colors were grey, but there
 			were images or shadings in a non grey colorspace).
 			2: Definitely color
-	
+
 		threshold: The difference from grayscale that will be tolerated.
 		Typical values to use are either 0 (be exact) and 0.02 (allow an
 		imperceptible amount of slop).
-	
+
 		options: A set of bitfield options, from the FZ_TEST_OPT set.
-	
+
 		passthrough: A device to pass all calls through to, or NULL.
 		If set, then the test device can both test and pass through to
 		an underlying device (like, say, the display list device). This
 		means that a display list can be created and at the end we'll
 		know if it's colored or not.
-	
+
 		In the absence of a passthrough device, the device will throw
 		an exception to stop page interpretation when color is found.
 	*/
@@ -2979,43 +2979,43 @@ struct FzDevice
 	/** Class-aware wrapper for `::fz_new_ocr_device()`.  */
 	/**
 		Create a device to OCR the text on the page.
-	
+
 		Renders the page internally to a bitmap that is then OCRd. Text
 		is then forwarded onto the target device.
-	
+
 		target: The target device to receive the OCRd text.
-	
+
 		ctm: The transform to apply to the mediabox to get the size for
 		the rendered page image. Also used to calculate the resolution
 		for the page image. In general, this will be the same as the CTM
 		that you pass to fz_run_page (or fz_run_display_list) to feed
 		this device.
-	
+
 		mediabox: The mediabox (in points). Combined with the CTM to get
 		the bounds of the pixmap used internally for the rendered page
 		image.
-	
+
 		with_list: If with_list is false, then all non-text operations
 		are forwarded instantly to the target device. This results in
 		the target device seeing all NON-text operations, followed by
 		all the text operations (derived from OCR).
-	
+
 		If with_list is true, then all the marking operations are
 		collated into a display list which is then replayed to the
 		target device at the end.
-	
+
 		language: NULL (for "eng"), or a pointer to a string to describe
 		the languages/scripts that should be used for OCR (e.g.
 		"eng,ara").
-	
+
 		datadir: NULL (for ""), or a pointer to a path string otherwise
 		provided to Tesseract in the TESSDATA_PREFIX environment variable.
-	
+
 		progress: NULL, or function to be called periodically to indicate
 		progress. Return 0 to continue, or 1 to cancel. progress_arg is
 		returned as the void *. The int is a value between 0 and 100 to
 		indicate progress.
-	
+
 		progress_arg: A void * value to be parrotted back to the progress
 		function.
 	*/
@@ -3032,7 +3032,7 @@ struct FzDevice
 		Nasty PDF interpreter specific hernia, required to allow the
 		interpreter to replay glyphs from a type3 font directly into
 		the target device.
-	
+
 		This is only used in exceptional circumstances (such as type3
 		glyphs that inherit current graphics state, or nested type3
 		glyphs).
@@ -3212,10 +3212,10 @@ struct FzDisplayList
 	/** Constructor using `fz_new_display_list()`. */
 	/**
 		Create an empty display list.
-	
+
 		A display list contains drawing commands (text, images, etc.).
 		Use fz_new_list_device for populating the list.
-	
+
 		mediabox: Bounds of the page (in points) represented by the
 		display list.
 	*/
@@ -3224,7 +3224,7 @@ struct FzDisplayList
 	/** Constructor using `fz_new_display_list_from_page()`. */
 	/**
 		Create a display list.
-	
+
 		Ownership of the display list is returned to the caller.
 	*/
 	FZ_FUNCTION FzDisplayList(const FzPage& page);
@@ -3261,7 +3261,7 @@ struct FzDisplayList
 	/** Class-aware wrapper for `::fz_new_display_list_from_page_contents()`.  */
 	/**
 		Create a display list from page contents (no annotations).
-	
+
 		Ownership of the display list is returned to the caller.
 	*/
 	FZ_FUNCTION static FzDisplayList fz_new_display_list_from_page_contents(const FzPage& page);
@@ -3277,9 +3277,9 @@ struct FzDisplayList
 	/** Class-aware wrapper for `::fz_display_list_is_empty()`.  */
 	/**
 		Check for a display list being empty
-	
+
 		list: The list to check.
-	
+
 		Returns true if empty, false otherwise.
 	*/
 	FZ_FUNCTION int fz_display_list_is_empty() const;
@@ -3293,14 +3293,14 @@ struct FzDisplayList
 	/** Class-aware wrapper for `::fz_new_list_device()`.  */
 	/**
 		Create a rendering device for a display list.
-	
+
 		When the device is rendering a page it will populate the
 		display list with drawing commands (text, images, etc.). The
 		display list can later be reused to render a page many times
 		without having to re-interpret the page from the document file
 		for each rendering. Once the device is no longer needed, free
 		it with fz_drop_device.
-	
+
 		list: A display list that the list device takes a reference to.
 	*/
 	FZ_FUNCTION FzDevice fz_new_list_device() const;
@@ -3308,7 +3308,7 @@ struct FzDisplayList
 	/** Class-aware wrapper for `::fz_new_pixmap_from_display_list()`.  */
 	/**
 		Render the page to a pixmap using the transform and colorspace.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap fz_new_pixmap_from_display_list(const FzMatrix& ctm, const FzColorspace& cs, int alpha) const;
@@ -3316,7 +3316,7 @@ struct FzDisplayList
 	/** Class-aware wrapper for `::fz_new_pixmap_from_display_list_with_separations()`.  */
 	/**
 		Render the page contents with control over spot colors.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap fz_new_pixmap_from_display_list_with_separations(const FzMatrix& ctm, const FzColorspace& cs, const FzSeparations& seps, int alpha) const;
@@ -3324,20 +3324,20 @@ struct FzDisplayList
 	/** Class-aware wrapper for `::fz_run_display_list()`.  */
 	/**
 		(Re)-run a display list through a device.
-	
+
 		list: A display list, created by fz_new_display_list and
 		populated with objects from a page by running fz_run_page on a
 		device obtained from fz_new_list_device.
-	
+
 		ctm: Transform to apply to display list contents. May include
 		for example scaling and rotation, see fz_scale, fz_rotate and
 		fz_concat. Set to fz_identity if no transformation is desired.
-	
+
 		scissor: Only the part of the contents of the display list
 		visible within this area will be considered when the list is
 		run through the device. This does not imply for tile objects
 		contained in the display list.
-	
+
 		cookie: Communication mechanism between caller and library
 		running the page. Intended for multi-threaded applications,
 		while single-threaded applications set cookie to NULL. The
@@ -3348,7 +3348,7 @@ struct FzDisplayList
 	FZ_FUNCTION void fz_run_display_list(const FzDevice& dev, const FzMatrix& ctm, const FzRect& scissor, FzCookie& cookie) const;
 
 	/** Class-aware wrapper for `::fz_search_display_list()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_search_display_list(const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -3393,10 +3393,10 @@ struct FzDocument
 		Open a document file and read its basic structure so pages and
 		objects can be located. MuPDF will try to repair broken
 		documents (without actually changing the file contents).
-	
+
 		The returned fz_document is used when calling most other
 		document related functions.
-	
+
 		filename: a path to a file as it would be given to open(2).
 	*/
 	FZ_FUNCTION FzDocument(const char *filename, const char *accel);
@@ -3405,14 +3405,14 @@ struct FzDocument
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream of the document contents.
-	
+
 		accel: NULL, or a stream of the 'accelerator' contents for this document.
-	
+
 		NOTE: The caller retains ownership of 'stream' and 'accel' - the document will
 		take its own references if required.
 	*/
@@ -3422,16 +3422,16 @@ struct FzDocument
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream of the document contents.
-	
+
 		accel: NULL, or a stream of the 'accelerator' contents for this document.
-	
+
 		dir: NULL, or the 'directory context' for the stream contents.
-	
+
 		NOTE: The caller retains ownership of 'stream', 'accel' and 'dir' - the document will
 		take its own references if required.
 	*/
@@ -3442,10 +3442,10 @@ struct FzDocument
 		Open a document file and read its basic structure so pages and
 		objects can be located. MuPDF will try to repair broken
 		documents (without actually changing the file contents).
-	
+
 		The returned fz_document is used when calling most other
 		document related functions.
-	
+
 		filename: a path to a file as it would be given to open(2).
 	*/
 	FZ_FUNCTION FzDocument(const char *filename);
@@ -3460,12 +3460,12 @@ struct FzDocument
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream representing the contents of the document file.
-	
+
 		NOTE: The caller retains ownership of 'stream' - the document will take its
 		own reference if required.
 	*/
@@ -3475,14 +3475,14 @@ struct FzDocument
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream representing the contents of the document file.
-	
+
 		dir: a 'directory context' for those filetypes that need it.
-	
+
 		NOTE: The caller retains ownership of 'stream' and 'dir' - the document will
 		take its own references if required.
 	*/
@@ -3511,16 +3511,16 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_authenticate_password()`.  */
 	/**
 		Test if the given password can decrypt the document.
-	
+
 		password: The password string to be checked. Some document
 		specifications do not specify any particular text encoding, so
 		neither do we.
-	
+
 		Returns 0 for failure to authenticate, non-zero for success.
-	
+
 		For PDF documents, further information can be given by examining
 		the bits in the return code.
-	
+
 			Bit 0 => No password required
 			Bit 1 => User password authenticated
 			Bit 2 => Owner password authenticated
@@ -3551,7 +3551,7 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_count_pages()`.  */
 	/**
 		Return the number of pages in document
-	
+
 		May return 0 for documents with no pages.
 	*/
 	FZ_FUNCTION int fz_count_pages() const;
@@ -3560,7 +3560,7 @@ struct FzDocument
 	/**
 		Find the output intent colorspace if the document has defined
 		one.
-	
+
 		Returns a borrowed reference that should not be dropped, unless
 		it is kept first.
 	*/
@@ -3576,7 +3576,7 @@ struct FzDocument
 	/**
 		Format an internal link to a page number, location, and possible viewing parameters,
 		suitable for use with fz_create_link.
-	
+
 		Returns a newly allocated string that the caller must free.
 	*/
 	FZ_FUNCTION char *fz_format_link_uri(const FzLinkDest& dest) const;
@@ -3590,7 +3590,7 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_is_document_reflowable()`.  */
 	/**
 		Is the document reflowable.
-	
+
 		Returns 1 to indicate reflowable documents, otherwise 0.
 	*/
 	FZ_FUNCTION int fz_is_document_reflowable() const;
@@ -3606,7 +3606,7 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_layout_document()`.  */
 	/**
 		Layout reflowable document types.
-	
+
 		w, h: Page size in points.
 		em: Default font size in points.
 	*/
@@ -3615,11 +3615,11 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_load_chapter_page()`.  */
 	/**
 		Load a page.
-	
+
 		After fz_load_page is it possible to retrieve the size of the
 		page using fz_bound_page, or to render the page using
 		fz_run_page_*. Free the page by calling fz_drop_page.
-	
+
 		chapter: chapter number, 0 is the first chapter of the document.
 		number: page number, 0 is the first page of the chapter.
 	*/
@@ -3628,7 +3628,7 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_load_outline()`.  */
 	/**
 		Load the hierarchical document outline.
-	
+
 		Should be freed by fz_drop_outline.
 	*/
 	FZ_FUNCTION FzOutline fz_load_outline() const;
@@ -3658,15 +3658,15 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_lookup_metadata()`.  */
 	/**
 		Retrieve document meta data strings.
-	
+
 		doc: The document to query.
-	
+
 		key: Which meta data key to retrieve...
-	
+
 		Basic information:
 			'format'	-- Document format and version.
 			'encryption'	-- Description of the encryption used.
-	
+
 		From the document information dictionary:
 			'info:Title'
 			'info:Author'
@@ -3676,12 +3676,12 @@ struct FzDocument
 			'info:Producer'
 			'info:CreationDate'
 			'info:ModDate'
-	
+
 		buf: The buffer to hold the results (a nul-terminated UTF-8
 		string).
-	
+
 		size: Size of 'buf'.
-	
+
 		Returns the number of bytes need to store the string plus terminator
 		(will be larger than 'size' if the output was truncated), or -1 if the
 		key is not recognized or found.
@@ -3764,25 +3764,25 @@ struct FzDocument
 		provided callback for each page for processing. If the callback
 		returns non-NULL then the iteration stops and that value is returned
 		to the called of fz_process_opened_pages().
-	
+
 		The state pointer provided to fz_process_opened_pages() is
 		passed on to the callback but is owned by the caller.
-	
+
 		Returns the first non-NULL value returned by the callback,
 		or NULL if the callback returned NULL for all opened pages.
 	*/
 	FZ_FUNCTION void *fz_process_opened_pages(::fz_process_opened_page_fn *process_openend_page, void *state) const;
 
 	/** Class-aware wrapper for `::fz_resolve_link()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_resolve_link(const char *uri)` => `(fz_location, float xp, float yp)`
 	 */
 	/**
 		Resolve an internal link to a page number.
-	
+
 		xp, yp: Pointer to store coordinate of destination on the page.
-	
+
 		Returns (-1,-1) if the URI cannot be resolved.
 	*/
 	FZ_FUNCTION FzLocation fz_resolve_link(const char *uri, float *xp, float *yp) const;
@@ -3790,11 +3790,11 @@ struct FzDocument
 	/** Class-aware wrapper for `::fz_run_document_structure()`.  */
 	/**
 		Run the document structure through a device.
-	
+
 		doc: Document in question.
-	
+
 		dev: Device obtained from fz_new_*_device.
-	
+
 		cookie: Communication mechanism between caller and library.
 		Intended for multi-threaded applications, while
 		single-threaded applications set cookie to NULL. The
@@ -3812,7 +3812,7 @@ struct FzDocument
 	FZ_FUNCTION void fz_save_accelerator(const char *accel) const;
 
 	/** Class-aware wrapper for `::fz_search_chapter_page_number()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_search_chapter_page_number(int chapter, int page, const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -3828,7 +3828,7 @@ struct FzDocument
 	FZ_FUNCTION std::vector<fz_search_page2_hit> fz_search_page2(int number, const char *needle, int hit_max) const;
 
 	/** Class-aware wrapper for `::fz_search_page_number()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_search_page_number(int number, const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -3902,7 +3902,7 @@ struct FzDocumentHandler
 	/** Class-aware wrapper for `::fz_register_document_handler()`.  */
 	/**
 		Register a handler for a document type.
-	
+
 		handler: The handler to register. This must live on for the duration of the
 		use of this handler. It will be passed back to the handler for calls so
 		the caller can use it to retrieve state.
@@ -4089,7 +4089,7 @@ struct FzDocumentWriter
 		fz_new_pdfocr_writer_with_output()
 		fz_new_ps_writer_with_output()
 		fz_new_pwg_writer_with_output()
-	
+
 	This constructor takes ownership of <out> -
 	out.m_internal is set to NULL after this constructor
 	returns so <out> must not be used again.
@@ -4103,7 +4103,7 @@ struct FzDocumentWriter
 	FZ_FUNCTION FzDocumentWriter(const char *format, const char *path, const char *options, FormatPathType format_path_type);
 
 	/** Constructor using fz_new_document_writer_with_output().
-	
+
 	This constructor takes ownership of <out> -
 	out.m_internal is set to NULL after this constructor
 	returns so <out> must not be used again.
@@ -4111,7 +4111,7 @@ struct FzDocumentWriter
 	FZ_FUNCTION FzDocumentWriter(FzOutput& out, const char *format, const char *options);
 
 	/** Constructor using fz_new_text_writer_with_output().
-	
+
 	This constructor takes ownership of <out> -
 	out.m_internal is set to NULL after this constructor
 	returns so <out> must not be used again.
@@ -4127,9 +4127,9 @@ struct FzDocumentWriter
 	/**
 		Called to start the process of writing a page to
 		a document.
-	
+
 		mediabox: page size rectangle in points.
-	
+
 		Returns a borrowed fz_device to write page contents to. This
 		should be kept if required, and only dropped if it was kept.
 	*/
@@ -4139,7 +4139,7 @@ struct FzDocumentWriter
 	/**
 		Called to end the process of writing
 		pages to a document.
-	
+
 		This writes any file level trailers required. After this
 		completes successfully the file is up to date and complete.
 	*/
@@ -4365,17 +4365,17 @@ struct FzFont
 	/** Constructor using `fz_new_font_from_buffer()`. */
 	/**
 		Create a new font from a font file in a fz_buffer.
-	
+
 		Fonts created in this way, will be eligible for embedding by default.
-	
+
 		name: Name of font (leave NULL to use name from font).
-	
+
 		buffer: Buffer to load from.
-	
+
 		index: Which font from the file to load (0 for default).
-	
+
 		use_glyph_box: 1 if we should use the glyph bbox, 0 otherwise.
-	
+
 		Returns new font handle, or throws exception on error.
 	*/
 	FZ_FUNCTION FzFont(const char *name, const FzBuffer& buffer, int index, int use_glyph_bbox);
@@ -4383,17 +4383,17 @@ struct FzFont
 	/** Constructor using `fz_new_font_from_file()`. */
 	/**
 		Create a new font from a font file.
-	
+
 		Fonts created in this way, will be eligible for embedding by default.
-	
+
 		name: Name of font (leave NULL to use name from font).
-	
+
 		path: File path to load from.
-	
+
 		index: Which font from the file to load (0 for default).
-	
+
 		use_glyph_box: 1 if we should use the glyph bbox, 0 otherwise.
-	
+
 		Returns new font handle, or throws exception on error.
 	*/
 	FZ_FUNCTION FzFont(const char *name, const char *path, int index, int use_glyph_bbox);
@@ -4401,19 +4401,19 @@ struct FzFont
 	/** Constructor using `fz_new_font_from_memory()`. */
 	/**
 		Create a new font from a font file in memory.
-	
+
 		Fonts created in this way, will be eligible for embedding by default.
-	
+
 		name: Name of font (leave NULL to use name from font).
-	
+
 		data: Pointer to the font file data.
-	
+
 		len: Length of the font file data.
-	
+
 		index: Which font from the file to load (0 for default).
-	
+
 		use_glyph_box: 1 if we should use the glyph bbox, 0 otherwise.
-	
+
 		Returns new font handle, or throws exception on error.
 	*/
 	FZ_FUNCTION FzFont(const char *name, const unsigned char *data, int len, int index, int use_glyph_bbox);
@@ -4421,11 +4421,11 @@ struct FzFont
 	/** Constructor using `fz_new_type3_font()`. */
 	/**
 		Create a new (empty) type3 font.
-	
+
 		name: Name of font (or NULL).
-	
+
 		matrix: Font matrix.
-	
+
 		Returns a new font handle, or throws exception on
 		allocation failure.
 	*/
@@ -4445,13 +4445,13 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_advance_glyph()`.  */
 	/**
 		Return the advance for a given glyph.
-	
+
 		font: The font to look for the glyph in.
-	
+
 		glyph: The glyph to find the advance for.
-	
+
 		wmode: 1 for vertical mode, 0 for horizontal.
-	
+
 		Returns the advance for the glyph.
 	*/
 	FZ_FUNCTION float fz_advance_glyph(int glyph, int wmode) const;
@@ -4459,13 +4459,13 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_bound_glyph()`.  */
 	/**
 		Return a bbox for a given glyph in a font.
-	
+
 		font: The font to look for the glyph in.
-	
+
 		gid: The glyph to bound.
-	
+
 		trm: The matrix to apply to the glyph before bounding.
-	
+
 		Returns rectangle by value containing the bounds of the given
 		glyph.
 	*/
@@ -4475,7 +4475,7 @@ struct FzFont
 	/**
 		Ensure that a font has its ascender/descender values calculated
 		from the actual bbox of the glyphs.
-	
+
 		Note, that we combine the declared values from the font (or the
 		default values if those are not present) with the actual bbox to
 		get the final result. So this can only cause ascender/descender
@@ -4490,11 +4490,11 @@ struct FzFont
 	/**
 		Find the glyph id for a given unicode
 		character within a font.
-	
+
 		font: The font to look for the unicode character in.
-	
+
 		unicode: The unicode character to encode.
-	
+
 		Returns the glyph id for the given unicode value, or 0 if
 		unknown.
 	*/
@@ -4503,11 +4503,11 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_encode_character_by_glyph_name()`.  */
 	/**
 		Encode character.
-	
+
 		Either by direct lookup of glyphname within a font, or, failing
 		that, by mapping glyphname to unicode and thence to the glyph
 		index within the given font.
-	
+
 		Returns zero for type3 fonts.
 	*/
 	FZ_FUNCTION int fz_encode_character_by_glyph_name(const char *glyphname) const;
@@ -4515,18 +4515,18 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_encode_character_sc()`.  */
 	/**
 		Encode character, preferring small-caps variant if available.
-	
+
 		font: The font to look for the unicode character in.
-	
+
 		unicode: The unicode character to encode.
-	
+
 		Returns the glyph id for the given unicode value, or 0 if
 		unknown.
 	*/
 	FZ_FUNCTION int fz_encode_character_sc(int unicode) const;
 
 	/** Class-aware wrapper for `::fz_encode_character_with_fallback()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_encode_character_with_fallback(int unicode, int script, int language, ::fz_font **out_font)` => `(int)`
 	 */
@@ -4534,20 +4534,20 @@ struct FzFont
 		Find the glyph id for
 		a given unicode character within a font, falling back to
 		an alternative if not found.
-	
+
 		font: The font to look for the unicode character in.
-	
+
 		unicode: The unicode character to encode.
-	
+
 		script: The script in use.
-	
+
 		language: The language in use.
-	
+
 		out_font: The font handle in which the given glyph represents
 		the requested unicode character. The caller does not own the
 		reference it is passed, so should call fz_keep_font if it is
 		not simply to be used immediately.
-	
+
 		Returns the glyph id for the given unicode value in the supplied
 		font (and sets *out_font to font) if it is present. Otherwise
 		an alternative fallback font (based on script/language) is
@@ -4579,9 +4579,9 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_font_bbox()`.  */
 	/**
 		Retrieve the font bbox.
-	
+
 		font: The font to query.
-	
+
 		Returns the font bbox by value; it is valid only if
 		fz_font_flags(font)->invalid_bbox is zero.
 	*/
@@ -4603,9 +4603,9 @@ struct FzFont
 	/**
 		Retrieve the FT_Face handle
 		for the font.
-	
+
 		font: The font to query
-	
+
 		Returns the FT_Face handle for the font, or NULL
 		if not a freetype handled font. (Cast to void *
 		to avoid nasty header exposure).
@@ -4639,9 +4639,9 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_font_name()`.  */
 	/**
 		Retrieve a pointer to the name of the font.
-	
+
 		font: The font to query.
-	
+
 		Returns a pointer to an internal copy of the font name.
 		Will never be NULL, but may be the empty string.
 	*/
@@ -4651,9 +4651,9 @@ struct FzFont
 	/**
 		Retrieve the Type3 procs
 		for a font.
-	
+
 		font: The font to query
-	
+
 		Returns the t3_procs pointer. Will be NULL for a
 		non type-3 font.
 	*/
@@ -4662,15 +4662,15 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_get_glyph_name()`.  */
 	/**
 		Find the name of a glyph
-	
+
 		font: The font to look for the glyph in.
-	
+
 		glyph: The glyph id to look for.
-	
+
 		buf: Pointer to a buffer for the name to be inserted into.
-	
+
 		size: The size of the buffer.
-	
+
 		If a font contains a name table, then the name of the glyph
 		will be returned in the supplied buffer. Otherwise a name
 		is synthesised. The name will be truncated to fit in
@@ -4690,11 +4690,11 @@ struct FzFont
 		is cacheable. Certain glyphs in a type 3 font cannot safely
 		be cached, as their appearance depends on the enclosing
 		graphic state.
-	
+
 		font: The font to look for the glyph in.
-	
+
 		gif: The glyph to query.
-	
+
 		Returns non-zero if cacheable, 0 if not.
 	*/
 	FZ_FUNCTION int fz_glyph_cacheable(int gid) const;
@@ -4702,7 +4702,7 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_measure_string()`.  */
 	/**
 		Measure the advance width of a UTF8 string should it be added to a text object.
-	
+
 		This uses the same layout algorithms as fz_show_string, and can be used
 		to calculate text alignment adjustments.
 	*/
@@ -4712,7 +4712,7 @@ struct FzFont
 	/**
 		Look a glyph up from a font, and return the outline of the
 		glyph using the given transform.
-	
+
 		The caller owns the returned path, and so is responsible for
 		ensuring that it eventually gets dropped.
 	*/
@@ -4722,7 +4722,7 @@ struct FzFont
 	/**
 		Force a type3 font to cache the displaylist for a given glyph
 		id.
-	
+
 		This caching can involve reading the underlying file, so must
 		happen ahead of time, so we aren't suddenly forced to read the
 		file while playing a displaylist back.
@@ -4732,12 +4732,12 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_render_glyph_pixmap()`.  */
 	/**
 		Create a pixmap containing a rendered glyph.
-	
+
 		Lookup gid from font, clip it with scissor, and rendering it
 		with aa bits of antialiasing into a new pixmap.
-	
+
 		The caller takes ownership of the pixmap and so must free it.
-	
+
 		Note: This function is no longer used for normal rendering
 		operations, and is kept around just because we use it in the
 		app. It should be considered "at risk" of removal from the API.
@@ -4748,13 +4748,13 @@ struct FzFont
 	/**
 		Run a glyph from a Type3 font to
 		a given device.
-	
+
 		font: The font to find the glyph in.
-	
+
 		gid: The glyph to run.
-	
+
 		trm: The transform to apply.
-	
+
 		dev: The device to render onto.
 	*/
 	FZ_FUNCTION void fz_run_t3_glyph(int gid, const FzMatrix& trm, const FzDevice& dev) const;
@@ -4762,9 +4762,9 @@ struct FzFont
 	/** Class-aware wrapper for `::fz_set_font_bbox()`.  */
 	/**
 		Set the font bbox.
-	
+
 		font: The font to set the bbox for.
-	
+
 		xmin, ymin, xmax, ymax: The bounding box.
 	*/
 	FZ_FUNCTION void fz_set_font_bbox(float xmin, float ymin, float xmax, float ymax) const;
@@ -4907,7 +4907,7 @@ struct FzFunction
 	/* == Methods. */
 
 	/** Class-aware wrapper for `::fz_eval_function()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_eval_function(const float *in, int inlen, int outlen)` => float out
 	 */
@@ -5144,16 +5144,16 @@ struct FzHashTable
 	/** Constructor using `fz_new_hash_table()`. */
 	/**
 		Create a new hash table.
-	
+
 		initialsize: The initial size of the hashtable. The hashtable
 		may grow (double in size) if it starts to get crowded (80%
 		full).
-	
+
 		keylen: byte length for each key.
-	
+
 		lock: -1 for no lock, otherwise the FZ_LOCK to use to protect
 		this table.
-	
+
 		drop_val: Function to use to destroy values on table drop.
 	*/
 	FZ_FUNCTION FzHashTable(int initialsize, int keylen, int lock, ::fz_hash_table_drop_fn *drop_val);
@@ -5186,11 +5186,11 @@ struct FzHashTable
 	/** Class-aware wrapper for `::fz_hash_insert()`.  */
 	/**
 		Insert a new key/value pair into the hash table.
-	
+
 		If an existing entry with the same key is found, no change is
 		made to the hash table, and a pointer to the existing value is
 		returned.
-	
+
 		If no existing entry with the same key is found, ownership of
 		val passes in, key is copied, and NULL is returned.
 	*/
@@ -5199,7 +5199,7 @@ struct FzHashTable
 	/** Class-aware wrapper for `::fz_hash_remove()`.  */
 	/**
 		Remove the entry for a given key.
-	
+
 		The value is NOT freed, so the caller is expected to take care
 		of this.
 	*/
@@ -5288,14 +5288,14 @@ struct FzImage
 	/** Constructor using `fz_new_barcode_image()`. */
 	/**
 		Create an fz_image from a barcode definition.
-	
+
 		type: The type of barcode to create.
 		value: The value of the barcode.
 		size: The size of the barcode.
 		ec_level: error correction level 0-8.
 		quiet: whether to include quiet zones (0 or 1).
 		hrt: whether to include human readable text below the barcode (0 or 1).
-	
+
 		returns a created fz_image.
 	*/
 	FZ_FUNCTION FzImage(::fz_barcode_type type, const char *value, int size, int ec_level, int quiet, int hrt);
@@ -5312,32 +5312,32 @@ struct FzImage
 	/**
 		Create an image based on
 		the data in the supplied compressed buffer.
-	
+
 		w,h: Width and height of the created image.
-	
+
 		bpc: Bits per component.
-	
+
 		colorspace: The colorspace (determines the number of components,
 		and any color conversions required while decoding).
-	
+
 		xres, yres: The X and Y resolutions respectively.
-	
+
 		interpolate: 1 if interpolation should be used when decoding
 		this image, 0 otherwise.
-	
+
 		imagemask: 1 if this is an imagemask (i.e. transparency bitmap
 		mask), 0 otherwise.
-	
+
 		decode: NULL, or a pointer to to a decode array. The default
 		decode array is [0 1] (repeated n times, for n color components).
-	
+
 		colorkey: NULL, or a pointer to a colorkey array. The default
 		colorkey array is [0 255] (repeated n times, for n color
 		components).
-	
+
 		buffer: Buffer of compressed data and compression parameters.
 		Ownership of this reference is passed in.
-	
+
 		mask: NULL, or another image to use as a mask for this one.
 		A new reference is taken to this image. Supplying a masked
 		image as a mask to another image is illegal!
@@ -5353,12 +5353,12 @@ struct FzImage
 	/** Constructor using `fz_new_image_from_display_list()`. */
 	/**
 		Create a new image from a display list.
-	
+
 		w, h: The conceptual width/height of the image.
-	
+
 		transform: The matrix that needs to be applied to the given
 		list to make it render to the unit square.
-	
+
 		list: The display list.
 	*/
 	FZ_FUNCTION FzImage(float w, float h, const FzDisplayList& list);
@@ -5375,10 +5375,10 @@ struct FzImage
 	/**
 		Create an image from the given
 		pixmap.
-	
+
 		pixmap: The pixmap to base the image upon. A new reference
 		to this is taken.
-	
+
 		mask: NULL, or another image to use as a mask for this one.
 		A new reference is taken to this image. Supplying a masked
 		image as a mask to another image is illegal!
@@ -5401,44 +5401,44 @@ struct FzImage
 	/**
 		Internal function to make a new fz_image structure
 		for a derived class.
-	
+
 		w,h: Width and height of the created image.
-	
+
 		bpc: Bits per component.
-	
+
 		colorspace: The colorspace (determines the number of components,
 		and any color conversions required while decoding).
-	
+
 		xres, yres: The X and Y resolutions respectively.
-	
+
 		interpolate: 1 if interpolation should be used when decoding
 		this image, 0 otherwise.
-	
+
 		imagemask: 1 if this is an imagemask (i.e. transparent), 0
 		otherwise.
-	
+
 		decode: NULL, or a pointer to to a decode array. The default
 		decode array is [0 1] (repeated n times, for n color components).
-	
+
 		colorkey: NULL, or a pointer to a colorkey array. The default
 		colorkey array is [0 255] (repeated n times, for n color
 		components).
-	
+
 		mask: NULL, or another image to use as a mask for this one.
 		A new reference is taken to this image. Supplying a masked
 		image as a mask to another image is illegal!
-	
+
 		size: The size of the required allocated structure (the size of
 		the derived structure).
-	
+
 		get: The function to be called to obtain a decoded pixmap.
-	
+
 		get_size: The function to be called to return the storage size
 		used by this image.
-	
+
 		drop: The function to be called to dispose of this image once
 		the last reference is dropped.
-	
+
 		Returns a pointer to an allocated structure of the required size,
 		with the first sizeof(fz_image) bytes initialised as appropriate
 		given the supplied parameters, and the other bytes set to zero.
@@ -5459,11 +5459,11 @@ struct FzImage
 	/** Class-aware wrapper for `::fz_compressed_image_buffer()`.  */
 	/**
 		Retrieve the underlying compressed data for an image.
-	
+
 		Returns a pointer to the underlying data buffer for an image,
 		or NULL if this image is not based upon a compressed data
 		buffer.
-	
+
 		This is not a reference counted structure, so no reference is
 		returned. Lifespan is limited to that of the image itself.
 	*/
@@ -5472,36 +5472,36 @@ struct FzImage
 	/** Class-aware wrapper for `::fz_compressed_image_type()`.  */
 	/**
 		Return the type of a compressed image.
-	
+
 		Any non-compressed image will have the type returned as UNKNOWN.
 	*/
 	FZ_FUNCTION int fz_compressed_image_type() const;
 
 	/** Class-aware wrapper for `::fz_get_pixmap_from_image()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_get_pixmap_from_image(const ::fz_irect *subarea, ::fz_matrix *ctm)` => `(fz_pixmap *, int w, int h)`
 	 */
 	/**
 		Called to get a handle to a pixmap from an image.
-	
+
 		image: The image to retrieve a pixmap from.
-	
+
 		subarea: The subarea of the image that we actually care about
 		(or NULL to indicate the whole image).
-	
+
 		ctm: Optional, unless subarea is given. If given, then on
 		entry this is the transform that will be applied to the complete
 		image. It should be updated on exit to the transform to apply to
 		the given subarea of the image. This is used to calculate the
 		desired width/height for subsampling.
-	
+
 		w: If non-NULL, a pointer to an int to be updated on exit to the
 		width (in pixels) that the scaled output will cover.
-	
+
 		h: If non-NULL, a pointer to an int to be updated on exit to the
 		height (in pixels) that the scaled output will cover.
-	
+
 		Returns a non NULL kept pixmap pointer. May throw exceptions.
 	*/
 	FZ_FUNCTION FzPixmap fz_get_pixmap_from_image(FzIrect& subarea, FzMatrix& ctm, int *w, int *h) const;
@@ -5515,16 +5515,16 @@ struct FzImage
 	/** Class-aware wrapper for `::fz_image_orientation()`.  */
 	/**
 		Request the natural orientation of an image.
-	
+
 		This is for images (such as JPEG) that can contain internal
 		specifications of rotation/flips. This is ignored by all the
 		internal decode/rendering routines, but can be used by callers
 		(such as the image document handler) to respect such
 		specifications.
-	
+
 		The values used by MuPDF are as follows, with the equivalent
 		Exif specifications given for information:
-	
+
 		0: Undefined
 		1: 0 degree ccw rotation. (Exif = 1)
 		2: 90 degree ccw rotation. (Exif = 8)
@@ -5541,14 +5541,14 @@ struct FzImage
 	FZ_FUNCTION FzMatrix fz_image_orientation_matrix() const;
 
 	/** Class-aware wrapper for `::fz_image_resolution()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_image_resolution()` => `(int xres, int yres)`
 	 */
 	/**
 		Request the natural resolution
 		of an image.
-	
+
 		xres, yres: Pointers to ints to be updated with the
 		natural resolution of an image (or a sensible default
 		if not encoded).
@@ -5567,12 +5567,12 @@ struct FzImage
 	/** Class-aware wrapper for `::fz_new_bitmap_from_image()`.  */
 	/**
 		Make a bitmap from a pixmap and a halftone.
-	
+
 		img: The image to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -5596,7 +5596,7 @@ struct FzImage
 	/** Class-aware wrapper for `::fz_new_buffer_from_image_as_png()`.  */
 	/**
 		Re-encode a given image as a PNG into a buffer.
-	
+
 		Ownership of the buffer is returned.
 	*/
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_image_as_png(const FzColorParams& color_params) const;
@@ -5977,7 +5977,7 @@ struct FzIrect
 	/**
 		Convert a rect into the minimal bounding box
 		that covers the rectangle.
-	
+
 		Coordinates in a bounding box are integers, so rounding of the
 		rects coordinates takes place. The top left corner is rounded
 		upwards and left while the bottom right corner is rounded
@@ -6001,7 +6001,7 @@ struct FzIrect
 	/** Class-aware wrapper for `::fz_intersect_irect()`.  */
 	/**
 		Compute intersection of two bounding boxes.
-	
+
 		Similar to fz_intersect_rect but operates on two bounding
 		boxes instead of two rectangles.
 	*/
@@ -6032,9 +6032,9 @@ struct FzIrect
 	/** Class-aware wrapper for `::fz_is_irect_inside_irect()`.  */
 	/**
 		Inclusion test for irects.
-	
+
 		rects are assumed to be both open or both closed.
-	
+
 		No invalid rect can include any other rect.
 		No invalid rect can be included by any rect.
 		Empty (point) rects can include themselves.
@@ -6051,14 +6051,14 @@ struct FzIrect
 	/** Class-aware wrapper for `::fz_rect_from_irect()`.  */
 	/**
 		Convert a bbox into a rect.
-	
+
 		For our purposes, a rect can represent all the values we meet in
 		a bbox, so nothing can go wrong.
-	
+
 		rect: A place to store the generated rectangle.
-	
+
 		bbox: The bbox to convert.
-	
+
 		Returns rect (updated).
 	*/
 	FZ_FUNCTION FzRect fz_rect_from_irect();
@@ -6508,10 +6508,10 @@ struct FzLink
 	/** Constructor using `fz_new_link_of_size()`. */
 	/**
 		Create a new link record.
-	
+
 		next is set to NULL with the expectation that the caller will
 		handle the linked list setup. Internal function.
-	
+
 		Different document types will be implemented by deriving from
 		fz_link. This macro allocates such derived structures, and
 		initialises the base sections.
@@ -6773,10 +6773,10 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_concat()`.  */
 	/**
 		Multiply two matrices.
-	
+
 		The order of the two matrices are important since matrix
 		multiplication is not commutative.
-	
+
 		Returns result.
 	*/
 	FZ_FUNCTION static FzMatrix fz_concat(const FzMatrix& left, const FzMatrix& right);
@@ -6784,15 +6784,15 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_scale()`.  */
 	/**
 		Create a scaling matrix.
-	
+
 		The returned matrix is of the form [ sx 0 0 sy 0 0 ].
-	
+
 		m: Pointer to the matrix to populate
-	
+
 		sx, sy: Scaling factors along the X- and Y-axes. A scaling
 		factor of 1.0 will not cause any scaling along the relevant
 		axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION static FzMatrix fz_scale(float sx, float sy);
@@ -6800,14 +6800,14 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_shear()`.  */
 	/**
 		Create a shearing matrix.
-	
+
 		The returned matrix is of the form [ 1 sy sx 1 0 0 ].
-	
+
 		m: pointer to place to store returned matrix
-	
+
 		sx, sy: Shearing factors. A shearing factor of 0.0 will not
 		cause any shearing along the relevant axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION static FzMatrix fz_shear(float sx, float sy);
@@ -6815,15 +6815,15 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_rotate()`.  */
 	/**
 		Create a rotation matrix.
-	
+
 		The returned matrix is of the form
 		[ cos(deg) sin(deg) -sin(deg) cos(deg) 0 0 ].
-	
+
 		m: Pointer to place to store matrix
-	
+
 		degrees: Degrees of counter clockwise rotation. Values less
 		than zero and greater than 360 are handled as expected.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION static FzMatrix fz_rotate(float degrees);
@@ -6831,15 +6831,15 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_translate()`.  */
 	/**
 		Create a translation matrix.
-	
+
 		The returned matrix is of the form [ 1 0 0 1 tx ty ].
-	
+
 		m: A place to store the created matrix.
-	
+
 		tx, ty: Translation distances along the X- and Y-axes. A
 		translation of 0 will not cause any translation along the
 		relevant axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION static FzMatrix fz_translate(float tx, float ty);
@@ -6858,10 +6858,10 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_concat()`.  */
 	/**
 		Multiply two matrices.
-	
+
 		The order of the two matrices are important since matrix
 		multiplication is not commutative.
-	
+
 		Returns result.
 	*/
 	FZ_FUNCTION FzMatrix fz_concat(const FzMatrix& right);
@@ -6869,11 +6869,11 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_invert_matrix()`.  */
 	/**
 		Create an inverse matrix.
-	
+
 		matrix: Matrix to invert. A degenerate matrix, where the
 		determinant is equal to zero, can not be inverted and the
 		original matrix is returned instead.
-	
+
 		Returns inverse.
 	*/
 	FZ_FUNCTION FzMatrix fz_invert_matrix();
@@ -6884,7 +6884,7 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_is_rectilinear()`.  */
 	/**
 		Check if a transformation is rectilinear.
-	
+
 		Rectilinear means that no shearing is present and that any
 		rotations present are a multiple of 90 degrees. Usually this
 		is used to make sure that axis-aligned rectangles before the
@@ -6908,13 +6908,13 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_post_scale()`.  */
 	/**
 		Scale a matrix by postmultiplication.
-	
+
 		m: Pointer to the matrix to scale
-	
+
 		sx, sy: Scaling factors along the X- and Y-axes. A scaling
 		factor of 1.0 will not cause any scaling along the relevant
 		axis.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_post_scale(float sx, float sy);
@@ -6922,15 +6922,15 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_pre_rotate()`.  */
 	/**
 		Rotate a transformation by premultiplying.
-	
+
 		The premultiplied matrix is of the form
 		[ cos(deg) sin(deg) -sin(deg) cos(deg) 0 0 ].
-	
+
 		m: Pointer to matrix to premultiply.
-	
+
 		degrees: Degrees of counter clockwise rotation. Values less
 		than zero and greater than 360 are handled as expected.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_rotate(float degrees);
@@ -6938,13 +6938,13 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_pre_scale()`.  */
 	/**
 		Scale a matrix by premultiplication.
-	
+
 		m: Pointer to the matrix to scale
-	
+
 		sx, sy: Scaling factors along the X- and Y-axes. A scaling
 		factor of 1.0 will not cause any scaling along the relevant
 		axis.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_scale(float sx, float sy);
@@ -6952,14 +6952,14 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_pre_shear()`.  */
 	/**
 		Premultiply a matrix with a shearing matrix.
-	
+
 		The shearing matrix is of the form [ 1 sy sx 1 0 0 ].
-	
+
 		m: pointer to matrix to premultiply
-	
+
 		sx, sy: Shearing factors. A shearing factor of 0.0 will not
 		cause any shearing along the relevant axis.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_shear(float sx, float sy);
@@ -6967,13 +6967,13 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_pre_translate()`.  */
 	/**
 		Translate a matrix by premultiplication.
-	
+
 		m: The matrix to translate
-	
+
 		tx, ty: Translation distances along the X- and Y-axes. A
 		translation of 0 will not cause any translation along the
 		relevant axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_translate(float tx, float ty);
@@ -6981,18 +6981,18 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_subpixel_adjust()`.  */
 	/**
 		Perform subpixel quantisation and adjustment on a glyph matrix.
-	
+
 		ctm: On entry, the desired 'ideal' transformation for a glyph.
 		On exit, adjusted to a (very similar) transformation quantised
 		for subpixel caching.
-	
+
 		subpix_ctm: Initialised by the routine to the transform that
 		should be used to render the glyph.
-	
+
 		qe, qf: which subpixel position we quantised to.
-	
+
 		Returns: the size of the glyph.
-	
+
 		Note: This is currently only exposed for use in our app. It
 		should be considered "at risk" of removal from the API.
 	*/
@@ -7001,12 +7001,12 @@ struct FzMatrix
 	/** Class-aware wrapper for `::fz_try_invert_matrix()`.  */
 	/**
 		Attempt to create an inverse matrix.
-	
+
 		inv: Place to store inverse matrix.
-	
+
 		src: Matrix to invert. A degenerate matrix, where the
 		determinant is equal to zero, can not be inverted.
-	
+
 		Returns 1 if matrix is degenerate (singular), or 0 otherwise.
 	*/
 	FZ_FUNCTION int fz_try_invert_matrix(const FzMatrix& src);
@@ -7072,7 +7072,7 @@ struct FzMd5
 	/**
 		MD5 finalization. Ends an MD5 message-digest operation, writing
 		the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_final(unsigned char digest[16]);
@@ -7087,7 +7087,7 @@ struct FzMd5
 	/**
 		MD5 initialization. Begins an MD5 operation, writing a new
 		context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_init();
@@ -7097,7 +7097,7 @@ struct FzMd5
 		MD5 block update operation. Continues an MD5 message-digest
 		operation, processing another message block, and updating the
 		context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_update(const unsigned char *input, size_t inlen);
@@ -7106,7 +7106,7 @@ struct FzMd5
 	/**
 		MD5 block update operation. Continues an MD5 message-digest
 		operation, processing an int64, and updating the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_update_int64(int64_t i);
@@ -7185,7 +7185,7 @@ struct FzOutline
 	/** Constructor using `fz_load_outline()`. */
 	/**
 		Load the hierarchical document outline.
-	
+
 		Should be freed by fz_drop_outline.
 	*/
 	FZ_FUNCTION FzOutline(const FzDocument& doc);
@@ -7296,7 +7296,7 @@ struct FzOutlineIterator
 	/** Constructor using `fz_new_outline_iterator()`. */
 	/**
 		Get an iterator for the document outline.
-	
+
 		Should be freed by fz_drop_outline_iterator.
 	*/
 	FZ_FUNCTION FzOutlineIterator(const FzDocument& doc);
@@ -7321,7 +7321,7 @@ struct FzOutlineIterator
 	/** Class-aware wrapper for `::fz_outline_iterator_delete()`.  */
 	/**
 		Delete the current item.
-	
+
 		This implicitly moves us to the 'next' item, and the return code is as for fz_outline_iterator_next.
 	*/
 	FZ_FUNCTION int fz_outline_iterator_delete() const;
@@ -7332,7 +7332,7 @@ struct FzOutlineIterator
 	/** Class-aware wrapper for `::fz_outline_iterator_item()`.  */
 	/**
 		Call to get the current outline item.
-	
+
 		Can return NULL. The item is only valid until the next call.
 	*/
 	FZ_FUNCTION FzOutlineItem fz_outline_iterator_item() const;
@@ -7340,7 +7340,7 @@ struct FzOutlineIterator
 	/** Class-aware wrapper for `::fz_outline_iterator_next()`.  */
 	/**
 		Calls to move the iterator position.
-	
+
 		A negative return value means we could not move as requested. Otherwise:
 		0 = the final position has a valid item.
 		1 = not a valid item, but we can insert an item here.
@@ -7413,7 +7413,7 @@ struct FzOutput
 	/** Constructor using `fz_new_log_for_module()`. */
 	/**
 		Internal function to actually do the opening of the logfile.
-	
+
 		Caller should close/drop the output when finished with it.
 	*/
 	FZ_FUNCTION FzOutput(const char *module);
@@ -7422,11 +7422,11 @@ struct FzOutput
 	/**
 		Create a new output object with the given
 		internal state and function pointers.
-	
+
 		state: Internal state (opaque to everything but implementation).
-	
+
 		write: Function to output a given buffer.
-	
+
 		close: Cleanup function to destroy state when output closed.
 		May permissibly be null.
 	*/
@@ -7436,7 +7436,7 @@ struct FzOutput
 	/**
 		Open an output stream that appends
 		to a buffer.
-	
+
 		buf: The buffer to append to.
 	*/
 	FZ_FUNCTION FzOutput(const FzBuffer& buf);
@@ -7445,7 +7445,7 @@ struct FzOutput
 	/**
 		Open an output stream that writes to a
 		given FILE *.
-	
+
 		file: The file pointers to write to. NULL is interpreted as effectively
 		meaning /dev/null or similar.
 	*/
@@ -7455,9 +7455,9 @@ struct FzOutput
 	/**
 		Open an output stream that writes to a
 		given path.
-	
+
 		filename: The filename to write to (specified in UTF-8).
-	
+
 		append: non-zero if we should append to the file, rather than
 		overwriting it.
 	*/
@@ -7509,32 +7509,32 @@ struct FzOutput
 	/**
 		Create a device that outputs (single page) SVG files to
 		the given output stream.
-	
+
 		Equivalent to fz_new_svg_device_with_id passing id = NULL.
 	*/
 	FZ_FUNCTION FzDevice fz_new_svg_device(float page_width, float page_height, int text_format, int reuse_images) const;
 
 	/** Class-aware wrapper for `::fz_new_svg_device_with_id()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_new_svg_device_with_id(float page_width, float page_height, int text_format, int reuse_images)` => `(fz_device *, int id)`
 	 */
 	/**
 		Create a device that outputs (single page) SVG files to
 		the given output stream.
-	
+
 		output: The output stream to send the constructed SVG page to.
-	
+
 		page_width, page_height: The page dimensions to use (in points).
-	
+
 		text_format: How to emit text. One of the following values:
 			FZ_SVG_TEXT_AS_TEXT: As <text> elements with possible
 			layout errors and mismatching fonts.
 			FZ_SVG_TEXT_AS_PATH: As <path> elements with exact
 			visual appearance.
-	
+
 		reuse_images: Share image resources using <symbol> definitions.
-	
+
 		id: ID parameter to keep generated IDs unique across SVG files.
 	*/
 	FZ_FUNCTION FzDevice fz_new_svg_device_with_id(float page_width, float page_height, int text_format, int reuse_images, int *id) const;
@@ -7618,7 +7618,7 @@ struct FzOutput
 	/**
 		Seek to the specified file position.
 		See fseek for arguments.
-	
+
 		Throw an error on unseekable outputs.
 	*/
 	FZ_FUNCTION void fz_seek_output(int64_t off, int whence) const;
@@ -7633,7 +7633,7 @@ struct FzOutput
 	/** Class-aware wrapper for `::fz_stream_from_output()`.  */
 	/**
 		Obtain the fz_output in the form of a fz_stream.
-	
+
 		This allows data to be read back from some forms of fz_output
 		object. When finished reading, the fz_stream should be released
 		by calling fz_drop_stream. Until the fz_stream is dropped, no
@@ -7644,7 +7644,7 @@ struct FzOutput
 	/** Class-aware wrapper for `::fz_tell_output()`.  */
 	/**
 		Return the current file position.
-	
+
 		Throw an error on untellable outputs.
 	*/
 	FZ_FUNCTION int64_t fz_tell_output() const;
@@ -7652,7 +7652,7 @@ struct FzOutput
 	/** Class-aware wrapper for `::fz_truncate_output()`.  */
 	/**
 		Truncate the output at the current position.
-	
+
 		This allows output streams which have seeked back from the end
 		of their storage to be truncated at the current point.
 	*/
@@ -7699,7 +7699,7 @@ struct FzOutput
 	/** Class-aware wrapper for `::fz_write_bitmap_as_pwg_page()`.  */
 	/**
 		Write a bitmap as a PWG page.
-	
+
 		Caller should provide a file header by calling
 		fz_write_pwg_file_header, but can then write several pages to
 		the same file.
@@ -7731,7 +7731,7 @@ struct FzOutput
 	/** Class-aware wrapper for `::fz_write_data()`.  */
 	/**
 		Write data to output.
-	
+
 		data: Pointer to data to write.
 		size: Size of data to write in bytes.
 	*/
@@ -7779,7 +7779,7 @@ struct FzOutput
 	/** Class-aware wrapper for `::fz_write_pixmap_as_jpx()`.  */
 	/**
 		Pixmap data as JP2K with no subsampling.
-	
+
 		quality = 100 = lossless
 		otherwise for a factor of x compression use 100-x. (so 80 is 1:20 compression)
 	*/
@@ -7843,7 +7843,7 @@ struct FzOutput
 	/** Class-aware wrapper for `::fz_write_pixmap_as_pwg_page()`.  */
 	/**
 		Write a pixmap as a PWG page.
-	
+
 		Caller should provide a file header by calling
 		fz_write_pwg_file_header, but can then write several pages to
 		the same file.
@@ -7911,7 +7911,7 @@ struct FzOutput
 	FZ_FUNCTION void pdf_print_crypt(const PdfCrypt& crypt) const;
 
 	/** Class-aware wrapper for `::pdf_print_encrypted_obj()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_print_encrypted_obj(::pdf_obj *obj, int tight, int ascii, ::pdf_crypt *crypt, int num, int gen)` => int sep
 	 */
@@ -8040,11 +8040,11 @@ struct FzPage
 	/** Constructor using `fz_load_chapter_page()`. */
 	/**
 		Load a page.
-	
+
 		After fz_load_page is it possible to retrieve the size of the
 		page using fz_bound_page, or to render the page using
 		fz_run_page_*. Free the page by calling fz_drop_page.
-	
+
 		chapter: chapter number, 0 is the first chapter of the document.
 		number: page number, 0 is the first page of the chapter.
 	*/
@@ -8104,12 +8104,12 @@ struct FzPage
 	/** Class-aware wrapper for `::fz_load_links()`.  */
 	/**
 		Load the list of links for a page.
-	
+
 		Returns a linked list of all the links on the page, each with
 		its clickable region and link destination. Each link is
 		reference counted so drop and free the list of links by
 		calling fz_drop_link on the pointer return from fz_load_links.
-	
+
 		page: Page obtained from fz_load_page.
 	*/
 	FZ_FUNCTION FzLink fz_load_links() const;
@@ -8120,7 +8120,7 @@ struct FzPage
 	/** Class-aware wrapper for `::fz_new_buffer_from_page_with_format()`.  */
 	/**
 		Returns an fz_buffer containing a page after conversion to specified format.
-	
+
 		page: The page to convert.
 		format, options: Passed to fz_new_document_writer_with_output() internally.
 		transform, cookie: Passed to fz_run_page() internally.
@@ -8130,7 +8130,7 @@ struct FzPage
 	/** Class-aware wrapper for `::fz_new_display_list_from_page()`.  */
 	/**
 		Create a display list.
-	
+
 		Ownership of the display list is returned to the caller.
 	*/
 	FZ_FUNCTION FzDisplayList fz_new_display_list_from_page() const;
@@ -8138,7 +8138,7 @@ struct FzPage
 	/** Class-aware wrapper for `::fz_new_display_list_from_page_contents()`.  */
 	/**
 		Create a display list from page contents (no annotations).
-	
+
 		Ownership of the display list is returned to the caller.
 	*/
 	FZ_FUNCTION FzDisplayList fz_new_display_list_from_page_contents() const;
@@ -8149,7 +8149,7 @@ struct FzPage
 	/** Class-aware wrapper for `::fz_new_pixmap_from_page_contents()`.  */
 	/**
 		Render the page contents without annotations.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap fz_new_pixmap_from_page_contents(const FzMatrix& ctm, const FzColorspace& cs, int alpha) const;
@@ -8167,19 +8167,19 @@ struct FzPage
 	FZ_FUNCTION const char *fz_page_label(char *buf, int size) const;
 
 	/** Class-aware wrapper for `::fz_page_presentation()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_page_presentation(::fz_transition *transition)` => `(fz_transition *, float duration)`
 	 */
 	/**
 		Get the presentation details for a given page.
-	
+
 		transition: A pointer to a transition struct to fill out.
-	
+
 		duration: A pointer to a place to set the page duration in
 		seconds. Will be set to 0 if no transition is specified for the
 		page.
-	
+
 		Returns: a pointer to the transition structure, or NULL if there
 		is no transition specified for the page.
 	*/
@@ -8191,7 +8191,7 @@ struct FzPage
 		This will be NULL, unless the format specifically supports
 		separations (such as PDF files). May be NULL even
 		so, if there are no separations on a page.
-	
+
 		Returns a reference that must be dropped.
 	*/
 	FZ_FUNCTION FzSeparations fz_page_separations() const;
@@ -8205,15 +8205,15 @@ struct FzPage
 	/** Class-aware wrapper for `::fz_run_page()`.  */
 	/**
 		Run a page through a device.
-	
+
 		page: Page obtained from fz_load_page.
-	
+
 		dev: Device obtained from fz_new_*_device.
-	
+
 		transform: Transform to apply to page. May include for example
 		scaling and rotation, see fz_scale, fz_rotate and fz_concat.
 		Set to fz_identity if no transformation is desired.
-	
+
 		cookie: Communication mechanism between caller and library
 		rendering the page. Intended for multi-threaded applications,
 		while single-threaded applications set cookie to NULL. The
@@ -8234,15 +8234,15 @@ struct FzPage
 	/**
 		Run a page through a device. Just the main
 		page content, without the annotations, if any.
-	
+
 		page: Page obtained from fz_load_page.
-	
+
 		dev: Device obtained from fz_new_*_device.
-	
+
 		transform: Transform to apply to page. May include for example
 		scaling and rotation, see fz_scale, fz_rotate and fz_concat.
 		Set to fz_identity if no transformation is desired.
-	
+
 		cookie: Communication mechanism between caller and library
 		rendering the page. Intended for multi-threaded applications,
 		while single-threaded applications set cookie to NULL. The
@@ -8260,7 +8260,7 @@ struct FzPage
 	FZ_FUNCTION void fz_run_page_widgets(const FzDevice& dev, const FzMatrix& transform, FzCookie& cookie) const;
 
 	/** Class-aware wrapper for `::fz_search_page()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_search_page(const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -8339,18 +8339,18 @@ struct FzPath
 	/** Class-aware wrapper for `::fz_bound_path()`.  */
 	/**
 		Return a bounding rectangle for a path.
-	
+
 		path: The path to bound.
-	
+
 		stroke: If NULL, the bounding rectangle given is for
 		the filled path. If non-NULL the bounding rectangle
 		given is for the path stroked with the given attributes.
-	
+
 		ctm: The matrix to apply to the path during stroking.
-	
+
 		r: Pointer to a fz_rect which will be used to hold
 		the result.
-	
+
 		Returns r, updated to contain the bounding rectangle.
 	*/
 	FZ_FUNCTION FzRect fz_bound_path(const FzStrokeState& stroke, const FzMatrix& ctm) const;
@@ -8358,14 +8358,14 @@ struct FzPath
 	/** Class-aware wrapper for `::fz_clone_path()`.  */
 	/**
 		Clone the data for a path.
-	
+
 		This is used in preference to fz_keep_path when a whole
 		new copy of a path is required, rather than just a shared
 		pointer. This probably indicates that the path is about to
 		be modified.
-	
+
 		path: path to clone.
-	
+
 		Throws exceptions on failure to allocate.
 	*/
 	FZ_FUNCTION FzPath fz_clone_path() const;
@@ -8373,9 +8373,9 @@ struct FzPath
 	/** Class-aware wrapper for `::fz_closepath()`.  */
 	/**
 		Close the current subpath.
-	
+
 		path: The path to modify.
-	
+
 		Throws exceptions on failure to allocate, attempting to modify
 		a packed path, and illegal path closes (i.e. closing a non open
 		path).
@@ -8386,7 +8386,7 @@ struct FzPath
 	/**
 		Return the current point that a path has
 		reached or (0,0) if empty.
-	
+
 		path: path to return the current point of.
 	*/
 	FZ_FUNCTION FzPoint fz_currentpoint() const;
@@ -8395,17 +8395,17 @@ struct FzPath
 	/**
 		Append a 'curveto' command to an open path. (For a
 		cubic bezier).
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: The coordinates of the first control point for the
 		curve.
-	
+
 		x1, y1: The coordinates of the second control point for the
 		curve.
-	
+
 		x2, y2: The end coordinates for the curve.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -8416,14 +8416,14 @@ struct FzPath
 		Append a 'curvetov' command to an open path. (For a
 		cubic bezier with the first control coordinate equal to
 		the start point).
-	
+
 		path: The path to modify.
-	
+
 		x1, y1: The coordinates of the second control point for the
 		curve.
-	
+
 		x2, y2: The end coordinates for the curve.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -8434,15 +8434,15 @@ struct FzPath
 		Append a 'curvetoy' command to an open path. (For a
 		cubic bezier with the second control coordinate equal to
 		the end point).
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: The coordinates of the first control point for the
 		curve.
-	
+
 		x2, y2: The end coordinates for the curve (and the second
 		control coordinate).
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -8451,11 +8451,11 @@ struct FzPath
 	/** Class-aware wrapper for `::fz_lineto()`.  */
 	/**
 		Append a 'lineto' command to an open path.
-	
+
 		path: The path to modify.
-	
+
 		x, y: The coordinate to line to.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -8465,11 +8465,11 @@ struct FzPath
 	/**
 		Append a 'moveto' command to a path.
 		This 'opens' a path.
-	
+
 		path: The path to modify.
-	
+
 		x, y: The coordinate to move to.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -8485,7 +8485,7 @@ struct FzPath
 	/**
 		Check whether a given path, under the given transform
 		is an axis-aligned rectangle.
-	
+
 		We accept zero width or height rectangles, so
 		"move 100, 100; line 200, 100" would count as
 		a rectangle too.
@@ -8496,11 +8496,11 @@ struct FzPath
 	/**
 		Check whether a given path, under the given transform
 		is an axis-aligned rectangle.
-	
+
 		We accept zero width or height rectangles, so
 		"move 100, 100; line 200, 100" would count as
 		a rectangle too.
-	
+
 		bounds = NULL, or place to return the rectangle
 		bounds if the path is a rectangle.
 	*/
@@ -8510,13 +8510,13 @@ struct FzPath
 	/**
 		Append a 'quadto' command to an open path. (For a
 		quadratic bezier).
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: The control coordinates for the quadratic curve.
-	
+
 		x1, y1: The end coordinates for the quadratic curve.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -8525,20 +8525,20 @@ struct FzPath
 	/** Class-aware wrapper for `::fz_rectto()`.  */
 	/**
 		Append a 'rectto' command to an open path.
-	
+
 		The rectangle is equivalent to:
 			moveto x0 y0
 			lineto x1 y0
 			lineto x1 y1
 			lineto x0 y1
 			closepath
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: First corner of the rectangle.
-	
+
 		x1, y1: Second corner of the rectangle.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -8548,11 +8548,11 @@ struct FzPath
 	/**
 		Transform a path by a given
 		matrix.
-	
+
 		path: The path to modify (must not be a packed path).
-	
+
 		transform: The transform to apply.
-	
+
 		Throws exceptions if the path is packed, or on failure
 		to allocate.
 	*/
@@ -8561,7 +8561,7 @@ struct FzPath
 	/** Class-aware wrapper for `::fz_trim_path()`.  */
 	/**
 		Minimise the internal storage used by a path.
-	
+
 		As paths are constructed, the internal buffers
 		grow. To avoid repeated reallocations they
 		grow with some spare space. Once a path has
@@ -8575,17 +8575,17 @@ struct FzPath
 		Walk the segments of a path, calling the
 		appropriate callback function from a given set for each
 		segment of the path.
-	
+
 		path: The path to walk.
-	
+
 		walker: The set of callback functions to use. The first
 		4 callback pointers in the set must be non-NULL. The
 		subsequent ones can either be supplied, or can be left
 		as NULL, in which case the top 4 functions will be
 		called as appropriate to simulate them.
-	
+
 		arg: An opaque argument passed in to each callback.
-	
+
 		Exceptions will only be thrown if the underlying callback
 		functions throw them.
 	*/
@@ -8707,9 +8707,9 @@ struct FzPclOptions
 	/** Constructor using `fz_parse_pcl_options()`. */
 	/**
 		Parse PCL options.
-	
+
 		Currently defined options and values are as follows:
-	
+
 			preset=X	Either "generic" or one of the presets as for fz_pcl_preset.
 			spacing=0	No vertical spacing capability
 			spacing=1	PCL 3 spacing (<ESC>*p+<n>Y)
@@ -8734,9 +8734,9 @@ struct FzPclOptions
 	/** Class-aware wrapper for `::fz_pcl_preset()`.  */
 	/**
 		Initialize PCL option struct for a given preset.
-	
+
 		Currently defined presets include:
-	
+
 			generic	Generic PCL printer
 			ljet4	HP DeskJet
 			dj500	HP DeskJet 500
@@ -8796,9 +8796,9 @@ struct FzPclmOptions
 	/** Constructor using `fz_parse_pclm_options()`. */
 	/**
 		Parse PCLm options.
-	
+
 		Currently defined options and values are as follows:
-	
+
 			compression=none: No compression
 			compression=flate: Flate compression
 			strip-height=n: Strip height (default 16)
@@ -8859,9 +8859,9 @@ struct FzPdfocrOptions
 	/** Class-aware wrapper for `::fz_parse_pdfocr_options()`.  */
 	/**
 		Parse PDFOCR options.
-	
+
 		Currently defined options and values are as follows:
-	
+
 			compression=none: No compression
 			compression=flate: Flate compression
 			strip-height=n: Strip height (default 16)
@@ -8937,14 +8937,14 @@ struct FzPixmap
 	/** Constructor using `fz_new_barcode_pixmap()`. */
 	/**
 		Create an fz_pixmap from a barcode definition.
-	
+
 		type: The type of barcode to create.
 		value: The value of the barcode.
 		size: The size of the barcode.
 		ec_level: error correction level 0-8.
 		quiet: whether to include quiet zones (0 or 1).
 		hrt: whether to include human readable text below the barcode (0 or 1).
-	
+
 		returns a created fz_pixmap.
 	*/
 	FZ_FUNCTION FzPixmap(::fz_barcode_type type, const char *value, int size, int ec_level, int quiet, int hrt);
@@ -8952,18 +8952,18 @@ struct FzPixmap
 	/** Constructor using `fz_new_pixmap()`. */
 	/**
 		Create a new pixmap, with its origin at (0,0)
-	
+
 		cs: The colorspace to use for the pixmap, or NULL for an alpha
 		plane/mask.
-	
+
 		w: The width of the pixmap (in pixels)
-	
+
 		h: The height of the pixmap (in pixels)
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -8975,7 +8975,7 @@ struct FzPixmap
 	/** Constructor using `fz_new_pixmap_from_display_list()`. */
 	/**
 		Render the page to a pixmap using the transform and colorspace.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap(const FzDisplayList& list, const FzMatrix& ctm, const FzColorspace& cs, int alpha);
@@ -8983,7 +8983,7 @@ struct FzPixmap
 	/** Constructor using `fz_new_pixmap_from_display_list_with_separations()`. */
 	/**
 		Render the page contents with control over spot colors.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap(const FzDisplayList& list, const FzMatrix& ctm, const FzColorspace& cs, const FzSeparations& seps, int alpha);
@@ -9005,10 +9005,10 @@ struct FzPixmap
 		Create a new pixmap that represents a subarea of the specified
 		pixmap. A reference is taken to this pixmap that will be dropped
 		on destruction.
-	
+
 		The supplied rectangle must be wholly contained within the
 		original pixmap.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -9017,21 +9017,21 @@ struct FzPixmap
 	/** Constructor using `fz_new_pixmap_with_bbox()`. */
 	/**
 		Create a pixmap of a given size, location and pixel format.
-	
+
 		The bounding box specifies the size of the created pixmap and
 		where it will be located. The colorspace determines the number
 		of components per pixel. Alpha is always present. Pixmaps are
 		reference counted, so drop references using fz_drop_pixmap.
-	
+
 		colorspace: Colorspace format used for the created pixmap. The
 		pixmap will keep a reference to the colorspace.
-	
+
 		bbox: Bounding box specifying location/size of created pixmap.
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -9041,23 +9041,23 @@ struct FzPixmap
 	/**
 		Create a pixmap of a given size, location and pixel format,
 		using the supplied data block.
-	
+
 		The bounding box specifies the size of the created pixmap and
 		where it will be located. The colorspace determines the number
 		of components per pixel. Alpha is always present. Pixmaps are
 		reference counted, so drop references using fz_drop_pixmap.
-	
+
 		colorspace: Colorspace format used for the created pixmap. The
 		pixmap will keep a reference to the colorspace.
-	
+
 		rect: Bounding box specifying location/size of created pixmap.
-	
+
 		seps: Details of separations.
-	
+
 		alpha: Number of alpha planes (0 or 1).
-	
+
 		samples: The data block to keep the samples in.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -9067,23 +9067,23 @@ struct FzPixmap
 	/**
 		Create a new pixmap, with its origin at
 		(0,0) using the supplied data block.
-	
+
 		cs: The colorspace to use for the pixmap, or NULL for an alpha
 		plane/mask.
-	
+
 		w: The width of the pixmap (in pixels)
-	
+
 		h: The height of the pixmap (in pixels)
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		stride: The byte offset from the pixel data in a row to the
 		pixel data in the next row.
-	
+
 		samples: The data block to keep the samples in.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure to
 		allocate.
 	*/
@@ -9118,7 +9118,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_new_pixmap_from_page_contents()`.  */
 	/**
 		Render the page contents without annotations.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION static FzPixmap fz_new_pixmap_from_page_contents(const FzPage& page, const FzMatrix& ctm, const FzColorspace& cs, int alpha);
@@ -9138,7 +9138,7 @@ struct FzPixmap
 	/**
 		Sets all components (including alpha) of
 		all pixels in a pixmap to 0.
-	
+
 		pix: The pixmap to clear.
 	*/
 	FZ_FUNCTION void fz_clear_pixmap() const;
@@ -9146,13 +9146,13 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_clear_pixmap_rect_with_value()`.  */
 	/**
 		Clears a subrect of a pixmap with the given value.
-	
+
 		pix: The pixmap to clear.
-	
+
 		value: Values in the range 0 to 255 are valid. Each component
 		sample for each pixel in the pixmap will be set to this value,
 		while alpha will always be set to 255 (non-transparent).
-	
+
 		r: the rectangle.
 	*/
 	FZ_FUNCTION void fz_clear_pixmap_rect_with_value(int value, const FzIrect& r) const;
@@ -9160,13 +9160,13 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_clear_pixmap_with_value()`.  */
 	/**
 		Clears a pixmap with the given value.
-	
+
 		pix: The pixmap to clear.
-	
+
 		value: Values in the range 0 to 255 are valid. Each component
 		sample for each pixel in the pixmap will be set to this value,
 		while alpha will always be set to 255 (non-transparent).
-	
+
 		This function is horrible, and should be removed from the
 		API and replaced with a less magic one.
 	*/
@@ -9176,7 +9176,7 @@ struct FzPixmap
 	/**
 		Clone a pixmap, copying the pixels and associated data to new
 		storage.
-	
+
 		The reference count of 'old' is unchanged.
 	*/
 	FZ_FUNCTION FzPixmap fz_clone_pixmap() const;
@@ -9187,7 +9187,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_convert_indexed_pixmap_to_base()`.  */
 	/**
 		Convert pixmap from indexed to base colorspace.
-	
+
 		This creates a new bitmap containing the converted pixmap data.
 	 */
 	FZ_FUNCTION FzPixmap fz_convert_indexed_pixmap_to_base() const;
@@ -9197,20 +9197,20 @@ struct FzPixmap
 		Convert an existing pixmap to a desired
 		colorspace. Other properties of the pixmap, such as resolution
 		and position are copied to the converted pixmap.
-	
+
 		pix: The pixmap to convert.
-	
+
 		default_cs: If NULL pix->colorspace is used. It is possible that
 		the data may need to be interpreted as one of the color spaces
 		in default_cs.
-	
+
 		cs_des: Desired colorspace, may be NULL to denote alpha-only.
-	
+
 		prf: Proofing color space through which we need to convert.
-	
+
 		color_params: Parameters that may be used in conversion (e.g.
 		ri).
-	
+
 		keep_alpha: If 0 any alpha component is removed, otherwise
 		alpha is kept if present in the pixmap.
 	*/
@@ -9219,7 +9219,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_convert_separation_pixmap_to_base()`.  */
 	/**
 		Convert pixmap from DeviceN/Separation to base colorspace.
-	
+
 		This creates a new bitmap containing the converted pixmap data.
 	*/
 	FZ_FUNCTION FzPixmap fz_convert_separation_pixmap_to_base() const;
@@ -9237,7 +9237,7 @@ struct FzPixmap
 	FZ_FUNCTION double fz_detect_skew() const;
 
 	/** Class-aware wrapper for `::fz_fill_pixmap_with_color()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_fill_pixmap_with_color(::fz_colorspace *colorspace, ::fz_color_params color_params)` => float color
 	 */
@@ -9250,7 +9250,7 @@ struct FzPixmap
 	/**
 		Apply gamma correction to a pixmap. All components
 		of all pixels are modified (except alpha, which is unchanged).
-	
+
 		gamma: The gamma value to apply; 1.0 for no change.
 	*/
 	FZ_FUNCTION void fz_gamma_pixmap(float gamma) const;
@@ -9258,15 +9258,15 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_generate_transition()`.  */
 	/**
 		Generate a frame of a transition.
-	
+
 		tpix: Target pixmap
 		opix: Old pixmap
 		npix: New pixmap
 		time: Position within the transition (0 to 256)
 		trans: Transition details
-	
+
 		Returns 1 if successfully generated a frame.
-	
+
 		Note: Pixmaps must include alpha.
 	*/
 	FZ_FUNCTION int fz_generate_transition(const FzPixmap& opix, const FzPixmap& npix, int time, FzTransition& trans) const;
@@ -9290,7 +9290,7 @@ struct FzPixmap
 		Transform the pixels in a pixmap so that luminance of each
 		pixel is inverted, and the chrominance remains unchanged (as
 		much as accuracy allows).
-	
+
 		All components of all pixels are inverted (except alpha, which
 		is unchanged). Only supports Grey and RGB bitmaps.
 	*/
@@ -9330,12 +9330,12 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_new_bitmap_from_pixmap()`.  */
 	/**
 		Make a bitmap from a pixmap and a halftone.
-	
+
 		pix: The pixmap to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -9346,15 +9346,15 @@ struct FzPixmap
 		Make a bitmap from a pixmap and a
 		halftone, allowing for the position of the pixmap within an
 		overall banded rendering.
-	
+
 		pix: The pixmap to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		band_start: Vertical offset within the overall banded rendering
 		(in pixels)
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -9378,7 +9378,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_new_buffer_from_pixmap_as_png()`.  */
 	/**
 		Re-encode a given pixmap as a PNG into a buffer.
-	
+
 		Ownership of the buffer is returned.
 	*/
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_pixmap_as_png(const FzColorParams& color_params) const;
@@ -9393,10 +9393,10 @@ struct FzPixmap
 	/**
 		Create an image from the given
 		pixmap.
-	
+
 		pixmap: The pixmap to base the image upon. A new reference
 		to this is taken.
-	
+
 		mask: NULL, or another image to use as a mask for this one.
 		A new reference is taken to this image. Supplying a masked
 		image as a mask to another image is illegal!
@@ -9414,10 +9414,10 @@ struct FzPixmap
 		Create a new pixmap that represents a subarea of the specified
 		pixmap. A reference is taken to this pixmap that will be dropped
 		on destruction.
-	
+
 		The supplied rectangle must be wholly contained within the
 		original pixmap.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -9426,7 +9426,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_pixmap_alpha()`.  */
 	/**
 		Return the number of alpha planes in a pixmap.
-	
+
 		Returns the number of alphas. Does not throw exceptions.
 	*/
 	FZ_FUNCTION int fz_pixmap_alpha() const;
@@ -9440,7 +9440,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_pixmap_colorants()`.  */
 	/**
 		Return the number of colorants in a pixmap.
-	
+
 		Returns the number of colorants (components, less any spots and
 		alpha).
 	*/
@@ -9449,7 +9449,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_pixmap_colorspace()`.  */
 	/**
 		Return the colorspace of a pixmap
-	
+
 		Returns colorspace.
 	*/
 	FZ_FUNCTION FzColorspace fz_pixmap_colorspace() const;
@@ -9457,7 +9457,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_pixmap_components()`.  */
 	/**
 		Return the number of components in a pixmap.
-	
+
 		Returns the number of components (including spots and alpha).
 	*/
 	FZ_FUNCTION int fz_pixmap_components() const;
@@ -9471,7 +9471,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_pixmap_samples()`.  */
 	/**
 		Returns a pointer to the pixel data of a pixmap.
-	
+
 		Returns the pointer.
 	*/
 	FZ_FUNCTION unsigned char *fz_pixmap_samples() const;
@@ -9489,7 +9489,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_pixmap_spots()`.  */
 	/**
 		Return the number of spots in a pixmap.
-	
+
 		Returns the number of spots (components, less colorants and
 		alpha). Does not throw exceptions.
 	*/
@@ -9541,7 +9541,7 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_save_pixmap_as_jpx()`.  */
 	/**
 		Save pixmap data as JP2K with no subsampling.
-	
+
 		quality = 100 = lossless
 		otherwise for a factor of x compression use 100-x. (so 80 is 1:20 compression)
 	*/
@@ -9629,9 +9629,9 @@ struct FzPixmap
 	/** Class-aware wrapper for `::fz_tint_pixmap()`.  */
 	/**
 		Tint all the pixels in an RGB, BGR, or Gray pixmap.
-	
+
 		black: Map black to this hexadecimal RGB color.
-	
+
 		white: Map white to this hexadecimal RGB color.
 	*/
 	FZ_FUNCTION void fz_tint_pixmap(int black, int white) const;
@@ -9695,10 +9695,10 @@ struct FzPixmapImage
 	/** Class-aware wrapper for `::fz_pixmap_image_tile()`.  */
 	/**
 		Retrieve the underlying fz_pixmap for an image.
-	
+
 		Returns a pointer to the underlying fz_pixmap for an image,
 		or NULL if this image is not based upon an fz_pixmap.
-	
+
 		No reference is returned. Lifespan is limited to that of
 		the image itself. If required, use fz_keep_pixmap to take
 		a reference to keep it longer.
@@ -9759,13 +9759,13 @@ struct FzPoint
 	/** Class-aware wrapper for `::fz_transform_point()`.  */
 	/**
 		Apply a transformation to a point.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale, fz_rotate and fz_translate for how to create a
 		matrix.
-	
+
 		point: Pointer to point to update.
-	
+
 		Returns transform (unchanged).
 	*/
 	FZ_FUNCTION static FzPoint fz_transform_point(const FzPoint& point, const FzMatrix& m);
@@ -9776,11 +9776,11 @@ struct FzPoint
 	/** Class-aware wrapper for `::fz_transform_vector()`.  */
 	/**
 		Apply a transformation to a vector.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale and fz_rotate for how to create a matrix. Any
 		translation will be ignored.
-	
+
 		vector: Pointer to vector to update.
 	*/
 	FZ_FUNCTION static FzPoint fz_transform_vector(const FzPoint& vector, const FzMatrix& m);
@@ -9809,13 +9809,13 @@ struct FzPoint
 	/** Class-aware wrapper for `::fz_transform_point()`.  */
 	/**
 		Apply a transformation to a point.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale, fz_rotate and fz_translate for how to create a
 		matrix.
-	
+
 		point: Pointer to point to update.
-	
+
 		Returns transform (unchanged).
 	*/
 	FZ_FUNCTION FzPoint fz_transform_point(const FzMatrix& m);
@@ -9823,11 +9823,11 @@ struct FzPoint
 	/** Class-aware wrapper for `::fz_transform_vector()`.  */
 	/**
 		Apply a transformation to a vector.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale and fz_rotate for how to create a matrix. Any
 		translation will be ignored.
-	
+
 		vector: Pointer to vector to update.
 	*/
 	FZ_FUNCTION FzPoint fz_transform_vector(const FzMatrix& m);
@@ -9907,7 +9907,7 @@ struct FzPool
 	/** Class-aware wrapper for `::fz_pool_size()`.  */
 	/**
 		The current size of the pool.
-	
+
 		The number of bytes of storage currently allocated to the pool.
 		This is the total of the storage used for the blocks making
 		up the pool, rather then total of the allocated blocks so far,
@@ -9976,13 +9976,13 @@ struct FzPoolArray
 	/* == Methods. */
 
 	/** Class-aware wrapper for `::fz_pool_array_append()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_pool_array_append()` => `(void *, size_t idx)`
 	 */
 	/**
 		Append an element to the end of the array.
-	
+
 		Returns a pointer to the new element (initially all 0's), and
 		(optionally) the index of that element.
 	*/
@@ -10199,7 +10199,7 @@ struct FzQuad
 	/** Class-aware wrapper for `::fz_is_quad_inside_quad()`.  */
 	/**
 		Inclusion test for quad in quad.
-	
+
 		This may break down if quads are not 'well formed'.
 	*/
 	FZ_FUNCTION int fz_is_quad_inside_quad(const FzQuad& haystack);
@@ -10207,7 +10207,7 @@ struct FzQuad
 	/** Class-aware wrapper for `::fz_is_quad_intersecting_quad()`.  */
 	/**
 		Intersection test for quads.
-	
+
 		This may break down if quads are not 'well formed'.
 	*/
 	FZ_FUNCTION int fz_is_quad_intersecting_quad(const FzQuad& b);
@@ -10330,14 +10330,14 @@ struct FzRect
 	/** Constructor using `fz_rect_from_irect()`. */
 	/**
 		Convert a bbox into a rect.
-	
+
 		For our purposes, a rect can represent all the values we meet in
 		a bbox, so nothing can go wrong.
-	
+
 		rect: A place to store the generated rectangle.
-	
+
 		bbox: The bbox to convert.
-	
+
 		Returns rect (updated).
 	*/
 	FZ_FUNCTION FzRect(const FzIrect& bbox);
@@ -10351,15 +10351,15 @@ struct FzRect
 	/** Constructor using `fz_transform_rect()`. */
 	/**
 		Apply a transform to a rectangle.
-	
+
 		After the four corner points of the axis-aligned rectangle
 		have been transformed it may not longer be axis-aligned. So a
 		new axis-aligned rectangle is created covering at least the
 		area of the transformed rectangle.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale and fz_rotate for how to create a matrix.
-	
+
 		rect: Rectangle to be transformed. The two special cases
 		fz_empty_rect and fz_infinite_rect, may be used but are
 		returned unchanged as expected.
@@ -10385,7 +10385,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_intersect_rect()`.  */
 	/**
 		Compute intersection of two rectangles.
-	
+
 		Given two rectangles, update the first to be the smallest
 		axis-aligned rectangle that covers the area covered by both
 		given rectangles. If either rectangle is empty then the
@@ -10399,7 +10399,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_union_rect()`.  */
 	/**
 		Compute union of two rectangles.
-	
+
 		Given two rectangles, update the first to be the smallest
 		axis-aligned rectangle that encompasses both given rectangles.
 		If either rectangle is infinite then the union is also infinite.
@@ -10423,7 +10423,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_contains_rect()`.  */
 	/**
 		Test rectangle inclusion.
-	
+
 		Return true if a entirely contains b.
 	*/
 	FZ_FUNCTION int fz_contains_rect(const FzRect& b);
@@ -10446,7 +10446,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_intersect_rect()`.  */
 	/**
 		Compute intersection of two rectangles.
-	
+
 		Given two rectangles, update the first to be the smallest
 		axis-aligned rectangle that covers the area covered by both
 		given rectangles. If either rectangle is empty then the
@@ -10461,7 +10461,7 @@ struct FzRect
 	/**
 		Convert a rect into the minimal bounding box
 		that covers the rectangle.
-	
+
 		Coordinates in a bounding box are integers, so rounding of the
 		rects coordinates takes place. The top left corner is rounded
 		upwards and left while the bottom right corner is rounded
@@ -10472,7 +10472,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_is_empty_rect()`.  */
 	/**
 		Check if rectangle is empty.
-	
+
 		An empty rectangle is defined as one whose area is zero.
 		All invalid rectangles are empty.
 	*/
@@ -10487,9 +10487,9 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_is_rect_inside_rect()`.  */
 	/**
 		Inclusion test for rects.
-	
+
 		rects are assumed to be both open or both closed.
-	
+
 		No invalid rect can include any other rect.
 		No invalid rect can be included by any rect.
 		Empty (point) rects can include themselves.
@@ -10507,7 +10507,7 @@ struct FzRect
 	/**
 		Create a device to compute the bounding
 		box of all marks on a page.
-	
+
 		The returned bounding box will be the union of all bounding
 		boxes of all objects on a page.
 	*/
@@ -10516,10 +10516,10 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_new_display_list()`.  */
 	/**
 		Create an empty display list.
-	
+
 		A display list contains drawing commands (text, images, etc.).
 		Use fz_new_list_device for populating the list.
-	
+
 		mediabox: Bounds of the page (in points) represented by the
 		display list.
 	*/
@@ -10528,7 +10528,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_overlaps_rect()`.  */
 	/**
 		Test rectangle overlap.
-	
+
 		Returns true if the area of the overlap is
 		non zero.
 	*/
@@ -10543,12 +10543,12 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_round_rect()`.  */
 	/**
 		Round rectangle coordinates.
-	
+
 		Coordinates in a bounding box are integers, so rounding of the
 		rects coordinates takes place. The top left corner is rounded
 		upwards and left while the bottom right corner is rounded
 		downwards and to the right.
-	
+
 		This differs from fz_irect_from_rect, in that fz_irect_from_rect
 		slavishly follows the numbers (i.e any slight over/under
 		calculations can cause whole extra pixels to be added).
@@ -10569,15 +10569,15 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_transform_rect()`.  */
 	/**
 		Apply a transform to a rectangle.
-	
+
 		After the four corner points of the axis-aligned rectangle
 		have been transformed it may not longer be axis-aligned. So a
 		new axis-aligned rectangle is created covering at least the
 		area of the transformed rectangle.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale and fz_rotate for how to create a matrix.
-	
+
 		rect: Rectangle to be transformed. The two special cases
 		fz_empty_rect and fz_infinite_rect, may be used but are
 		returned unchanged as expected.
@@ -10587,7 +10587,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_translate_rect()`.  */
 	/**
 		Translate bounding box.
-	
+
 		Translate a bbox by a given x and y offset. Allows for overflow.
 	*/
 	FZ_FUNCTION FzRect fz_translate_rect(float xoff, float yoff);
@@ -10595,7 +10595,7 @@ struct FzRect
 	/** Class-aware wrapper for `::fz_union_rect()`.  */
 	/**
 		Compute union of two rectangles.
-	
+
 		Given two rectangles, update the first to be the smallest
 		axis-aligned rectangle that encompasses both given rectangles.
 		If either rectangle is infinite then the union is also infinite.
@@ -10696,7 +10696,7 @@ struct FzSeparations
 	/**
 		Add a separation with equivalents (null terminated name,
 		colorspace)
-	
+
 		(old, deprecated)
 	*/
 	FZ_FUNCTION void fz_add_separation_equivalents(uint32_t rgba, uint32_t cmyk, const char *name) const;
@@ -10714,7 +10714,7 @@ struct FzSeparations
 	/** Class-aware wrapper for `::fz_compare_separations()`.  */
 	/**
 		Compare 2 separations structures (or NULLs).
-	
+
 		Return 0 if identical, non-zero if not identical.
 	*/
 	FZ_FUNCTION int fz_compare_separations(const FzSeparations& sep2) const;
@@ -10729,7 +10729,7 @@ struct FzSeparations
 	FZ_FUNCTION int fz_count_separations() const;
 
 	/** Class-aware wrapper for `::fz_separation_equivalent()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_separation_equivalent(int idx, ::fz_colorspace *dst_cs, ::fz_colorspace *prf, ::fz_color_params color_params)` => float dst_color
 	 */
@@ -10789,7 +10789,7 @@ struct FzSha256
 	/**
 		MD5 finalization. Ends an MD5 message-digest operation, writing
 		the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha256_final(unsigned char digest[32]) const;
@@ -10798,7 +10798,7 @@ struct FzSha256
 	/**
 		SHA256 initialization. Begins an SHA256 operation, initialising
 		the supplied context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha256_init() const;
@@ -10808,7 +10808,7 @@ struct FzSha256
 		SHA256 block update operation. Continues an SHA256 message-
 		digest operation, processing another message block, and updating
 		the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha256_update(const unsigned char *input, size_t inlen) const;
@@ -10899,7 +10899,7 @@ struct FzSha512
 	/**
 		SHA384 finalization. Ends an SHA384 message-digest operation,
 		writing the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha384_final(unsigned char digest[64]) const;
@@ -10908,7 +10908,7 @@ struct FzSha512
 	/**
 		SHA384 initialization. Begins an SHA384 operation, initialising
 		the supplied context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha384_init() const;
@@ -10918,7 +10918,7 @@ struct FzSha512
 		SHA384 block update operation. Continues an SHA384 message-
 		digest operation, processing another message block, and updating
 		the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha384_update(const unsigned char *input, size_t inlen) const;
@@ -10927,7 +10927,7 @@ struct FzSha512
 	/**
 		SHA512 finalization. Ends an SHA512 message-digest operation,
 		writing the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha512_final(unsigned char digest[64]) const;
@@ -10936,7 +10936,7 @@ struct FzSha512
 	/**
 		SHA512 initialization. Begins an SHA512 operation, initialising
 		the supplied context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha512_init() const;
@@ -10946,7 +10946,7 @@ struct FzSha512
 		SHA512 block update operation. Continues an SHA512 message-
 		digest operation, processing another message block, and updating
 		the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha512_update(const unsigned char *input, size_t inlen) const;
@@ -11004,41 +11004,41 @@ struct FzShade
 	/** Class-aware wrapper for `::fz_bound_shade()`.  */
 	/**
 		Bound a given shading.
-	
+
 		shade: The shade to bound.
-	
+
 		ctm: The transform to apply to the shade before bounding.
-	
+
 		r: Pointer to storage to put the bounds in.
-	
+
 		Returns r, updated to contain the bounds for the shading.
 	*/
 	FZ_FUNCTION FzRect fz_bound_shade(const FzMatrix& ctm) const;
 
 	/** Class-aware wrapper for `::fz_paint_shade()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
-		`fz_paint_shade(::fz_colorspace *override_cs, ::fz_matrix ctm, ::fz_pixmap *dest, ::fz_color_params color_params, ::fz_irect bbox, const ::fz_overprint *eop, ::fz_shade_color_cache **cache)` => 
+		`fz_paint_shade(::fz_colorspace *override_cs, ::fz_matrix ctm, ::fz_pixmap *dest, ::fz_color_params color_params, ::fz_irect bbox, const ::fz_overprint *eop, ::fz_shade_color_cache **cache)` =>
 	 */
 	/**
 		Render a shade to a given pixmap.
-	
+
 		shade: The shade to paint.
-	
+
 		override_cs: NULL, or colorspace to override the shades
 		inbuilt colorspace.
-	
+
 		ctm: The transform to apply.
-	
+
 		dest: The pixmap to render into.
-	
+
 		color_params: The color rendering settings
-	
+
 		bbox: Pointer to a bounding box to limit the rendering
 		of the shade.
-	
+
 		eop: NULL, or pointer to overprint bitmap.
-	
+
 		cache: *cache is used to cache color information. If *cache is NULL it
 		is set to point to a new fz_shade_color_cache. If cache is NULL it is
 		ignored.
@@ -11051,19 +11051,19 @@ struct FzShade
 		decomposes the shading to a mesh (even ones that are not
 		natively meshes, such as linear or radial shadings), and
 		processes triangles from those meshes.
-	
+
 		shade: The shade to process.
-	
+
 		ctm: The transform to use
-	
+
 		prepare: Callback function to 'prepare' each vertex.
 		This function is passed an array of floats, and populates
 		a fz_vertex structure.
-	
+
 		process: This function is passed 3 pointers to vertex
 		structures, and actually performs the processing (typically
 		filling the area between the vertices).
-	
+
 		process_arg: An opaque argument passed through from caller
 		to callback functions.
 	*/
@@ -11444,10 +11444,10 @@ struct FzStextPage
 	/** Constructor using `fz_new_stext_page()`. */
 	/**
 		Create an empty text page.
-	
+
 		The text page is filled out by the text device to contain the
 		blocks and lines of text on the page.
-	
+
 		mediabox: optional mediabox information.
 	*/
 	FZ_FUNCTION FzStextPage(const FzRect& mediabox);
@@ -11461,7 +11461,7 @@ struct FzStextPage
 	/** Constructor using `fz_new_stext_page_from_page()`. */
 	/**
 		Extract text from page.
-	
+
 		Ownership of the fz_stext_page is returned to the caller.
 	*/
 	FZ_FUNCTION FzStextPage(const FzPage& page, FzStextOptions& options);
@@ -11484,15 +11484,15 @@ struct FzStextPage
 	/**
 		Interpret the bounded contents of a given stext page as
 		a table.
-	
+
 		The page contents will be rewritten to contain a Table
 		structure with the identified content in it.
-	
+
 		This uses the same logic as for fz_table_hunt, without the
 		actual hunting. fz_table_hunt hunts to find possible bounds
 		for multiple tables on the page; this routine just finds a
 		single table contained within the given rectangle.
-	
+
 		Returns the stext_block list that contains the content of
 		the table.
 	*/
@@ -11521,17 +11521,17 @@ struct FzStextPage
 	/** Class-aware wrapper for `::fz_new_stext_device()`.  */
 	/**
 		Create a device to extract the text on a page.
-	
+
 		Gather the text on a page into blocks and lines.
-	
+
 		The reading order is taken from the order the text is drawn in
 		the source file, so may not be accurate.
-	
+
 		page: The text page to which content should be added. This will
 		usually be a newly created (empty) text page, but it can be one
 		containing data already (for example when merging multiple
 		pages, or watermarking).
-	
+
 		options: Options to configure the stext device.
 	*/
 	FZ_FUNCTION FzDevice fz_new_stext_device(FzStextOptions& options) const;
@@ -11540,33 +11540,33 @@ struct FzStextPage
 	/**
 		Create a device to extract the text on a page into an existing
 		fz_stext_page structure.
-	
+
 		Gather the text on a page into blocks and lines.
-	
+
 		The reading order is taken from the order the text is drawn in
 		the source file, so may not be accurate.
-	
+
 		stext_page: The text page to which content should be added. This will
 		usually be a newly created (empty) text page, but it can be one
 		containing data already (for example when merging multiple
 		pages, or watermarking).
-	
+
 		options: Options to configure the stext device.
-	
+
 		The next 2 parameters are copied into the fz_stext_page structure's
 		ids section, so only have to be valid if you expect to interrogate
 		that section later.
-	
+
 		chapter_num: The chapter number that this page came from.
-	
+
 		page_num: The page number that this page came from.
-	
+
 		The final parameter is copied into the fz_stext_page structure's
 		ids section. The mediabox for the enture fz_stext_page is unioned
 		with this, so pass fz_empty_bbox if you don't care about getting
 		a valid value back from the ids section, but you don't want to
 		upset the value in the page->mediabox field.
-	
+
 		mediabox: The mediabox for this page.
 	*/
 	FZ_FUNCTION FzDevice fz_new_stext_device_for_page(FzStextOptions& opts, int chapter_num, int page_num, const FzRect& mediabox) const;
@@ -11581,16 +11581,16 @@ struct FzStextPage
 	FZ_FUNCTION void fz_paragraph_break() const;
 
 	/** Class-aware wrapper for `::fz_search_stext_page()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_search_stext_page(const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
 	/**
 		Search for occurrence of 'needle' in text page.
-	
+
 		Return the number of quads and store hit quads in the passed in
 		array.
-	
+
 		NOTE: This is an experimental interface and subject to change
 		without notice.
 	*/
@@ -11599,14 +11599,14 @@ struct FzStextPage
 	/** Class-aware wrapper for `::fz_search_stext_page_cb()`.  */
 	/**
 		Search for occurrence of 'needle' in text page.
-	
+
 		Call callback once for each hit. This callback will receive
 		(potentially) multiple quads for each hit.
-	
+
 		Returns the number of hits - note that this is potentially
 		different from (i.e. is not greater than) the number of quads
 		as returned by the non callback API.
-	
+
 		NOTE: This is an experimental interface and subject to change
 		without notice.
 	*/
@@ -11616,15 +11616,15 @@ struct FzStextPage
 	/**
 		Perform segmentation analysis on an (unstructured) page to look for
 		recursive subdivisions.
-	
+
 		Essentially this code attempts to split the page horizontally and/or
 		vertically repeatedly into smaller and smaller "segments" (divisions).
-	
+
 		This minimises the reordering of the content, but some reordering
 		may be unavoidable.
-	
+
 		Returns 0 if no changes were made to the document.
-	
+
 		This is experimental code, and may change (or be removed) in future
 		versions!
 	*/
@@ -11634,24 +11634,24 @@ struct FzStextPage
 	/**
 		Perform segmentation analysis on a rectangle of a given
 		stext page.
-	
+
 		Like fz_segment_stext_page, this attempts to split the given page
 		region horizontally and/or vertically repeatedly into smaller and
 		smaller "segments".
-	
+
 		This works for pages with structure too, but splitting with
 		rectangles that cut across structure blocks may not behave as
 		expected.
-	
+
 		This minimises the reordering of the content (as viewed from the
 		perspective of a depth first traversal), but some reordering may
 		be unavoidable.
-	
+
 		This function accepts smaller gaps for segmentation than the full
 		page segmentation does.
-	
+
 		Returns 0 if no changes were made to the document.
-	
+
 		This is experimental code, and may change (or be removed) in future
 		versions!
 	*/
@@ -12316,13 +12316,13 @@ struct FzStream
 	/**
 		Create a new stream object with the given
 		internal state and function pointers.
-	
+
 		state: Internal state (opaque to everything but implementation).
-	
+
 		next: Should provide the next set of bytes (up to max) of stream
 		data. Return the number of bytes read, or EOF when there is no
 		more data.
-	
+
 		drop: Should clean up and free the internal state. May not
 		throw exceptions.
 	*/
@@ -12331,7 +12331,7 @@ struct FzStream
 	/** Constructor using `fz_open_file()`. */
 	/**
 		Open the named file and wrap it in a stream.
-	
+
 		filename: Path to a file. On non-Windows machines the filename
 		should be exactly as it would be passed to fopen(2). On Windows
 		machines, the path should be UTF-8 encoded so that non-ASCII
@@ -12351,12 +12351,12 @@ struct FzStream
 	/** Constructor using `fz_open_memory()`. */
 	/**
 		Open a block of memory as a stream.
-	
+
 		data: Pointer to start of data block. Ownership of the data
 		block is NOT passed in.
-	
+
 		len: Number of bytes in data block.
-	
+
 		Returns pointer to newly created stream. May throw exceptions on
 		failure to allocate.
 	*/
@@ -12388,13 +12388,13 @@ struct FzStream
 	/**
 		Ask how many bytes are available immediately from
 		a given stream.
-	
+
 		stm: The stream to read from.
-	
+
 		max: A hint for the underlying stream; the maximum number of
 		bytes that we are sure we will want to read. If you do not know
 		this number, give 1.
-	
+
 		Returns the number of bytes immediately available between the
 		read and write pointers. This number is guaranteed only to be 0
 		if we have hit EOF. The number of bytes returned here need have
@@ -12403,7 +12403,7 @@ struct FzStream
 	FZ_FUNCTION size_t fz_available(size_t max) const;
 
 	/** Class-aware wrapper for `::fz_decomp_image_from_stream()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_decomp_image_from_stream(::fz_compressed_image *image, ::fz_irect *subarea, int indexed, int l2factor)` => `(fz_pixmap *, int l2extra)`
 	 */
@@ -12414,7 +12414,7 @@ struct FzStream
 		subsampling that should be performed by this routine. This will
 		be updated on exit to the amount of subsampling that is still
 		required to be done.
-	
+
 		Returns a kept reference.
 	*/
 	FZ_FUNCTION FzPixmap fz_decomp_image_from_stream(const FzCompressedImage& image, FzIrect& subarea, int indexed, int l2factor, int *l2extra) const;
@@ -12422,7 +12422,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_is_cfb_archive()`.  */
 	/**
 		Detect if stream object is a cfb archive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_cfb_archive() const;
@@ -12431,7 +12431,7 @@ struct FzStream
 	/**
 		Query if the stream has reached EOF (during normal bytewise
 		reading).
-	
+
 		See fz_is_eof_bits for the equivalent function for bitwise
 		reading.
 	*/
@@ -12441,7 +12441,7 @@ struct FzStream
 	/**
 		Query if the stream has reached EOF (during bitwise
 		reading).
-	
+
 		See fz_is_eof for the equivalent function for bytewise
 		reading.
 	*/
@@ -12450,7 +12450,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_is_libarchive_archive()`.  */
 	/**
 		Detect if stream object is an archive supported by libarchive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_libarchive_archive() const;
@@ -12458,7 +12458,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_is_tar_archive()`.  */
 	/**
 		Detect if stream object is a tar archive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_tar_archive() const;
@@ -12466,7 +12466,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_is_zip_archive()`.  */
 	/**
 		Detect if stream object is a zip archive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_zip_archive() const;
@@ -12505,7 +12505,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_open_archive_with_stream()`.  */
 	/**
 		Open zip or tar archive stream.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
 	*/
@@ -12521,10 +12521,10 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_open_cfb_archive_with_stream()`.  */
 	/**
 		Open a cfb file as an archive.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the file is not recognised as a chm.
 	*/
 	FZ_FUNCTION FzArchive fz_open_cfb_archive_with_stream() const;
@@ -12533,19 +12533,19 @@ struct FzStream
 	/**
 		dctd filter performs DCT (JPEG) decoding of data read
 		from the chained filter.
-	
+
 		color_transform implements the PDF color_transform option
 			use -1 for default behavior
 			use 0 to disable YUV-RGB / YCCK-CMYK transforms
 			use 1 to enable YUV-RGB / YCCK-CMYK transforms
-	
+
 		invert_cmyk implements the necessary inversion for Photoshop CMYK images
 			use 0 if embedded in PDF
 			use 1 if not embedded in PDF
-	
+
 		For subsampling on decode, set l2factor to the log2 of the
 		reduction required (therefore 0 = full size decode).
-	
+
 		jpegtables is an optional stream from which the JPEG tables
 		can be read. Use NULL if not required.
 	*/
@@ -12562,22 +12562,22 @@ struct FzStream
 	/**
 		faxd filter performs FAX decoding of data read from
 		the chained filter.
-	
+
 		k: see fax specification (fax default is 0).
-	
+
 		end_of_line: whether we expect end of line markers (fax default
 		is 0).
-	
+
 		encoded_byte_align: whether we align to bytes after each line
 		(fax default is 0).
-	
+
 		columns: how many columns in the image (fax default is 1728).
-	
+
 		rows: 0 for unspecified or the number of rows of data to expect.
-	
+
 		end_of_block: whether we expect end of block markers (fax
 		default is 1).
-	
+
 		black_is_1: determines the polarity of the image (fax default is
 		0).
 	*/
@@ -12587,7 +12587,7 @@ struct FzStream
 	/**
 		flated filter performs LZ77 decoding (inflating) of data read
 		from the chained filter.
-	
+
 		window_bits: How large a decompression window to use. Typically
 		15. A negative number, -n, means to use n bits, but to expect
 		raw data with no header.
@@ -12595,7 +12595,7 @@ struct FzStream
 	FZ_FUNCTION FzStream fz_open_flated(int window_bits) const;
 
 	/** Class-aware wrapper for `::fz_open_image_decomp_stream()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_open_image_decomp_stream(::fz_compression_params *arg_1)` => `(fz_stream *, int l2factor)`
 	 */
@@ -12616,12 +12616,12 @@ struct FzStream
 	/**
 		Attach a filter to a stream that will store any
 		characters read from the stream into the supplied buffer.
-	
+
 		chain: The underlying stream to leech from.
-	
+
 		buf: The buffer into which the read data should be appended.
 		The buffer will be resized as required.
-	
+
 		Returns pointer to newly created stream. May throw exceptions on
 		failure to allocate.
 	*/
@@ -12630,10 +12630,10 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_open_libarchive_archive_with_stream()`.  */
 	/**
 		Open an archive using libarchive.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the stream is not supported by libarchive.
 	*/
 	FZ_FUNCTION FzArchive fz_open_libarchive_archive_with_stream() const;
@@ -12642,7 +12642,7 @@ struct FzStream
 	/**
 		libarchived filter performs generic compressed decoding of data
 		in any format understood by libarchive from the chained filter.
-	
+
 		This will throw an exception if libarchive is not built in, or
 		if the compression format is not recognised.
 	*/
@@ -12652,16 +12652,16 @@ struct FzStream
 	/**
 		lzwd filter performs LZW decoding of data read from the chained
 		filter.
-	
+
 		early_change: (Default 1) specifies whether to change codes 1
 		bit early.
-	
+
 		min_bits: (Default 9) specifies the minimum number of bits to
 		use.
-	
+
 		reverse_bits: (Default 0) allows for compatibility with gif and
 		old style tiffs (1).
-	
+
 		old_tiff: (Default 0) allows for different handling of the clear
 		code, as found in old style tiffs.
 	*/
@@ -12678,13 +12678,13 @@ struct FzStream
 	/**
 		predict filter performs pixel prediction on data read from
 		the chained filter.
-	
+
 		predictor: 1 = copy, 2 = tiff, other = inline PNG predictor
-	
+
 		columns: width of image in pixels
-	
+
 		colors: number of components.
-	
+
 		bpc: bits per component (typically 8)
 	*/
 	FZ_FUNCTION FzStream fz_open_predict(int predictor, int columns, int colors, int bpc) const;
@@ -12727,13 +12727,13 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_open_tar_archive_with_stream()`.  */
 	/**
 		Open a tar archive stream.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the stream is not a tar archive as
 		indicated by the presence of a tar signature.
-	
+
 	*/
 	FZ_FUNCTION FzArchive fz_open_tar_archive_with_stream() const;
 
@@ -12747,20 +12747,20 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_open_zip_archive_with_stream()`.  */
 	/**
 		Open a zip archive stream.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the stream is not a zip archive as
 		indicated by the presence of a zip signature.
-	
+
 	*/
 	FZ_FUNCTION FzArchive fz_open_zip_archive_with_stream() const;
 
 	/** Class-aware wrapper for `::fz_parse_xml_stream()`.  */
 	/**
 		Parse the contents of buffer into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
 	*/
 	FZ_FUNCTION FzXml fz_parse_xml_stream(int preserve_white) const;
@@ -12768,9 +12768,9 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_peek_byte()`.  */
 	/**
 		Peek at the next byte in a stream.
-	
+
 		stm: The stream to peek at.
-	
+
 		Returns -1 for EOF, or the next byte that will be read.
 	*/
 	FZ_FUNCTION int fz_peek_byte() const;
@@ -12778,13 +12778,13 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_read()`.  */
 	/**
 		Read from a stream into a given data block.
-	
+
 		stm: The stream to read from.
-	
+
 		data: The data block to read into.
-	
+
 		len: The length of the data block (in bytes).
-	
+
 		Returns the number of bytes read. May throw exceptions.
 	*/
 	FZ_FUNCTION size_t fz_read(unsigned char *data, size_t len) const;
@@ -12792,18 +12792,18 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_read_all()`.  */
 	/**
 		Read all of a stream into a buffer.
-	
+
 		stm: The stream to read from
-	
+
 		initial: Suggested initial size for the buffer.
-	
+
 		Returns a buffer created from reading from the stream. May throw
 		exceptions on failure to allocate.
 	*/
 	FZ_FUNCTION FzBuffer fz_read_all(size_t initial) const;
 
 	/** Class-aware wrapper for `::fz_read_best()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_read_best(size_t initial, size_t worst_case)` => `(fz_buffer *, int truncated)`
 	 */
@@ -12811,16 +12811,16 @@ struct FzStream
 		Attempt to read a stream into a buffer. If truncated
 		is NULL behaves as fz_read_all, sets a truncated flag in case of
 		error.
-	
+
 		stm: The stream to read from.
-	
+
 		initial: Suggested initial size for the buffer.
-	
+
 		truncated: Flag to store success/failure indication in.
-	
+
 		worst_case: 0 for unknown, otherwise an upper bound for the
 		size of the stream.
-	
+
 		Returns a buffer created from reading from the stream.
 	*/
 	FZ_FUNCTION FzBuffer fz_read_best(size_t initial, int *truncated, size_t worst_case) const;
@@ -12829,12 +12829,12 @@ struct FzStream
 	/**
 		Read the next n bits from a stream (assumed to
 		be packed most significant bit first).
-	
+
 		stm: The stream to read from.
-	
+
 		n: The number of bits to read, between 1 and 8*sizeof(int)
 		inclusive.
-	
+
 		Returns -1 for EOF, or the required number of bits.
 	*/
 	FZ_FUNCTION unsigned int fz_read_bits(int n) const;
@@ -12842,9 +12842,9 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_read_byte()`.  */
 	/**
 		Read the next byte from a stream.
-	
+
 		stm: The stream t read from.
-	
+
 		Returns -1 for end of stream, or the next byte. May
 		throw exceptions.
 	*/
@@ -12879,7 +12879,7 @@ struct FzStream
 		Read a line from stream into the buffer until either a
 		terminating newline or EOF, which it replaces with a null byte
 		('\0').
-	
+
 		Returns buf on success, and NULL when end of file occurs while
 		no characters have been read.
 	*/
@@ -12889,12 +12889,12 @@ struct FzStream
 	/**
 		Read the next n bits from a stream (assumed to
 		be packed least significant bit first).
-	
+
 		stm: The stream to read from.
-	
+
 		n: The number of bits to read, between 1 and 8*sizeof(int)
 		inclusive.
-	
+
 		Returns (unsigned int)-1 for EOF, or the required number of bits.
 	*/
 	FZ_FUNCTION unsigned int fz_read_rbits(int n) const;
@@ -12902,7 +12902,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_read_rune()`.  */
 	/**
 		Read a utf-8 rune from a stream.
-	
+
 		In the event of encountering badly formatted utf-8 codes
 		(such as a leading code with an unexpected number of following
 		codes) no error/exception is given, but undefined values may be
@@ -12922,10 +12922,10 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_read_uint16()`.  */
 	/**
 		fz_read_[u]int(16|24|32|64)(_le)?
-	
+
 		Read a 16/32/64 bit signed/unsigned integer from stream,
 		in big or little-endian byte orders.
-	
+
 		Throws an exception if EOF is encountered.
 	*/
 	FZ_FUNCTION uint16_t fz_read_uint16() const;
@@ -12958,7 +12958,7 @@ struct FzStream
 	/**
 		Read a utf-16 rune from a stream. (little endian and
 		big endian respectively).
-	
+
 		In the event of encountering badly formatted utf-16 codes
 		(mismatched surrogates) no error/exception is given, but
 		undefined values may be returned.
@@ -12976,27 +12976,27 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_seek()`.  */
 	/**
 		Seek within a stream.
-	
+
 		stm: The stream to seek within.
-	
+
 		offset: The offset to seek to.
-	
+
 		whence: From where the offset is measured (see fseek).
 		SEEK_SET - start of stream.
 		SEEK_CUR - current position.
 		SEEK_END - end of stream.
-	
+
 	*/
 	FZ_FUNCTION void fz_seek(int64_t offset, int whence) const;
 
 	/** Class-aware wrapper for `::fz_skip()`.  */
 	/**
 		Read from a stream discarding data.
-	
+
 		stm: The stream to read from.
-	
+
 		len: The number of bytes to read.
-	
+
 		Returns the number of bytes read. May throw exceptions.
 	*/
 	FZ_FUNCTION size_t fz_skip(size_t len) const;
@@ -13018,7 +13018,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_stream_filename()`.  */
 	/**
 		Return the filename (UTF-8 encoded) from which a stream was opened.
-	
+
 		Returns NULL if the filename is not available (or the stream was
 		opened from a source other than a file).
 	*/
@@ -13041,7 +13041,7 @@ struct FzStream
 	/** Class-aware wrapper for `::fz_try_open_archive_with_stream()`.  */
 	/**
 		Open zip or tar archive stream.
-	
+
 		Does the same as fz_open_archive_with_stream, but will not throw
 		an error in the event of failing to recognise the format. Will
 		still throw errors in other cases though!
@@ -13056,7 +13056,7 @@ struct FzStream
 		Unread the single last byte successfully
 		read from a stream. Do not call this without having
 		successfully read a byte.
-	
+
 		stm: The stream to operate upon.
 	*/
 	FZ_FUNCTION void fz_unread_byte() const;
@@ -13151,7 +13151,7 @@ struct FzStrokeState
 	/**
 		Create a new (empty) stroke state structure (with no dash
 		data) and return a reference to it.
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION FzStrokeState();
@@ -13160,9 +13160,9 @@ struct FzStrokeState
 	/**
 		Create a new (empty) stroke state structure, with room for
 		dash data of the given length, and return a reference to it.
-	
+
 		len: The number of dash elements to allow room for.
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION FzStrokeState(int len);
@@ -13179,9 +13179,9 @@ struct FzStrokeState
 	/**
 		Create an identical stroke_state structure and return a
 		reference to it.
-	
+
 		stroke: The stroke state reference to clone.
-	
+
 		Exceptions may be thrown in the event of a failure to
 		allocate.
 	*/
@@ -13196,12 +13196,12 @@ struct FzStrokeState
 		return a reference to an equivalent stroke_state structure
 		that is guaranteed to be unshared (i.e. one that can
 		safely be modified).
-	
+
 		shared: The reference to a (possibly) shared structure
 		to unshare. Ownership of this reference is passed in
 		to this function, even in the case of exceptions being
 		thrown.
-	
+
 		Exceptions may be thrown in the event of failure to
 		allocate if required.
 	*/
@@ -13213,12 +13213,12 @@ struct FzStrokeState
 		return a reference to a stroke_state structure (with room for a
 		given amount of dash data) that is guaranteed to be unshared
 		(i.e. one that can safely be modified).
-	
+
 		shared: The reference to a (possibly) shared structure
 		to unshare. Ownership of this reference is passed in
 		to this function, even in the case of exceptions being
 		thrown.
-	
+
 		Exceptions may be thrown in the event of failure to
 		allocate if required.
 	*/
@@ -13296,7 +13296,7 @@ struct FzText
 	/** Constructor using `fz_new_text()`. */
 	/**
 		Create a new empty fz_text object.
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION FzText();
@@ -13312,16 +13312,16 @@ struct FzText
 	/** Class-aware wrapper for `::fz_bound_text()`.  */
 	/**
 		Find the bounds of a given text object.
-	
+
 		text: The text object to find the bounds of.
-	
+
 		stroke: Pointer to the stroke attributes (for stroked
 		text), or NULL (for filled text).
-	
+
 		ctm: The matrix in use.
-	
+
 		r: pointer to storage for the bounds.
-	
+
 		Returns a pointer to r, which is updated to contain the
 		bounding box for the text object.
 	*/
@@ -13330,29 +13330,29 @@ struct FzText
 	/** Class-aware wrapper for `::fz_show_glyph()`.  */
 	/**
 		Add a glyph/unicode value to a text object.
-	
+
 		text: Text object to add to.
-	
+
 		font: The font the glyph should be added in.
-	
+
 		trm: The transform to use for the glyph.
-	
+
 		glyph: The glyph id to add.
-	
+
 		unicode: The unicode character for the glyph.
-	
+
 		cid: The CJK CID value or raw character code.
-	
+
 		wmode: 1 for vertical mode, 0 for horizontal.
-	
+
 		bidi_level: The bidirectional level for this glyph.
-	
+
 		markup_dir: The direction of the text as specified in the
 		markup.
-	
+
 		language: The language in use (if known, 0 otherwise)
 		(e.g. FZ_LANG_zh_Hans).
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION void fz_show_glyph(const FzFont& font, const FzMatrix& trm, int glyph, int unicode, int wmode, int bidi_level, ::fz_bidi_direction markup_dir, ::fz_text_language language) const;
@@ -13363,24 +13363,24 @@ struct FzText
 	/** Class-aware wrapper for `::fz_show_string()`.  */
 	/**
 		Add a UTF8 string to a text object.
-	
+
 		text: Text object to add to.
-	
+
 		font: The font the string should be added in.
-	
+
 		trm: The transform to use.
-	
+
 		s: The utf-8 string to add.
-	
+
 		wmode: 1 for vertical mode, 0 for horizontal.
-	
+
 		bidi_level: The bidirectional level for this glyph.
-	
+
 		markup_dir: The direction of the text as specified in the markup.
-	
+
 		language: The language in use (if known, 0 otherwise)
 			(e.g. FZ_LANG_zh_Hans).
-	
+
 		Returns the transform updated with the advance width of the
 		string.
 	*/
@@ -13625,7 +13625,7 @@ struct FzTree
 	/** Class-aware wrapper for `::fz_new_tree_archive()`.  */
 	/**
 		Create an archive that holds named buffers.
-	
+
 		tree can either be a preformed tree with fz_buffers as values,
 		or it can be NULL for an empty tree.
 	*/
@@ -13634,9 +13634,9 @@ struct FzTree
 	/** Class-aware wrapper for `::fz_tree_lookup()`.  */
 	/**
 		Look for the value of a node in the tree with the given key.
-	
+
 		Simple pointer equivalence is used for key.
-	
+
 		Returns NULL for no match.
 	*/
 	FZ_FUNCTION void *fz_tree_lookup(const char *key) const;
@@ -13883,7 +13883,7 @@ struct FzXml
 	/** Constructor using `fz_new_dom_node()`. */
 	/**
 		Create a new dom node.
-	
+
 		This will NOT be linked in yet.
 	*/
 	FZ_FUNCTION FzXml(const FzXml& dom, const char *tag);
@@ -13902,7 +13902,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_new_dom_text_node()`.  */
 	/**
 		Create a new dom text node.
-	
+
 		This will NOT be linked in yet.
 	*/
 	FZ_FUNCTION static FzXml fz_new_dom_text_node(const FzXml& dom, const char *text);
@@ -13926,7 +13926,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_dom_add_attribute()`.  */
 	/**
 		Add an attribute to an element.
-	
+
 		Ownership of att and value remain with the caller.
 	*/
 	FZ_FUNCTION void fz_dom_add_attribute(const char *att, const char *value) const;
@@ -13941,7 +13941,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_dom_attribute()`.  */
 	/**
 		Retrieve the value of a given attribute from a given element.
-	
+
 		Returns a borrowed pointer to the value or NULL if not found.
 	*/
 	FZ_FUNCTION const char *fz_dom_attribute(const char *att) const;
@@ -13956,7 +13956,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_dom_clone()`.  */
 	/**
 		Clone an element (and its children).
-	
+
 		A borrowed reference to the clone is returned. The clone is not
 		yet linked into the DOM.
 	*/
@@ -13965,7 +13965,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_dom_create_element()`.  */
 	/**
 		Create an element of a given tag type for the given DOM.
-	
+
 		The element is not linked into the DOM yet.
 	*/
 	FZ_FUNCTION FzXml fz_dom_create_element(const char *tag) const;
@@ -13973,7 +13973,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_dom_create_text_node()`.  */
 	/**
 		Create a text node for the given DOM.
-	
+
 		The element is not linked into the DOM yet.
 	*/
 	FZ_FUNCTION FzXml fz_dom_create_text_node(const char *text) const;
@@ -13988,14 +13988,14 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_dom_find()`.  */
 	/**
 		Find the first element matching the requirements in a depth first traversal from elt.
-	
+
 		The tagname must match tag, unless tag is NULL, when all tag names are considered to match.
-	
+
 		If att is NULL, then all tags match.
 		Otherwise:
 			If match is NULL, then only nodes that have an att attribute match.
 			If match is non-NULL, then only nodes that have an att attribute that matches match match.
-	
+
 		Returns NULL (if no match found), or a borrowed reference to the first matching element.
 	*/
 	FZ_FUNCTION FzXml fz_dom_find(const char *tag, const char *att, const char *match) const;
@@ -14014,15 +14014,15 @@ struct FzXml
 	FZ_FUNCTION FzXml fz_dom_first_child() const;
 
 	/** Class-aware wrapper for `::fz_dom_get_attribute()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_dom_get_attribute(int i)` => `(const char *, const char *att)`
 	 */
 	/**
 		Enumerate through the attributes of an element.
-	
+
 		Call with i=0,1,2,3... to enumerate attributes.
-	
+
 		On return *att and the return value will be NULL if there are not
 		that many attributes to read. Otherwise, *att will be filled in
 		with a borrowed pointer to the attribute name, and the return
@@ -14069,7 +14069,7 @@ struct FzXml
 	/**
 		Remove an element from the DOM. The element can be added back elsewhere
 		if required.
-	
+
 		No reference counting changes for the element.
 	*/
 	FZ_FUNCTION void fz_dom_remove() const;
@@ -14081,7 +14081,7 @@ struct FzXml
 	FZ_FUNCTION void fz_dom_remove_attribute(const char *att) const;
 
 	/** Class-aware wrapper for `::fz_new_display_list_from_svg_xml()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`fz_new_display_list_from_svg_xml(::fz_xml *xml, const char *base_uri, ::fz_archive *dir)` => `(fz_display_list *, float w, float h)`
 	 */
@@ -14093,7 +14093,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_new_dom_node()`.  */
 	/**
 		Create a new dom node.
-	
+
 		This will NOT be linked in yet.
 	*/
 	FZ_FUNCTION FzXml fz_new_dom_node(const char *tag) const;
@@ -14101,7 +14101,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_new_dom_text_node()`.  */
 	/**
 		Create a new dom text node.
-	
+
 		This will NOT be linked in yet.
 	*/
 	FZ_FUNCTION FzXml fz_new_dom_text_node(const char *text) const;
@@ -14121,12 +14121,12 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_write_xml()`.  */
 	/**
 		Write our xml structure out to an xml stream.
-	
+
 		Properly formatted XML is only allowed to have a single top-level node
 		under which everything must sit. Our structures allow for multiple
 		top level nodes. If required, we will output an extra 'ROOT' node
 		at the top so that the xml is well-formed.
-	
+
 		If 'indented' is non-zero then additional whitespace will be added to
 		make the XML easier to read in a text editor. It will NOT be properly
 		compliant.
@@ -14151,7 +14151,7 @@ struct FzXml
 	/** Class-aware wrapper for `::fz_xml_att_eq()`.  */
 	/**
 		Check for a matching attribute on an XML node.
-	
+
 		If the node has the requested attribute (name), and the value
 		matches (match) then return 1. Otherwise, 0.
 	*/
@@ -14167,7 +14167,7 @@ struct FzXml
 	/**
 		Search the siblings of XML nodes starting with item looking for
 		the first with the given tag.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find(const char *tag) const;
@@ -14195,7 +14195,7 @@ struct FzXml
 	/**
 		Search the siblings of XML nodes starting with the first child
 		of item looking for the first with the given tag.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_down(const char *tag) const;
@@ -14205,7 +14205,7 @@ struct FzXml
 		Search the siblings of XML nodes starting with the first child
 		of item looking for the first with the given tag (or any tag if
 		tag is NULL), and with a matching attribute.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_down_match(const char *tag, const char *att, const char *match) const;
@@ -14215,7 +14215,7 @@ struct FzXml
 		Search the siblings of XML nodes starting with item looking for
 		the first with the given tag (or any tag if tag is NULL), and
 		with a matching attribute.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_match(const char *tag, const char *att, const char *match) const;
@@ -14224,7 +14224,7 @@ struct FzXml
 	/**
 		Search the siblings of XML nodes starting with the first sibling
 		of item looking for the first with the given tag.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_next(const char *tag) const;
@@ -14253,7 +14253,7 @@ struct FzXml
 		Search the siblings of XML nodes starting with the first sibling
 		of item looking for the first with the given tag (or any tag if tag
 		is NULL), and with a matching attribute.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_next_match(const char *tag, const char *att, const char *match) const;
@@ -14382,7 +14382,7 @@ struct FzZipWriter
 	/** Constructor using `fz_new_zip_writer()`. */
 	/**
 		Create a new zip writer that writes to a given file.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
 	*/
@@ -14391,7 +14391,7 @@ struct FzZipWriter
 	/** Constructor using `fz_new_zip_writer_with_output()`. */
 	/**
 		Create a new zip writer that writes to a given output stream.
-	
+
 		Ownership of out passes in immediately upon calling this function.
 		The caller should never drop the fz_output, even if this function throws
 		an exception.
@@ -14406,7 +14406,7 @@ struct FzZipWriter
 	/** Class-aware wrapper for `::fz_close_zip_writer()`.  */
 	/**
 		Close the zip file for writing.
-	
+
 		This flushes any pending data to the file. This can throw
 		exceptions.
 	*/
@@ -14512,7 +14512,7 @@ struct PdfAnnot
 	FZ_FUNCTION void pdf_add_annot_vertex(const FzPoint& p) const;
 
 	/** Class-aware wrapper for `::pdf_annot_MK_BC()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_annot_MK_BC(float color[4])` => int n
 	 */
@@ -14522,7 +14522,7 @@ struct PdfAnnot
 	FZ_FUNCTION int pdf_annot_MK_BC_rgb(float rgb[3]) const;
 
 	/** Class-aware wrapper for `::pdf_annot_MK_BG()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_annot_MK_BG(float color[4])` => int n
 	 */
@@ -14568,7 +14568,7 @@ struct PdfAnnot
 	FZ_FUNCTION enum pdf_line_ending pdf_annot_callout_style() const;
 
 	/** Class-aware wrapper for `::pdf_annot_color()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_annot_color(float color[4])` => int n
 	 */
@@ -14581,14 +14581,14 @@ struct PdfAnnot
 	FZ_FUNCTION int64_t pdf_annot_creation_date() const;
 
 	/** Class-aware wrapper for `::pdf_annot_default_appearance()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_annot_default_appearance(float color[4])` => `(const char *font, float size, int n)`
 	 */
 	FZ_FUNCTION void pdf_annot_default_appearance(const char **font, float *size, int *n, float color[4]) const;
 
 	/** Class-aware wrapper for `::pdf_annot_default_appearance_unmapped()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_annot_default_appearance_unmapped(char *font_name, int font_name_len, float color[4])` => `(float size, int n)`
 	 */
@@ -14724,7 +14724,7 @@ struct PdfAnnot
 	FZ_FUNCTION enum pdf_intent pdf_annot_intent() const;
 
 	/** Class-aware wrapper for `::pdf_annot_interior_color()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_annot_interior_color(float color[4])` => int n
 	 */
@@ -14749,7 +14749,7 @@ struct PdfAnnot
 	FZ_FUNCTION enum pdf_line_ending pdf_annot_line_end_style() const;
 
 	/** Class-aware wrapper for `::pdf_annot_line_ending_styles()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_annot_line_ending_styles()` => `(enum pdf_line_ending start_style, enum pdf_line_ending end_style)`
 	 */
@@ -14878,7 +14878,7 @@ struct PdfAnnot
 	FZ_FUNCTION void pdf_dirty_annot() const;
 
 	/** Class-aware wrapper for `::pdf_edit_text_field_value()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_edit_text_field_value(const char *value, const char *change)` => `(int, int selStart, int selEnd, char *newvalue)`
 	 */
@@ -15210,7 +15210,7 @@ struct PdfCmap
 	FZ_FUNCTION int pdf_cmap_wmode() const;
 
 	/** Class-aware wrapper for `::pdf_decode_cmap()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_decode_cmap(unsigned char *s, unsigned char *e)` => `(int, unsigned int cpt)`
 	 */
@@ -15220,14 +15220,14 @@ struct PdfCmap
 	FZ_FUNCTION int pdf_lookup_cmap(unsigned int cpt) const;
 
 	/** Class-aware wrapper for `::pdf_lookup_cmap_full()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_lookup_cmap_full(unsigned int cpt)` => `(int, int out)`
 	 */
 	FZ_FUNCTION int pdf_lookup_cmap_full(unsigned int cpt, int *out) const;
 
 	/** Class-aware wrapper for `::pdf_map_one_to_many()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_map_one_to_many(unsigned int one, size_t len)` => int many
 	 */
@@ -15685,7 +15685,7 @@ struct PdfDocument
 	FZ_FUNCTION int pdf_count_pages() const;
 
 	/** Class-aware wrapper for `::pdf_count_q_balance()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_count_q_balance(::pdf_obj *res, ::pdf_obj *stm)` => `(int prepend, int append)`
 	 */
@@ -15800,7 +15800,7 @@ struct PdfDocument
 	FZ_FUNCTION int pdf_field_event_keystroke(const PdfObj& field, const PdfKeystrokeEvent& evt) const;
 
 	/** Class-aware wrapper for `::pdf_field_event_validate()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_field_event_validate(::pdf_obj *field, const char *value)` => `(int, char *newvalue)`
 	 */
@@ -15911,7 +15911,7 @@ struct PdfDocument
 	/** Class-aware wrapper for `::pdf_load_object()`.  */
 	/**
 		Load a given object.
-	
+
 		This can cause xref reorganisations (solidifications etc) due to
 		repairs, so all held pdf_xref_entries should be considered
 		invalid after this call (other than the returned one).
@@ -15940,7 +15940,7 @@ struct PdfDocument
 	FZ_FUNCTION FzBuffer pdf_load_stream_number(int num) const;
 
 	/** Class-aware wrapper for `::pdf_load_to_unicode()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_load_to_unicode(::pdf_font_desc *font, char *collection, ::pdf_obj *cmapstm)` => const char *strings
 	 */
@@ -15969,7 +15969,7 @@ struct PdfDocument
 	FZ_FUNCTION PdfObj pdf_lookup_name(const PdfObj& which, const PdfObj& needle) const;
 
 	/** Class-aware wrapper for `::pdf_lookup_page_loc()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_lookup_page_loc(int needle, ::pdf_obj **parentp)` => `(pdf_obj *, int indexp)`
 	 */
@@ -16063,7 +16063,7 @@ struct PdfDocument
 	FZ_FUNCTION void pdf_page_label(int page, char *buf, size_t size) const;
 
 	/** Class-aware wrapper for `::pdf_page_write()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_page_write(::fz_rect mediabox, ::pdf_obj **presources, ::fz_buffer **pcontents)` => `(fz_device *)`
 	 */
@@ -16076,14 +16076,14 @@ struct PdfDocument
 	FZ_FUNCTION PdfObj pdf_parse_dict(const FzStream& f, const PdfLexbuf& buf) const;
 
 	/** Class-aware wrapper for `::pdf_parse_ind_obj()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_parse_ind_obj(::fz_stream *f)` => `(pdf_obj *, int num, int gen, int64_t stm_ofs, int try_repair)`
 	 */
 	FZ_FUNCTION PdfObj pdf_parse_ind_obj(const FzStream& f, int *num, int *gen, int64_t *stm_ofs, int *try_repair) const;
 
 	/** Class-aware wrapper for `::pdf_parse_journal_obj()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_parse_journal_obj(::fz_stream *stm, ::fz_buffer **ostm)` => `(pdf_obj *, int onum, int newobj)`
 	 */
@@ -16127,7 +16127,7 @@ struct PdfDocument
 	FZ_FUNCTION void pdf_remove_output_intents() const;
 
 	/** Class-aware wrapper for `::pdf_repair_obj()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_repair_obj(::pdf_lexbuf *buf, ::pdf_obj **encrypt, ::pdf_obj **id, ::pdf_obj **page, ::pdf_obj **root)` => `(int, int64_t stmofsp, int64_t stmlenp, int64_t tmpofs)`
 	 */
@@ -16143,7 +16143,7 @@ struct PdfDocument
 	FZ_FUNCTION void pdf_reset_form(const PdfObj& fields, int exclude) const;
 
 	/** Class-aware wrapper for `::pdf_resolve_link()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_resolve_link(const char *uri)` => `(int, float xp, float yp)`
 	 */
@@ -16201,7 +16201,7 @@ struct PdfDocument
 	FZ_FUNCTION int pdf_signature_byte_range(const PdfObj& signature, const FzRange& byte_range) const;
 
 	/** Class-aware wrapper for `::pdf_signature_contents()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_signature_contents(::pdf_obj *signature)` => `(size_t, char *contents)`
 	 */
@@ -16239,7 +16239,7 @@ struct PdfDocument
 	FZ_FUNCTION void pdf_undo() const;
 
 	/** Class-aware wrapper for `::pdf_undoredo_state()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_undoredo_state()` => `(int, int steps)`
 	 */
@@ -16306,7 +16306,7 @@ struct PdfDocument
 	FZ_FUNCTION void pdf_xref_store_unsaved_signature(const PdfObj& field, const PdfPkcs7Signer& signer) const;
 
 	/** Class-aware wrapper for `::pdf_zugferd_profile()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_zugferd_profile()` => `(enum pdf_zugferd_profile, float version)`
 	 */
@@ -16644,7 +16644,7 @@ struct PdfFunction
 	/* == Methods. */
 
 	/** Class-aware wrapper for `::pdf_eval_function()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_eval_function(const float *in, int inlen, int outlen)` => float out
 	 */
@@ -17012,7 +17012,7 @@ struct PdfJs
 	FZ_FUNCTION int pdf_js_event_result_keystroke(const PdfKeystrokeEvent& evt) const;
 
 	/** Class-aware wrapper for `::pdf_js_event_result_validate()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_js_event_result_validate()` => `(int, char *newvalue)`
 	 */
@@ -17022,7 +17022,7 @@ struct PdfJs
 	FZ_FUNCTION char *pdf_js_event_value() const;
 
 	/** Class-aware wrapper for `::pdf_js_execute()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_js_execute(const char *name, const char *code)` => char *result
 	 */
@@ -17661,7 +17661,7 @@ struct PdfObj
 	FZ_FUNCTION FzRect pdf_array_get_rect(int index) const;
 
 	/** Class-aware wrapper for `::pdf_array_get_string()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_array_get_string(int index)` => `(const char *, size_t sizep)`
 	 */
@@ -17803,7 +17803,7 @@ struct PdfObj
 	FZ_FUNCTION FzRect pdf_dict_get_inheritable_rect(const PdfObj& key) const;
 
 	/** Class-aware wrapper for `::pdf_dict_get_inheritable_string()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_dict_get_inheritable_string(::pdf_obj *key)` => `(const char *, size_t sizep)`
 	 */
@@ -17843,7 +17843,7 @@ struct PdfObj
 	FZ_FUNCTION FzRect pdf_dict_get_rect(const PdfObj& key) const;
 
 	/** Class-aware wrapper for `::pdf_dict_get_string()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_dict_get_string(::pdf_obj *key)` => `(const char *, size_t sizep)`
 	 */
@@ -18087,7 +18087,7 @@ struct PdfObj
 	FZ_FUNCTION int pdf_obj_marked() const;
 
 	/** Class-aware wrapper for `::pdf_obj_memo()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_obj_memo(int bit)` => `(int, int memo)`
 	 */
@@ -18132,7 +18132,7 @@ struct PdfObj
 	/** Class-aware wrapper for `::pdf_resolve_indirect()`.  */
 	/**
 		Resolve an indirect object (or chain of objects).
-	
+
 		This can cause xref reorganisations (solidifications etc) due to
 		repairs, so all held pdf_xref_entries should be considered
 		invalid after this call (other than the returned one).
@@ -18212,7 +18212,7 @@ struct PdfObj
 	FZ_FUNCTION size_t pdf_to_str_len() const;
 
 	/** Class-aware wrapper for `::pdf_to_string()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_to_string()` => `(const char *, size_t sizep)`
 	 */
@@ -18228,7 +18228,7 @@ struct PdfObj
 	FZ_FUNCTION int pdf_verify_embedded_file_checksum() const;
 
 	/** Class-aware wrapper for `::pdf_walk_tree()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_walk_tree(::pdf_obj *kid_name, void (*arrive)(::fz_context *, ::pdf_obj *, void *, ::pdf_obj **), void (*leave)(::fz_context *, ::pdf_obj *, void *), void *arg, ::pdf_obj **names, ::pdf_obj **values)` => `()`
 	 */
@@ -18457,7 +18457,7 @@ struct PdfPage
 	FZ_FUNCTION int pdf_page_has_transparency() const;
 
 	/** Class-aware wrapper for `::pdf_page_presentation()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_page_presentation(::fz_transition *transition)` => `(fz_transition *, float duration)`
 	 */
@@ -18749,9 +18749,9 @@ struct PdfProcessor
 	FZ_FUNCTION void pdf_process_annot(const PdfAnnot& annot, FzCookie& cookie) const;
 
 	/** Class-aware wrapper for `::pdf_process_contents()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
-		`pdf_process_contents(::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm, ::fz_cookie *cookie, ::pdf_obj **out_res)` => 
+		`pdf_process_contents(::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm, ::fz_cookie *cookie, ::pdf_obj **out_res)` =>
 	 */
 	FZ_FUNCTION void pdf_process_contents(const PdfDocument& doc, const PdfObj& res, const PdfObj& stm, FzCookie& cookie, PdfObj& out_res) const;
 
@@ -19292,7 +19292,7 @@ struct PdfTextObjectState
 	FZ_FUNCTION FzText pdf_tos_get_text() const;
 
 	/** Class-aware wrapper for `::pdf_tos_make_trm()`.
-	
+
 	This method has out-params. Python/C# wrappers look like:
 		`pdf_tos_make_trm(::pdf_text_state *text, ::pdf_font_desc *fontdesc, int cid, ::fz_matrix *trm)` => `(int, float adv)`
 	 */

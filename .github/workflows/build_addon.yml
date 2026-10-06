@@ -10,6 +10,7 @@ on:
     branches: [ main, master ]
 
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
@@ -19,33 +20,37 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
-    - run: echo -e "pre-commit\nscons\nmarkdown">requirements.txt
-
-    - name: Set up Python
-      uses: actions/setup-python@v7
+    - name: Install uv
+      uses: astral-sh/setup-uv@v10.2.0
       with:
-        python-version: 3.11
-        cache: 'pip'
+        enable-cache: true
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip wheel
-        pip install -r requirements.txt
         sudo apt-get update  -y
         sudo apt-get install -y gettext
+        uv sync
 
     - name: Code checks
-      run: export SKIP=no-commit-to-branch; pre-commit run --all
+      run: |
+        uv run ruff check .
 
     - name: building addon
-      run: scons && scons pot
+      run: uv run scons && uv run scons pot
 
     - uses: actions/upload-artifact@v7
       with:
         name: packaged_addon
         path: |
           ./*.nvda-addon
+        archive: false
+
+    - uses: actions/upload-artifact@v7
+      with:
+        name: translation_template
+        path: |
           ./*.pot
+        archive: false
 
   upload_release:
     runs-on: ubuntu-latest
@@ -55,8 +60,11 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v7
-    - name: download releases files
+    - name: download all artifacts
       uses: actions/download-artifact@v8
+      with:
+        path: .
+        merge-multiple: true
     - name: Display structure of downloaded files
       run: ls -R
     - name: Calculate sha256
@@ -75,65 +83,75 @@ jobs:
         prerelease: ${{ contains(github.ref, '-') }}
 
     - name: Send Telegram Notification
+      if: ${{ !contains(github.ref, '-') }}
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+        REF_NAME: ${{ github.ref_name }}
+        REPO_URL: ${{ github.event.repository.html_url }}
       run: |
-        head -n 100 changelog.md > log_part.txt
-        sed -i 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' log_part.txt
-        
-        sed -i 's/\*\*\([^*]*\)\*\*/<b>\1<\/b>/g' log_part.txt
-        sed -i 's/\*\([^*]*\)\*/<i>\1<\/i>/g' log_part.txt
-        sed -i 's/^## \(.*\)/<b>🔹 \1<\/b>/g' log_part.txt
-        sed -i 's/^\* /• /g' log_part.txt
-        
-        sed -i 's/\*//g' log_part.txt
+        python3 - << 'EOF'
+        import html
+        import os
+        import re
 
-        cat << 'EOF' > tg_msg.txt
-        <b>🚀 New Release: Vision Assistant Pro</b>
+        with open("changelog.md", "r", encoding="utf-8") as f:
+            content = f.read()
 
-        <b>Version:</b> <code>${{ github.ref_name }}</code>
+        content = re.sub(r'\n+SHA256:\s*\n.*', '', content, flags=re.DOTALL)
 
-        <b>What's New:</b>
+        parts = content.split("---", 1)
+        version_part = parts[0].strip()
+        donate_part = parts[1].strip() if len(parts) > 1 else ""
+
+        lines = version_part.splitlines()
+        body_lines = [l for l in lines if not l.strip().startswith("## ")]
+        cleaned_version_text = "\n".join(body_lines).strip()
+
+        def md_to_tg_html(text):
+            text = html.escape(text, quote=False)
+            text = re.sub(r'\[([^\]]+)\]\((https?://[^\s)]+)\)', r'<a href="\2">\1</a>', text)
+            text = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', text)
+            text = re.sub(r'(?<!\*)\*([^*\n]+)\*(?!\*)', r'<i>\1</i>', text)
+            text = re.sub(r'`([^`\n]+)`', r'<code>\1</code>', text)
+            text = re.sub(r'^###?\s+(.*)', r'<b>🔹 \1</b>', text, flags=re.MULTILINE)
+            text = re.sub(r'^\s*\*\s+', '• ', text, flags=re.MULTILINE)
+            text = text.replace('*', '')
+            return text.strip()
+
+        version = os.environ.get("REF_NAME", "")
+        repo_url = os.environ.get("REPO_URL", "")
+
+        header = f"<b>🚀 New Release: Vision Assistant Pro</b>\n\n<b>Version:</b> <code>{version}</code>\n\n"
+        footer = f"\n\n<a href=\"{repo_url}/releases/tag/{version}\">📦 View and Download on GitHub</a>\n\n#NVDA #AI #VisionAssistant"
+
+        donate_html = md_to_tg_html(donate_part) if donate_part else ""
+
+        full_body = "<b>What's New:</b>\n\n" + md_to_tg_html(cleaned_version_text)
+        full_msg = header + full_body + (f"\n\n{donate_html}" if donate_html else "") + footer
+
+        if len(full_msg) <= 3800:
+            final_msg = full_msg
+        else:
+            title_matches = re.findall(r"^\s*\*\s+\*\*([^*]+)\*\*", cleaned_version_text, re.MULTILINE)
+            titles_formatted = "\n".join([f"• <b>{html.escape(t.strip(), quote=False)}</b>" for t in title_matches if t.strip()])
+            if titles_formatted:
+                summary_body = f"<b>Key Highlights:</b>\n\n{titles_formatted}\n\n<i>(Changelog summarized for Telegram. View full details on GitHub!)</i>"
+            else:
+                summary_body = "<i>(The changelog is too long for Telegram. View full details on GitHub!)</i>"
+            final_msg = header + summary_body + (f"\n\n{donate_html}" if donate_html else "") + footer
+            if len(final_msg) > 4000:
+                final_msg = header + summary_body + footer
+            if len(final_msg) > 4000:
+                available = 3900 - len(header) - len(footer)
+                final_msg = header + summary_body[:available] + "...\n\n" + footer
+
+        with open("tg_msg.txt", "w", encoding="utf-8") as out:
+            out.write(final_msg)
         EOF
-        
-        cat log_part.txt >> tg_msg.txt
-        
-        cat << 'EOF' >> tg_msg.txt
 
-        <a href="${{ github.event.repository.html_url }}/releases/tag/${{ github.ref_name }}">📦 View and Download on GitHub</a>
-
-        #NVDA #AI #VisionAssistant
-        EOF
-
-        MSG_LEN=$(wc -m < tg_msg.txt | awk '{print $1}')
-        if [ "$MSG_LEN" -gt 4000 ]; then
-            awk '/🌟 Support the Future/{flag=1} flag' changelog.md > donate_part.txt
-            sed -i 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' donate_part.txt
-            sed -i 's/\[\([^]]*\)\](\([^)]*\))/<a href="\2">\1<\/a>/g' donate_part.txt
-            sed -i 's/\*\*\([^*]*\)\*\*/<b>\1<\/b>/g' donate_part.txt
-            sed -i 's/\*\([^*]*\)\*/<i>\1<\/i>/g' donate_part.txt
-            sed -i 's/^### \(.*\)/<b>🔹 \1<\/b>/g' donate_part.txt
-            sed -i 's/^\* /• /g' donate_part.txt
-            sed -i 's/`\([^`]*\)`/<code>\1<\/code>/g' donate_part.txt
-            sed -i 's/\*//g' donate_part.txt
-
-            cat << 'EOF' > tg_msg.txt
-        <b>🚀 New Release: Vision Assistant Pro</b>
-
-        <b>Version:</b> <code>${{ github.ref_name }}</code>
-
-        <i>(The changelog is too long for Telegram. Please view the full changelog on GitHub!)</i>
-
-        EOF
-            cat donate_part.txt >> tg_msg.txt
-            cat << 'EOF' >> tg_msg.txt
-
-        <a href="${{ github.event.repository.html_url }}/releases/tag/${{ github.ref_name }}">📦 View and Download on GitHub</a>
-
-        #NVDA #AI #VisionAssistant
-        EOF
-        fi
-
-        curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-          --data-urlencode "chat_id=${{ secrets.TELEGRAM_TO }}" \
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+          --data-urlencode "chat_id=${TELEGRAM_TO}" \
           --data-urlencode "text@tg_msg.txt" \
           -d "parse_mode=HTML" \
           -d "disable_web_page_preview=false"

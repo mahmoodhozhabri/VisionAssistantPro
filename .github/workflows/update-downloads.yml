@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
@@ -27,7 +27,7 @@ jobs:
           repo = "mahmoodhozhabri/VisionAssistantPro"
           total = 0
           page = 1
-          
+
           while True:
               url = f"https://api.github.com/repos/{repo}/releases?per_page=100&page={page}"
               req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -43,22 +43,22 @@ jobs:
               except Exception as e:
                   print(f"Error fetching data: {e}")
                   break
-          
+
           readme_file = next((f for f in os.listdir('.') if f.lower() == 'readme.md'), None)
           if not readme_file:
               print("Error: readme file not found!")
               exit(1)
-              
+
           with open(readme_file, 'r', encoding='utf-8') as f:
               readme = f.read()
-              
+
           new_readme = re.sub(
-              r'(<!-- DOWNLOAD_COUNT_START -->).*?(<!-- DOWNLOAD_COUNT_END -->)', 
-              f'\\1 Total Downloads: {total:,} \\2', 
-              readme, 
+              r'(<!-- DOWNLOAD_COUNT_START -->).*?(<!-- DOWNLOAD_COUNT_END -->)',
+              f'\\1 Total Downloads: {total:,} \\2',
+              readme,
               flags=re.DOTALL
           )
-          
+
           if new_readme != readme:
               with open(readme_file, 'w', encoding='utf-8') as f:
                   f.write(new_readme)

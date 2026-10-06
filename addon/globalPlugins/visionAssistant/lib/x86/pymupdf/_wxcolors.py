@@ -560,4 +560,4 @@ _wxcolors = [
         ("YELLOW3", 205, 205, 0),
         ("YELLOW4", 139, 139, 0),
         ("YELLOWGREEN", 154, 205, 50),
-        ]
+]

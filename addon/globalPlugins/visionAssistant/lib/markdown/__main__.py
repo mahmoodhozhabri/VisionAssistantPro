@@ -54,39 +54,57 @@ def parse_options(args=None, values=None):
     ver = "%%prog %s" % markdown.__version__
 
     parser = optparse.OptionParser(usage=usage, description=desc, version=ver)
-    parser.add_option("-f", "--file", dest="filename", default=None,
-                      help="Write output to OUTPUT_FILE. Defaults to STDOUT.",
-                      metavar="OUTPUT_FILE")
-    parser.add_option("-e", "--encoding", dest="encoding",
-                      help="Encoding for input and output files.",)
-    parser.add_option("-o", "--output_format", dest="output_format",
-                      default='xhtml', metavar="OUTPUT_FORMAT",
-                      help="Use output format 'xhtml' (default) or 'html'.")
-    parser.add_option("-n", "--no_lazy_ol", dest="lazy_ol",
-                      action='store_false', default=True,
-                      help="Observe number of first item of ordered lists.")
-    parser.add_option("-x", "--extension", action="append", dest="extensions",
-                      help="Load extension EXTENSION.", metavar="EXTENSION")
-    parser.add_option("-c", "--extension_configs",
-                      dest="configfile", default=None,
-                      help="Read extension configurations from CONFIG_FILE. "
-                      "CONFIG_FILE must be of JSON or YAML format. YAML "
-                      "format requires that a python YAML library be "
-                      "installed. The parsed JSON or YAML must result in a "
-                      "python dictionary which would be accepted by the "
-                      "'extension_configs' keyword on the markdown.Markdown "
-                      "class. The extensions must also be loaded with the "
-                      "`--extension` option.",
-                      metavar="CONFIG_FILE")
-    parser.add_option("-q", "--quiet", default=CRITICAL,
-                      action="store_const", const=CRITICAL+10, dest="verbose",
-                      help="Suppress all warnings.")
-    parser.add_option("-v", "--verbose",
-                      action="store_const", const=WARNING, dest="verbose",
-                      help="Print all warnings.")
-    parser.add_option("--noisy",
-                      action="store_const", const=DEBUG, dest="verbose",
-                      help="Print debug messages.")
+    parser.add_option(
+        "-f", "--file", dest="filename", default=None,
+        help="Write output to OUTPUT_FILE. Defaults to STDOUT.",
+        metavar="OUTPUT_FILE",
+    )
+    parser.add_option(
+        "-e", "--encoding", dest="encoding",
+        help="Encoding for input and output files.",
+    )
+    parser.add_option(
+        "-o", "--output_format", dest="output_format",
+        default='xhtml', metavar="OUTPUT_FORMAT",
+        help="Use output format 'xhtml' (default) or 'html'.",
+    )
+    parser.add_option(
+        "-n", "--no_lazy_ol", dest="lazy_ol",
+        action='store_false', default=True,
+        help="Observe number of first item of ordered lists.",
+    )
+    parser.add_option(
+        "-x", "--extension", action="append", dest="extensions",
+        help="Load extension EXTENSION.", metavar="EXTENSION",
+    )
+    parser.add_option(
+        "-c", "--extension_configs",
+        dest="configfile", default=None,
+        help="Read extension configurations from CONFIG_FILE. "
+        "CONFIG_FILE must be of JSON or YAML format. YAML "
+        "format requires that a python YAML library be "
+        "installed. The parsed JSON or YAML must result in a "
+        "python dictionary which would be accepted by the "
+        "'extension_configs' keyword on the markdown.Markdown "
+        "class. The extensions must also be loaded with the "
+        "`--extension` option.",
+        metavar="CONFIG_FILE",
+    )
+    parser.add_option(
+        "-q", "--quiet", default=CRITICAL,
+        action="store_const", const=CRITICAL+10, dest="verbose",
+        help="Suppress all warnings.",
+    )
+    parser.add_option(
+        "-v", "--verbose",
+        action="store_const", const=WARNING, dest="verbose",
+        help="Print all warnings.",
+    )
+    parser.add_option(
+        "--noisy",
+        action="store_const", const=DEBUG, dest="verbose",
+        help="Print debug messages.",
+    )
 
     (options, args) = parser.parse_args(args, values)
 
@@ -101,7 +119,7 @@ def parse_options(args=None, values=None):
     extension_configs = {}
     if options.configfile:
         with open(
-            options.configfile, mode="r", encoding=options.encoding
+            options.configfile, mode="r", encoding=options.encoding,
         ) as fp:
             try:
                 extension_configs = yaml_load(fp)
@@ -118,7 +136,7 @@ def parse_options(args=None, values=None):
         'extension_configs': extension_configs,
         'encoding': options.encoding,
         'output_format': options.output_format,
-        'lazy_ol': options.lazy_ol
+        'lazy_ol': options.lazy_ol,
     }
 
     return opts, options.verbose

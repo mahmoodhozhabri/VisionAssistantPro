@@ -23,7 +23,7 @@ def _worker_init(
         pagefn_args,
         pagefn_kwargs,
         stats,
-        ):
+):
     # pylint: disable=attribute-defined-outside-init
     _worker_state.path = path
     _worker_state.pagefn = pagefn
@@ -49,25 +49,25 @@ def _worker_fn(page_number):
         _worker_state.document = pymupdf.Document(_worker_state.path)   # pylint: disable=attribute-defined-outside-init
         if _worker_state.stats:
             _stats_write(t, 'pymupdf.Document()')
-    
+
     if _worker_state.stats:
         t = time.time()
     page = _worker_state.document[page_number]
     if _worker_state.stats:
         _stats_write(t, '_worker_state.document[page_number]')
-    
+
     if _worker_state.stats:
         t = time.time()
     ret = _worker_state.pagefn(
             page,
             *_worker_state.pagefn_args,
             **_worker_state.pagefn_kwargs,
-            )
+    )
     if _worker_state.stats:
         _stats_write(t, '_worker_state.pagefn()')
-    
+
     return ret
-    
+
 
 def _multiprocessing(
         path,
@@ -80,7 +80,7 @@ def _multiprocessing(
         initfn_kwargs,
         concurrency,
         stats,
-        ):
+):
     #print(f'_worker_mp(): {concurrency=}', flush=1)
     with multiprocessing.Pool(
             concurrency,
@@ -91,10 +91,10 @@ def _multiprocessing(
                 pagefn, pagefn_args, pagefn_kwargs,
                 stats,
             ),
-            ) as pool:
+    ) as pool:
         result = pool.map_async(_worker_fn, pages)
         return result.get()
-    
+
 
 def _fork(
         path,
@@ -107,7 +107,7 @@ def _fork(
         initfn_kwargs,
         concurrency,
         stats,
-        ):
+):
     verbose = 0
     if concurrency is None:
         concurrency = multiprocessing.cpu_count()
@@ -134,7 +134,7 @@ def _fork(
                 pagefn_args,
                 pagefn_kwargs,
                 stats,
-                )
+        )
         while 1:
             if verbose:
                 pymupdf.log(f'{os.getpid()=}: calling get().')
@@ -150,23 +150,23 @@ def _fork(
                     document = pymupdf.Document(path)
                     if stats:
                         _stats_write(t, 'pymupdf.Document(path)')
-                
+
                 if stats:
                     t = time.time()
                 page = document[page_num]
                 if stats:
                     _stats_write(t, 'document[page_num]')
-                
+
                 if verbose:
                     pymupdf.log(f'{os.getpid()=}: {_worker_state=}')
-                
+
                 if stats:
                     t = time.time()
                 ret = pagefn(
                         page,
                         *_worker_state.pagefn_args,
                         **_worker_state.pagefn_kwargs,
-                        )
+                )
                 if stats:
                     _stats_write(t, f'{page_num=} pagefn()')
             except Exception as e:
@@ -174,8 +174,8 @@ def _fork(
                 ret = e
             if verbose:
                 pymupdf.log(f'{os.getpid()=}: sending {page_num=} {ret=}')
-                
-            queue_up.put( (page_num, ret) )
+
+            queue_up.put( (page_num, ret))
 
     error = None
 
@@ -239,7 +239,7 @@ def _fork(
         if verbose:
             pymupdf.log(f'After concurrent, returning {len(ret)=}')
         return ret
-        
+
     finally:
         # Join all child processes.
         if stats:

@@ -22,7 +22,7 @@ def _swig_repr(self):
         strthis = "proxy of " + self.this.__repr__()
     except __builtin__.Exception:
         strthis = ""
-    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis)
 
 
 def _swig_setattr_nondynamic_instance_variable(set):
@@ -218,4 +218,3 @@ def pixmap_copy(pm, src, n):
 
 def ll_JM_color_count(pm, clip):
     return _extra.ll_JM_color_count(pm, clip)
-

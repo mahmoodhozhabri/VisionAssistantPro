@@ -52,7 +52,7 @@ namespace mupdf
 	/**
 		Add a separation with equivalents (null terminated name,
 		colorspace)
-	
+
 		(old, deprecated)
 	*/
 	FZ_FUNCTION void fz_add_separation_equivalents(const FzSeparations& sep, uint32_t rgba, uint32_t cmyk, const char *name);
@@ -69,13 +69,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_advance_glyph()`.  */
 	/**
 		Return the advance for a given glyph.
-	
+
 		font: The font to look for the glyph in.
-	
+
 		glyph: The glyph to find the advance for.
-	
+
 		wmode: 1 for vertical mode, 0 for horizontal.
-	
+
 		Returns the advance for the glyph.
 	*/
 	FZ_FUNCTION float fz_advance_glyph(const FzFont& font, int glyph, int wmode);
@@ -86,7 +86,7 @@ namespace mupdf
 		which must match what was initially set up) length bytes (which
 		must be a multiple of 16), using (and modifying) the insertion
 		vector iv, reading from input, and writing to output.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_aes_crypt_cbc(const FzAes& ctx, int mode, size_t length, unsigned char iv[16], const unsigned char *input, unsigned char *output);
@@ -95,9 +95,9 @@ namespace mupdf
 	/**
 		AES decryption initialization. Fills in the supplied context
 		and prepares for decryption using the given key.
-	
+
 		Returns non-zero for error (key size other than 128/192/256).
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION int fz_aes_setkey_dec(const FzAes& ctx, const unsigned char *key, int keysize);
@@ -106,9 +106,9 @@ namespace mupdf
 	/**
 		AES encryption initialization. Fills in the supplied context
 		and prepares for encryption using the given key.
-	
+
 		Returns non-zero for error (key size other than 128/192/256).
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION int fz_aes_setkey_enc(const FzAes& ctx, const unsigned char *key, int keysize);
@@ -141,7 +141,7 @@ namespace mupdf
 	/**
 		Append the contents of the source buffer onto the end of the
 		destination buffer, extending automatically as required.
-	
+
 		Ownership of buffers does not change.
 	*/
 	FZ_FUNCTION void fz_append_buffer(const FzBuffer& destination, const FzBuffer& source);
@@ -152,7 +152,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_append_data()`.  */
 	/**
 		fz_append_*: Append data to a buffer.
-	
+
 		The buffer will automatically grow as required.
 	*/
 	FZ_FUNCTION void fz_append_data(const FzBuffer& buf, const void *data, size_t len);
@@ -179,7 +179,7 @@ namespace mupdf
 	/**
 		fz_append_pdf_string: Append a string with PDF syntax quotes and
 		escapes.
-	
+
 		The buffer will automatically grow as required.
 	*/
 	FZ_FUNCTION void fz_append_pdf_string(const FzBuffer& buffer, const char *text);
@@ -204,7 +204,7 @@ namespace mupdf
 	/**
 		RC4 block encrypt operation; encrypt src into dst (both of
 		length len) updating the RC4 state as we go.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_arc4_encrypt(const FzArc4& state, unsigned char *dest, const unsigned char *src, size_t len);
@@ -212,7 +212,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_arc4_final()`.  */
 	/**
 		RC4 finalization. Zero the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_arc4_final(const FzArc4& state);
@@ -221,7 +221,7 @@ namespace mupdf
 	/**
 		RC4 initialization. Begins an RC4 operation, writing a new
 		context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_arc4_init(const FzArc4& state, const unsigned char *key, size_t len);
@@ -230,7 +230,7 @@ namespace mupdf
 	/**
 		Return a pointer to a string describing the format of the
 		archive.
-	
+
 		The lifetime of the string is unspecified (in current
 		implementations the string will persist until the archive
 		is closed, but this is not guaranteed).
@@ -258,7 +258,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_atoz()`.  */
 	/**
 		size_t atoi that copes with NULL.
-	
+
 		NOTE: limited to 63bits. Negative numbers
 		are returned as 0.
 	*/
@@ -267,16 +267,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_authenticate_password()`.  */
 	/**
 		Test if the given password can decrypt the document.
-	
+
 		password: The password string to be checked. Some document
 		specifications do not specify any particular text encoding, so
 		neither do we.
-	
+
 		Returns 0 for failure to authenticate, non-zero for success.
-	
+
 		For PDF documents, further information can be given by examining
 		the bits in the return code.
-	
+
 			Bit 0 => No password required
 			Bit 1 => User password authenticated
 			Bit 2 => Owner password authenticated
@@ -290,13 +290,13 @@ namespace mupdf
 	/**
 		Ask how many bytes are available immediately from
 		a given stream.
-	
+
 		stm: The stream to read from.
-	
+
 		max: A hint for the underlying stream; the maximum number of
 		bytes that we are sure we will want to read. If you do not know
 		this number, give 1.
-	
+
 		Returns the number of bytes immediately available between the
 		read and write pointers. This number is guaranteed only to be 0
 		if we have hit EOF. The number of bytes returned here need have
@@ -314,11 +314,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_base_colorspace()`.  */
 	/**
 		Get the 'base' colorspace for a colorspace.
-	
+
 		For indexed colorspaces, this is the colorspace the index
 		decodes into. For all other colorspaces, it is the colorspace
 		itself.
-	
+
 		The returned colorspace is 'borrowed' (i.e. no additional
 		references are taken or dropped).
 	*/
@@ -346,9 +346,9 @@ namespace mupdf
 	/**
 		Called to start the process of writing a page to
 		a document.
-	
+
 		mediabox: page size rectangle in points.
-	
+
 		Returns a borrowed fz_device to write page contents to. This
 		should be kept if required, and only dropped if it was kept.
 	*/
@@ -367,7 +367,7 @@ namespace mupdf
 	FZ_FUNCTION int fz_begin_tile_tid(const FzDevice& dev, const FzRect& area, const FzRect& view, float xstep, float ystep, const FzMatrix& ctm, int id, int doc_id);
 
 	/** Class-aware wrapper for `::fz_bidi_fragment_text()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_bidi_fragment_text(const uint32_t *text, size_t textlen, ::fz_bidi_fragment_fn *callback, void *arg, int flags)` => ::fz_bidi_direction baseDir
 	 */
@@ -375,7 +375,7 @@ namespace mupdf
 		Partitions the given Unicode sequence into one or more
 		unidirectional fragments and invokes the given callback
 		function for each fragment.
-	
+
 		For example, if directionality of text is:
 				0123456789
 				rrlllrrrrr,
@@ -383,7 +383,7 @@ namespace mupdf
 				&text[0], length == 2
 				&text[2], length == 3
 				&text[5], length == 5
-	
+
 		@param[in] text	start of Unicode sequence
 		@param[in] textlen   number of Unicodes to analyse
 		@param[in] baseDir   direction of paragraph (specify FZ_BIDI_NEUTRAL to force auto-detection)
@@ -394,22 +394,22 @@ namespace mupdf
 	FZ_FUNCTION void fz_bidi_fragment_text(const uint32_t *text, size_t textlen, ::fz_bidi_direction *baseDir, ::fz_bidi_fragment_fn *callback, void *arg, int flags);
 
 	/** Class-aware wrapper for `::fz_bitmap_details()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_bitmap_details(::fz_bitmap *bitmap)` => `(int w, int h, int n, int stride)`
 	 */
 	/**
 		Retrieve details of a given bitmap.
-	
+
 		bitmap: The bitmap to query.
-	
+
 		w: Pointer to storage to retrieve width (or NULL).
-	
+
 		h: Pointer to storage to retrieve height (or NULL).
-	
+
 		n: Pointer to storage to retrieve number of color components (or
 		NULL).
-	
+
 		stride: Pointer to storage to retrieve bitmap stride (or NULL).
 	*/
 	FZ_FUNCTION void fz_bitmap_details(const FzBitmap& bitmap, int *w, int *h, int *n, int *stride);
@@ -417,7 +417,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_blendmode_name()`.  */
 	/**
 		Map from enumeration to blend mode string.
-	
+
 		The string is static, with arbitrary lifespan.
 	*/
 	FZ_FUNCTION const char *fz_blendmode_name(int blendmode);
@@ -431,13 +431,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_bound_glyph()`.  */
 	/**
 		Return a bbox for a given glyph in a font.
-	
+
 		font: The font to look for the glyph in.
-	
+
 		gid: The glyph to bound.
-	
+
 		trm: The matrix to apply to the glyph before bounding.
-	
+
 		Returns rectangle by value containing the bounds of the given
 		glyph.
 	*/
@@ -455,18 +455,18 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_bound_path()`.  */
 	/**
 		Return a bounding rectangle for a path.
-	
+
 		path: The path to bound.
-	
+
 		stroke: If NULL, the bounding rectangle given is for
 		the filled path. If non-NULL the bounding rectangle
 		given is for the path stroked with the given attributes.
-	
+
 		ctm: The matrix to apply to the path during stroking.
-	
+
 		r: Pointer to a fz_rect which will be used to hold
 		the result.
-	
+
 		Returns r, updated to contain the bounding rectangle.
 	*/
 	FZ_FUNCTION FzRect fz_bound_path(const FzPath& path, const FzStrokeState& stroke, const FzMatrix& ctm);
@@ -474,13 +474,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_bound_shade()`.  */
 	/**
 		Bound a given shading.
-	
+
 		shade: The shade to bound.
-	
+
 		ctm: The transform to apply to the shade before bounding.
-	
+
 		r: Pointer to storage to put the bounds in.
-	
+
 		Returns r, updated to contain the bounds for the shading.
 	*/
 	FZ_FUNCTION FzRect fz_bound_shade(const FzShade& shade, const FzMatrix& ctm);
@@ -488,16 +488,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_bound_text()`.  */
 	/**
 		Find the bounds of a given text object.
-	
+
 		text: The text object to find the bounds of.
-	
+
 		stroke: Pointer to the stroke attributes (for stroked
 		text), or NULL (for filled text).
-	
+
 		ctm: The matrix in use.
-	
+
 		r: pointer to storage for the bounds.
-	
+
 		Returns a pointer to r, which is updated to contain the
 		bounding box for the text object.
 	*/
@@ -514,36 +514,36 @@ namespace mupdf
 	FZ_FUNCTION size_t fz_brotli_bound(size_t size);
 
 	/** Class-aware wrapper for `::fz_buffer_extract()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_buffer_extract(::fz_buffer *buf)` => `(size_t, unsigned char *data)`
 	 */
 	/**
 		Take ownership of buffer contents.
-	
+
 		Performs the same task as fz_buffer_storage, but ownership of
 		the data buffer returns with this call. The buffer is left
 		empty.
-	
+
 		Note: Bad things may happen if this is called on a buffer with
 		multiple references that is being used from multiple threads.
-	
+
 		data: Pointer to place to retrieve data pointer.
-	
+
 		Returns length of stream.
 	*/
 	FZ_FUNCTION size_t fz_buffer_extract(const FzBuffer& buf, unsigned char **data);
 
 	/** Class-aware wrapper for `::fz_buffer_storage()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_buffer_storage(::fz_buffer *buf)` => `(size_t, unsigned char *datap)`
 	 */
 	/**
 		Retrieve internal memory of buffer.
-	
+
 		datap: Output parameter that will be pointed to the data.
-	
+
 		Returns the current size of the data in bytes.
 	*/
 	FZ_FUNCTION size_t fz_buffer_storage(const FzBuffer& buf, unsigned char **datap);
@@ -552,7 +552,7 @@ namespace mupdf
 	/**
 		Ensure that a font has its ascender/descender values calculated
 		from the actual bbox of the glyphs.
-	
+
 		Note, that we combine the declared values from the font (or the
 		default values if those are not present) with the actual bbox to
 		get the final result. So this can only cause ascender/descender
@@ -564,7 +564,7 @@ namespace mupdf
 	/**
 		Allocate array of memory of count entries of size bytes.
 		Clears the memory to zero.
-	
+
 		Throws exception in the event of failure to allocate.
 	*/
 	FZ_FUNCTION void *fz_calloc(size_t count, size_t size);
@@ -580,7 +580,7 @@ namespace mupdf
 	/**
 		Within an fz_catch() block, retrieve the error code for
 		the current exception.
-	
+
 		This assumes no intervening use of fz_try/fz_catch.
 	*/
 	FZ_FUNCTION int fz_caught();
@@ -592,44 +592,44 @@ namespace mupdf
 	/**
 		Within an fz_catch() block, retrieve the formatted message
 		string for the current exception.
-	
+
 		This assumes no intervening use of fz_try/fz_catch.
 	*/
 	FZ_FUNCTION const char *fz_caught_message();
 
 	/** Class-aware wrapper for `::fz_chartorune()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_chartorune(const char *str)` => `(int, int rune)`
 	 */
 	/**
 		UTF8 decode a single rune from a sequence of chars.
-	
+
 		rune: Pointer to an int to assign the decoded 'rune' to.
 		(0xFFFD on error).
-	
+
 		str: Pointer to a UTF8 encoded string.
-	
+
 		Returns the number of bytes consumed.
 	*/
 	FZ_FUNCTION int fz_chartorune(int *rune, const char *str);
 
 	/** Class-aware wrapper for `::fz_chartorunen()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_chartorunen(const char *str, size_t n)` => `(int, int rune)`
 	 */
 	/**
 		UTF8 decode a single rune from a sequence of chars
 		of given length.
-	
+
 		rune: Pointer to an int to assign the decoded 'rune' to.
 		(0xFFFD on error).
-	
+
 		str: Pointer to a UTF8 encoded string.
-	
+
 		n: The number of bytes available at str.
-	
+
 		Returns the number of bytes consumed.
 	*/
 	FZ_FUNCTION int fz_chartorunen(int *rune, const char *str, size_t n);
@@ -641,7 +641,7 @@ namespace mupdf
 	FZ_FUNCTION int64_t fz_clamp64(int64_t x, int64_t min, int64_t max);
 
 	/** Class-aware wrapper for `::fz_clamp_color()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_clamp_color(::fz_colorspace *cs, const float *in)` => float out
 	 */
@@ -673,7 +673,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_cleanname()`.  */
 	/**
 		rewrite path to the shortest string that names the same path.
-	
+
 		Eliminates multiple and trailing slashes, interprets "." and
 		"..". Overwrites the string in place.
 	*/
@@ -682,7 +682,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_cleanname_strdup()`.  */
 	/**
 		rewrite path to the shortest string that names the same path.
-	
+
 		Eliminates multiple and trailing slashes, interprets "." and
 		"..". Allocates a new string that the caller must free.
 	*/
@@ -691,7 +691,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_clear_bitmap()`.  */
 	/**
 		Set the entire bitmap to 0.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_clear_bitmap(const FzBitmap& bit);
@@ -700,7 +700,7 @@ namespace mupdf
 	/**
 		Empties the buffer. Storage is not freed, but is held ready
 		to be reused as the buffer is refilled.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_clear_buffer(const FzBuffer& buf);
@@ -709,7 +709,7 @@ namespace mupdf
 	/**
 		Sets all components (including alpha) of
 		all pixels in a pixmap to 0.
-	
+
 		pix: The pixmap to clear.
 	*/
 	FZ_FUNCTION void fz_clear_pixmap(const FzPixmap& pix);
@@ -717,13 +717,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_clear_pixmap_rect_with_value()`.  */
 	/**
 		Clears a subrect of a pixmap with the given value.
-	
+
 		pix: The pixmap to clear.
-	
+
 		value: Values in the range 0 to 255 are valid. Each component
 		sample for each pixel in the pixmap will be set to this value,
 		while alpha will always be set to 255 (non-transparent).
-	
+
 		r: the rectangle.
 	*/
 	FZ_FUNCTION void fz_clear_pixmap_rect_with_value(const FzPixmap& pix, int value, const FzIrect& r);
@@ -731,13 +731,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_clear_pixmap_with_value()`.  */
 	/**
 		Clears a pixmap with the given value.
-	
+
 		pix: The pixmap to clear.
-	
+
 		value: Values in the range 0 to 255 are valid. Each component
 		sample for each pixel in the pixmap will be set to this value,
 		while alpha will always be set to 255 (non-transparent).
-	
+
 		This function is horrible, and should be removed from the
 		API and replaced with a less magic one.
 	*/
@@ -773,7 +773,7 @@ namespace mupdf
 	/**
 		Returns a reference to a newly cloned default colorspaces
 		structure.
-	
+
 		The new clone may safely be altered without fear of race
 		conditions as the caller is the only reference holder.
 	*/
@@ -782,14 +782,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_clone_path()`.  */
 	/**
 		Clone the data for a path.
-	
+
 		This is used in preference to fz_keep_path when a whole
 		new copy of a path is required, rather than just a shared
 		pointer. This probably indicates that the path is about to
 		be modified.
-	
+
 		path: path to clone.
-	
+
 		Throws exceptions on failure to allocate.
 	*/
 	FZ_FUNCTION FzPath fz_clone_path(const FzPath& path);
@@ -798,7 +798,7 @@ namespace mupdf
 	/**
 		Clone a pixmap, copying the pixels and associated data to new
 		storage.
-	
+
 		The reference count of 'old' is unchanged.
 	*/
 	FZ_FUNCTION FzPixmap fz_clone_pixmap(const FzPixmap& old);
@@ -820,9 +820,9 @@ namespace mupdf
 	/**
 		Create an identical stroke_state structure and return a
 		reference to it.
-	
+
 		stroke: The stroke state reference to clone.
-	
+
 		Exceptions may be thrown in the event of a failure to
 		allocate.
 	*/
@@ -847,7 +847,7 @@ namespace mupdf
 	/**
 		Called to end the process of writing
 		pages to a document.
-	
+
 		This writes any file level trailers required. After this
 		completes successfully the file is up to date and complete.
 	*/
@@ -862,7 +862,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_close_zip_writer()`.  */
 	/**
 		Close the zip file for writing.
-	
+
 		This flushes any pending data to the file. This can throw
 		exceptions.
 	*/
@@ -871,9 +871,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_closepath()`.  */
 	/**
 		Close the current subpath.
-	
+
 		path: The path to modify.
-	
+
 		Throws exceptions on failure to allocate, attempting to modify
 		a packed path, and illegal path closes (i.e. closing a non open
 		path).
@@ -883,7 +883,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_colorspace_colorant()`.  */
 	/**
 		Retrieve a the name for a colorant.
-	
+
 		Returns a pointer with the same lifespan as the colorspace.
 	*/
 	FZ_FUNCTION const char *fz_colorspace_colorant(const FzColorspace& cs, int n);
@@ -958,7 +958,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_colorspace_name()`.  */
 	/**
 		Query the name of a colorspace.
-	
+
 		The returned string has the same lifespan as the colorspace
 		does. Caller should not free it.
 	*/
@@ -967,7 +967,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_colorspace_name_colorant()`.  */
 	/**
 		Assign a name for a given colorant in a colorspace.
-	
+
 		Used while initially setting up a colorspace. The string is
 		copied into local storage, so need not be retained by the
 		caller.
@@ -983,13 +983,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_compare_separations()`.  */
 	/**
 		Compare 2 separations structures (or NULLs).
-	
+
 		Return 0 if identical, non-zero if not identical.
 	*/
 	FZ_FUNCTION int fz_compare_separations(const FzSeparations& sep1, const FzSeparations& sep2);
 
 	/** Class-aware wrapper for `::fz_compress_brotli()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_compress_brotli(unsigned char *dest, const unsigned char *source, size_t source_length, ::fz_brotli_level level)` => size_t compressed_length
 	 */
@@ -1021,7 +1021,7 @@ namespace mupdf
 	/**
 		Return the storage size used for a buffer and its data.
 		Used in implementing store handling.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION size_t fz_compressed_buffer_size(const FzCompressedBuffer& buffer);
@@ -1029,11 +1029,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_compressed_image_buffer()`.  */
 	/**
 		Retrieve the underlying compressed data for an image.
-	
+
 		Returns a pointer to the underlying data buffer for an image,
 		or NULL if this image is not based upon a compressed data
 		buffer.
-	
+
 		This is not a reference counted structure, so no reference is
 		returned. Lifespan is limited to that of the image itself.
 	*/
@@ -1042,7 +1042,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_compressed_image_type()`.  */
 	/**
 		Return the type of a compressed image.
-	
+
 		Any non-compressed image will have the type returned as UNKNOWN.
 	*/
 	FZ_FUNCTION int fz_compressed_image_type(const FzImage& image);
@@ -1050,10 +1050,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_concat()`.  */
 	/**
 		Multiply two matrices.
-	
+
 		The order of the two matrices are important since matrix
 		multiplication is not commutative.
-	
+
 		Returns result.
 	*/
 	FZ_FUNCTION FzMatrix fz_concat(const FzMatrix& left, const FzMatrix& right);
@@ -1061,13 +1061,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_contains_rect()`.  */
 	/**
 		Test rectangle inclusion.
-	
+
 		Return true if a entirely contains b.
 	*/
 	FZ_FUNCTION int fz_contains_rect(const FzRect& a, const FzRect& b);
 
 	/** Class-aware wrapper for `::fz_convert_color()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_convert_color(::fz_colorspace *ss, const float *sv, ::fz_colorspace *ds, ::fz_colorspace *is, ::fz_color_params params)` => float dv
 	 */
@@ -1079,7 +1079,7 @@ namespace mupdf
 	FZ_FUNCTION void fz_convert_color(const FzColorspace& ss, const float *sv, const FzColorspace& ds, float *dv, const FzColorspace& is, const FzColorParams& params);
 
 	/** Class-aware wrapper for `::fz_convert_error()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_convert_error()` => `(const char *, int code)`
 	 */
@@ -1088,7 +1088,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_convert_indexed_pixmap_to_base()`.  */
 	/**
 		Convert pixmap from indexed to base colorspace.
-	
+
 		This creates a new bitmap containing the converted pixmap data.
 	 */
 	FZ_FUNCTION FzPixmap fz_convert_indexed_pixmap_to_base(const FzPixmap& src);
@@ -1098,27 +1098,27 @@ namespace mupdf
 		Convert an existing pixmap to a desired
 		colorspace. Other properties of the pixmap, such as resolution
 		and position are copied to the converted pixmap.
-	
+
 		pix: The pixmap to convert.
-	
+
 		default_cs: If NULL pix->colorspace is used. It is possible that
 		the data may need to be interpreted as one of the color spaces
 		in default_cs.
-	
+
 		cs_des: Desired colorspace, may be NULL to denote alpha-only.
-	
+
 		prf: Proofing color space through which we need to convert.
-	
+
 		color_params: Parameters that may be used in conversion (e.g.
 		ri).
-	
+
 		keep_alpha: If 0 any alpha component is removed, otherwise
 		alpha is kept if present in the pixmap.
 	*/
 	FZ_FUNCTION FzPixmap fz_convert_pixmap(const FzPixmap& pix, const FzColorspace& cs_des, const FzColorspace& prf, const FzDefaultColorspaces& default_cs, const FzColorParams& color_params, int keep_alpha);
 
 	/** Class-aware wrapper for `::fz_convert_separation_colors()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_convert_separation_colors(::fz_colorspace *src_cs, const float *src_color, ::fz_separations *dst_seps, ::fz_colorspace *dst_cs, ::fz_color_params color_params)` => float dst_color
 	 */
@@ -1131,7 +1131,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_convert_separation_pixmap_to_base()`.  */
 	/**
 		Convert pixmap from DeviceN/Separation to base colorspace.
-	
+
 		This creates a new bitmap containing the converted pixmap data.
 	*/
 	FZ_FUNCTION FzPixmap fz_convert_separation_pixmap_to_base(const FzPixmap& src);
@@ -1140,7 +1140,7 @@ namespace mupdf
 	/**
 		Copy an option (val) into a destination buffer (dest), of maxlen
 		bytes.
-	
+
 		Returns the number of bytes (including terminator) that did not
 		fit. If val is maxlen or greater bytes in size, it will be left
 		unterminated.
@@ -1154,7 +1154,7 @@ namespace mupdf
 	/**
 		Return a newly allocated UTF-8 string with the text for a given
 		selection rectangle.
-	
+
 		crlf: If true, write "\r\n" style line endings (otherwise "\n"
 		only).
 	*/
@@ -1164,7 +1164,7 @@ namespace mupdf
 	/**
 		Return a newly allocated UTF-8 string with the text for a given
 		selection.
-	
+
 		crlf: If true, write "\r\n" style line endings (otherwise "\n"
 		only).
 	*/
@@ -1179,9 +1179,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_count_archive_entries()`.  */
 	/**
 		Number of entries in archive.
-	
+
 		Will always return a value >= 0.
-	
+
 		May throw an exception if this type of archive cannot count the
 		entries (such as a directory).
 	*/
@@ -1204,7 +1204,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_count_pages()`.  */
 	/**
 		Return the number of pages in document
-	
+
 		May return 0 for documents with no pages.
 	*/
 	FZ_FUNCTION int fz_count_pages(const FzDocument& doc);
@@ -1222,7 +1222,7 @@ namespace mupdf
 	/**
 		Return the current point that a path has
 		reached or (0,0) if empty.
-	
+
 		path: path to return the current point of.
 	*/
 	FZ_FUNCTION FzPoint fz_currentpoint(const FzPath& path);
@@ -1231,17 +1231,17 @@ namespace mupdf
 	/**
 		Append a 'curveto' command to an open path. (For a
 		cubic bezier).
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: The coordinates of the first control point for the
 		curve.
-	
+
 		x1, y1: The coordinates of the second control point for the
 		curve.
-	
+
 		x2, y2: The end coordinates for the curve.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -1252,14 +1252,14 @@ namespace mupdf
 		Append a 'curvetov' command to an open path. (For a
 		cubic bezier with the first control coordinate equal to
 		the start point).
-	
+
 		path: The path to modify.
-	
+
 		x1, y1: The coordinates of the second control point for the
 		curve.
-	
+
 		x2, y2: The end coordinates for the curve.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -1270,15 +1270,15 @@ namespace mupdf
 		Append a 'curvetoy' command to an open path. (For a
 		cubic bezier with the second control coordinate equal to
 		the end point).
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: The coordinates of the first control point for the
 		curve.
-	
+
 		x2, y2: The end coordinates for the curve (and the second
 		control coordinate).
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -1299,24 +1299,24 @@ namespace mupdf
 	FZ_FUNCTION void fz_debug_xml(const FzXml& item, int level);
 
 	/** Class-aware wrapper for `::fz_decode_barcode_from_display_list()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_decode_barcode_from_display_list(::fz_display_list *list, ::fz_rect subarea, int rotate)` => `(char *, ::fz_barcode_type type)`
 	 */
 	/**
 		Decode a barcode from a display list.
-	
+
 		type: NULL, or a pointer to receive the barcode type decoded.
 		list: The display list to render to get the barcode.
 		subarea: subarea of the page to decode.
 		rotate: 0, 90, 180, or 270.
-	
+
 		returns the decoded value.
 	*/
 	FZ_FUNCTION char *fz_decode_barcode_from_display_list(::fz_barcode_type *type, const FzDisplayList& list, const FzRect& subarea, int rotate);
 
 	/** Class-aware wrapper for `::fz_decode_barcode_from_display_list2()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_decode_barcode_from_display_list2(::fz_display_list *list, ::fz_rect subarea, int rotate)` => `(std::string, ::fz_barcode_type type)`
 	 */
@@ -1325,24 +1325,24 @@ namespace mupdf
 	FZ_FUNCTION std::string fz_decode_barcode_from_display_list2(::fz_barcode_type *type, const FzDisplayList& list, const FzRect& subarea, int rotate);
 
 	/** Class-aware wrapper for `::fz_decode_barcode_from_page()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_decode_barcode_from_page(::fz_page *page, ::fz_rect subarea, int rotate)` => `(char *, ::fz_barcode_type type)`
 	 */
 	/**
 		Decode a barcode from a page.
-	
+
 		type: NULL, or a pointer to receive the barcode type decoded.
 		page: The page to decode.
 		subarea: subarea of the page to decode.
 		rotate: 0, 90, 180, or 270.
-	
+
 		returns the decoded value.
 	*/
 	FZ_FUNCTION char *fz_decode_barcode_from_page(::fz_barcode_type *type, const FzPage& page, const FzRect& subarea, int rotate);
 
 	/** Class-aware wrapper for `::fz_decode_barcode_from_page2()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_decode_barcode_from_page2(::fz_page *page, ::fz_rect subarea, int rotate)` => `(std::string, ::fz_barcode_type type)`
 	 */
@@ -1351,24 +1351,24 @@ namespace mupdf
 	FZ_FUNCTION std::string fz_decode_barcode_from_page2(::fz_barcode_type *type, const FzPage& page, const FzRect& subarea, int rotate);
 
 	/** Class-aware wrapper for `::fz_decode_barcode_from_pixmap()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_decode_barcode_from_pixmap(::fz_pixmap *pix, int rotate)` => `(char *, ::fz_barcode_type type)`
 	 */
 	/**
 		Decode a barcode from a pixmap.
-	
+
 		type: NULL, or a pointer to receive the barcode type decoded.
 		pix: The pixmap to decode.
 		rotate: 0, 90, 180, or 270.
-	
+
 		returns the decoded value as an fz_malloced block. Should
 		be fz_free'd by the caller.
 	*/
 	FZ_FUNCTION char *fz_decode_barcode_from_pixmap(::fz_barcode_type *type, const FzPixmap& pix, int rotate);
 
 	/** Class-aware wrapper for `::fz_decode_barcode_from_pixmap2()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_decode_barcode_from_pixmap2(::fz_pixmap *pix, int rotate)` => `(std::string, ::fz_barcode_type type)`
 	 */
@@ -1395,7 +1395,7 @@ namespace mupdf
 	FZ_FUNCTION char *fz_decode_uri_component(const char *s);
 
 	/** Class-aware wrapper for `::fz_decomp_image_from_stream()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_decomp_image_from_stream(::fz_stream *stm, ::fz_compressed_image *image, ::fz_irect *subarea, int indexed, int l2factor)` => `(fz_pixmap *, int l2extra)`
 	 */
@@ -1406,7 +1406,7 @@ namespace mupdf
 		subsampling that should be performed by this routine. This will
 		be updated on exit to the amount of subsampling that is still
 		required to be done.
-	
+
 		Returns a kept reference.
 	*/
 	FZ_FUNCTION FzPixmap fz_decomp_image_from_stream(const FzStream& stm, const FzCompressedImage& image, FzIrect& subarea, int indexed, int l2factor, int *l2extra);
@@ -1422,7 +1422,7 @@ namespace mupdf
 		FIXME: Better not to expose fz_default_error_callback, and
 		fz_default_warning callback and to allow 'NULL' to be used
 		int fz_set_xxxx_callback to mean "defaults".
-	
+
 		FIXME: Do we need/want functions like
 		fz_error_callback(ctx, message) to allow callers to inject
 		stuff into the error/warning streams?
@@ -1437,10 +1437,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_default_gray()`.  */
 	/**
 		Retrieve default colorspaces (typically page local).
-	
+
 		If default_cs is non NULL, the default is retrieved from there,
 		otherwise the global default is retrieved.
-	
+
 		These return borrowed references that should not be dropped,
 		unless they are kept first.
 	*/
@@ -1450,9 +1450,9 @@ namespace mupdf
 	/**
 		Create a 'default' halftone structure
 		for the given number of components.
-	
+
 		num_comps: The number of components to use.
-	
+
 		Returns a simple default halftone. The default halftone uses
 		the same halftone tile for each plane, which may not be ideal
 		for all purposes.
@@ -1476,13 +1476,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_defer_reap_end()`.  */
 	/**
 		Decrement the defer reap count.
-	
+
 		If the defer reap count returns to 0, and the store
 		has reapable objects in, a reap pass will begin.
-	
+
 		Call this at the end of a process during which you
 		potentially might drop many reapable objects.
-	
+
 		It is vital that every fz_defer_reap_start is matched
 		by a fz_defer_reap_end call.
 	*/
@@ -1491,21 +1491,21 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_defer_reap_start()`.  */
 	/**
 		Increment the defer reap count.
-	
+
 		No reap operations will take place (except for those
 		triggered by an immediate failed malloc) until the
 		defer reap count returns to 0.
-	
+
 		Call this at the start of a process during which you
 		potentially might drop many reapable objects.
-	
+
 		It is vital that every fz_defer_reap_start is matched
 		by a fz_defer_reap_end call.
 	*/
 	FZ_FUNCTION void fz_defer_reap_start();
 
 	/** Class-aware wrapper for `::fz_deflate()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_deflate(unsigned char *dest, const unsigned char *source, size_t source_length, ::fz_deflate_level level)` => size_t compressed_length
 	 */
@@ -1561,7 +1561,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_device_gray()`.  */
 	/**
 		Retrieve global default colorspaces.
-	
+
 		These return borrowed references that should not be dropped,
 		unless they are kept first.
 	*/
@@ -1594,9 +1594,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_display_list_is_empty()`.  */
 	/**
 		Check for a display list being empty
-	
+
 		list: The list to check.
-	
+
 		Returns true if empty, false otherwise.
 	*/
 	FZ_FUNCTION int fz_display_list_is_empty(const FzDisplayList& list);
@@ -1630,7 +1630,7 @@ namespace mupdf
 	/**
 		Find the output intent colorspace if the document has defined
 		one.
-	
+
 		Returns a borrowed reference that should not be dropped, unless
 		it is kept first.
 	*/
@@ -1645,7 +1645,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_dom_add_attribute()`.  */
 	/**
 		Add an attribute to an element.
-	
+
 		Ownership of att and value remain with the caller.
 	*/
 	FZ_FUNCTION void fz_dom_add_attribute(const FzXml& elt, const char *att, const char *value);
@@ -1660,7 +1660,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_dom_attribute()`.  */
 	/**
 		Retrieve the value of a given attribute from a given element.
-	
+
 		Returns a borrowed pointer to the value or NULL if not found.
 	*/
 	FZ_FUNCTION const char *fz_dom_attribute(const FzXml& elt, const char *att);
@@ -1675,7 +1675,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_dom_clone()`.  */
 	/**
 		Clone an element (and its children).
-	
+
 		A borrowed reference to the clone is returned. The clone is not
 		yet linked into the DOM.
 	*/
@@ -1684,7 +1684,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_dom_create_element()`.  */
 	/**
 		Create an element of a given tag type for the given DOM.
-	
+
 		The element is not linked into the DOM yet.
 	*/
 	FZ_FUNCTION FzXml fz_dom_create_element(const FzXml& dom, const char *tag);
@@ -1692,7 +1692,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_dom_create_text_node()`.  */
 	/**
 		Create a text node for the given DOM.
-	
+
 		The element is not linked into the DOM yet.
 	*/
 	FZ_FUNCTION FzXml fz_dom_create_text_node(const FzXml& dom, const char *text);
@@ -1707,14 +1707,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_dom_find()`.  */
 	/**
 		Find the first element matching the requirements in a depth first traversal from elt.
-	
+
 		The tagname must match tag, unless tag is NULL, when all tag names are considered to match.
-	
+
 		If att is NULL, then all tags match.
 		Otherwise:
 			If match is NULL, then only nodes that have an att attribute match.
 			If match is non-NULL, then only nodes that have an att attribute that matches match match.
-	
+
 		Returns NULL (if no match found), or a borrowed reference to the first matching element.
 	*/
 	FZ_FUNCTION FzXml fz_dom_find(const FzXml& elt, const char *tag, const char *att, const char *match);
@@ -1733,15 +1733,15 @@ namespace mupdf
 	FZ_FUNCTION FzXml fz_dom_first_child(const FzXml& elt);
 
 	/** Class-aware wrapper for `::fz_dom_get_attribute()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_dom_get_attribute(::fz_xml *elt, int i)` => `(const char *, const char *att)`
 	 */
 	/**
 		Enumerate through the attributes of an element.
-	
+
 		Call with i=0,1,2,3... to enumerate attributes.
-	
+
 		On return *att and the return value will be NULL if there are not
 		that many attributes to read. Otherwise, *att will be filled in
 		with a borrowed pointer to the attribute name, and the return
@@ -1788,7 +1788,7 @@ namespace mupdf
 	/**
 		Remove an element from the DOM. The element can be added back elsewhere
 		if required.
-	
+
 		No reference counting changes for the element.
 	*/
 	FZ_FUNCTION void fz_dom_remove(const FzXml& elt);
@@ -1833,11 +1833,11 @@ namespace mupdf
 	/**
 		Find the glyph id for a given unicode
 		character within a font.
-	
+
 		font: The font to look for the unicode character in.
-	
+
 		unicode: The unicode character to encode.
-	
+
 		Returns the glyph id for the given unicode value, or 0 if
 		unknown.
 	*/
@@ -1846,11 +1846,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_encode_character_by_glyph_name()`.  */
 	/**
 		Encode character.
-	
+
 		Either by direct lookup of glyphname within a font, or, failing
 		that, by mapping glyphname to unicode and thence to the glyph
 		index within the given font.
-	
+
 		Returns zero for type3 fonts.
 	*/
 	FZ_FUNCTION int fz_encode_character_by_glyph_name(const FzFont& font, const char *glyphname);
@@ -1858,18 +1858,18 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_encode_character_sc()`.  */
 	/**
 		Encode character, preferring small-caps variant if available.
-	
+
 		font: The font to look for the unicode character in.
-	
+
 		unicode: The unicode character to encode.
-	
+
 		Returns the glyph id for the given unicode value, or 0 if
 		unknown.
 	*/
 	FZ_FUNCTION int fz_encode_character_sc(const FzFont& font, int unicode);
 
 	/** Class-aware wrapper for `::fz_encode_character_with_fallback()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_encode_character_with_fallback(::fz_font *font, int unicode, int script, int language, ::fz_font **out_font)` => `(int)`
 	 */
@@ -1877,20 +1877,20 @@ namespace mupdf
 		Find the glyph id for
 		a given unicode character within a font, falling back to
 		an alternative if not found.
-	
+
 		font: The font to look for the unicode character in.
-	
+
 		unicode: The unicode character to encode.
-	
+
 		script: The script in use.
-	
+
 		language: The language in use.
-	
+
 		out_font: The font handle in which the given glyph represents
 		the requested unicode character. The caller does not own the
 		reference it is passed, so should call fz_keep_font if it is
 		not simply to be used immediately.
-	
+
 		Returns the glyph id for the given unicode value in the supplied
 		font (and sets *out_font to font) if it is present. Otherwise
 		an alternative fallback font (based on script/language) is
@@ -1962,7 +1962,7 @@ namespace mupdf
 	FZ_FUNCTION std::vector<fz_font_ucs_gid> fz_enumerate_font_cmap2(const FzFont& font);
 
 	/** Class-aware wrapper for `::fz_error_callback()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_error_callback()` => `(fz_error_cb *, void *user)`
 	 */
@@ -1975,7 +1975,7 @@ namespace mupdf
 	FZ_FUNCTION ::fz_error_cb *fz_error_callback(void **user);
 
 	/** Class-aware wrapper for `::fz_eval_function()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_eval_function(::fz_function *func, const float *in, int inlen, int outlen)` => float out
 	 */
@@ -1997,25 +1997,25 @@ namespace mupdf
 	/**
 		Supply more stext to be searched; ownership of the stext page is
 		passed in.
-	
+
 		This can be called immediately after an fz_search has been created
 		to give it the first page to search, or it will be requested as soon
 		as the first search operation is done on that page.
-	
+
 		If we are calling this in response to fz_search_forwards telling
 		us that we need another page, page will be the stext for the next
 		page.
-	
+
 		If we are calling this in response to fz_search_backwards telling
 		is that we need another page, page will be the stext for the previous
 		page.
-	
+
 		seq is a simple integer value that will be parrotted back to us in the
 		match (typically the page number within the document).
-	
+
 		The search function will retain the page for a while. When it has
 		finished with it, it will call fz_drop_stext_page() to release it.
-	
+
 		Pass page = NULL to indicate that there are no more pages (in this
 		direction) to be fed.
 	*/
@@ -2043,7 +2043,7 @@ namespace mupdf
 	FZ_FUNCTION FzPixmap fz_fill_pixmap_from_display_list(const FzDisplayList& list, const FzMatrix& ctm, const FzPixmap& pix);
 
 	/** Class-aware wrapper for `::fz_fill_pixmap_with_color()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_fill_pixmap_with_color(::fz_pixmap *pix, ::fz_colorspace *colorspace, ::fz_color_params color_params)` => float color
 	 */
@@ -2062,7 +2062,7 @@ namespace mupdf
 	/**
 		Filter every element in the store with a matching type with the
 		given function.
-	
+
 		If the function returns 1 for an element, drop the element.
 	*/
 	FZ_FUNCTION void fz_filter_store(::fz_store_filter_fn *fn, void *arg, const FzStoreType& type);
@@ -2070,14 +2070,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_find_item()`.  */
 	/**
 		Find an item within the store.
-	
+
 		drop: The function used to free the value (to ensure we get a
 		value of the correct type).
-	
+
 		key: The key used to index the item.
-	
+
 		type: Functions used to manipulate the key.
-	
+
 		Returns NULL for not found, otherwise returns a pointer to the
 		value indexed by key to which a reference has been taken.
 	*/
@@ -2087,15 +2087,15 @@ namespace mupdf
 	/**
 		Interpret the bounded contents of a given stext page as
 		a table.
-	
+
 		The page contents will be rewritten to contain a Table
 		structure with the identified content in it.
-	
+
 		This uses the same logic as for fz_table_hunt, without the
 		actual hunting. fz_table_hunt hunts to find possible bounds
 		for multiple tables on the page; this routine just finds a
 		single table contained within the given rectangle.
-	
+
 		Returns the stext_block list that contains the content of
 		the table.
 	*/
@@ -2116,7 +2116,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_flush_warnings()`.  */
 	/**
 		Flush any repeated warnings.
-	
+
 		Repeated warnings are buffered, counted and eventually printed
 		along with the number of repetitions. Call fz_flush_warnings
 		to force printing of the latest buffered warning and the
@@ -2134,9 +2134,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_font_bbox()`.  */
 	/**
 		Retrieve the font bbox.
-	
+
 		font: The font to query.
-	
+
 		Returns the font bbox by value; it is valid only if
 		fz_font_flags(font)->invalid_bbox is zero.
 	*/
@@ -2162,9 +2162,9 @@ namespace mupdf
 	/**
 		Retrieve the FT_Face handle
 		for the font.
-	
+
 		font: The font to query
-	
+
 		Returns the FT_Face handle for the font, or NULL
 		if not a freetype handled font. (Cast to void *
 		to avoid nasty header exposure).
@@ -2198,9 +2198,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_font_name()`.  */
 	/**
 		Retrieve a pointer to the name of the font.
-	
+
 		font: The font to query.
-	
+
 		Returns a pointer to an internal copy of the font name.
 		Will never be NULL, but may be the empty string.
 	*/
@@ -2214,9 +2214,9 @@ namespace mupdf
 	/**
 		Retrieve the Type3 procs
 		for a font.
-	
+
 		font: The font to query
-	
+
 		Returns the t3_procs pointer. Will be NULL for a
 		non type-3 font.
 	*/
@@ -2231,7 +2231,7 @@ namespace mupdf
 	/**
 		Format an internal link to a page number, location, and possible viewing parameters,
 		suitable for use with fz_create_link.
-	
+
 		Returns a newly allocated string that the caller must free.
 	*/
 	FZ_FUNCTION char *fz_format_link_uri(const FzDocument& doc, const FzLinkDest& dest);
@@ -2239,7 +2239,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_format_output_path()`.  */
 	/**
 		create output file name using a template.
-	
+
 		If the path contains %[0-9]*d, the first such pattern will be
 		replaced with the page number. If the template does not contain
 		such a pattern, the page number will be inserted before the
@@ -2265,7 +2265,7 @@ namespace mupdf
 		3 characters for the positive part of integers, so
 		other styles, such as Indian (123,456,78) are not
 		supported.
-	
+
 		%g output in "as short as possible hopefully lossless
 		non-exponent" form, see fz_ftoa for specifics.
 		%f and %e output as usual.
@@ -2279,9 +2279,9 @@ namespace mupdf
 		%z{d,u,x,X} indicates that the value is a size_t.
 		%< outputs a quoted (utf8) string (for XML).
 		%> outputs a hex string for a zero terminated string of bytes.
-	
+
 		user: An opaque pointer that is passed to the emit function.
-	
+
 		emit: A function pointer called to emit output bytes as the
 		string is being formatted.
 	*/
@@ -2290,9 +2290,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_free()`.  */
 	/**
 		Free a previously allocated block of memory.
-	
+
 		fz_free(ctx, NULL) does nothing.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_free(void *p);
@@ -2319,7 +2319,7 @@ namespace mupdf
 	/**
 		Apply gamma correction to a pixmap. All components
 		of all pixels are modified (except alpha, which is unchanged).
-	
+
 		gamma: The gamma value to apply; 1.0 for no change.
 	*/
 	FZ_FUNCTION void fz_gamma_pixmap(const FzPixmap& pix, float gamma);
@@ -2327,15 +2327,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_generate_transition()`.  */
 	/**
 		Generate a frame of a transition.
-	
+
 		tpix: Target pixmap
 		opix: Old pixmap
 		npix: New pixmap
 		time: Position within the transition (0 to 256)
 		trans: Transition details
-	
+
 		Returns 1 if successfully generated a frame.
-	
+
 		Note: Pixmaps must include alpha.
 	*/
 	FZ_FUNCTION int fz_generate_transition(const FzPixmap& tpix, const FzPixmap& opix, const FzPixmap& npix, int time, FzTransition& trans);
@@ -2343,15 +2343,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_get_glyph_name()`.  */
 	/**
 		Find the name of a glyph
-	
+
 		font: The font to look for the glyph in.
-	
+
 		glyph: The glyph id to look for.
-	
+
 		buf: Pointer to a buffer for the name to be inserted into.
-	
+
 		size: The size of the buffer.
-	
+
 		If a font contains a name table, then the name of the glyph
 		will be returned in the supplied buffer. Otherwise a name
 		is synthesised. The name will be truncated to fit in
@@ -2366,36 +2366,36 @@ namespace mupdf
 	FZ_FUNCTION std::string fz_get_glyph_name2(const FzFont& font, int glyph);
 
 	/** Class-aware wrapper for `::fz_get_pixmap_from_image()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_get_pixmap_from_image(::fz_image *image, const ::fz_irect *subarea, ::fz_matrix *ctm)` => `(fz_pixmap *, int w, int h)`
 	 */
 	/**
 		Called to get a handle to a pixmap from an image.
-	
+
 		image: The image to retrieve a pixmap from.
-	
+
 		subarea: The subarea of the image that we actually care about
 		(or NULL to indicate the whole image).
-	
+
 		ctm: Optional, unless subarea is given. If given, then on
 		entry this is the transform that will be applied to the complete
 		image. It should be updated on exit to the transform to apply to
 		the given subarea of the image. This is used to calculate the
 		desired width/height for subsampling.
-	
+
 		w: If non-NULL, a pointer to an int to be updated on exit to the
 		width (in pixels) that the scaled output will cover.
-	
+
 		h: If non-NULL, a pointer to an int to be updated on exit to the
 		height (in pixels) that the scaled output will cover.
-	
+
 		Returns a non NULL kept pixmap pointer. May throw exceptions.
 	*/
 	FZ_FUNCTION FzPixmap fz_get_pixmap_from_image(const FzImage& image, FzIrect& subarea, FzMatrix& ctm, int *w, int *h);
 
 	/** Class-aware wrapper for `::fz_get_pixmap_mask_from_image()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_get_pixmap_mask_from_image(::fz_image *image, const ::fz_irect *subarea, ::fz_matrix *ctm, int in_smask)` => `(fz_pixmap *, int dw, int dh)`
 	 */
@@ -2412,7 +2412,7 @@ namespace mupdf
 	FZ_FUNCTION FzPixmap fz_get_unscaled_pixmap_from_image(const FzImage& image);
 
 	/** Class-aware wrapper for `::fz_getopt()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_getopt(int nargc, const char *ostr)` => `(int, char *nargv)`
 	 */
@@ -2423,26 +2423,26 @@ namespace mupdf
 	FZ_FUNCTION int fz_getopt(int nargc, char **nargv, const char *ostr);
 
 	/** Class-aware wrapper for `::fz_getopt_long()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_getopt_long(int nargc, const char *ostr, const ::fz_getopt_long_options *longopts)` => `(int, char *nargv)`
 	 */
 	/**
 		Simple functions/variables for use in tools.
-	
+
 		ostr = option string. Comprises single letter options, followed by : if there
 		is an argument to the option.
-	
+
 		longopts: NULL (indicating no long options), or a pointer to an array of
 		longoptions, terminated by an entry with option == NULL.
-	
+
 		In the event of matching a single char option, this function will normally
 		return the char. The exception to this is when the option requires an
 		argument and none is supplied; in this case we return ':'.
-	
+
 		In the event of matching a long option, this function returns 0, with fz_optlong
 		set to point to the matching option.
-	
+
 		A long option entry may be followed with : to indicate there is an argument to the
 		option. If the need for an argument is specified in this way, and no argument is
 		given, an error will be displayed and argument processing will stop. If an argument
@@ -2451,16 +2451,16 @@ namespace mupdf
 		case-insensitive matches to 'yes', 'no', 'true' and 'false' will cause a value of 0
 		or 1 as appropriate to be written; failing this the arg will be interpreted as a
 		decimal integer using atoi.
-	
+
 		A long option entry may be followed by an list of options (e.g. myoption=foo|bar|baz)
 		and the option will be passed to fz_opt_from_list. The return value of that will be
 		placed in fz_optitem. If the return value of that function is -1, then an error will
 		be displayed and argument processing will stop.
-	
+
 		In the event of reaching the end of the arg list or '--', this function returns EOF.
-	
+
 		In the event of failing to match anything, an error is printed, and we return '?'.
-	
+
 		If an argument is expected for the option, then fz_optarg will be returned pointing
 		at the start of the argument. Examples of supported argument formats: '-r500', '-r 500',
 		'--resolution 500', '--resolution=500'.
@@ -2482,11 +2482,11 @@ namespace mupdf
 		is cacheable. Certain glyphs in a type 3 font cannot safely
 		be cached, as their appearance depends on the enclosing
 		graphic state.
-	
+
 		font: The font to look for the glyph in.
-	
+
 		gif: The glyph to query.
-	
+
 		Returns non-zero if cacheable, 0 if not.
 	*/
 	FZ_FUNCTION int fz_glyph_cacheable(const FzFont& font, int gid);
@@ -2517,7 +2517,7 @@ namespace mupdf
 	/**
 		Get the minimum line width to be
 		used for stroked lines.
-	
+
 		min_line_width: The minimum line width to use (in pixels).
 	*/
 	FZ_FUNCTION float fz_graphics_min_line_width();
@@ -2525,11 +2525,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_gridfit_matrix()`.  */
 	/**
 		Grid fit a matrix.
-	
+
 		as_tiled = 0 => adjust the matrix so that the image of the unit
 		square completely covers any pixel that was touched by the
 		image of the unit square under the original matrix.
-	
+
 		as_tiled = 1 => adjust the matrix so that the corners of the
 		image of the unit square align with the closest integer corner
 		of the image of the unit square under the original matrix.
@@ -2537,7 +2537,7 @@ namespace mupdf
 	FZ_FUNCTION FzMatrix fz_gridfit_matrix(int as_tiled, const FzMatrix& m);
 
 	/** Class-aware wrapper for `::fz_grisu()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_grisu(float f, char *s)` => `(int, int exp)`
 	 */
@@ -2553,17 +2553,17 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_has_archive_entry()`.  */
 	/**
 		Check if entry by given name exists.
-	
+
 		If named entry does not exist 0 will be returned, if it does
 		exist 1 is returned.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
 	*/
 	FZ_FUNCTION int fz_has_archive_entry(const FzArchive& arch, const char *name);
 
 	/** Class-aware wrapper for `::fz_has_option()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_has_option(const char *opts, const char *key)` => `(int, const char *val)`
 	 */
@@ -2602,11 +2602,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_hash_insert()`.  */
 	/**
 		Insert a new key/value pair into the hash table.
-	
+
 		If an existing entry with the same key is found, no change is
 		made to the hash table, and a pointer to the existing value is
 		returned.
-	
+
 		If no existing entry with the same key is found, ownership of
 		val passes in, key is copied, and NULL is returned.
 	*/
@@ -2615,7 +2615,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_hash_remove()`.  */
 	/**
 		Remove the entry for a given key.
-	
+
 		The value is NOT freed, so the caller is expected to take care
 		of this.
 	*/
@@ -2662,16 +2662,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_image_orientation()`.  */
 	/**
 		Request the natural orientation of an image.
-	
+
 		This is for images (such as JPEG) that can contain internal
 		specifications of rotation/flips. This is ignored by all the
 		internal decode/rendering routines, but can be used by callers
 		(such as the image document handler) to respect such
 		specifications.
-	
+
 		The values used by MuPDF are as follows, with the equivalent
 		Exif specifications given for information:
-	
+
 		0: Undefined
 		1: 0 degree ccw rotation. (Exif = 1)
 		2: 90 degree ccw rotation. (Exif = 8)
@@ -2688,14 +2688,14 @@ namespace mupdf
 	FZ_FUNCTION FzMatrix fz_image_orientation_matrix(const FzImage& image);
 
 	/** Class-aware wrapper for `::fz_image_resolution()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_image_resolution(::fz_image *image)` => `(int xres, int yres)`
 	 */
 	/**
 		Request the natural resolution
 		of an image.
-	
+
 		xres, yres: Pointers to ints to be updated with the
 		natural resolution of an image (or a sensible default
 		if not encoded).
@@ -2711,7 +2711,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_image_type_name()`.  */
 	/**
 		Map from FZ_IMAGE_* value to string.
-	
+
 		The returned string is static and therefore must not be freed.
 	*/
 	FZ_FUNCTION const char *fz_image_type_name(int type);
@@ -2732,7 +2732,7 @@ namespace mupdf
 	/**
 		Install functions to allow MuPDF to request fonts from the
 		system.
-	
+
 		Only one set of hooks can be in use at a time.
 	*/
 	FZ_FUNCTION void fz_install_load_system_font_funcs(::fz_load_system_font_fn *f, ::fz_load_system_cjk_font_fn *f_cjk, ::fz_load_system_fallback_font_fn *f_fallback);
@@ -2777,7 +2777,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_intersect_irect()`.  */
 	/**
 		Compute intersection of two bounding boxes.
-	
+
 		Similar to fz_intersect_rect but operates on two bounding
 		boxes instead of two rectangles.
 	*/
@@ -2786,7 +2786,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_intersect_rect()`.  */
 	/**
 		Compute intersection of two rectangles.
-	
+
 		Given two rectangles, update the first to be the smallest
 		axis-aligned rectangle that covers the area covered by both
 		given rectangles. If either rectangle is empty then the
@@ -2815,7 +2815,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_invert_bitmap()`.  */
 	/**
 		Invert bitmap.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_invert_bitmap(const FzBitmap& bmp);
@@ -2823,11 +2823,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_invert_matrix()`.  */
 	/**
 		Create an inverse matrix.
-	
+
 		matrix: Matrix to invert. A degenerate matrix, where the
 		determinant is equal to zero, can not be inverted and the
 		original matrix is returned instead.
-	
+
 		Returns inverse.
 	*/
 	FZ_FUNCTION FzMatrix fz_invert_matrix(const FzMatrix& matrix);
@@ -2851,7 +2851,7 @@ namespace mupdf
 		Transform the pixels in a pixmap so that luminance of each
 		pixel is inverted, and the chrominance remains unchanged (as
 		much as accuracy allows).
-	
+
 		All components of all pixels are inverted (except alpha, which
 		is unchanged). Only supports Grey and RGB bitmaps.
 	*/
@@ -2876,7 +2876,7 @@ namespace mupdf
 	/**
 		Convert a rect into the minimal bounding box
 		that covers the rectangle.
-	
+
 		Coordinates in a bounding box are integers, so rounding of the
 		rects coordinates takes place. The top left corner is rounded
 		upwards and left while the bottom right corner is rounded
@@ -2899,7 +2899,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_cfb_archive()`.  */
 	/**
 		Detect if stream object is a cfb archive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_cfb_archive(const FzStream& file);
@@ -2907,7 +2907,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_directory()`.  */
 	/**
 		Determine if a given path is a directory.
-	
+
 		In the case of the path not existing, or having no access
 		we will return 0.
 	*/
@@ -2916,7 +2916,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_document_reflowable()`.  */
 	/**
 		Is the document reflowable.
-	
+
 		Returns 1 to indicate reflowable documents, otherwise 0.
 	*/
 	FZ_FUNCTION int fz_is_document_reflowable(const FzDocument& doc);
@@ -2933,7 +2933,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_empty_rect()`.  */
 	/**
 		Check if rectangle is empty.
-	
+
 		An empty rectangle is defined as one whose area is zero.
 		All invalid rectangles are empty.
 	*/
@@ -2943,7 +2943,7 @@ namespace mupdf
 	/**
 		Query if the stream has reached EOF (during normal bytewise
 		reading).
-	
+
 		See fz_is_eof_bits for the equivalent function for bitwise
 		reading.
 	*/
@@ -2953,7 +2953,7 @@ namespace mupdf
 	/**
 		Query if the stream has reached EOF (during bitwise
 		reading).
-	
+
 		See fz_is_eof for the equivalent function for bytewise
 		reading.
 	*/
@@ -2992,9 +2992,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_irect_inside_irect()`.  */
 	/**
 		Inclusion test for irects.
-	
+
 		rects are assumed to be both open or both closed.
-	
+
 		No invalid rect can include any other rect.
 		No invalid rect can be included by any rect.
 		Empty (point) rects can include themselves.
@@ -3005,7 +3005,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_libarchive_archive()`.  */
 	/**
 		Detect if stream object is an archive supported by libarchive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_libarchive_archive(const FzStream& file);
@@ -3053,7 +3053,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_quad_inside_quad()`.  */
 	/**
 		Inclusion test for quad in quad.
-	
+
 		This may break down if quads are not 'well formed'.
 	*/
 	FZ_FUNCTION int fz_is_quad_inside_quad(const FzQuad& needle, const FzQuad& haystack);
@@ -3061,7 +3061,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_quad_intersecting_quad()`.  */
 	/**
 		Intersection test for quads.
-	
+
 		This may break down if quads are not 'well formed'.
 	*/
 	FZ_FUNCTION int fz_is_quad_intersecting_quad(const FzQuad& a, const FzQuad& b);
@@ -3069,9 +3069,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_rect_inside_rect()`.  */
 	/**
 		Inclusion test for rects.
-	
+
 		rects are assumed to be both open or both closed.
-	
+
 		No invalid rect can include any other rect.
 		No invalid rect can be included by any rect.
 		Empty (point) rects can include themselves.
@@ -3082,7 +3082,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_rectilinear()`.  */
 	/**
 		Check if a transformation is rectilinear.
-	
+
 		Rectilinear means that no shearing is present and that any
 		rotations present are a multiple of 90 degrees. Usually this
 		is used to make sure that axis-aligned rectangles before the
@@ -3093,7 +3093,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_tar_archive()`.  */
 	/**
 		Detect if stream object is a tar archive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_tar_archive(const FzStream& file);
@@ -3150,7 +3150,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_is_zip_archive()`.  */
 	/**
 		Detect if stream object is a zip archive.
-	
+
 		Assumes that the stream object is seekable.
 	*/
 	FZ_FUNCTION int fz_is_zip_archive(const FzStream& file);
@@ -3249,7 +3249,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_layout_document()`.  */
 	/**
 		Layout reflowable document types.
-	
+
 		w, h: Page size in points.
 		em: Default font size in points.
 	*/
@@ -3264,11 +3264,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_lineto()`.  */
 	/**
 		Append a 'lineto' command to an open path.
-	
+
 		path: The path to modify.
-	
+
 		x, y: The coordinate to line to.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -3277,11 +3277,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_list_archive_entry()`.  */
 	/**
 		Get listed name of entry position idx.
-	
+
 		idx: Must be a value >= 0 < return value from
 		fz_count_archive_entries. If not in range NULL will be
 		returned.
-	
+
 		May throw an exception if this type of archive cannot list the
 		entries (such as a directory).
 	*/
@@ -3296,11 +3296,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_load_chapter_page()`.  */
 	/**
 		Load a page.
-	
+
 		After fz_load_page is it possible to retrieve the size of the
 		page using fz_bound_page, or to render the page using
 		fz_run_page_*. Free the page by calling fz_drop_page.
-	
+
 		chapter: chapter number, 0 is the first chapter of the document.
 		number: page number, 0 is the first page of the chapter.
 	*/
@@ -3312,17 +3312,17 @@ namespace mupdf
 		given combination of font attributes. Whether a font is
 		present or not will depend on the configuration in which
 		MuPDF is built.
-	
+
 		script: The script desired (e.g. UCDN_SCRIPT_KATAKANA).
-	
+
 		language: The language desired (e.g. FZ_LANG_ja).
-	
+
 		serif: 1 if serif desired, 0 otherwise.
-	
+
 		bold: 1 if bold desired, 0 otherwise.
-	
+
 		italic: 1 if italic desired, 0 otherwise.
-	
+
 		Returns a new font handle, or NULL if not available.
 	*/
 	FZ_FUNCTION FzFont fz_load_fallback_font(int script, int language, int serif, int bold, int italic);
@@ -3330,7 +3330,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_load_jbig2_globals()`.  */
 	/**
 		Create a jbig2 globals record from a buffer.
-	
+
 		Immutable once created.
 	*/
 	FZ_FUNCTION FzJbig2Globals fz_load_jbig2_globals(const FzBuffer& buf);
@@ -3350,12 +3350,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_load_links()`.  */
 	/**
 		Load the list of links for a page.
-	
+
 		Returns a linked list of all the links on the page, each with
 		its clickable region and link destination. Each link is
 		reference counted so drop and free the list of links by
 		calling fz_drop_link on the pointer return from fz_load_links.
-	
+
 		page: Page obtained from fz_load_page.
 	*/
 	FZ_FUNCTION FzLink fz_load_links(const FzPage& page);
@@ -3363,7 +3363,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_load_outline()`.  */
 	/**
 		Load the hierarchical document outline.
-	
+
 		Should be freed by fz_drop_outline.
 	*/
 	FZ_FUNCTION FzOutline fz_load_outline(const FzDocument& doc);
@@ -3392,13 +3392,13 @@ namespace mupdf
 	/**
 		Attempt to load a given font from
 		the system.
-	
+
 		name: The name of the desired font.
-	
+
 		ordering: The ordering to load the font from (e.g. FZ_ADOBE_KOREA)
-	
+
 		serif: 1 if serif desired, 0 otherwise.
-	
+
 		Returns a new font handle, or NULL if no matching font was found
 		(or on error).
 	*/
@@ -3407,16 +3407,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_load_system_font()`.  */
 	/**
 		Attempt to load a given font from the system.
-	
+
 		name: The name of the desired font.
-	
+
 		bold: 1 if bold desired, 0 otherwise.
-	
+
 		italic: 1 if italic desired, 0 otherwise.
-	
+
 		needs_exact_metrics: 1 if an exact metrical match is required,
 		0 otherwise.
-	
+
 		Returns a new font handle, or NULL if no matching font was found
 		(or on error).
 	*/
@@ -3460,7 +3460,7 @@ namespace mupdf
 	FZ_FUNCTION void fz_log_error(const char *str);
 
 	/** Class-aware wrapper for `::fz_lookup_base14_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_base14_font(const char *name)` => `(const unsigned char *, int len)`
 	 */
@@ -3468,12 +3468,12 @@ namespace mupdf
 		Search the builtin base14 fonts for a match.
 		Whether a given font is present or not will depend on the
 		configuration in which MuPDF is built.
-	
+
 		name: The name of the font desired.
-	
+
 		len: Pointer to a place to receive the length of the discovered
 		font buffer.
-	
+
 		Returns a pointer to the font file data, or NULL if not present.
 	*/
 	FZ_FUNCTION const unsigned char *fz_lookup_base14_font(const char *name, int *len);
@@ -3491,7 +3491,7 @@ namespace mupdf
 	FZ_FUNCTION FzLocation fz_lookup_bookmark(const FzDocument& doc, ::fz_bookmark mark);
 
 	/** Class-aware wrapper for `::fz_lookup_builtin_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_builtin_font(const char *name, int bold, int italic)` => `(const unsigned char *, int len)`
 	 */
@@ -3499,22 +3499,22 @@ namespace mupdf
 		Search the builtin fonts for a match.
 		Whether a given font is present or not will depend on the
 		configuration in which MuPDF is built.
-	
+
 		name: The name of the font desired.
-	
+
 		bold: 1 if bold desired, 0 otherwise.
-	
+
 		italic: 1 if italic desired, 0 otherwise.
-	
+
 		len: Pointer to a place to receive the length of the discovered
 		font buffer.
-	
+
 		Returns a pointer to the font file data, or NULL if not present.
 	*/
 	FZ_FUNCTION const unsigned char *fz_lookup_builtin_font(const char *name, int bold, int italic, int *len);
 
 	/** Class-aware wrapper for `::fz_lookup_cjk_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_cjk_font(int ordering)` => `(const unsigned char *, int len, int index)`
 	 */
@@ -3522,18 +3522,18 @@ namespace mupdf
 		Search the builtin cjk fonts for a match.
 		Whether a font is present or not will depend on the
 		configuration in which MuPDF is built.
-	
+
 		ordering: The desired ordering of the font (e.g. FZ_ADOBE_KOREA).
-	
+
 		len: Pointer to a place to receive the length of the discovered
 		font buffer.
-	
+
 		Returns a pointer to the font file data, or NULL if not present.
 	*/
 	FZ_FUNCTION const unsigned char *fz_lookup_cjk_font(int ordering, int *len, int *index);
 
 	/** Class-aware wrapper for `::fz_lookup_cjk_font_by_language()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_cjk_font_by_language(const char *lang)` => `(const unsigned char *, int len, int subfont)`
 	 */
@@ -3541,16 +3541,16 @@ namespace mupdf
 		Search the builtin cjk fonts for a match for a given language.
 		Whether a font is present or not will depend on the
 		configuration in which MuPDF is built.
-	
+
 		lang: Pointer to a (case sensitive) language string (e.g.
 		"ja", "ko", "zh-Hant" etc).
-	
+
 		len: Pointer to a place to receive the length of the discovered
 		font buffer.
-	
+
 		subfont: Pointer to a place to store the subfont index of the
 		discovered font.
-	
+
 		Returns a pointer to the font file data, or NULL if not present.
 	*/
 	FZ_FUNCTION const unsigned char *fz_lookup_cjk_font_by_language(const char *lang, int *len, int *subfont);
@@ -3576,15 +3576,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_lookup_metadata()`.  */
 	/**
 		Retrieve document meta data strings.
-	
+
 		doc: The document to query.
-	
+
 		key: Which meta data key to retrieve...
-	
+
 		Basic information:
 			'format'	-- Document format and version.
 			'encryption'	-- Description of the encryption used.
-	
+
 		From the document information dictionary:
 			'info:Title'
 			'info:Author'
@@ -3594,12 +3594,12 @@ namespace mupdf
 			'info:Producer'
 			'info:CreationDate'
 			'info:ModDate'
-	
+
 		buf: The buffer to hold the results (a nul-terminated UTF-8
 		string).
-	
+
 		size: Size of 'buf'.
-	
+
 		Returns the number of bytes need to store the string plus terminator
 		(will be larger than 'size' if the output was truncated), or -1 if the
 		key is not recognized or found.
@@ -3614,21 +3614,21 @@ namespace mupdf
 	FZ_FUNCTION std::string fz_lookup_metadata2(const FzDocument& doc, const char *key);
 
 	/** Class-aware wrapper for `::fz_lookup_noto_boxes_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_noto_boxes_font()` => `(const unsigned char *, int len)`
 	 */
 	FZ_FUNCTION const unsigned char *fz_lookup_noto_boxes_font(int *len);
 
 	/** Class-aware wrapper for `::fz_lookup_noto_emoji_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_noto_emoji_font()` => `(const unsigned char *, int len)`
 	 */
 	FZ_FUNCTION const unsigned char *fz_lookup_noto_emoji_font(int *len);
 
 	/** Class-aware wrapper for `::fz_lookup_noto_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_noto_font(int script, int lang)` => `(const unsigned char *, int len, int subfont)`
 	 */
@@ -3636,20 +3636,20 @@ namespace mupdf
 		Search the builtin noto fonts for a match.
 		Whether a font is present or not will depend on the
 		configuration in which MuPDF is built.
-	
+
 		script: The script desired (e.g. UCDN_SCRIPT_KATAKANA).
-	
+
 		lang: The language desired (e.g. FZ_LANG_ja).
-	
+
 		len: Pointer to a place to receive the length of the discovered
 		font buffer.
-	
+
 		Returns a pointer to the font file data, or NULL if not present.
 	*/
 	FZ_FUNCTION const unsigned char *fz_lookup_noto_font(int script, int lang, int *len, int *subfont);
 
 	/** Class-aware wrapper for `::fz_lookup_noto_math_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_noto_math_font()` => `(const unsigned char *, int len)`
 	 */
@@ -3661,7 +3661,7 @@ namespace mupdf
 	FZ_FUNCTION const unsigned char *fz_lookup_noto_math_font(int *len);
 
 	/** Class-aware wrapper for `::fz_lookup_noto_music_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_noto_music_font()` => `(const unsigned char *, int len)`
 	 */
@@ -3676,14 +3676,14 @@ namespace mupdf
 	FZ_FUNCTION const char *fz_lookup_noto_stem_from_script(int script, int language);
 
 	/** Class-aware wrapper for `::fz_lookup_noto_symbol1_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_noto_symbol1_font()` => `(const unsigned char *, int len)`
 	 */
 	FZ_FUNCTION const unsigned char *fz_lookup_noto_symbol1_font(int *len);
 
 	/** Class-aware wrapper for `::fz_lookup_noto_symbol2_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_lookup_noto_symbol2_font()` => `(const unsigned char *, int len)`
 	 */
@@ -3743,9 +3743,9 @@ namespace mupdf
 	/**
 		Allocate uninitialized memory of a given size.
 		Does NOT clear the memory!
-	
+
 		May return NULL for size = 0.
-	
+
 		Throws exception in the event of failure to allocate.
 	*/
 	FZ_FUNCTION void *fz_malloc(size_t size);
@@ -3765,7 +3765,7 @@ namespace mupdf
 	FZ_FUNCTION void *fz_malloc_no_throw(size_t size);
 
 	/** Class-aware wrapper for `::fz_match_chapter_page_number()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_match_chapter_page_number(::fz_document *doc, int chapter, int page, const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
 	 */
@@ -3775,7 +3775,7 @@ namespace mupdf
 	FZ_FUNCTION int fz_match_chapter_page_number_cb(const FzDocument& doc, int chapter, int page, const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options);
 
 	/** Class-aware wrapper for `::fz_match_display_list()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_match_display_list(::fz_display_list *list, const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
 	 */
@@ -3785,7 +3785,7 @@ namespace mupdf
 	FZ_FUNCTION int fz_match_display_list_cb(const FzDisplayList& list, const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options);
 
 	/** Class-aware wrapper for `::fz_match_page()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_match_page(::fz_page *page, const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
 	 */
@@ -3795,7 +3795,7 @@ namespace mupdf
 	FZ_FUNCTION int fz_match_page_cb(const FzPage& page, const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options);
 
 	/** Class-aware wrapper for `::fz_match_page_number()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_match_page_number(::fz_document *doc, int number, const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
 	 */
@@ -3805,17 +3805,17 @@ namespace mupdf
 	FZ_FUNCTION int fz_match_page_number_cb(const FzDocument& doc, int number, const char *needle, ::fz_match_callback_fn *cb, void *opaque, ::fz_search_options options);
 
 	/** Class-aware wrapper for `::fz_match_stext_page()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_match_stext_page(::fz_stext_page *text, const char *needle, ::fz_quad *hit_bbox, int hit_max, ::fz_search_options options)` => `(int, int hit_mark)`
 	 */
 	/**
 		Search for occurrence of 'needle' in text page, matching in a given
 		style.
-	
+
 		Return the number of quads and store hit quads in the passed in
 		array.
-	
+
 		NOTE: This is an experimental interface and subject to change
 		without notice.
 	*/
@@ -3824,14 +3824,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_match_stext_page_cb()`.  */
 	/**
 		Search for occurrence of 'needle' in text page.
-	
+
 		Call callback once for each hit. This callback will receive
 		(potentially) multiple quads for each hit.
-	
+
 		Returns the number of hits - note that this is potentially
 		different from (i.e. is not greater than) the number of quads
 		as returned by the non callback API.
-	
+
 		NOTE: This is an experimental interface and subject to change
 		without notice.
 	*/
@@ -3865,7 +3865,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_md5_buffer()`.  */
 	/**
 		Create an MD5 digest from buffer contents.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_md5_buffer(const FzBuffer& buffer, unsigned char digest[16]);
@@ -3874,7 +3874,7 @@ namespace mupdf
 	/**
 		MD5 finalization. Ends an MD5 message-digest operation, writing
 		the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_final(FzMd5& state, unsigned char digest[16]);
@@ -3889,7 +3889,7 @@ namespace mupdf
 	/**
 		MD5 initialization. Begins an MD5 operation, writing a new
 		context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_init(FzMd5& state);
@@ -3908,7 +3908,7 @@ namespace mupdf
 		MD5 block update operation. Continues an MD5 message-digest
 		operation, processing another message block, and updating the
 		context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_update(FzMd5& state, const unsigned char *input, size_t inlen);
@@ -3917,7 +3917,7 @@ namespace mupdf
 	/**
 		MD5 block update operation. Continues an MD5 message-digest
 		operation, processing an int64, and updating the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_md5_update_int64(FzMd5& state, int64_t i);
@@ -3925,7 +3925,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_measure_string()`.  */
 	/**
 		Measure the advance width of a UTF8 string should it be added to a text object.
-	
+
 		This uses the same layout algorithms as fz_show_string, and can be used
 		to calculate text alignment adjustments.
 	*/
@@ -3971,7 +3971,7 @@ namespace mupdf
 	/**
 		Add an archive to the set of archives handled by a multi
 		archive.
-	
+
 		If path is NULL, then the archive contents will appear at the
 		top level, otherwise, the archives contents will appear prefixed
 		by path.
@@ -3982,11 +3982,11 @@ namespace mupdf
 	/**
 		Append a 'moveto' command to a path.
 		This 'opens' a path.
-	
+
 		path: The path to modify.
-	
+
 		x, y: The coordinate to move to.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -4027,14 +4027,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_barcode_image()`.  */
 	/**
 		Create an fz_image from a barcode definition.
-	
+
 		type: The type of barcode to create.
 		value: The value of the barcode.
 		size: The size of the barcode.
 		ec_level: error correction level 0-8.
 		quiet: whether to include quiet zones (0 or 1).
 		hrt: whether to include human readable text below the barcode (0 or 1).
-	
+
 		returns a created fz_image.
 	*/
 	FZ_FUNCTION FzImage fz_new_barcode_image(::fz_barcode_type type, const char *value, int size, int ec_level, int quiet, int hrt);
@@ -4042,14 +4042,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_barcode_pixmap()`.  */
 	/**
 		Create an fz_pixmap from a barcode definition.
-	
+
 		type: The type of barcode to create.
 		value: The value of the barcode.
 		size: The size of the barcode.
 		ec_level: error correction level 0-8.
 		quiet: whether to include quiet zones (0 or 1).
 		hrt: whether to include human readable text below the barcode (0 or 1).
-	
+
 		returns a created fz_pixmap.
 	*/
 	FZ_FUNCTION FzPixmap fz_new_barcode_pixmap(::fz_barcode_type type, const char *value, int size, int ec_level, int quiet, int hrt);
@@ -4064,7 +4064,7 @@ namespace mupdf
 	/**
 		Create a device to compute the bounding
 		box of all marks on a page.
-	
+
 		The returned bounding box will be the union of all bounding
 		boxes of all objects on a page.
 	*/
@@ -4073,13 +4073,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_bitmap()`.  */
 	/**
 		Create a new bitmap.
-	
+
 		w, h: Width and Height for the bitmap
-	
+
 		n: Number of color components (assumed to be a divisor of 8)
-	
+
 		xres, yres: X and Y resolutions (in pixels per inch).
-	
+
 		Returns pointer to created bitmap structure. The bitmap
 		data is uninitialised.
 	*/
@@ -4088,12 +4088,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_bitmap_from_image()`.  */
 	/**
 		Make a bitmap from a pixmap and a halftone.
-	
+
 		img: The image to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -4102,12 +4102,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_bitmap_from_pixmap()`.  */
 	/**
 		Make a bitmap from a pixmap and a halftone.
-	
+
 		pix: The pixmap to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
@@ -4118,22 +4118,22 @@ namespace mupdf
 		Make a bitmap from a pixmap and a
 		halftone, allowing for the position of the pixmap within an
 		overall banded rendering.
-	
+
 		pix: The pixmap to generate from. Currently must be a single
 		color component with no alpha.
-	
+
 		ht: The halftone to use. NULL implies the default halftone.
-	
+
 		band_start: Vertical offset within the overall banded rendering
 		(in pixels)
-	
+
 		Returns the resultant bitmap. Throws exceptions in the case of
 		failure to allocate.
 	*/
 	FZ_FUNCTION FzBitmap fz_new_bitmap_from_pixmap_band(const FzPixmap& pix, const FzHalftone& ht, int band_start);
 
 	/** Class-aware wrapper for `::fz_new_brotli_data()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_brotli_data(const unsigned char *source, size_t source_length, ::fz_brotli_level level)` => `(unsigned char *, size_t compressed_length)`
 	 */
@@ -4149,7 +4149,7 @@ namespace mupdf
 	FZ_FUNCTION unsigned char *fz_new_brotli_data(size_t *compressed_length, const unsigned char *source, size_t source_length, ::fz_brotli_level level);
 
 	/** Class-aware wrapper for `::fz_new_brotli_data_from_buffer()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_brotli_data_from_buffer(::fz_buffer *buffer, ::fz_brotli_level level)` => `(unsigned char *, size_t compressed_length)`
 	 */
@@ -4182,14 +4182,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_buffer_from_data()`.  */
 	/**
 		Create a new buffer with existing data.
-	
+
 		data: Pointer to existing data.
 		size: Size of existing data.
-	
+
 		Takes ownership of data. Does not make a copy. Calls fz_free on
 		the data when the buffer is deallocated. Do not use 'data' after
 		passing to this function.
-	
+
 		Returns pointer to new buffer. Throws exception on allocation
 		failure.
 	*/
@@ -4211,7 +4211,7 @@ namespace mupdf
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_flattened_page_number(const FzDocument& doc, int number, FzStextOptions& options, ::fz_text_flatten flatten);
 
 	/** Class-aware wrapper for `::fz_new_buffer_from_flattened_stext_page()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_buffer_from_flattened_stext_page(::fz_stext_page *text, ::fz_text_flatten flatten, ::fz_stext_position **map)` => `(fz_buffer *)`
 	 */
@@ -4239,7 +4239,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_buffer_from_image_as_png()`.  */
 	/**
 		Re-encode a given image as a PNG into a buffer.
-	
+
 		Ownership of the buffer is returned.
 	*/
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_image_as_png(const FzImage& image, const FzColorParams& color_params);
@@ -4262,7 +4262,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_buffer_from_page_with_format()`.  */
 	/**
 		Returns an fz_buffer containing a page after conversion to specified format.
-	
+
 		page: The page to convert.
 		format, options: Passed to fz_new_document_writer_with_output() internally.
 		transform, cookie: Passed to fz_run_page() internally.
@@ -4287,7 +4287,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_buffer_from_pixmap_as_png()`.  */
 	/**
 		Re-encode a given pixmap as a PNG into a buffer.
-	
+
 		Ownership of the buffer is returned.
 	*/
 	FZ_FUNCTION FzBuffer fz_new_buffer_from_pixmap_as_png(const FzPixmap& pixmap, const FzColorParams& color_params);
@@ -4317,10 +4317,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_cal_gray_colorspace()`.  */
 	/**
 		Create a calibrated gray colorspace.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace fz_new_cal_gray_colorspace(float wp[3], float bp[3], float gamma);
@@ -4328,10 +4328,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_cal_rgb_colorspace()`.  */
 	/**
 		Create a calibrated rgb colorspace.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace fz_new_cal_rgb_colorspace(float wp[3], float bp[3], float gamma[3], float matrix[9]);
@@ -4354,13 +4354,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_colorspace()`.  */
 	/**
 		Creates a new colorspace instance and returns a reference.
-	
+
 		No internal checking is done that the colorspace type (e.g.
 		CMYK) matches with the flags (e.g. FZ_COLORSPACE_HAS_CMYK) or
 		colorant count (n) or name.
-	
+
 		The reference should be dropped when it is finished with.
-	
+
 		Colorspaces are immutable once created (with the exception of
 		setting up colorant names for separation spaces).
 	*/
@@ -4388,12 +4388,12 @@ namespace mupdf
 	/**
 		Create a new default colorspace structure with values inherited
 		from the context, and return a reference to it.
-	
+
 		These can be overridden using fz_set_default_xxxx.
-	
+
 		These should not be overridden while more than one caller has
 		the reference for fear of race conditions.
-	
+
 		The caller should drop this reference once finished with it.
 	*/
 	FZ_FUNCTION FzDefaultColorspaces fz_new_default_colorspaces();
@@ -4403,7 +4403,7 @@ namespace mupdf
 	is non-copyable. */
 
 	/** Class-aware wrapper for `::fz_new_deflated_data()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_deflated_data(const unsigned char *source, size_t source_length, ::fz_deflate_level level)` => `(unsigned char *, size_t compressed_length)`
 	 */
@@ -4419,7 +4419,7 @@ namespace mupdf
 	FZ_FUNCTION unsigned char *fz_new_deflated_data(size_t *compressed_length, const unsigned char *source, size_t source_length, ::fz_deflate_level level);
 
 	/** Class-aware wrapper for `::fz_new_deflated_data_from_buffer()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_deflated_data_from_buffer(::fz_buffer *buffer, ::fz_deflate_level level)` => `(unsigned char *, size_t compressed_length)`
 	 */
@@ -4447,10 +4447,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_display_list()`.  */
 	/**
 		Create an empty display list.
-	
+
 		A display list contains drawing commands (text, images, etc.).
 		Use fz_new_list_device for populating the list.
-	
+
 		mediabox: Bounds of the page (in points) represented by the
 		display list.
 	*/
@@ -4459,7 +4459,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_display_list_from_page()`.  */
 	/**
 		Create a display list.
-	
+
 		Ownership of the display list is returned to the caller.
 	*/
 	FZ_FUNCTION FzDisplayList fz_new_display_list_from_page(const FzPage& page);
@@ -4467,7 +4467,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_display_list_from_page_contents()`.  */
 	/**
 		Create a display list from page contents (no annotations).
-	
+
 		Ownership of the display list is returned to the caller.
 	*/
 	FZ_FUNCTION FzDisplayList fz_new_display_list_from_page_contents(const FzPage& page);
@@ -4476,7 +4476,7 @@ namespace mupdf
 	FZ_FUNCTION FzDisplayList fz_new_display_list_from_page_number(const FzDocument& doc, int number);
 
 	/** Class-aware wrapper for `::fz_new_display_list_from_svg()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_display_list_from_svg(::fz_buffer *buf, const char *base_uri, ::fz_archive *dir)` => `(fz_display_list *, float w, float h)`
 	 */
@@ -4486,7 +4486,7 @@ namespace mupdf
 	FZ_FUNCTION FzDisplayList fz_new_display_list_from_svg(const FzBuffer& buf, const char *base_uri, const FzArchive& dir, float *w, float *h);
 
 	/** Class-aware wrapper for `::fz_new_display_list_from_svg_xml()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_display_list_from_svg_xml(::fz_xml_doc *xmldoc, ::fz_xml *xml, const char *base_uri, ::fz_archive *dir)` => `(fz_display_list *, float w, float h)`
 	 */
@@ -4539,7 +4539,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_dom_node()`.  */
 	/**
 		Create a new dom node.
-	
+
 		This will NOT be linked in yet.
 	*/
 	FZ_FUNCTION FzXml fz_new_dom_node(const FzXml& dom, const char *tag);
@@ -4547,7 +4547,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_dom_text_node()`.  */
 	/**
 		Create a new dom text node.
-	
+
 		This will NOT be linked in yet.
 	*/
 	FZ_FUNCTION FzXml fz_new_dom_text_node(const FzXml& dom, const char *text);
@@ -4555,13 +4555,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_draw_device()`.  */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
 	*/
@@ -4573,16 +4573,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_draw_device_with_bbox()`.  */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
-	
+
 		clip: Bounding box to restrict any marking operations of the
 		draw device.
 	*/
@@ -4591,37 +4591,37 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_draw_device_with_bbox_proof()`.  */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
-	
+
 		clip: Bounding box to restrict any marking operations of the
 		draw device.
-	
+
 		proof_cs: Color space to render to prior to mapping to color
 		space defined by pixmap.
 	*/
 	FZ_FUNCTION FzDevice fz_new_draw_device_with_bbox_proof(const FzMatrix& transform, const FzPixmap& dest, FzIrect& clip, const FzColorspace& cs);
 
 	/** Class-aware wrapper for `::fz_new_draw_device_with_options()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_draw_device_with_options(const ::fz_draw_options *options, ::fz_rect mediabox, ::fz_pixmap **pixmap)` => `(fz_device *)`
 	 */
 	/**
 		Create a new pixmap and draw device, using the specified options.
-	
+
 		options: Options to configure the draw device, and choose the
 		resolution and colorspace.
-	
+
 		mediabox: The bounds of the page in points.
-	
+
 		pixmap: An out parameter containing the newly created pixmap.
 	*/
 	FZ_FUNCTION FzDevice fz_new_draw_device_with_options(FzDrawOptions& options, const FzRect& mediabox, FzPixmap& pixmap);
@@ -4629,16 +4629,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_draw_device_with_proof()`.  */
 	/**
 		Create a device to draw on a pixmap.
-	
+
 		dest: Target pixmap for the draw device. See fz_new_pixmap*
 		for how to obtain a pixmap. The pixmap is not cleared by the
 		draw device, see fz_clear_pixmap* for how to clear it prior to
 		calling fz_new_draw_device. Free the device by calling
 		fz_drop_device.
-	
+
 		transform: Transform from user space in points to device space
 		in pixels.
-	
+
 		proof_cs: Intermediate color space to map though when mapping to
 		color space defined by pixmap.
 	*/
@@ -4651,17 +4651,17 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_font_from_buffer()`.  */
 	/**
 		Create a new font from a font file in a fz_buffer.
-	
+
 		Fonts created in this way, will be eligible for embedding by default.
-	
+
 		name: Name of font (leave NULL to use name from font).
-	
+
 		buffer: Buffer to load from.
-	
+
 		index: Which font from the file to load (0 for default).
-	
+
 		use_glyph_box: 1 if we should use the glyph bbox, 0 otherwise.
-	
+
 		Returns new font handle, or throws exception on error.
 	*/
 	FZ_FUNCTION FzFont fz_new_font_from_buffer(const char *name, const FzBuffer& buffer, int index, int use_glyph_bbox);
@@ -4669,17 +4669,17 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_font_from_file()`.  */
 	/**
 		Create a new font from a font file.
-	
+
 		Fonts created in this way, will be eligible for embedding by default.
-	
+
 		name: Name of font (leave NULL to use name from font).
-	
+
 		path: File path to load from.
-	
+
 		index: Which font from the file to load (0 for default).
-	
+
 		use_glyph_box: 1 if we should use the glyph bbox, 0 otherwise.
-	
+
 		Returns new font handle, or throws exception on error.
 	*/
 	FZ_FUNCTION FzFont fz_new_font_from_file(const char *name, const char *path, int index, int use_glyph_bbox);
@@ -4687,19 +4687,19 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_font_from_memory()`.  */
 	/**
 		Create a new font from a font file in memory.
-	
+
 		Fonts created in this way, will be eligible for embedding by default.
-	
+
 		name: Name of font (leave NULL to use name from font).
-	
+
 		data: Pointer to the font file data.
-	
+
 		len: Length of the font file data.
-	
+
 		index: Which font from the file to load (0 for default).
-	
+
 		use_glyph_box: 1 if we should use the glyph bbox, 0 otherwise.
-	
+
 		Returns new font handle, or throws exception on error.
 	*/
 	FZ_FUNCTION FzFont fz_new_font_from_memory(const char *name, const unsigned char *data, int len, int index, int use_glyph_bbox);
@@ -4718,16 +4718,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_icc_colorspace()`.  */
 	/**
 		Create a colorspace from an ICC profile supplied in buf.
-	
+
 		Limited checking is done to ensure that the colorspace type is
 		appropriate for the supplied ICC profile.
-	
+
 		An additional reference is taken to buf, which will be dropped
 		on destruction. Ownership is NOT passed in.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace fz_new_icc_colorspace(enum fz_colorspace_type type, int flags, const char *name, const FzBuffer& buf);
@@ -4744,32 +4744,32 @@ namespace mupdf
 	/**
 		Create an image based on
 		the data in the supplied compressed buffer.
-	
+
 		w,h: Width and height of the created image.
-	
+
 		bpc: Bits per component.
-	
+
 		colorspace: The colorspace (determines the number of components,
 		and any color conversions required while decoding).
-	
+
 		xres, yres: The X and Y resolutions respectively.
-	
+
 		interpolate: 1 if interpolation should be used when decoding
 		this image, 0 otherwise.
-	
+
 		imagemask: 1 if this is an imagemask (i.e. transparency bitmap
 		mask), 0 otherwise.
-	
+
 		decode: NULL, or a pointer to to a decode array. The default
 		decode array is [0 1] (repeated n times, for n color components).
-	
+
 		colorkey: NULL, or a pointer to a colorkey array. The default
 		colorkey array is [0 255] (repeated n times, for n color
 		components).
-	
+
 		buffer: Buffer of compressed data and compression parameters.
 		Ownership of this reference is passed in.
-	
+
 		mask: NULL, or another image to use as a mask for this one.
 		A new reference is taken to this image. Supplying a masked
 		image as a mask to another image is illegal!
@@ -4785,12 +4785,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_image_from_display_list()`.  */
 	/**
 		Create a new image from a display list.
-	
+
 		w, h: The conceptual width/height of the image.
-	
+
 		transform: The matrix that needs to be applied to the given
 		list to make it render to the unit square.
-	
+
 		list: The display list.
 	*/
 	FZ_FUNCTION FzImage fz_new_image_from_display_list(float w, float h, const FzDisplayList& list);
@@ -4807,10 +4807,10 @@ namespace mupdf
 	/**
 		Create an image from the given
 		pixmap.
-	
+
 		pixmap: The pixmap to base the image upon. A new reference
 		to this is taken.
-	
+
 		mask: NULL, or another image to use as a mask for this one.
 		A new reference is taken to this image. Supplying a masked
 		image as a mask to another image is illegal!
@@ -4833,44 +4833,44 @@ namespace mupdf
 	/**
 		Internal function to make a new fz_image structure
 		for a derived class.
-	
+
 		w,h: Width and height of the created image.
-	
+
 		bpc: Bits per component.
-	
+
 		colorspace: The colorspace (determines the number of components,
 		and any color conversions required while decoding).
-	
+
 		xres, yres: The X and Y resolutions respectively.
-	
+
 		interpolate: 1 if interpolation should be used when decoding
 		this image, 0 otherwise.
-	
+
 		imagemask: 1 if this is an imagemask (i.e. transparent), 0
 		otherwise.
-	
+
 		decode: NULL, or a pointer to to a decode array. The default
 		decode array is [0 1] (repeated n times, for n color components).
-	
+
 		colorkey: NULL, or a pointer to a colorkey array. The default
 		colorkey array is [0 255] (repeated n times, for n color
 		components).
-	
+
 		mask: NULL, or another image to use as a mask for this one.
 		A new reference is taken to this image. Supplying a masked
 		image as a mask to another image is illegal!
-	
+
 		size: The size of the required allocated structure (the size of
 		the derived structure).
-	
+
 		get: The function to be called to obtain a decoded pixmap.
-	
+
 		get_size: The function to be called to return the storage size
 		used by this image.
-	
+
 		drop: The function to be called to dispose of this image once
 		the last reference is dropped.
-	
+
 		Returns a pointer to an allocated structure of the required size,
 		with the first sizeof(fz_image) bytes initialised as appropriate
 		given the supplied parameters, and the other bytes set to zero.
@@ -4880,20 +4880,20 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_indexed_colorspace()`.  */
 	/**
 		Create an indexed colorspace.
-	
+
 		The supplied lookup table is high palette entries long. Each
 		entry is n bytes long, where n is given by the number of
 		colorants in the base colorspace, one byte per colorant.
-	
+
 		Ownership of lookup is passed it; it will be freed on
 		destruction, so must be heap allocated.
-	
+
 		The colorspace will keep an additional reference to the base
 		colorspace that will be dropped on destruction.
-	
+
 		The returned reference should be dropped when it is finished
 		with.
-	
+
 		Colorspaces are immutable once created.
 	*/
 	FZ_FUNCTION FzColorspace fz_new_indexed_colorspace(const FzColorspace& base, int high, unsigned char *lookup);
@@ -4912,10 +4912,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_link_of_size()`.  */
 	/**
 		Create a new link record.
-	
+
 		next is set to NULL with the expectation that the caller will
 		handle the linked list setup. Internal function.
-	
+
 		Different document types will be implemented by deriving from
 		fz_link. This macro allocates such derived structures, and
 		initialises the base sections.
@@ -4925,14 +4925,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_list_device()`.  */
 	/**
 		Create a rendering device for a display list.
-	
+
 		When the device is rendering a page it will populate the
 		display list with drawing commands (text, images, etc.). The
 		display list can later be reused to render a page many times
 		without having to re-interpret the page from the document file
 		for each rendering. Once the device is no longer needed, free
 		it with fz_drop_device.
-	
+
 		list: A display list that the list device takes a reference to.
 	*/
 	FZ_FUNCTION FzDevice fz_new_list_device(const FzDisplayList& list);
@@ -4958,43 +4958,43 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_ocr_device()`.  */
 	/**
 		Create a device to OCR the text on the page.
-	
+
 		Renders the page internally to a bitmap that is then OCRd. Text
 		is then forwarded onto the target device.
-	
+
 		target: The target device to receive the OCRd text.
-	
+
 		ctm: The transform to apply to the mediabox to get the size for
 		the rendered page image. Also used to calculate the resolution
 		for the page image. In general, this will be the same as the CTM
 		that you pass to fz_run_page (or fz_run_display_list) to feed
 		this device.
-	
+
 		mediabox: The mediabox (in points). Combined with the CTM to get
 		the bounds of the pixmap used internally for the rendered page
 		image.
-	
+
 		with_list: If with_list is false, then all non-text operations
 		are forwarded instantly to the target device. This results in
 		the target device seeing all NON-text operations, followed by
 		all the text operations (derived from OCR).
-	
+
 		If with_list is true, then all the marking operations are
 		collated into a display list which is then replayed to the
 		target device at the end.
-	
+
 		language: NULL (for "eng"), or a pointer to a string to describe
 		the languages/scripts that should be used for OCR (e.g.
 		"eng,ara").
-	
+
 		datadir: NULL (for ""), or a pointer to a path string otherwise
 		provided to Tesseract in the TESSDATA_PREFIX environment variable.
-	
+
 		progress: NULL, or function to be called periodically to indicate
 		progress. Return 0 to continue, or 1 to cancel. progress_arg is
 		returned as the void *. The int is a value between 0 and 100 to
 		indicate progress.
-	
+
 		progress_arg: A void * value to be parrotted back to the progress
 		function.
 	*/
@@ -5122,18 +5122,18 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_pixmap()`.  */
 	/**
 		Create a new pixmap, with its origin at (0,0)
-	
+
 		cs: The colorspace to use for the pixmap, or NULL for an alpha
 		plane/mask.
-	
+
 		w: The width of the pixmap (in pixels)
-	
+
 		h: The height of the pixmap (in pixels)
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -5148,7 +5148,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_pixmap_from_display_list()`.  */
 	/**
 		Render the page to a pixmap using the transform and colorspace.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap fz_new_pixmap_from_display_list(const FzDisplayList& list, const FzMatrix& ctm, const FzColorspace& cs, int alpha);
@@ -5156,7 +5156,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_pixmap_from_display_list_with_separations()`.  */
 	/**
 		Render the page contents with control over spot colors.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap fz_new_pixmap_from_display_list_with_separations(const FzDisplayList& list, const FzMatrix& ctm, const FzColorspace& cs, const FzSeparations& seps, int alpha);
@@ -5167,7 +5167,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_pixmap_from_page_contents()`.  */
 	/**
 		Render the page contents without annotations.
-	
+
 		Ownership of the pixmap is returned to the caller.
 	*/
 	FZ_FUNCTION FzPixmap fz_new_pixmap_from_page_contents(const FzPage& page, const FzMatrix& ctm, const FzColorspace& cs, int alpha);
@@ -5189,10 +5189,10 @@ namespace mupdf
 		Create a new pixmap that represents a subarea of the specified
 		pixmap. A reference is taken to this pixmap that will be dropped
 		on destruction.
-	
+
 		The supplied rectangle must be wholly contained within the
 		original pixmap.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -5201,21 +5201,21 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_pixmap_with_bbox()`.  */
 	/**
 		Create a pixmap of a given size, location and pixel format.
-	
+
 		The bounding box specifies the size of the created pixmap and
 		where it will be located. The colorspace determines the number
 		of components per pixel. Alpha is always present. Pixmaps are
 		reference counted, so drop references using fz_drop_pixmap.
-	
+
 		colorspace: Colorspace format used for the created pixmap. The
 		pixmap will keep a reference to the colorspace.
-	
+
 		bbox: Bounding box specifying location/size of created pixmap.
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -5225,23 +5225,23 @@ namespace mupdf
 	/**
 		Create a pixmap of a given size, location and pixel format,
 		using the supplied data block.
-	
+
 		The bounding box specifies the size of the created pixmap and
 		where it will be located. The colorspace determines the number
 		of components per pixel. Alpha is always present. Pixmaps are
 		reference counted, so drop references using fz_drop_pixmap.
-	
+
 		colorspace: Colorspace format used for the created pixmap. The
 		pixmap will keep a reference to the colorspace.
-	
+
 		rect: Bounding box specifying location/size of created pixmap.
-	
+
 		seps: Details of separations.
-	
+
 		alpha: Number of alpha planes (0 or 1).
-	
+
 		samples: The data block to keep the samples in.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure
 		to allocate.
 	*/
@@ -5251,23 +5251,23 @@ namespace mupdf
 	/**
 		Create a new pixmap, with its origin at
 		(0,0) using the supplied data block.
-	
+
 		cs: The colorspace to use for the pixmap, or NULL for an alpha
 		plane/mask.
-	
+
 		w: The width of the pixmap (in pixels)
-	
+
 		h: The height of the pixmap (in pixels)
-	
+
 		seps: Details of separations.
-	
+
 		alpha: 0 for no alpha, 1 for alpha.
-	
+
 		stride: The byte offset from the pixel data in a row to the
 		pixel data in the next row.
-	
+
 		samples: The data block to keep the samples in.
-	
+
 		Returns a pointer to the new pixmap. Throws exception on failure to
 		allocate.
 	*/
@@ -5362,17 +5362,17 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_stext_device()`.  */
 	/**
 		Create a device to extract the text on a page.
-	
+
 		Gather the text on a page into blocks and lines.
-	
+
 		The reading order is taken from the order the text is drawn in
 		the source file, so may not be accurate.
-	
+
 		page: The text page to which content should be added. This will
 		usually be a newly created (empty) text page, but it can be one
 		containing data already (for example when merging multiple
 		pages, or watermarking).
-	
+
 		options: Options to configure the stext device.
 	*/
 	FZ_FUNCTION FzDevice fz_new_stext_device(const FzStextPage& page, FzStextOptions& options);
@@ -5381,33 +5381,33 @@ namespace mupdf
 	/**
 		Create a device to extract the text on a page into an existing
 		fz_stext_page structure.
-	
+
 		Gather the text on a page into blocks and lines.
-	
+
 		The reading order is taken from the order the text is drawn in
 		the source file, so may not be accurate.
-	
+
 		stext_page: The text page to which content should be added. This will
 		usually be a newly created (empty) text page, but it can be one
 		containing data already (for example when merging multiple
 		pages, or watermarking).
-	
+
 		options: Options to configure the stext device.
-	
+
 		The next 2 parameters are copied into the fz_stext_page structure's
 		ids section, so only have to be valid if you expect to interrogate
 		that section later.
-	
+
 		chapter_num: The chapter number that this page came from.
-	
+
 		page_num: The page number that this page came from.
-	
+
 		The final parameter is copied into the fz_stext_page structure's
 		ids section. The mediabox for the enture fz_stext_page is unioned
 		with this, so pass fz_empty_bbox if you don't care about getting
 		a valid value back from the ids section, but you don't want to
 		upset the value in the page->mediabox field.
-	
+
 		mediabox: The mediabox for this page.
 	*/
 	FZ_FUNCTION FzDevice fz_new_stext_device_for_page(const FzStextPage& stext_page, FzStextOptions& opts, int chapter_num, int page_num, const FzRect& mediabox);
@@ -5442,7 +5442,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_store_context()`.  */
 	/**
 		Create a new store inside the context
-	
+
 		max: The maximum size (in bytes) that the store is allowed to
 		grow to. FZ_STORE_UNLIMITED means no limit.
 	*/
@@ -5456,13 +5456,13 @@ namespace mupdf
 	/**
 		Create a new stream object with the given
 		internal state and function pointers.
-	
+
 		state: Internal state (opaque to everything but implementation).
-	
+
 		next: Should provide the next set of bytes (up to max) of stream
 		data. Return the number of bytes read, or EOF when there is no
 		more data.
-	
+
 		drop: Should clean up and free the internal state. May not
 		throw exceptions.
 	*/
@@ -5475,7 +5475,7 @@ namespace mupdf
 	/**
 		Create a new (empty) stroke state structure (with no dash
 		data) and return a reference to it.
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION FzStrokeState fz_new_stroke_state();
@@ -5484,9 +5484,9 @@ namespace mupdf
 	/**
 		Create a new (empty) stroke state structure, with room for
 		dash data of the given length, and return a reference to it.
-	
+
 		len: The number of dash elements to allow room for.
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION FzStrokeState fz_new_stroke_state_with_dash_len(int len);
@@ -5495,34 +5495,34 @@ namespace mupdf
 	/**
 		Create a device that outputs (single page) SVG files to
 		the given output stream.
-	
+
 		Equivalent to fz_new_svg_device_with_id passing id = NULL.
 	*/
 	FZ_FUNCTION FzDevice fz_new_svg_device(const FzOutput& out, float page_width, float page_height, int text_format, int reuse_images);
 
 	/** Class-aware wrapper for `::fz_new_svg_device_with_id()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_svg_device_with_id(::fz_output *out, float page_width, float page_height, int text_format, int reuse_images)` => `(fz_device *, int id)`
 	 */
 	/**
 		Create a device that outputs (single page) SVG files to
 		the given output stream.
-	
+
 		output: The output stream to send the constructed SVG page to.
-	
+
 		page_width, page_height: The page dimensions to use (in points).
-	
+
 		text_format: How to emit text. One of the following values:
 			FZ_SVG_TEXT_AS_TEXT: As <text> elements with possible
 			layout errors and mismatching fonts.
 			FZ_SVG_TEXT_AS_PATH: As <path> elements with exact
 			visual appearance.
-	
+
 		reuse_images: Share image resources using <symbol> definitions.
-	
+
 		resolution: Resolution to use when rasterizing shadings (and such) to images.
-	
+
 		id: ID parameter to keep generated IDs unique across SVG files.
 	*/
 	FZ_FUNCTION FzDevice fz_new_svg_device_with_id(const FzOutput& out, float page_width, float page_height, int text_format, int reuse_images, int *id);
@@ -5539,33 +5539,33 @@ namespace mupdf
 	is non-copyable. */
 
 	/** Class-aware wrapper for `::fz_new_test_device()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_new_test_device(float threshold, int options, ::fz_device *passthrough)` => `(fz_device *, int is_color)`
 	 */
 	/**
 		Create a device to test for features.
-	
+
 		Currently only tests for the presence of non-grayscale colors.
-	
+
 		is_color: Possible values returned:
 			0: Definitely greyscale
 			1: Probably color (all colors were grey, but there
 			were images or shadings in a non grey colorspace).
 			2: Definitely color
-	
+
 		threshold: The difference from grayscale that will be tolerated.
 		Typical values to use are either 0 (be exact) and 0.02 (allow an
 		imperceptible amount of slop).
-	
+
 		options: A set of bitfield options, from the FZ_TEST_OPT set.
-	
+
 		passthrough: A device to pass all calls through to, or NULL.
 		If set, then the test device can both test and pass through to
 		an underlying device (like, say, the display list device). This
 		means that a display list can be created and at the end we'll
 		know if it's colored or not.
-	
+
 		In the absence of a passthrough device, the device will throw
 		an exception to stop page interpretation when color is found.
 	*/
@@ -5574,7 +5574,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_text()`.  */
 	/**
 		Create a new empty fz_text object.
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION FzText fz_new_text();
@@ -5602,7 +5602,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_tree_archive()`.  */
 	/**
 		Create an archive that holds named buffers.
-	
+
 		tree can either be a preformed tree with fz_buffers as values,
 		or it can be NULL for an empty tree.
 	*/
@@ -5611,11 +5611,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_new_type3_font()`.  */
 	/**
 		Create a new (empty) type3 font.
-	
+
 		name: Name of font (or NULL).
-	
+
 		matrix: Font matrix.
-	
+
 		Returns a new font handle, or throws exception on
 		allocation failure.
 	*/
@@ -5668,10 +5668,10 @@ namespace mupdf
 		Open a document file and read its basic structure so pages and
 		objects can be located. MuPDF will try to repair broken
 		documents (without actually changing the file contents).
-	
+
 		The returned fz_document is used when calling most other
 		document related functions.
-	
+
 		filename: a path to a file as it would be given to open(2).
 	*/
 	FZ_FUNCTION FzDocument fz_open_accelerated_document(const char *filename, const char *accel);
@@ -5680,14 +5680,14 @@ namespace mupdf
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream of the document contents.
-	
+
 		accel: NULL, or a stream of the 'accelerator' contents for this document.
-	
+
 		NOTE: The caller retains ownership of 'stream' and 'accel' - the document will
 		take its own references if required.
 	*/
@@ -5697,16 +5697,16 @@ namespace mupdf
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream of the document contents.
-	
+
 		accel: NULL, or a stream of the 'accelerator' contents for this document.
-	
+
 		dir: NULL, or the 'directory context' for the stream contents.
-	
+
 		NOTE: The caller retains ownership of 'stream', 'accel' and 'dir' - the document will
 		take its own references if required.
 	*/
@@ -5736,10 +5736,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_archive()`.  */
 	/**
 		Open a zip or tar archive
-	
+
 		Open a file and identify its archive type based on the archive
 		signature contained inside.
-	
+
 		filename: a path to a file as it would be given to open(2).
 	*/
 	FZ_FUNCTION FzArchive fz_open_archive(const char *filename);
@@ -5747,10 +5747,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_archive_entry()`.  */
 	/**
 		Opens an archive entry as a stream.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
-	
+
 		Throws an exception if a matching entry cannot be found.
 	*/
 	FZ_FUNCTION FzStream fz_open_archive_entry(const FzArchive& arch, const char *name);
@@ -5758,7 +5758,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_archive_with_stream()`.  */
 	/**
 		Open zip or tar archive stream.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
 	*/
@@ -5774,10 +5774,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_buffer()`.  */
 	/**
 		Open a buffer as a stream.
-	
+
 		buf: The buffer to open. Ownership of the buffer is NOT passed
 		in (this function takes its own reference).
-	
+
 		Returns pointer to newly created stream. May throw exceptions on
 		failure to allocate.
 	*/
@@ -5786,9 +5786,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_cfb_archive()`.  */
 	/**
 		Open a cfb file as an archive.
-	
+
 		An exception is thrown if the file is not recognised as a cfb.
-	
+
 		filename: a path to an archive file as it would be given to
 		open(2).
 	*/
@@ -5797,10 +5797,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_cfb_archive_with_stream()`.  */
 	/**
 		Open a cfb file as an archive.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the file is not recognised as a chm.
 	*/
 	FZ_FUNCTION FzArchive fz_open_cfb_archive_with_stream(const FzStream& file);
@@ -5821,19 +5821,19 @@ namespace mupdf
 	/**
 		dctd filter performs DCT (JPEG) decoding of data read
 		from the chained filter.
-	
+
 		color_transform implements the PDF color_transform option
 			use -1 for default behavior
 			use 0 to disable YUV-RGB / YCCK-CMYK transforms
 			use 1 to enable YUV-RGB / YCCK-CMYK transforms
-	
+
 		invert_cmyk implements the necessary inversion for Photoshop CMYK images
 			use 0 if embedded in PDF
 			use 1 if not embedded in PDF
-	
+
 		For subsampling on decode, set l2factor to the log2 of the
 		reduction required (therefore 0 = full size decode).
-	
+
 		jpegtables is an optional stream from which the JPEG tables
 		can be read. Use NULL if not required.
 	*/
@@ -5842,14 +5842,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_directory()`.  */
 	/**
 		Open a directory as if it was an archive.
-	
+
 		A special case where a directory is opened as if it was an
 		archive.
-	
+
 		Note that for directories it is not possible to retrieve the
 		number of entries or list the entries. It is however possible
 		to check if the archive has a particular entry.
-	
+
 		path: a path to a directory as it would be given to opendir(3).
 	*/
 	FZ_FUNCTION FzArchive fz_open_directory(const char *path);
@@ -5859,10 +5859,10 @@ namespace mupdf
 		Open a document file and read its basic structure so pages and
 		objects can be located. MuPDF will try to repair broken
 		documents (without actually changing the file contents).
-	
+
 		The returned fz_document is used when calling most other
 		document related functions.
-	
+
 		filename: a path to a file as it would be given to open(2).
 	*/
 	FZ_FUNCTION FzDocument fz_open_document(const char *filename);
@@ -5877,12 +5877,12 @@ namespace mupdf
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream representing the contents of the document file.
-	
+
 		NOTE: The caller retains ownership of 'stream' - the document will take its
 		own reference if required.
 	*/
@@ -5892,14 +5892,14 @@ namespace mupdf
 	/**
 		Open a document using the specified stream object rather than
 		opening a file on disk.
-	
+
 		magic: a string used to detect document type; either a file name
 		or mime-type.
-	
+
 		stream: a stream representing the contents of the document file.
-	
+
 		dir: a 'directory context' for those filetypes that need it.
-	
+
 		NOTE: The caller retains ownership of 'stream' and 'dir' - the document will
 		take its own references if required.
 	*/
@@ -5916,22 +5916,22 @@ namespace mupdf
 	/**
 		faxd filter performs FAX decoding of data read from
 		the chained filter.
-	
+
 		k: see fax specification (fax default is 0).
-	
+
 		end_of_line: whether we expect end of line markers (fax default
 		is 0).
-	
+
 		encoded_byte_align: whether we align to bytes after each line
 		(fax default is 0).
-	
+
 		columns: how many columns in the image (fax default is 1728).
-	
+
 		rows: 0 for unspecified or the number of rows of data to expect.
-	
+
 		end_of_block: whether we expect end of block markers (fax
 		default is 1).
-	
+
 		black_is_1: determines the polarity of the image (fax default is
 		0).
 	*/
@@ -5940,7 +5940,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_file()`.  */
 	/**
 		Open the named file and wrap it in a stream.
-	
+
 		filename: Path to a file. On non-Windows machines the filename
 		should be exactly as it would be passed to fopen(2). On Windows
 		machines, the path should be UTF-8 encoded so that non-ASCII
@@ -5967,7 +5967,7 @@ namespace mupdf
 	/**
 		flated filter performs LZ77 decoding (inflating) of data read
 		from the chained filter.
-	
+
 		window_bits: How large a decompression window to use. Typically
 		15. A negative number, -n, means to use n bits, but to expect
 		raw data with no header.
@@ -5975,7 +5975,7 @@ namespace mupdf
 	FZ_FUNCTION FzStream fz_open_flated(const FzStream& chain, int window_bits);
 
 	/** Class-aware wrapper for `::fz_open_image_decomp_stream()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_open_image_decomp_stream(::fz_stream *arg_0, ::fz_compression_params *arg_1)` => `(fz_stream *, int l2factor)`
 	 */
@@ -5986,14 +5986,14 @@ namespace mupdf
 	FZ_FUNCTION FzStream fz_open_image_decomp_stream(const FzStream& arg_0, const FzCompressionParams& arg_1, int *l2factor);
 
 	/** Class-aware wrapper for `::fz_open_image_decomp_stream_from_buffer()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_open_image_decomp_stream_from_buffer(::fz_compressed_buffer *arg_0)` => `(fz_stream *, int l2factor)`
 	 */
 	/**
 		Open a stream to read the decompressed version of a buffer,
 		with optional log2 subsampling.
-	
+
 		l2factor = NULL for no subsampling, or a pointer to an integer
 		containing the maximum log2 subsample factor acceptable (0 =
 		none, 1 = halve dimensions, 2 = quarter dimensions etc). If
@@ -6013,12 +6013,12 @@ namespace mupdf
 	/**
 		Attach a filter to a stream that will store any
 		characters read from the stream into the supplied buffer.
-	
+
 		chain: The underlying stream to leech from.
-	
+
 		buf: The buffer into which the read data should be appended.
 		The buffer will be resized as required.
-	
+
 		Returns pointer to newly created stream. May throw exceptions on
 		failure to allocate.
 	*/
@@ -6027,9 +6027,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_libarchive_archive()`.  */
 	/**
 		Open an archive using libarchive.
-	
+
 		An exception is thrown if the file is not supported by libarchive.
-	
+
 		filename: a path to an archive file as it would be given to
 		open(2).
 	*/
@@ -6038,10 +6038,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_libarchive_archive_with_stream()`.  */
 	/**
 		Open an archive using libarchive.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the stream is not supported by libarchive.
 	*/
 	FZ_FUNCTION FzArchive fz_open_libarchive_archive_with_stream(const FzStream& file);
@@ -6050,7 +6050,7 @@ namespace mupdf
 	/**
 		libarchived filter performs generic compressed decoding of data
 		in any format understood by libarchive from the chained filter.
-	
+
 		This will throw an exception if libarchive is not built in, or
 		if the compression format is not recognised.
 	*/
@@ -6060,16 +6060,16 @@ namespace mupdf
 	/**
 		lzwd filter performs LZW decoding of data read from the chained
 		filter.
-	
+
 		early_change: (Default 1) specifies whether to change codes 1
 		bit early.
-	
+
 		min_bits: (Default 9) specifies the minimum number of bits to
 		use.
-	
+
 		reverse_bits: (Default 0) allows for compatibility with gif and
 		old style tiffs (1).
-	
+
 		old_tiff: (Default 0) allows for different handling of the clear
 		code, as found in old style tiffs.
 	*/
@@ -6078,12 +6078,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_memory()`.  */
 	/**
 		Open a block of memory as a stream.
-	
+
 		data: Pointer to start of data block. Ownership of the data
 		block is NOT passed in.
-	
+
 		len: Number of bytes in data block.
-	
+
 		Returns pointer to newly created stream. May throw exceptions on
 		failure to allocate.
 	*/
@@ -6100,13 +6100,13 @@ namespace mupdf
 	/**
 		predict filter performs pixel prediction on data read from
 		the chained filter.
-	
+
 		predictor: 1 = copy, 2 = tiff, other = inline PNG predictor
-	
+
 		columns: width of image in pixels
-	
+
 		colors: number of components.
-	
+
 		bpc: bits per component (typically 8)
 	*/
 	FZ_FUNCTION FzStream fz_open_predict(const FzStream& chain, int predictor, int columns, int colors, int bpc);
@@ -6152,10 +6152,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_tar_archive()`.  */
 	/**
 		Open a tar archive file.
-	
+
 		An exception is thrown if the file is not a tar archive as
 		indicated by the presence of a tar signature.
-	
+
 		filename: a path to a tar archive file as it would be given to
 		open(2).
 	*/
@@ -6164,13 +6164,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_tar_archive_with_stream()`.  */
 	/**
 		Open a tar archive stream.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the stream is not a tar archive as
 		indicated by the presence of a tar signature.
-	
+
 	*/
 	FZ_FUNCTION FzArchive fz_open_tar_archive_with_stream(const FzStream& file);
 
@@ -6184,10 +6184,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_zip_archive()`.  */
 	/**
 		Open a zip archive file.
-	
+
 		An exception is thrown if the file is not a zip archive as
 		indicated by the presence of a zip signature.
-	
+
 		filename: a path to a zip archive file as it would be given to
 		open(2).
 	*/
@@ -6202,13 +6202,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_open_zip_archive_with_stream()`.  */
 	/**
 		Open a zip archive stream.
-	
+
 		Open an archive using a seekable stream object rather than
 		opening a file or directory on disk.
-	
+
 		An exception is thrown if the stream is not a zip archive as
 		indicated by the presence of a zip signature.
-	
+
 	*/
 	FZ_FUNCTION FzArchive fz_open_zip_archive_with_stream(const FzStream& file);
 
@@ -6224,20 +6224,20 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_opt_from_list()`.  */
 	/**
 		Return the index of a (case-insensitive) option within an optlist.
-	
+
 		For instance for optlist = "Foo|Bar|Baz", and  opt = "bar",
 		this would return 1.
-	
+
 		If the optlist ends with "|*" then that is a catch all case and
 		matches all options allowing the caller to process it itself.
 		fz_optarg will be set to point to the option, and the return
 		value will be the index of the '*' option within that list.
-	
+
 		If an optlist entry ends with ':' (e.g. "Foo:") then that option
 		may have suboptions appended to it (for example "JPG:80") and
 		fz_optarg will be set to point at "80". Otherwise fz_optarg will
 		be set to NULL.
-	
+
 		In the event of no-match found, prints an error and returns -1.
 	*/
 	FZ_FUNCTION int fz_opt_from_list(char *opt, const char *optlist);
@@ -6246,7 +6246,7 @@ namespace mupdf
 	/**
 		Check to see if an option, a, from a string matches a reference
 		option, b.
-	
+
 		(i.e. a could be 'foo' or 'foo,bar...' etc, but b can only be
 		'foo'.)
 	*/
@@ -6263,7 +6263,7 @@ namespace mupdf
 	/**
 		Look a glyph up from a font, and return the outline of the
 		glyph using the given transform.
-	
+
 		The caller owns the returned path, and so is responsible for
 		ensuring that it eventually gets dropped.
 	*/
@@ -6272,7 +6272,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_outline_iterator_delete()`.  */
 	/**
 		Delete the current item.
-	
+
 		This implicitly moves us to the 'next' item, and the return code is as for fz_outline_iterator_next.
 	*/
 	FZ_FUNCTION int fz_outline_iterator_delete(const FzOutlineIterator& iter);
@@ -6287,7 +6287,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_outline_iterator_item()`.  */
 	/**
 		Call to get the current outline item.
-	
+
 		Can return NULL. The item is only valid until the next call.
 	*/
 	FZ_FUNCTION FzOutlineItem fz_outline_iterator_item(const FzOutlineIterator& iter);
@@ -6295,7 +6295,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_outline_iterator_next()`.  */
 	/**
 		Calls to move the iterator position.
-	
+
 		A negative return value means we could not move as requested. Otherwise:
 		0 = the final position has a valid item.
 		1 = not a valid item, but we can insert an item here.
@@ -6330,7 +6330,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_overlaps_rect()`.  */
 	/**
 		Test rectangle overlap.
-	
+
 		Returns true if the area of the overlap is
 		non zero.
 	*/
@@ -6342,29 +6342,29 @@ namespace mupdf
 		To minimise the size of paths, this function allows them to be
 		packed into a buffer with other information. Paths can be used
 		interchangeably regardless of how they are packed.
-	
+
 		pack: Pointer to a block of data to pack the path into. Should
 		be aligned by the caller to the same alignment as required for
 		a fz_path pointer.
-	
+
 		path: The path to pack.
-	
+
 		Returns the number of bytes within the block used. Callers can
 		access the packed path data by casting the value of pack on
 		entry to be a fz_path *.
-	
+
 		Throws exceptions on failure to allocate.
-	
+
 		Implementation details: Paths can be 'unpacked', 'flat', or
 		'open'. Standard paths, as created are 'unpacked'. Paths
 		will be packed as 'flat', unless they are too large
 		(where large indicates that they exceed some private
 		implementation defined limits, currently including having
 		more than 256 coordinates or commands).
-	
+
 		Large paths are 'open' packed as a header into the given block,
 		plus pointers to other data blocks.
-	
+
 		Users should not have to care about whether paths are 'open'
 		or 'flat' packed. Simply pack a path (if required), and then
 		forget about the details.
@@ -6392,19 +6392,19 @@ namespace mupdf
 	FZ_FUNCTION int fz_page_number_from_location(const FzDocument& doc, const FzLocation& loc);
 
 	/** Class-aware wrapper for `::fz_page_presentation()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_page_presentation(::fz_page *page, ::fz_transition *transition)` => `(fz_transition *, float duration)`
 	 */
 	/**
 		Get the presentation details for a given page.
-	
+
 		transition: A pointer to a transition struct to fill out.
-	
+
 		duration: A pointer to a place to set the page duration in
 		seconds. Will be set to 0 if no transition is specified for the
 		page.
-	
+
 		Returns: a pointer to the transition structure, or NULL if there
 		is no transition specified for the page.
 	*/
@@ -6416,7 +6416,7 @@ namespace mupdf
 		This will be NULL, unless the format specifically supports
 		separations (such as PDF files). May be NULL even
 		so, if there are no separations on a page.
-	
+
 		Returns a reference that must be dropped.
 	*/
 	FZ_FUNCTION FzSeparations fz_page_separations(const FzPage& page);
@@ -6428,29 +6428,29 @@ namespace mupdf
 	FZ_FUNCTION int fz_page_uses_overprint(const FzPage& page);
 
 	/** Class-aware wrapper for `::fz_paint_shade()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
-		`fz_paint_shade(::fz_shade *shade, ::fz_colorspace *override_cs, ::fz_matrix ctm, ::fz_pixmap *dest, ::fz_color_params color_params, ::fz_irect bbox, const ::fz_overprint *eop, ::fz_shade_color_cache **cache)` => 
+		`fz_paint_shade(::fz_shade *shade, ::fz_colorspace *override_cs, ::fz_matrix ctm, ::fz_pixmap *dest, ::fz_color_params color_params, ::fz_irect bbox, const ::fz_overprint *eop, ::fz_shade_color_cache **cache)` =>
 	 */
 	/**
 		Render a shade to a given pixmap.
-	
+
 		shade: The shade to paint.
-	
+
 		override_cs: NULL, or colorspace to override the shades
 		inbuilt colorspace.
-	
+
 		ctm: The transform to apply.
-	
+
 		dest: The pixmap to render into.
-	
+
 		color_params: The color rendering settings
-	
+
 		bbox: Pointer to a bounding box to limit the rendering
 		of the shade.
-	
+
 		eop: NULL, or pointer to overprint bitmap.
-	
+
 		cache: *cache is used to cache color information. If *cache is NULL it
 		is set to point to a new fz_shade_color_cache. If cache is NULL it is
 		ignored.
@@ -6472,7 +6472,7 @@ namespace mupdf
 	is non-copyable. */
 
 	/** Class-aware wrapper for `::fz_parse_page_range()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_parse_page_range(const char *s, int n)` => `(const char *, int a, int b)`
 	 */
@@ -6489,9 +6489,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_parse_pdfocr_options()`.  */
 	/**
 		Parse PDFOCR options.
-	
+
 		Currently defined options and values are as follows:
-	
+
 			compression=none: No compression
 			compression=flate: Flate compression
 			strip-height=n: Strip height (default 16)
@@ -6516,7 +6516,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_parse_xml()`.  */
 	/**
 		Parse the contents of buffer into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
 	*/
 	FZ_FUNCTION FzXml fz_parse_xml(const FzBuffer& buf, int preserve_white);
@@ -6524,7 +6524,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_parse_xml_archive_entry()`.  */
 	/**
 		Parse the contents of an archive entry into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
 	*/
 	FZ_FUNCTION FzXml fz_parse_xml_archive_entry(const FzArchive& dir, const char *filename, int preserve_white);
@@ -6539,7 +6539,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_parse_xml_stream()`.  */
 	/**
 		Parse the contents of buffer into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
 	*/
 	FZ_FUNCTION FzXml fz_parse_xml_stream(const FzStream& stream, int preserve_white);
@@ -6547,7 +6547,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_path_is_closed()`.  */
 	/**
 		Check whether a given path has all its segments closed.
-	
+
 		This includes both explicit closepaths, and where segments are implicitly
 		closed by segments that end where they started.
 	*/
@@ -6563,7 +6563,7 @@ namespace mupdf
 	/**
 		Check whether a given path, under the given transform
 		is an axis-aligned rectangle.
-	
+
 		We accept zero width or height rectangles, so
 		"move 100, 100; line 200, 100" would count as
 		a rectangle too.
@@ -6574,11 +6574,11 @@ namespace mupdf
 	/**
 		Check whether a given path, under the given transform
 		is an axis-aligned rectangle.
-	
+
 		We accept zero width or height rectangles, so
 		"move 100, 100; line 200, 100" would count as
 		a rectangle too.
-	
+
 		bounds = NULL, or place to return the rectangle
 		bounds if the path is a rectangle.
 	*/
@@ -6587,9 +6587,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pcl_preset()`.  */
 	/**
 		Initialize PCL option struct for a given preset.
-	
+
 		Currently defined presets include:
-	
+
 			generic	Generic PCL printer
 			ljet4	HP DeskJet
 			dj500	HP DeskJet 500
@@ -6618,9 +6618,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_peek_byte()`.  */
 	/**
 		Peek at the next byte in a stream.
-	
+
 		stm: The stream to peek at.
-	
+
 		Returns -1 for EOF, or the next byte that will be read.
 	*/
 	FZ_FUNCTION int fz_peek_byte(const FzStream& stm);
@@ -6628,7 +6628,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pixmap_alpha()`.  */
 	/**
 		Return the number of alpha planes in a pixmap.
-	
+
 		Returns the number of alphas. Does not throw exceptions.
 	*/
 	FZ_FUNCTION int fz_pixmap_alpha(const FzPixmap& pix);
@@ -6642,7 +6642,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pixmap_colorants()`.  */
 	/**
 		Return the number of colorants in a pixmap.
-	
+
 		Returns the number of colorants (components, less any spots and
 		alpha).
 	*/
@@ -6651,7 +6651,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pixmap_colorspace()`.  */
 	/**
 		Return the colorspace of a pixmap
-	
+
 		Returns colorspace.
 	*/
 	FZ_FUNCTION FzColorspace fz_pixmap_colorspace(const FzPixmap& pix);
@@ -6659,7 +6659,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pixmap_components()`.  */
 	/**
 		Return the number of components in a pixmap.
-	
+
 		Returns the number of components (including spots and alpha).
 	*/
 	FZ_FUNCTION int fz_pixmap_components(const FzPixmap& pix);
@@ -6673,10 +6673,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pixmap_image_tile()`.  */
 	/**
 		Retrieve the underlying fz_pixmap for an image.
-	
+
 		Returns a pointer to the underlying fz_pixmap for an image,
 		or NULL if this image is not based upon an fz_pixmap.
-	
+
 		No reference is returned. Lifespan is limited to that of
 		the image itself. If required, use fz_keep_pixmap to take
 		a reference to keep it longer.
@@ -6686,7 +6686,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pixmap_samples()`.  */
 	/**
 		Returns a pointer to the pixel data of a pixmap.
-	
+
 		Returns the pointer.
 	*/
 	FZ_FUNCTION unsigned char *fz_pixmap_samples(const FzPixmap& pix);
@@ -6704,7 +6704,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pixmap_spots()`.  */
 	/**
 		Return the number of spots in a pixmap.
-	
+
 		Returns the number of spots (components, less colorants and
 		alpha). Does not throw exceptions.
 	*/
@@ -6748,13 +6748,13 @@ namespace mupdf
 	FZ_FUNCTION void *fz_pool_alloc(const FzPool& pool, size_t size);
 
 	/** Class-aware wrapper for `::fz_pool_array_append()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_pool_array_append(::fz_pool_array *arr)` => `(void *, size_t idx)`
 	 */
 	/**
 		Append an element to the end of the array.
-	
+
 		Returns a pointer to the new element (initially all 0's), and
 		(optionally) the index of that element.
 	*/
@@ -6775,7 +6775,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pool_size()`.  */
 	/**
 		The current size of the pool.
-	
+
 		The number of bytes of storage currently allocated to the pool.
 		This is the total of the storage used for the blocks making
 		up the pool, rather then total of the allocated blocks so far,
@@ -6796,13 +6796,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_post_scale()`.  */
 	/**
 		Scale a matrix by postmultiplication.
-	
+
 		m: Pointer to the matrix to scale
-	
+
 		sx, sy: Scaling factors along the X- and Y-axes. A scaling
 		factor of 1.0 will not cause any scaling along the relevant
 		axis.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_post_scale(const FzMatrix& m, float sx, float sy);
@@ -6810,15 +6810,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pre_rotate()`.  */
 	/**
 		Rotate a transformation by premultiplying.
-	
+
 		The premultiplied matrix is of the form
 		[ cos(deg) sin(deg) -sin(deg) cos(deg) 0 0 ].
-	
+
 		m: Pointer to matrix to premultiply.
-	
+
 		degrees: Degrees of counter clockwise rotation. Values less
 		than zero and greater than 360 are handled as expected.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_rotate(const FzMatrix& m, float degrees);
@@ -6826,13 +6826,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pre_scale()`.  */
 	/**
 		Scale a matrix by premultiplication.
-	
+
 		m: Pointer to the matrix to scale
-	
+
 		sx, sy: Scaling factors along the X- and Y-axes. A scaling
 		factor of 1.0 will not cause any scaling along the relevant
 		axis.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_scale(const FzMatrix& m, float sx, float sy);
@@ -6840,14 +6840,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pre_shear()`.  */
 	/**
 		Premultiply a matrix with a shearing matrix.
-	
+
 		The shearing matrix is of the form [ 1 sy sx 1 0 0 ].
-	
+
 		m: pointer to matrix to premultiply
-	
+
 		sx, sy: Shearing factors. A shearing factor of 0.0 will not
 		cause any shearing along the relevant axis.
-	
+
 		Returns m (updated).
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_shear(const FzMatrix& m, float sx, float sy);
@@ -6855,13 +6855,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_pre_translate()`.  */
 	/**
 		Translate a matrix by premultiplication.
-	
+
 		m: The matrix to translate
-	
+
 		tx, ty: Translation distances along the X- and Y-axes. A
 		translation of 0 will not cause any translation along the
 		relevant axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION FzMatrix fz_pre_translate(const FzMatrix& m, float tx, float ty);
@@ -6870,7 +6870,7 @@ namespace mupdf
 	/**
 		Force a type3 font to cache the displaylist for a given glyph
 		id.
-	
+
 		This caching can involve reading the underlying file, so must
 		happen ahead of time, so we aren't suddenly forced to read the
 		file while playing a displaylist back.
@@ -6933,10 +6933,10 @@ namespace mupdf
 		provided callback for each page for processing. If the callback
 		returns non-NULL then the iteration stops and that value is returned
 		to the called of fz_process_opened_pages().
-	
+
 		The state pointer provided to fz_process_opened_pages() is
 		passed on to the callback but is owned by the caller.
-	
+
 		Returns the first non-NULL value returned by the callback,
 		or NULL if the callback returned NULL for all opened pages.
 	*/
@@ -6948,19 +6948,19 @@ namespace mupdf
 		decomposes the shading to a mesh (even ones that are not
 		natively meshes, such as linear or radial shadings), and
 		processes triangles from those meshes.
-	
+
 		shade: The shade to process.
-	
+
 		ctm: The transform to use
-	
+
 		prepare: Callback function to 'prepare' each vertex.
 		This function is passed an array of floats, and populates
 		a fz_vertex structure.
-	
+
 		process: This function is passed 3 pointers to vertex
 		structures, and actually performs the processing (typically
 		filling the area between the vertices).
-	
+
 		process_arg: An opaque argument passed through from caller
 		to callback functions.
 	*/
@@ -6991,13 +6991,13 @@ namespace mupdf
 	/**
 		Append a 'quadto' command to an open path. (For a
 		quadratic bezier).
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: The control coordinates for the quadratic curve.
-	
+
 		x1, y1: The end coordinates for the quadratic curve.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -7009,13 +7009,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_read()`.  */
 	/**
 		Read from a stream into a given data block.
-	
+
 		stm: The stream to read from.
-	
+
 		data: The data block to read into.
-	
+
 		len: The length of the data block (in bytes).
-	
+
 		Returns the number of bytes read. May throw exceptions.
 	*/
 	FZ_FUNCTION size_t fz_read(const FzStream& stm, unsigned char *data, size_t len);
@@ -7023,11 +7023,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_read_all()`.  */
 	/**
 		Read all of a stream into a buffer.
-	
+
 		stm: The stream to read from
-	
+
 		initial: Suggested initial size for the buffer.
-	
+
 		Returns a buffer created from reading from the stream. May throw
 		exceptions on failure to allocate.
 	*/
@@ -7037,16 +7037,16 @@ namespace mupdf
 	/**
 		Reads all bytes in an archive entry
 		into a buffer.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
-	
+
 		Throws an exception if a matching entry cannot be found.
 	*/
 	FZ_FUNCTION FzBuffer fz_read_archive_entry(const FzArchive& arch, const char *name);
 
 	/** Class-aware wrapper for `::fz_read_best()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_read_best(::fz_stream *stm, size_t initial, size_t worst_case)` => `(fz_buffer *, int truncated)`
 	 */
@@ -7054,16 +7054,16 @@ namespace mupdf
 		Attempt to read a stream into a buffer. If truncated
 		is NULL behaves as fz_read_all, sets a truncated flag in case of
 		error.
-	
+
 		stm: The stream to read from.
-	
+
 		initial: Suggested initial size for the buffer.
-	
+
 		truncated: Flag to store success/failure indication in.
-	
+
 		worst_case: 0 for unknown, otherwise an upper bound for the
 		size of the stream.
-	
+
 		Returns a buffer created from reading from the stream.
 	*/
 	FZ_FUNCTION FzBuffer fz_read_best(const FzStream& stm, size_t initial, int *truncated, size_t worst_case);
@@ -7072,12 +7072,12 @@ namespace mupdf
 	/**
 		Read the next n bits from a stream (assumed to
 		be packed most significant bit first).
-	
+
 		stm: The stream to read from.
-	
+
 		n: The number of bits to read, between 1 and 8*sizeof(int)
 		inclusive.
-	
+
 		Returns -1 for EOF, or the required number of bits.
 	*/
 	FZ_FUNCTION unsigned int fz_read_bits(const FzStream& stm, int n);
@@ -7085,9 +7085,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_read_byte()`.  */
 	/**
 		Read the next byte from a stream.
-	
+
 		stm: The stream t read from.
-	
+
 		Returns -1 for end of stream, or the next byte. May
 		throw exceptions.
 	*/
@@ -7128,7 +7128,7 @@ namespace mupdf
 		Read a line from stream into the buffer until either a
 		terminating newline or EOF, which it replaces with a null byte
 		('\0').
-	
+
 		Returns buf on success, and NULL when end of file occurs while
 		no characters have been read.
 	*/
@@ -7138,12 +7138,12 @@ namespace mupdf
 	/**
 		Read the next n bits from a stream (assumed to
 		be packed least significant bit first).
-	
+
 		stm: The stream to read from.
-	
+
 		n: The number of bits to read, between 1 and 8*sizeof(int)
 		inclusive.
-	
+
 		Returns (unsigned int)-1 for EOF, or the required number of bits.
 	*/
 	FZ_FUNCTION unsigned int fz_read_rbits(const FzStream& stm, int n);
@@ -7151,7 +7151,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_read_rune()`.  */
 	/**
 		Read a utf-8 rune from a stream.
-	
+
 		In the event of encountering badly formatted utf-8 codes
 		(such as a leading code with an unexpected number of following
 		codes) no error/exception is given, but undefined values may be
@@ -7171,10 +7171,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_read_uint16()`.  */
 	/**
 		fz_read_[u]int(16|24|32|64)(_le)?
-	
+
 		Read a 16/32/64 bit signed/unsigned integer from stream,
 		in big or little-endian byte orders.
-	
+
 		Throws an exception if EOF is encountered.
 	*/
 	FZ_FUNCTION uint16_t fz_read_uint16(const FzStream& stm);
@@ -7207,7 +7207,7 @@ namespace mupdf
 	/**
 		Read a utf-16 rune from a stream. (little endian and
 		big endian respectively).
-	
+
 		In the event of encountering badly formatted utf-16 codes
 		(mismatched surrogates) no error/exception is given, but
 		undefined values may be returned.
@@ -7219,11 +7219,11 @@ namespace mupdf
 		Reallocates a block of memory to given size. Existing contents
 		up to min(old_size,new_size) are maintained. The rest of the
 		block is uninitialised.
-	
+
 		fz_realloc(ctx, NULL, size) behaves like fz_malloc(ctx, size).
-	
+
 		fz_realloc(ctx, p, 0); behaves like fz_free(ctx, p).
-	
+
 		Throws exception in the event of failure to allocate.
 	*/
 	FZ_FUNCTION void *fz_realloc(void *p, size_t size);
@@ -7268,14 +7268,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_rect_from_irect()`.  */
 	/**
 		Convert a bbox into a rect.
-	
+
 		For our purposes, a rect can represent all the values we meet in
 		a bbox, so nothing can go wrong.
-	
+
 		rect: A place to store the generated rectangle.
-	
+
 		bbox: The bbox to convert.
-	
+
 		Returns rect (updated).
 	*/
 	FZ_FUNCTION FzRect fz_rect_from_irect(const FzIrect& bbox);
@@ -7289,20 +7289,20 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_rectto()`.  */
 	/**
 		Append a 'rectto' command to an open path.
-	
+
 		The rectangle is equivalent to:
 			moveto x0 y0
 			lineto x1 y0
 			lineto x1 y1
 			lineto x0 y1
 			closepath
-	
+
 		path: The path to modify.
-	
+
 		x0, y0: First corner of the rectangle.
-	
+
 		x1, y1: Second corner of the rectangle.
-	
+
 		Throws exceptions on failure to allocate, or attempting to
 		modify a packed path.
 	*/
@@ -7317,7 +7317,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_register_document_handler()`.  */
 	/**
 		Register a handler for a document type.
-	
+
 		handler: The handler to register. This must live on for the duration of the
 		use of this handler. It will be passed back to the handler for calls so
 		the caller can use it to retrieve state.
@@ -7337,15 +7337,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_remove_item()`.  */
 	/**
 		Remove an item from the store.
-	
+
 		If an item indexed by the given key exists in the store, remove
 		it.
-	
+
 		drop: The function used to free the value (to ensure we get a
 		value of the correct type).
-	
+
 		key: The key used to find the item to remove.
-	
+
 		type: Functions used to manipulate the key.
 	*/
 	FZ_FUNCTION void fz_remove_item(::fz_store_drop_fn *drop, void *key, const FzStoreType& type);
@@ -7356,12 +7356,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_render_glyph_pixmap()`.  */
 	/**
 		Create a pixmap containing a rendered glyph.
-	
+
 		Lookup gid from font, clip it with scissor, and rendering it
 		with aa bits of antialiasing into a new pixmap.
-	
+
 		The caller takes ownership of the pixmap and so must free it.
-	
+
 		Note: This function is no longer used for normal rendering
 		operations, and is kept around just because we use it in the
 		app. It should be considered "at risk" of removal from the API.
@@ -7373,7 +7373,7 @@ namespace mupdf
 		Nasty PDF interpreter specific hernia, required to allow the
 		interpreter to replay glyphs from a type3 font directly into
 		the target device.
-	
+
 		This is only used in exceptional circumstances (such as type3
 		glyphs that inherit current graphics state, or nested type3
 		glyphs).
@@ -7383,7 +7383,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_rendering_intent_name()`.  */
 	/**
 		Map from enumerated rendering intent to string.
-	
+
 		The returned string is static and therefore must not be freed.
 	*/
 	FZ_FUNCTION const char *fz_rendering_intent_name(int ri);
@@ -7407,7 +7407,7 @@ namespace mupdf
 	/**
 		Ensure that a buffer has a given capacity,
 		truncating data if required.
-	
+
 		capacity: The desired capacity for the buffer. If the current
 		size of the buffer contents is smaller than capacity, it is
 		truncated.
@@ -7415,15 +7415,15 @@ namespace mupdf
 	FZ_FUNCTION void fz_resize_buffer(const FzBuffer& buf, size_t capacity);
 
 	/** Class-aware wrapper for `::fz_resolve_link()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_resolve_link(::fz_document *doc, const char *uri)` => `(fz_location, float xp, float yp)`
 	 */
 	/**
 		Resolve an internal link to a page number.
-	
+
 		xp, yp: Pointer to store coordinate of destination on the page.
-	
+
 		Returns (-1,-1) if the URI cannot be resolved.
 	*/
 	FZ_FUNCTION FzLocation fz_resolve_link(const FzDocument& doc, const char *uri, float *xp, float *yp);
@@ -7439,7 +7439,7 @@ namespace mupdf
 	/**
 		Within an fz_catch() block, rethrow the current exception
 		if the errcode of the current exception matches.
-	
+
 		This assumes no intervening use of fz_try/fz_catch.
 	*/
 	FZ_FUNCTION void fz_rethrow_if(int errcode);
@@ -7450,15 +7450,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_rotate()`.  */
 	/**
 		Create a rotation matrix.
-	
+
 		The returned matrix is of the form
 		[ cos(deg) sin(deg) -sin(deg) cos(deg) 0 0 ].
-	
+
 		m: Pointer to place to store matrix
-	
+
 		degrees: Degrees of counter clockwise rotation. Values less
 		than zero and greater than 360 are handled as expected.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION FzMatrix fz_rotate(float degrees);
@@ -7466,12 +7466,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_round_rect()`.  */
 	/**
 		Round rectangle coordinates.
-	
+
 		Coordinates in a bounding box are integers, so rounding of the
 		rects coordinates takes place. The top left corner is rounded
 		upwards and left while the bottom right corner is rounded
 		downwards and to the right.
-	
+
 		This differs from fz_irect_from_rect, in that fz_irect_from_rect
 		slavishly follows the numbers (i.e any slight over/under
 		calculations can cause whole extra pixels to be added).
@@ -7483,20 +7483,20 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_run_display_list()`.  */
 	/**
 		(Re)-run a display list through a device.
-	
+
 		list: A display list, created by fz_new_display_list and
 		populated with objects from a page by running fz_run_page on a
 		device obtained from fz_new_list_device.
-	
+
 		ctm: Transform to apply to display list contents. May include
 		for example scaling and rotation, see fz_scale, fz_rotate and
 		fz_concat. Set to fz_identity if no transformation is desired.
-	
+
 		scissor: Only the part of the contents of the display list
 		visible within this area will be considered when the list is
 		run through the device. This does not imply for tile objects
 		contained in the display list.
-	
+
 		cookie: Communication mechanism between caller and library
 		running the page. Intended for multi-threaded applications,
 		while single-threaded applications set cookie to NULL. The
@@ -7509,11 +7509,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_run_document_structure()`.  */
 	/**
 		Run the document structure through a device.
-	
+
 		doc: Document in question.
-	
+
 		dev: Device obtained from fz_new_*_device.
-	
+
 		cookie: Communication mechanism between caller and library.
 		Intended for multi-threaded applications, while
 		single-threaded applications set cookie to NULL. The
@@ -7527,15 +7527,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_run_page()`.  */
 	/**
 		Run a page through a device.
-	
+
 		page: Page obtained from fz_load_page.
-	
+
 		dev: Device obtained from fz_new_*_device.
-	
+
 		transform: Transform to apply to page. May include for example
 		scaling and rotation, see fz_scale, fz_rotate and fz_concat.
 		Set to fz_identity if no transformation is desired.
-	
+
 		cookie: Communication mechanism between caller and library
 		rendering the page. Intended for multi-threaded applications,
 		while single-threaded applications set cookie to NULL. The
@@ -7556,15 +7556,15 @@ namespace mupdf
 	/**
 		Run a page through a device. Just the main
 		page content, without the annotations, if any.
-	
+
 		page: Page obtained from fz_load_page.
-	
+
 		dev: Device obtained from fz_new_*_device.
-	
+
 		transform: Transform to apply to page. May include for example
 		scaling and rotation, see fz_scale, fz_rotate and fz_concat.
 		Set to fz_identity if no transformation is desired.
-	
+
 		cookie: Communication mechanism between caller and library
 		rendering the page. Intended for multi-threaded applications,
 		while single-threaded applications set cookie to NULL. The
@@ -7585,13 +7585,13 @@ namespace mupdf
 	/**
 		Run a glyph from a Type3 font to
 		a given device.
-	
+
 		font: The font to find the glyph in.
-	
+
 		gid: The glyph to run.
-	
+
 		trm: The transform to apply.
-	
+
 		dev: The device to render onto.
 	*/
 	FZ_FUNCTION void fz_run_t3_glyph(const FzFont& font, int gid, const FzMatrix& trm, const FzDevice& dev);
@@ -7599,11 +7599,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_runeidx()`.  */
 	/**
 		Compute the index of a rune in a string.
-	
+
 		str: Pointer to beginning of a string.
-	
+
 		p: Pointer to a char in str.
-	
+
 		Returns the index of the rune pointed to by p in str.
 	*/
 	FZ_FUNCTION int fz_runeidx(const char *str, const char *p);
@@ -7611,9 +7611,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_runelen()`.  */
 	/**
 		Count how many chars are required to represent a rune.
-	
+
 		rune: The rune to encode.
-	
+
 		Returns the number of bytes required to represent this run in
 		UTF8.
 	*/
@@ -7623,11 +7623,11 @@ namespace mupdf
 	/**
 		Obtain a pointer to the char representing the rune
 		at a given index.
-	
+
 		str: Pointer to beginning of a string.
-	
+
 		idx: Index of a rune to return a char pointer to.
-	
+
 		Returns a pointer to the char where the desired rune starts,
 		or NULL if the string ends before the index is reached.
 	*/
@@ -7636,11 +7636,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_runetochar()`.  */
 	/**
 		UTF8 encode a rune to a sequence of chars.
-	
+
 		str: Pointer to a place to put the UTF8 encoded character.
-	
+
 		rune: Pointer to a 'rune'.
-	
+
 		Returns the number of bytes the rune took to output.
 	*/
 	FZ_FUNCTION int fz_runetochar(char *str, int rune);
@@ -7703,7 +7703,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_save_pixmap_as_jpx()`.  */
 	/**
 		Save pixmap data as JP2K with no subsampling.
-	
+
 		quality = 100 = lossless
 		otherwise for a factor of x compression use 100-x. (so 80 is 1:20 compression)
 	*/
@@ -7785,15 +7785,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_scale()`.  */
 	/**
 		Create a scaling matrix.
-	
+
 		The returned matrix is of the form [ sx 0 0 sy 0 0 ].
-	
+
 		m: Pointer to the matrix to populate
-	
+
 		sx, sy: Scaling factors along the X- and Y-axes. A scaling
 		factor of 1.0 will not cause any scaling along the relevant
 		axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION FzMatrix fz_scale(float sx, float sy);
@@ -7806,7 +7806,7 @@ namespace mupdf
 	is non-copyable. */
 
 	/** Class-aware wrapper for `::fz_search_chapter_page_number()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_search_chapter_page_number(::fz_document *doc, int chapter, int page, const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -7816,7 +7816,7 @@ namespace mupdf
 	FZ_FUNCTION int fz_search_chapter_page_number_cb(const FzDocument& doc, int chapter, int page, const char *needle, ::fz_search_callback_fn *cb, void *opaque);
 
 	/** Class-aware wrapper for `::fz_search_display_list()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_search_display_list(::fz_display_list *list, const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -7830,7 +7830,7 @@ namespace mupdf
 	is non-copyable. */
 
 	/** Class-aware wrapper for `::fz_search_page()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_search_page(::fz_page *page, const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -7854,7 +7854,7 @@ namespace mupdf
 	FZ_FUNCTION int fz_search_page_cb(const FzPage& page, const char *needle, ::fz_search_callback_fn *cb, void *opaque);
 
 	/** Class-aware wrapper for `::fz_search_page_number()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_search_page_number(::fz_document *doc, int number, const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
@@ -7866,30 +7866,30 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_search_set_options()`.  */
 	/**
 		Change the options/needle to be used for a search.
-	
+
 		If the needle is invalid (in the case of regexps, it fails to compile)
 		it will throw an error.
-	
+
 		If the needle changes, the current position of the search within the
 		text is kept.
-	
+
 		If the options change, the search position may revert to the beginning
 		of the current page.
 	*/
 	FZ_FUNCTION void fz_search_set_options(const FzSearch& search, ::fz_search_options options, const char *needle);
 
 	/** Class-aware wrapper for `::fz_search_stext_page()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_search_stext_page(::fz_stext_page *text, const char *needle, ::fz_quad *hit_bbox, int hit_max)` => `(int, int hit_mark)`
 	 */
 	/**
 		Search for occurrence of 'needle' in text page.
 		Case insensitive match.
-	
+
 		Return the number of quads and store hit quads in the passed in
 		array.
-	
+
 		NOTE: This is an experimental interface and subject to change
 		without notice.
 	*/
@@ -7898,14 +7898,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_search_stext_page_cb()`.  */
 	/**
 		Search for occurrence of 'needle' in text page.
-	
+
 		Call callback once for each hit. This callback will receive
 		(potentially) multiple quads for each hit.
-	
+
 		Returns the number of hits - note that this is potentially
 		different from (i.e. is not greater than) the number of quads
 		as returned by the non callback API.
-	
+
 		NOTE: This is an experimental interface and subject to change
 		without notice.
 	*/
@@ -7914,16 +7914,16 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_seek()`.  */
 	/**
 		Seek within a stream.
-	
+
 		stm: The stream to seek within.
-	
+
 		offset: The offset to seek to.
-	
+
 		whence: From where the offset is measured (see fseek).
 		SEEK_SET - start of stream.
 		SEEK_CUR - current position.
 		SEEK_END - end of stream.
-	
+
 	*/
 	FZ_FUNCTION void fz_seek(const FzStream& stm, int64_t offset, int whence);
 
@@ -7931,7 +7931,7 @@ namespace mupdf
 	/**
 		Seek to the specified file position.
 		See fseek for arguments.
-	
+
 		Throw an error on unseekable outputs.
 	*/
 	FZ_FUNCTION void fz_seek_output(const FzOutput& out, int64_t off, int whence);
@@ -7940,15 +7940,15 @@ namespace mupdf
 	/**
 		Perform segmentation analysis on an (unstructured) page to look for
 		recursive subdivisions.
-	
+
 		Essentially this code attempts to split the page horizontally and/or
 		vertically repeatedly into smaller and smaller "segments" (divisions).
-	
+
 		This minimises the reordering of the content, but some reordering
 		may be unavoidable.
-	
+
 		Returns 0 if no changes were made to the document.
-	
+
 		This is experimental code, and may change (or be removed) in future
 		versions!
 	*/
@@ -7958,24 +7958,24 @@ namespace mupdf
 	/**
 		Perform segmentation analysis on a rectangle of a given
 		stext page.
-	
+
 		Like fz_segment_stext_page, this attempts to split the given page
 		region horizontally and/or vertically repeatedly into smaller and
 		smaller "segments".
-	
+
 		This works for pages with structure too, but splitting with
 		rectangles that cut across structure blocks may not behave as
 		expected.
-	
+
 		This minimises the reordering of the content (as viewed from the
 		perspective of a depth first traversal), but some reordering may
 		be unavoidable.
-	
+
 		This function accepts smaller gaps for segmentation than the full
 		page segmentation does.
-	
+
 		Returns 0 if no changes were made to the document.
-	
+
 		This is experimental code, and may change (or be removed) in future
 		versions!
 	*/
@@ -7988,7 +7988,7 @@ namespace mupdf
 	FZ_FUNCTION ::fz_separation_behavior fz_separation_current_behavior(const FzSeparations& sep, int separation);
 
 	/** Class-aware wrapper for `::fz_separation_equivalent()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_separation_equivalent(const ::fz_separations *seps, int idx, ::fz_colorspace *dst_cs, ::fz_colorspace *prf, ::fz_color_params color_params)` => float dst_color
 	 */
@@ -8004,7 +8004,7 @@ namespace mupdf
 	/**
 		Set the number of bits of antialiasing we should
 		use (for both text and graphics).
-	
+
 		bits: The number of bits of antialiasing to use (values are
 		clamped to within the 0 to 8 range).
 	*/
@@ -8022,10 +8022,10 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_set_default_gray()`.  */
 	/**
 		Set new defaults within the default colorspace structure.
-	
+
 		New references are taken to the new default, and references to
 		the old defaults dropped.
-	
+
 		Never throws exceptions.
 	*/
 	FZ_FUNCTION void fz_set_default_gray(const FzDefaultColorspaces& default_cs, const FzColorspace& cs);
@@ -8040,7 +8040,7 @@ namespace mupdf
 	/**
 		Set the error callback. This will be called as part of the
 		exception handling.
-	
+
 		The callback must not throw exceptions!
 	*/
 	FZ_FUNCTION void fz_set_error_callback(::fz_error_cb *error_cb, void *user);
@@ -8048,9 +8048,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_set_font_bbox()`.  */
 	/**
 		Set the font bbox.
-	
+
 		font: The font to set the bbox for.
-	
+
 		xmin, ymin, xmax, ymax: The bounding box.
 	*/
 	FZ_FUNCTION void fz_set_font_bbox(const FzFont& font, float xmin, float ymin, float xmax, float ymax);
@@ -8065,7 +8065,7 @@ namespace mupdf
 	/**
 		Set the number of bits of antialiasing we
 		should use for graphics.
-	
+
 		bits: The number of bits of antialiasing to use (values are
 		clamped to within the 0 to 8 range).
 	*/
@@ -8075,7 +8075,7 @@ namespace mupdf
 	/**
 		Set the minimum line width to be
 		used for stroked lines.
-	
+
 		min_line_width: The minimum line width to use (in pixels).
 	*/
 	FZ_FUNCTION void fz_set_graphics_min_line_width(float min_line_width);
@@ -8115,7 +8115,7 @@ namespace mupdf
 	/**
 		Set the number of bits of antialiasing we
 		should use for text.
-	
+
 		bits: The number of bits of antialiasing to use (values are
 		clamped to within the 0 to 8 range).
 	*/
@@ -8130,7 +8130,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_set_user_context()`.  */
 	/**
 		Set the user field in the context.
-	
+
 		NULL initially, this field can be set to any opaque value
 		required by the user. It is copied on clones.
 	*/
@@ -8146,7 +8146,7 @@ namespace mupdf
 	/**
 		Set the warning callback. This will be called as part of the
 		exception handling.
-	
+
 		The callback must not throw exceptions!
 	*/
 	FZ_FUNCTION void fz_set_warning_callback(::fz_warning_cb *warning_cb, void *user);
@@ -8155,7 +8155,7 @@ namespace mupdf
 	/**
 		MD5 finalization. Ends an MD5 message-digest operation, writing
 		the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha256_final(const FzSha256& state, unsigned char digest[32]);
@@ -8164,7 +8164,7 @@ namespace mupdf
 	/**
 		SHA256 initialization. Begins an SHA256 operation, initialising
 		the supplied context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha256_init(const FzSha256& state);
@@ -8174,7 +8174,7 @@ namespace mupdf
 		SHA256 block update operation. Continues an SHA256 message-
 		digest operation, processing another message block, and updating
 		the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha256_update(const FzSha256& state, const unsigned char *input, size_t inlen);
@@ -8183,7 +8183,7 @@ namespace mupdf
 	/**
 		SHA384 finalization. Ends an SHA384 message-digest operation,
 		writing the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha384_final(const FzSha512& state, unsigned char digest[64]);
@@ -8192,7 +8192,7 @@ namespace mupdf
 	/**
 		SHA384 initialization. Begins an SHA384 operation, initialising
 		the supplied context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha384_init(const FzSha512& state);
@@ -8202,7 +8202,7 @@ namespace mupdf
 		SHA384 block update operation. Continues an SHA384 message-
 		digest operation, processing another message block, and updating
 		the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha384_update(const FzSha512& state, const unsigned char *input, size_t inlen);
@@ -8211,7 +8211,7 @@ namespace mupdf
 	/**
 		SHA512 finalization. Ends an SHA512 message-digest operation,
 		writing the message digest and zeroizing the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha512_final(const FzSha512& state, unsigned char digest[64]);
@@ -8220,7 +8220,7 @@ namespace mupdf
 	/**
 		SHA512 initialization. Begins an SHA512 operation, initialising
 		the supplied context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha512_init(const FzSha512& state);
@@ -8230,7 +8230,7 @@ namespace mupdf
 		SHA512 block update operation. Continues an SHA512 message-
 		digest operation, processing another message block, and updating
 		the context.
-	
+
 		Never throws an exception.
 	*/
 	FZ_FUNCTION void fz_sha512_update(const FzSha512& state, const unsigned char *input, size_t inlen);
@@ -8238,14 +8238,14 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_shear()`.  */
 	/**
 		Create a shearing matrix.
-	
+
 		The returned matrix is of the form [ 1 sy sx 1 0 0 ].
-	
+
 		m: pointer to place to store returned matrix
-	
+
 		sx, sy: Shearing factors. A shearing factor of 0.0 will not
 		cause any shearing along the relevant axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION FzMatrix fz_shear(float sx, float sy);
@@ -8253,29 +8253,29 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_show_glyph()`.  */
 	/**
 		Add a glyph/unicode value to a text object.
-	
+
 		text: Text object to add to.
-	
+
 		font: The font the glyph should be added in.
-	
+
 		trm: The transform to use for the glyph.
-	
+
 		glyph: The glyph id to add.
-	
+
 		unicode: The unicode character for the glyph.
-	
+
 		cid: The CJK CID value or raw character code.
-	
+
 		wmode: 1 for vertical mode, 0 for horizontal.
-	
+
 		bidi_level: The bidirectional level for this glyph.
-	
+
 		markup_dir: The direction of the text as specified in the
 		markup.
-	
+
 		language: The language in use (if known, 0 otherwise)
 		(e.g. FZ_LANG_zh_Hans).
-	
+
 		Throws exception on failure to allocate.
 	*/
 	FZ_FUNCTION void fz_show_glyph(const FzText& text, const FzFont& font, const FzMatrix& trm, int glyph, int unicode, int wmode, int bidi_level, ::fz_bidi_direction markup_dir, ::fz_text_language language);
@@ -8286,24 +8286,24 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_show_string()`.  */
 	/**
 		Add a UTF8 string to a text object.
-	
+
 		text: Text object to add to.
-	
+
 		font: The font the string should be added in.
-	
+
 		trm: The transform to use.
-	
+
 		s: The utf-8 string to add.
-	
+
 		wmode: 1 for vertical mode, 0 for horizontal.
-	
+
 		bidi_level: The bidirectional level for this glyph.
-	
+
 		markup_dir: The direction of the text as specified in the markup.
-	
+
 		language: The language in use (if known, 0 otherwise)
 			(e.g. FZ_LANG_zh_Hans).
-	
+
 		Returns the transform updated with the advance width of the
 		string.
 	*/
@@ -8314,9 +8314,9 @@ namespace mupdf
 		Evict items from the store until the total size of
 		the objects in the store is reduced to a given percentage of its
 		current size.
-	
+
 		percent: %age of current size to reduce the store to.
-	
+
 		Returns non zero if we managed to free enough memory, zero
 		otherwise.
 	*/
@@ -8325,11 +8325,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_skip()`.  */
 	/**
 		Read from a stream discarding data.
-	
+
 		stm: The stream to read from.
-	
+
 		len: The number of bytes to read.
-	
+
 		Returns the number of bytes read. May throw exceptions.
 	*/
 	FZ_FUNCTION size_t fz_skip(const FzStream& stm, size_t len);
@@ -8351,11 +8351,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_slice_buffer()`.  */
 	/**
 		Create a new buffer with a (subset of) the data from the buffer.
-	
+
 		start: if >= 0, offset from start of buffer, if < 0 offset from end of buffer.
-	
+
 		end: if >= 0, offset from start of buffer, if < 0 offset from end of buffer.
-	
+
 	*/
 	FZ_FUNCTION FzBuffer fz_slice_buffer(const FzBuffer& buf, int64_t start, int64_t end);
 
@@ -8426,27 +8426,27 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_store_item()`.  */
 	/**
 		Add an item to the store.
-	
+
 		Add an item into the store, returning NULL for success. If an
 		item with the same key is found in the store, then our item will
 		not be inserted, and the function will return a pointer to that
 		value instead. This function takes its own reference to val, as
 		required (i.e. the caller maintains ownership of its own
 		reference).
-	
+
 		key: The key used to index the item.
-	
+
 		val: The value to store.
-	
+
 		itemsize: The size in bytes of the value (as counted towards the
 		store size).
-	
+
 		type: Functions used to manipulate the key.
 	*/
 	FZ_FUNCTION void *fz_store_item(void *key, void *val, size_t itemsize, const FzStoreType& type);
 
 	/** Class-aware wrapper for `::fz_store_scavenge()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_store_scavenge(size_t size)` => `(int, int phase)`
 	 */
@@ -8455,28 +8455,28 @@ namespace mupdf
 		allocator; when we fail to allocate memory, before returning a
 		failure to the caller, we try to scavenge space within the store
 		by evicting at least 'size' bytes. The allocator then retries.
-	
+
 		size: The number of bytes we are trying to have free.
-	
+
 		phase: What phase of the scavenge we are in. Updated on exit.
-	
+
 		Returns non zero if we managed to free any memory.
 	*/
 	FZ_FUNCTION int fz_store_scavenge(size_t size, int *phase);
 
 	/** Class-aware wrapper for `::fz_store_scavenge_external()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_store_scavenge_external(size_t size)` => `(int, int phase)`
 	 */
 	/**
 		External function for callers to use
 		to scavenge while trying allocations.
-	
+
 		size: The number of bytes we are trying to have free.
-	
+
 		phase: What phase of the scavenge we are in. Updated on exit.
-	
+
 		Returns non zero if we managed to free any memory.
 	*/
 	FZ_FUNCTION int fz_store_scavenge_external(size_t size, int *phase);
@@ -8505,7 +8505,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_stream_filename()`.  */
 	/**
 		Return the filename (UTF-8 encoded) from which a stream was opened.
-	
+
 		Returns NULL if the filename is not available (or the stream was
 		opened from a source other than a file).
 	*/
@@ -8514,7 +8514,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_stream_from_output()`.  */
 	/**
 		Obtain the fz_output in the form of a fz_stream.
-	
+
 		This allows data to be read back from some forms of fz_output
 		object. When finished reading, the fz_stream should be released
 		by calling fz_drop_stream. Until the fz_stream is dropped, no
@@ -8549,7 +8549,7 @@ namespace mupdf
 	/**
 		Recover ISO 639 (639-{1,2,3,5}) language specification
 		strings losslessly from a 15 bit fz_text_language code.
-	
+
 		No validation is carried out. See note above.
 	*/
 	FZ_FUNCTION char *fz_string_from_text_language(char str[8], ::fz_text_language lang);
@@ -8563,13 +8563,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_strlcat()`.  */
 	/**
 		Concatenate 2 strings, with a maximum length.
-	
+
 		dst: pointer to first string in a buffer of n bytes.
-	
+
 		src: pointer to string to concatenate.
-	
+
 		n: Size (in bytes) of buffer that dst is in.
-	
+
 		Returns the real length that a concatenated dst + src would have
 		been (not including terminator).
 	*/
@@ -8580,13 +8580,13 @@ namespace mupdf
 		Copy at most n-1 chars of a string into a destination
 		buffer with null termination, returning the real length of the
 		initial string (excluding terminator).
-	
+
 		dst: Destination buffer, at least n bytes long.
-	
+
 		src: C string (non-NULL).
-	
+
 		n: Size of dst buffer in bytes.
-	
+
 		Returns the length (excluding terminator) of src.
 	*/
 	FZ_FUNCTION size_t fz_strlcpy(char *dst, const char *src, size_t n);
@@ -8594,7 +8594,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_strncasecmp()`.  */
 	/**
 		Case insensitive (UTF8) string comparison.
-	
+
 		n = maximum number of bytes to read from either a or b.
 	*/
 	FZ_FUNCTION int fz_strncasecmp(const char *a, const char *b, size_t n);
@@ -8616,7 +8616,7 @@ namespace mupdf
 	FZ_FUNCTION void fz_stroke_text(const FzDevice& dev, const FzText& text, const FzStrokeState& stroke, const FzMatrix& ctm, const FzColorspace& colorspace, const float *color, float alpha, const FzColorParams& color_params);
 
 	/** Class-aware wrapper for `::fz_strsep()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_strsep(const char *delim)` => `(char *, char *stringp)`
 	 */
@@ -8624,15 +8624,15 @@ namespace mupdf
 		Given a pointer to a C string (or a pointer to NULL) break
 		it at the first occurrence of a delimiter char (from a given
 		set).
-	
+
 		stringp: Pointer to a C string pointer (or NULL). Updated on
 		exit to point to the first char of the string after the
 		delimiter that was found. The string pointed to by stringp will
 		be corrupted by this call (as the found delimiter will be
 		overwritten by 0).
-	
+
 		delim: A C string of acceptable delimiter characters.
-	
+
 		Returns a pointer to a C string containing the chars of stringp
 		up to the first delimiter char (or the end of the string), or
 		NULL.
@@ -8642,11 +8642,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_strstr()`.  */
 	/**
 		Safe strstr function.
-	
+
 		haystack: Where to look (may be NULL).
-	
+
 		needled: What to look for.
-	
+
 		Returns NULL if unmatched, or pointer to start of match.
 	*/
 	FZ_FUNCTION const char *fz_strstr(const char *haystack, const char *needle);
@@ -8654,17 +8654,17 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_strstrcase()`.  */
 	/**
 		Safe case-insensitive strstr function. (Accepts UTF-8).
-	
+
 		haystack: Where to look (may be NULL).
-	
+
 		needled: What to look for.
-	
+
 		Returns NULL if unmatched, or pointer to start of match.
 	*/
 	FZ_FUNCTION const char *fz_strstrcase(const char *haystack, const char *needle);
 
 	/** Class-aware wrapper for `::fz_strtof()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_strtof(const char *s)` => `(float, char *es)`
 	 */
@@ -8691,18 +8691,18 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_subpixel_adjust()`.  */
 	/**
 		Perform subpixel quantisation and adjustment on a glyph matrix.
-	
+
 		ctm: On entry, the desired 'ideal' transformation for a glyph.
 		On exit, adjusted to a (very similar) transformation quantised
 		for subpixel caching.
-	
+
 		subpix_ctm: Initialised by the routine to the transform that
 		should be used to render the glyph.
-	
+
 		qe, qf: which subpixel position we quantised to.
-	
+
 		Returns: the size of the glyph.
-	
+
 		Note: This is currently only exposed for use in our app. It
 		should be considered "at risk" of removal from the API.
 	*/
@@ -8712,14 +8712,14 @@ namespace mupdf
 	FZ_FUNCTION void fz_subsample_pixmap(const FzPixmap& tile, int factor);
 
 	/** Class-aware wrapper for `::fz_subset_cff_for_gids()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_subset_cff_for_gids(::fz_buffer *orig, int num_gids, int symbolic, int cidfont)` => `(fz_buffer *, int gids)`
 	 */
 	FZ_FUNCTION FzBuffer fz_subset_cff_for_gids(const FzBuffer& orig, int *gids, int num_gids, int symbolic, int cidfont);
 
 	/** Class-aware wrapper for `::fz_subset_ttf_for_gids()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_subset_ttf_for_gids(::fz_buffer *orig, int num_gids, int symbolic, int cidfont)` => `(fz_buffer *, int gids)`
 	 */
@@ -8756,7 +8756,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_tell_output()`.  */
 	/**
 		Return the current file position.
-	
+
 		Throw an error on untellable outputs.
 	*/
 	FZ_FUNCTION int64_t fz_tell_output(const FzOutput& out);
@@ -8764,12 +8764,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_terminate_buffer()`.  */
 	/**
 		Zero-terminate buffer in order to use as a C string.
-	
+
 		This byte is invisible and does not affect the length of the
 		buffer as returned by fz_buffer_storage. The zero byte is
 		written *after* the data, and subsequent writes will overwrite
 		the terminating byte.
-	
+
 		Subsequent changes to the size of the buffer (such as by
 		fz_buffer_trim, fz_buffer_grow, fz_resize_buffer, etc) may
 		invalidate this.
@@ -8787,7 +8787,7 @@ namespace mupdf
 	/**
 		Convert ISO 639 (639-{1,2,3,5}) language specification
 		strings losslessly to a 15 bit fz_text_language code.
-	
+
 		No validation is carried out. Obviously invalid (out
 		of spec) codes will be mapped to FZ_LANG_UNSET, but
 		well-formed (but undefined) codes will be blithely
@@ -8798,9 +8798,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_tint_pixmap()`.  */
 	/**
 		Tint all the pixels in an RGB, BGR, or Gray pixmap.
-	
+
 		black: Map black to this hexadecimal RGB color.
-	
+
 		white: Map white to this hexadecimal RGB color.
 	*/
 	FZ_FUNCTION void fz_tint_pixmap(const FzPixmap& pix, int black, int white);
@@ -8827,11 +8827,11 @@ namespace mupdf
 	/**
 		Transform a path by a given
 		matrix.
-	
+
 		path: The path to modify (must not be a packed path).
-	
+
 		transform: The transform to apply.
-	
+
 		Throws exceptions if the path is packed, or on failure
 		to allocate.
 	*/
@@ -8840,13 +8840,13 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_transform_point()`.  */
 	/**
 		Apply a transformation to a point.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale, fz_rotate and fz_translate for how to create a
 		matrix.
-	
+
 		point: Pointer to point to update.
-	
+
 		Returns transform (unchanged).
 	*/
 	FZ_FUNCTION FzPoint fz_transform_point(const FzPoint& point, const FzMatrix& m);
@@ -8863,15 +8863,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_transform_rect()`.  */
 	/**
 		Apply a transform to a rectangle.
-	
+
 		After the four corner points of the axis-aligned rectangle
 		have been transformed it may not longer be axis-aligned. So a
 		new axis-aligned rectangle is created covering at least the
 		area of the transformed rectangle.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale and fz_rotate for how to create a matrix.
-	
+
 		rect: Rectangle to be transformed. The two special cases
 		fz_empty_rect and fz_infinite_rect, may be used but are
 		returned unchanged as expected.
@@ -8881,11 +8881,11 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_transform_vector()`.  */
 	/**
 		Apply a transformation to a vector.
-	
+
 		transform: Transformation matrix to apply. See fz_concat,
 		fz_scale and fz_rotate for how to create a matrix. Any
 		translation will be ignored.
-	
+
 		vector: Pointer to vector to update.
 	*/
 	FZ_FUNCTION FzPoint fz_transform_vector(const FzPoint& vector, const FzMatrix& m);
@@ -8893,15 +8893,15 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_translate()`.  */
 	/**
 		Create a translation matrix.
-	
+
 		The returned matrix is of the form [ 1 0 0 1 tx ty ].
-	
+
 		m: A place to store the created matrix.
-	
+
 		tx, ty: Translation distances along the X- and Y-axes. A
 		translation of 0 will not cause any translation along the
 		relevant axis.
-	
+
 		Returns m.
 	*/
 	FZ_FUNCTION FzMatrix fz_translate(float tx, float ty);
@@ -8912,7 +8912,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_translate_rect()`.  */
 	/**
 		Translate bounding box.
-	
+
 		Translate a bbox by a given x and y offset. Allows for overflow.
 	*/
 	FZ_FUNCTION FzRect fz_translate_rect(const FzRect& a, float xoff, float yoff);
@@ -8920,7 +8920,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_tree_archive_add_buffer()`.  */
 	/**
 		Add a named buffer to an existing tree archive.
-	
+
 		The tree will take a new reference to the buffer. Ownership
 		is not transferred.
 	*/
@@ -8929,7 +8929,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_tree_archive_add_data()`.  */
 	/**
 		Add a named block of data to an existing tree archive.
-	
+
 		The data will be copied into a buffer, and so the caller
 		may free it as soon as this returns.
 	*/
@@ -8942,9 +8942,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_tree_lookup()`.  */
 	/**
 		Look for the value of a node in the tree with the given key.
-	
+
 		Simple pointer equivalence is used for key.
-	
+
 		Returns NULL for no match.
 	*/
 	FZ_FUNCTION void *fz_tree_lookup(const FzTree& node, const char *key);
@@ -8958,7 +8958,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_trim_path()`.  */
 	/**
 		Minimise the internal storage used by a path.
-	
+
 		As paths are constructed, the internal buffers
 		grow. To avoid repeated reallocations they
 		grow with some spare space. Once a path has
@@ -8970,7 +8970,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_truncate_output()`.  */
 	/**
 		Truncate the output at the current position.
-	
+
 		This allows output streams which have seeked back from the end
 		of their storage to be truncated at the current point.
 	*/
@@ -8979,12 +8979,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_try_invert_matrix()`.  */
 	/**
 		Attempt to create an inverse matrix.
-	
+
 		inv: Place to store inverse matrix.
-	
+
 		src: Matrix to invert. A degenerate matrix, where the
 		determinant is equal to zero, can not be inverted.
-	
+
 		Returns 1 if matrix is degenerate (singular), or 0 otherwise.
 	*/
 	FZ_FUNCTION int fz_try_invert_matrix(FzMatrix& inv, const FzMatrix& src);
@@ -8992,7 +8992,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_try_open_archive_entry()`.  */
 	/**
 		Opens an archive entry as a stream.
-	
+
 		Returns NULL if a matching entry cannot be found, otherwise
 		behaves exactly as fz_open_archive_entry.
 	*/
@@ -9001,7 +9001,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_try_open_archive_with_stream()`.  */
 	/**
 		Open zip or tar archive stream.
-	
+
 		Does the same as fz_open_archive_with_stream, but will not throw
 		an error in the event of failing to recognise the format. Will
 		still throw errors in other cases though!
@@ -9011,7 +9011,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_try_open_file()`.  */
 	/**
 		Open the named file and wrap it in a stream.
-	
+
 		Does the same as fz_open_file, but in the event the file
 		does not open, it will return NULL rather than throw an
 		exception.
@@ -9021,9 +9021,9 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_try_parse_xml_archive_entry()`.  */
 	/**
 		Try and parse the contents of an archive entry into a tree of xml nodes.
-	
+
 		preserve_white: whether to keep or delete all-whitespace nodes.
-	
+
 		Will return NULL if the archive entry can't be found. Otherwise behaves
 		the same as fz_parse_xml_archive_entry. May throw exceptions.
 	*/
@@ -9033,10 +9033,10 @@ namespace mupdf
 	/**
 		Reads all bytes in an archive entry
 		into a buffer.
-	
+
 		name: Entry name to look for, this must be an exact match to
 		the entry name in the archive.
-	
+
 		Returns NULL if a matching entry cannot be found. Otherwise behaves
 		the same as fz_read_archive_entry. Exceptions may be thrown.
 	*/
@@ -9045,7 +9045,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_try_read_file()`.  */
 	/**
 		Read all the contents of a file into a buffer.
-	
+
 		Returns NULL if the file does not exist, otherwise
 		behaves exactly as fz_read_file.
 	*/
@@ -9055,9 +9055,9 @@ namespace mupdf
 	/**
 		Set the tuning function to use for
 		image decode.
-	
+
 		image_decode: Function to use.
-	
+
 		arg: Opaque argument to be passed to tuning function.
 	*/
 	FZ_FUNCTION void fz_tune_image_decode(::fz_tune_image_decode_fn *image_decode, void *arg);
@@ -9066,9 +9066,9 @@ namespace mupdf
 	/**
 		Set the tuning function to use for
 		image scaling.
-	
+
 		image_scale: Function to use.
-	
+
 		arg: Opaque argument to be passed to tuning function.
 	*/
 	FZ_FUNCTION void fz_tune_image_scale(::fz_tune_image_scale_fn *image_scale, void *arg);
@@ -9082,7 +9082,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_union_rect()`.  */
 	/**
 		Compute union of two rectangles.
-	
+
 		Given two rectangles, update the first to be the smallest
 		axis-aligned rectangle that encompasses both given rectangles.
 		If either rectangle is infinite then the union is also infinite.
@@ -9106,7 +9106,7 @@ namespace mupdf
 		Unread the single last byte successfully
 		read from a stream. Do not call this without having
 		successfully read a byte.
-	
+
 		stm: The stream to operate upon.
 	*/
 	FZ_FUNCTION void fz_unread_byte(const FzStream& stm);
@@ -9117,12 +9117,12 @@ namespace mupdf
 		return a reference to an equivalent stroke_state structure
 		that is guaranteed to be unshared (i.e. one that can
 		safely be modified).
-	
+
 		shared: The reference to a (possibly) shared structure
 		to unshare. Ownership of this reference is passed in
 		to this function, even in the case of exceptions being
 		thrown.
-	
+
 		Exceptions may be thrown in the event of failure to
 		allocate if required.
 	*/
@@ -9134,12 +9134,12 @@ namespace mupdf
 		return a reference to a stroke_state structure (with room for a
 		given amount of dash data) that is guaranteed to be unshared
 		(i.e. one that can safely be modified).
-	
+
 		shared: The reference to a (possibly) shared structure
 		to unshare. Ownership of this reference is passed in
 		to this function, even in the case of exceptions being
 		thrown.
-	
+
 		Exceptions may be thrown in the event of failure to
 		allocate if required.
 	*/
@@ -9173,9 +9173,9 @@ namespace mupdf
 	/**
 		Count how many runes the UTF-8 encoded string
 		consists of.
-	
+
 		s: The UTF-8 encoded, NUL-terminated text string.
-	
+
 		Returns the number of runes in the string.
 	*/
 	FZ_FUNCTION int fz_utflen(const char *s);
@@ -9195,7 +9195,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_vthrow()`.  */
 	/**
 		Throw an exception.
-	
+
 		This assumes an enclosing fz_try() block within the callstack.
 	*/
 	FZ_FUNCTION void fz_vthrow(int errcode, const char *arg_1, va_list ap);
@@ -9203,7 +9203,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_vwarn()`.  */
 	/**
 		Log a warning.
-	
+
 		This goes to the registered warning stream (stderr by
 		default).
 	*/
@@ -9214,17 +9214,17 @@ namespace mupdf
 		Walk the segments of a path, calling the
 		appropriate callback function from a given set for each
 		segment of the path.
-	
+
 		path: The path to walk.
-	
+
 		walker: The set of callback functions to use. The first
 		4 callback pointers in the set must be non-NULL. The
 		subsequent ones can either be supplied, or can be left
 		as NULL, in which case the top 4 functions will be
 		called as appropriate to simulate them.
-	
+
 		arg: An opaque argument passed in to each callback.
-	
+
 		Exceptions will only be thrown if the underlying callback
 		functions throw them.
 	*/
@@ -9234,7 +9234,7 @@ namespace mupdf
 	FZ_FUNCTION void fz_warn(const char *fmt, ...);
 
 	/** Class-aware wrapper for `::fz_warning_callback()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`fz_warning_callback()` => `(fz_warning_cb *, void *user)`
 	 */
@@ -9262,13 +9262,13 @@ namespace mupdf
 	/**
 		Cause a band writer to write the next band
 		of data for an image.
-	
+
 		stride: The byte offset from the first byte of the data
 		for a pixel to the first byte of the data for the same pixel
 		on the row below.
-	
+
 		band_height: The number of lines in this band.
-	
+
 		samples: Pointer to first byte of the data.
 	*/
 	FZ_FUNCTION void fz_write_band(const FzBandWriter& writer, int stride, int band_height, const unsigned char *samples);
@@ -9314,7 +9314,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_write_bitmap_as_pwg_page()`.  */
 	/**
 		Write a bitmap as a PWG page.
-	
+
 		Caller should provide a file header by calling
 		fz_write_pwg_file_header, but can then write several pages to
 		the same file.
@@ -9346,7 +9346,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_write_data()`.  */
 	/**
 		Write data to output.
-	
+
 		data: Pointer to data to write.
 		size: Size of data to write in bytes.
 	*/
@@ -9371,17 +9371,17 @@ namespace mupdf
 		a banded image with the given properties/dimensions etc. This
 		also configures the bandwriter for the format of the data to be
 		passed in future calls.
-	
+
 		w, h: Width and Height of the entire page.
-	
+
 		n: Number of components (including spots and alphas).
-	
+
 		alpha: Number of alpha components.
-	
+
 		xres, yres: X and Y resolutions in dpi.
-	
+
 		cs: Colorspace (NULL for bitmaps)
-	
+
 		seps: Separation details (or NULL).
 	*/
 	FZ_FUNCTION void fz_write_header(const FzBandWriter& writer, int w, int h, int n, int alpha, int xres, int yres, int pagenum, const FzColorspace& cs, const FzSeparations& seps);
@@ -9422,7 +9422,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_write_pixmap_as_jpx()`.  */
 	/**
 		Pixmap data as JP2K with no subsampling.
-	
+
 		quality = 100 = lossless
 		otherwise for a factor of x compression use 100-x. (so 80 is 1:20 compression)
 	*/
@@ -9492,7 +9492,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_write_pixmap_as_pwg_page()`.  */
 	/**
 		Write a pixmap as a PWG page.
-	
+
 		Caller should provide a file header by calling
 		fz_write_pwg_file_header, but can then write several pages to
 		the same file.
@@ -9562,12 +9562,12 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_write_xml()`.  */
 	/**
 		Write our xml structure out to an xml stream.
-	
+
 		Properly formatted XML is only allowed to have a single top-level node
 		under which everything must sit. Our structures allow for multiple
 		top level nodes. If required, we will output an extra 'ROOT' node
 		at the top so that the xml is well-formed.
-	
+
 		If 'indented' is non-zero then additional whitespace will be added to
 		make the XML easier to read in a text editor. It will NOT be properly
 		compliant.
@@ -9605,7 +9605,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::fz_xml_att_eq()`.  */
 	/**
 		Check for a matching attribute on an XML node.
-	
+
 		If the node has the requested attribute (name), and the value
 		matches (match) then return 1. Otherwise, 0.
 	*/
@@ -9621,7 +9621,7 @@ namespace mupdf
 	/**
 		Search the siblings of XML nodes starting with item looking for
 		the first with the given tag.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find(const FzXml& item, const char *tag);
@@ -9649,7 +9649,7 @@ namespace mupdf
 	/**
 		Search the siblings of XML nodes starting with the first child
 		of item looking for the first with the given tag.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_down(const FzXml& item, const char *tag);
@@ -9659,7 +9659,7 @@ namespace mupdf
 		Search the siblings of XML nodes starting with the first child
 		of item looking for the first with the given tag (or any tag if
 		tag is NULL), and with a matching attribute.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_down_match(const FzXml& item, const char *tag, const char *att, const char *match);
@@ -9669,7 +9669,7 @@ namespace mupdf
 		Search the siblings of XML nodes starting with item looking for
 		the first with the given tag (or any tag if tag is NULL), and
 		with a matching attribute.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_match(const FzXml& item, const char *tag, const char *att, const char *match);
@@ -9678,7 +9678,7 @@ namespace mupdf
 	/**
 		Search the siblings of XML nodes starting with the first sibling
 		of item looking for the first with the given tag.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_next(const FzXml& item, const char *tag);
@@ -9707,7 +9707,7 @@ namespace mupdf
 		Search the siblings of XML nodes starting with the first sibling
 		of item looking for the first with the given tag (or any tag if tag
 		is NULL), and with a matching attribute.
-	
+
 		Return NULL if none found.
 	*/
 	FZ_FUNCTION FzXml fz_xml_find_next_match(const FzXml& item, const char *tag, const char *att, const char *match);
@@ -9840,7 +9840,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_add_vmtx(const PdfFontDesc& font, int lo, int hi, int x, int y, int w);
 
 	/** Class-aware wrapper for `::pdf_annot_MK_BC()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_MK_BC(::pdf_annot *annot, float color[4])` => int n
 	 */
@@ -9850,7 +9850,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_annot_MK_BC_rgb(const PdfAnnot& annot, float rgb[3]);
 
 	/** Class-aware wrapper for `::pdf_annot_MK_BG()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_MK_BG(::pdf_annot *annot, float color[4])` => int n
 	 */
@@ -9890,7 +9890,7 @@ namespace mupdf
 	FZ_FUNCTION float pdf_annot_border_width(const PdfAnnot& annot);
 
 	/** Class-aware wrapper for `::pdf_annot_callout_line()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_callout_line(::pdf_annot *annot, ::fz_point callout[3])` => int n
 	 */
@@ -9903,7 +9903,7 @@ namespace mupdf
 	FZ_FUNCTION enum pdf_line_ending pdf_annot_callout_style(const PdfAnnot& annot);
 
 	/** Class-aware wrapper for `::pdf_annot_color()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_color(::pdf_annot *annot, float color[4])` => int n
 	 */
@@ -9916,14 +9916,14 @@ namespace mupdf
 	FZ_FUNCTION int64_t pdf_annot_creation_date(const PdfAnnot& annot);
 
 	/** Class-aware wrapper for `::pdf_annot_default_appearance()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_default_appearance(::pdf_annot *annot, float color[4])` => `(const char *font, float size, int n)`
 	 */
 	FZ_FUNCTION void pdf_annot_default_appearance(const PdfAnnot& annot, const char **font, float *size, int *n, float color[4]);
 
 	/** Class-aware wrapper for `::pdf_annot_default_appearance_unmapped()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_default_appearance_unmapped(::pdf_annot *annot, char *font_name, int font_name_len, float color[4])` => `(float size, int n)`
 	 */
@@ -10065,7 +10065,7 @@ namespace mupdf
 	FZ_FUNCTION enum pdf_intent pdf_annot_intent(const PdfAnnot& annot);
 
 	/** Class-aware wrapper for `::pdf_annot_interior_color()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_interior_color(::pdf_annot *annot, float color[4])` => int n
 	 */
@@ -10093,7 +10093,7 @@ namespace mupdf
 	FZ_FUNCTION enum pdf_line_ending pdf_annot_line_end_style(const PdfAnnot& annot);
 
 	/** Class-aware wrapper for `::pdf_annot_line_ending_styles()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_annot_line_ending_styles(::pdf_annot *annot)` => `(enum pdf_line_ending start_style, enum pdf_line_ending end_style)`
 	 */
@@ -10223,7 +10223,7 @@ namespace mupdf
 	FZ_FUNCTION FzRect pdf_array_get_rect(const PdfObj& array, int index);
 
 	/** Class-aware wrapper for `::pdf_array_get_string()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_array_get_string(::pdf_obj *array, int index)` => `(const char *, size_t sizep)`
 	 */
@@ -10443,7 +10443,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_count_pages_imp(const FzDocument& doc, int chapter);
 
 	/** Class-aware wrapper for `::pdf_count_q_balance()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_count_q_balance(::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm)` => `(int prepend, int append)`
 	 */
@@ -10537,7 +10537,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_debug_ref(const PdfObj& obj);
 
 	/** Class-aware wrapper for `::pdf_decode_cmap()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_decode_cmap(::pdf_cmap *cmap, unsigned char *s, unsigned char *e)` => `(int, unsigned int cpt)`
 	 */
@@ -10616,7 +10616,7 @@ namespace mupdf
 	FZ_FUNCTION FzRect pdf_dict_get_inheritable_rect(const PdfObj& dict, const PdfObj& key);
 
 	/** Class-aware wrapper for `::pdf_dict_get_inheritable_string()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_dict_get_inheritable_string(::pdf_obj *dict, ::pdf_obj *key)` => `(const char *, size_t sizep)`
 	 */
@@ -10656,7 +10656,7 @@ namespace mupdf
 	FZ_FUNCTION FzRect pdf_dict_get_rect(const PdfObj& dict, const PdfObj& key);
 
 	/** Class-aware wrapper for `::pdf_dict_get_string()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_dict_get_string(::pdf_obj *dict, ::pdf_obj *key)` => `(const char *, size_t sizep)`
 	 */
@@ -10792,7 +10792,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_document_permissions(const PdfDocument& doc);
 
 	/** Class-aware wrapper for `::pdf_edit_text_field_value()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_edit_text_field_value(::pdf_annot *widget, const char *value, const char *change)` => `(int, int selStart, int selEnd, char *newvalue)`
 	 */
@@ -10829,7 +10829,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_ensure_solid_xref(const PdfDocument& doc, int num);
 
 	/** Class-aware wrapper for `::pdf_eval_function()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_eval_function(::pdf_function *func, const float *in, int inlen, int outlen)` => float out
 	 */
@@ -10866,7 +10866,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_field_event_keystroke(const PdfDocument& doc, const PdfObj& field, const PdfKeystrokeEvent& evt);
 
 	/** Class-aware wrapper for `::pdf_field_event_validate()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_field_event_validate(::pdf_document *doc, ::pdf_obj *field, const char *value)` => `(int, char *newvalue)`
 	 */
@@ -11111,7 +11111,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_js_event_result_keystroke(const PdfJs& js, const PdfKeystrokeEvent& evt);
 
 	/** Class-aware wrapper for `::pdf_js_event_result_validate()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_js_event_result_validate(::pdf_js *js)` => `(int, char *newvalue)`
 	 */
@@ -11121,7 +11121,7 @@ namespace mupdf
 	FZ_FUNCTION char *pdf_js_event_value(const PdfJs& js);
 
 	/** Class-aware wrapper for `::pdf_js_execute()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_js_execute(::pdf_js *js, const char *name, const char *code)` => char *result
 	 */
@@ -11217,7 +11217,7 @@ namespace mupdf
 	FZ_FUNCTION FzBuffer pdf_load_embedded_file_contents(const PdfObj& fs);
 
 	/** Class-aware wrapper for `::pdf_load_encoding()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_load_encoding(const char *encoding)` => const char *estrings
 	 */
@@ -11244,7 +11244,7 @@ namespace mupdf
 	FZ_FUNCTION FzImage pdf_load_image(const PdfDocument& doc, const PdfObj& obj);
 
 	/** Class-aware wrapper for `::pdf_load_image_stream()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_load_image_stream(::pdf_document *doc, int num, ::fz_compression_params *params, size_t worst_case)` => `(fz_buffer *, int truncated)`
 	 */
@@ -11268,7 +11268,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::pdf_load_object()`.  */
 	/**
 		Load a given object.
-	
+
 		This can cause xref reorganisations (solidifications etc) due to
 		repairs, so all held pdf_xref_entries should be considered
 		invalid after this call (other than the returned one).
@@ -11316,7 +11316,7 @@ namespace mupdf
 	FZ_FUNCTION PdfCmap pdf_load_system_cmap(const char *name);
 
 	/** Class-aware wrapper for `::pdf_load_to_unicode()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_load_to_unicode(::pdf_document *doc, ::pdf_font_desc *font, char *collection, ::pdf_obj *cmapstm)` => const char *strings
 	 */
@@ -11336,7 +11336,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_lookup_cmap(const PdfCmap& cmap, unsigned int cpt);
 
 	/** Class-aware wrapper for `::pdf_lookup_cmap_full()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_lookup_cmap_full(::pdf_cmap *cmap, unsigned int cpt)` => `(int, int out)`
 	 */
@@ -11369,7 +11369,7 @@ namespace mupdf
 	FZ_FUNCTION PdfObj pdf_lookup_number(const PdfObj& root, int needle);
 
 	/** Class-aware wrapper for `::pdf_lookup_page_loc()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_lookup_page_loc(::pdf_document *doc, int needle, ::pdf_obj **parentp)` => `(pdf_obj *, int indexp)`
 	 */
@@ -11385,7 +11385,7 @@ namespace mupdf
 	FZ_FUNCTION PdfObj pdf_lookup_resource(const PdfResourceStack& stack, const PdfObj& type, const char *name);
 
 	/** Class-aware wrapper for `::pdf_lookup_substitute_font()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_lookup_substitute_font(int mono, int serif, int bold, int italic)` => `(const unsigned char *, int len)`
 	 */
@@ -11396,7 +11396,7 @@ namespace mupdf
 	is non-copyable. */
 
 	/** Class-aware wrapper for `::pdf_map_one_to_many()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_map_one_to_many(::pdf_cmap *cmap, unsigned int one, size_t len)` => int many
 	 */
@@ -11620,7 +11620,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_obj_marked(const PdfObj& obj);
 
 	/** Class-aware wrapper for `::pdf_obj_memo()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_obj_memo(::pdf_obj *obj, int bit)` => `(int, int memo)`
 	 */
@@ -11714,7 +11714,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_page_obj_transform_box(const PdfObj& pageobj, FzRect& outbox, FzMatrix& out, ::fz_box_type box);
 
 	/** Class-aware wrapper for `::pdf_page_presentation()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_page_presentation(::pdf_page *page, ::fz_transition *transition)` => `(fz_transition *, float duration)`
 	 */
@@ -11733,7 +11733,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_page_transform_box(const PdfPage& page, FzRect& mediabox, FzMatrix& ctm, ::fz_box_type box);
 
 	/** Class-aware wrapper for `::pdf_page_write()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_page_write(::pdf_document *doc, ::fz_rect mediabox, ::pdf_obj **presources, ::fz_buffer **pcontents)` => `(fz_device *)`
 	 */
@@ -11746,14 +11746,14 @@ namespace mupdf
 	FZ_FUNCTION int64_t pdf_parse_date(const char *s);
 
 	/** Class-aware wrapper for `::pdf_parse_default_appearance()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_parse_default_appearance(const char *da, float color[4])` => `(const char *font, float size, int n)`
 	 */
 	FZ_FUNCTION void pdf_parse_default_appearance(const char *da, const char **font, float *size, int *n, float color[4]);
 
 	/** Class-aware wrapper for `::pdf_parse_default_appearance_unmapped()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_parse_default_appearance_unmapped(const char *da, char *font_name, int font_name_len, float color[4])` => `(float size, int n)`
 	 */
@@ -11763,14 +11763,14 @@ namespace mupdf
 	FZ_FUNCTION PdfObj pdf_parse_dict(const PdfDocument& doc, const FzStream& f, const PdfLexbuf& buf);
 
 	/** Class-aware wrapper for `::pdf_parse_ind_obj()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_parse_ind_obj(::pdf_document *doc, ::fz_stream *f)` => `(pdf_obj *, int num, int gen, int64_t stm_ofs, int try_repair)`
 	 */
 	FZ_FUNCTION PdfObj pdf_parse_ind_obj(const PdfDocument& doc, const FzStream& f, int *num, int *gen, int64_t *stm_ofs, int *try_repair);
 
 	/** Class-aware wrapper for `::pdf_parse_journal_obj()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_parse_journal_obj(::pdf_document *doc, ::fz_stream *stm, ::fz_buffer **ostm)` => `(pdf_obj *, int onum, int newobj)`
 	 */
@@ -11798,7 +11798,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_print_default_appearance(char *buf, int nbuf, const char *font, float size, int n, const float *color);
 
 	/** Class-aware wrapper for `::pdf_print_encrypted_obj()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_print_encrypted_obj(::fz_output *out, ::pdf_obj *obj, int tight, int ascii, ::pdf_crypt *crypt, int num, int gen)` => int sep
 	 */
@@ -11814,9 +11814,9 @@ namespace mupdf
 	FZ_FUNCTION void pdf_process_annot(const PdfProcessor& proc, const PdfAnnot& annot, FzCookie& cookie);
 
 	/** Class-aware wrapper for `::pdf_process_contents()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
-		`pdf_process_contents(::pdf_processor *proc, ::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm, ::fz_cookie *cookie, ::pdf_obj **out_res)` => 
+		`pdf_process_contents(::pdf_processor *proc, ::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm, ::fz_cookie *cookie, ::pdf_obj **out_res)` =>
 	 */
 	FZ_FUNCTION void pdf_process_contents(const PdfProcessor& proc, const PdfDocument& doc, const PdfObj& res, const PdfObj& stm, FzCookie& cookie, PdfObj& out_res);
 
@@ -11880,7 +11880,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_remove_output_intents(const PdfDocument& doc);
 
 	/** Class-aware wrapper for `::pdf_repair_obj()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_repair_obj(::pdf_document *doc, ::pdf_lexbuf *buf, ::pdf_obj **encrypt, ::pdf_obj **id, ::pdf_obj **page, ::pdf_obj **root)` => `(int, int64_t stmofsp, int64_t stmlenp, int64_t tmpofs)`
 	 */
@@ -11901,7 +11901,7 @@ namespace mupdf
 	/** Class-aware wrapper for `::pdf_resolve_indirect()`.  */
 	/**
 		Resolve an indirect object (or chain of objects).
-	
+
 		This can cause xref reorganisations (solidifications etc) due to
 		repairs, so all held pdf_xref_entries should be considered
 		invalid after this call (other than the returned one).
@@ -11912,7 +11912,7 @@ namespace mupdf
 	FZ_FUNCTION PdfObj pdf_resolve_indirect_chain(const PdfObj& ref);
 
 	/** Class-aware wrapper for `::pdf_resolve_link()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_resolve_link(::pdf_document *doc, const char *uri)` => `(int, float xp, float yp)`
 	 */
@@ -11959,7 +11959,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_run_page_with_usage(const PdfPage& page, const FzDevice& dev, const FzMatrix& ctm, const char *usage, FzCookie& cookie);
 
 	/** Class-aware wrapper for `::pdf_sample_shade_function()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_sample_shade_function(int n, int funcs, ::pdf_function **func, float t0, float t1)` => `(float samples)`
 	 */
@@ -12210,7 +12210,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_signature_byte_range(const PdfDocument& doc, const PdfObj& signature, const FzRange& byte_range);
 
 	/** Class-aware wrapper for `::pdf_signature_contents()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_signature_contents(::pdf_document *doc, ::pdf_obj *signature)` => `(size_t, char *contents)`
 	 */
@@ -12258,7 +12258,7 @@ namespace mupdf
 	FZ_FUNCTION PdfDocument pdf_specifics(const FzDocument& doc);
 
 	/** Class-aware wrapper for `::pdf_sprint_obj()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_sprint_obj(char *buf, size_t cap, ::pdf_obj *obj, int tight, int ascii)` => `(char *, size_t len)`
 	 */
@@ -12356,7 +12356,7 @@ namespace mupdf
 	FZ_FUNCTION size_t pdf_to_str_len(const PdfObj& obj);
 
 	/** Class-aware wrapper for `::pdf_to_string()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_to_string(::pdf_obj *obj)` => `(const char *, size_t sizep)`
 	 */
@@ -12375,7 +12375,7 @@ namespace mupdf
 	FZ_FUNCTION FzText pdf_tos_get_text(const PdfTextObjectState& tos);
 
 	/** Class-aware wrapper for `::pdf_tos_make_trm()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_tos_make_trm(::pdf_text_object_state *tos, ::pdf_text_state *text, ::pdf_font_desc *fontdesc, int cid, ::fz_matrix *trm)` => `(int, float adv)`
 	 */
@@ -12409,7 +12409,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_undo(const PdfDocument& doc);
 
 	/** Class-aware wrapper for `::pdf_undoredo_state()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_undoredo_state(::pdf_document *doc)` => `(int, int steps)`
 	 */
@@ -12467,7 +12467,7 @@ namespace mupdf
 	FZ_FUNCTION int pdf_version(const PdfDocument& doc);
 
 	/** Class-aware wrapper for `::pdf_walk_tree()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_walk_tree(::pdf_obj *tree, ::pdf_obj *kid_name, void (*arrive)(::fz_context *, ::pdf_obj *, void *, ::pdf_obj **), void (*leave)(::fz_context *, ::pdf_obj *, void *), void *arg, ::pdf_obj **names, ::pdf_obj **values)` => `()`
 	 */
@@ -12546,7 +12546,7 @@ namespace mupdf
 	FZ_FUNCTION void pdf_xref_store_unsaved_signature(const PdfDocument& doc, const PdfObj& field, const PdfPkcs7Signer& signer);
 
 	/** Class-aware wrapper for `::pdf_zugferd_profile()`.
-	
+
 	This function has out-params. Python/C# wrappers look like:
 		`pdf_zugferd_profile(::pdf_document *doc)` => `(enum pdf_zugferd_profile, float version)`
 	 */

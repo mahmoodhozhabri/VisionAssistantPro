@@ -1,0 +1,54 @@
+name: Crowdin l10n
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  crowdinAuthToken: ${{ secrets.CROWDIN_TOKEN }}
+  GH_TOKEN: ${{ github.token }}
+  CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID || 935491 }}
+  L10N_UTIL_CONFIG: ${{ vars.L10N_UTIL_CONFIG || 'l10nConfig.yaml' }}
+  MIN_PERCENTAGE_TRANSLATED: ${{ vars.MIN_PERCENTAGE_TRANSLATED || 50 }}
+
+jobs:
+  crowdinSync:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout add-on
+        uses: actions/checkout@v7
+        with:
+          submodules: true
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version-file: ".python-version"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.2.0
+      - name: Install dependencies
+        run: uv sync
+      - name: Install gettext
+        run: |
+          choco install -y gettext
+          # Add gettext to PATH for current and future steps
+          $gettextPath = "C:\Program Files\gettext-iconv\bin"
+          echo "$gettextPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Get add-on info
+        id: getAddonInfo
+        shell: pwsh
+        run: uv run ./.github/scripts/setOutputs.py
+      - name: Download l10nUtil
+        run: |
+          gh release download --repo nvaccess/nvdaL10n --pattern "l10nUtil.exe"
+      - name: Download translations from Crowdin
+        if: ${{ env.crowdinAuthToken }}
+        shell: pwsh
+        env:
+          ADDON_ID: ${{ steps.getAddonInfo.outputs.addonId }}
+        run: ./.github/scripts/crowdinSync.ps1

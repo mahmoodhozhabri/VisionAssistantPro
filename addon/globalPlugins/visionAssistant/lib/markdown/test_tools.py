@@ -129,18 +129,20 @@ class Kwargs(dict):
 
 def _normalize_whitespace(text):
     """ Normalize whitespace for a string of HTML using `tidylib`. """
-    output, errors = tidylib.tidy_fragment(text, options={
-        'drop_empty_paras': 0,
-        'fix_backslash': 0,
-        'fix_bad_comments': 0,
-        'fix_uri': 0,
-        'join_styles': 0,
-        'lower_literals': 0,
-        'merge_divs': 0,
-        'output_xhtml': 1,
-        'quote_ampersand': 0,
-        'newline': 'LF'
-    })
+    output, errors = tidylib.tidy_fragment(
+        text, options={
+            'drop_empty_paras': 0,
+            'fix_backslash': 0,
+            'fix_bad_comments': 0,
+            'fix_uri': 0,
+            'join_styles': 0,
+            'lower_literals': 0,
+            'merge_divs': 0,
+            'output_xhtml': 1,
+            'quote_ampersand': 0,
+            'newline': 'LF',
+        },
+    )
     return output
 
 

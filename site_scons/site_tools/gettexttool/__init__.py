@@ -32,6 +32,9 @@ XGETTEXT_COMMON_ARGS = (
 )
 
 
+from .check_comments import validate_pot_action
+
+
 def generate(env):
 	env.SetDefault(gettext_package_bugs_address="example@example.com")
 	env.SetDefault(gettext_package_name="")
@@ -44,12 +47,17 @@ def generate(env):
 	)
 
 	env["BUILDERS"]["gettextPotFile"] = env.Builder(
-		action=Action("xgettext " + XGETTEXT_COMMON_ARGS, "Generating pot file $TARGET"), suffix=".pot"
+		action=[
+			Action("xgettext " + XGETTEXT_COMMON_ARGS, "Generating pot file $TARGET"),
+			Action(validate_pot_action, "Checking translator comments in $TARGET"),
+		],
+		suffix=".pot",
 	)
 
 	env["BUILDERS"]["gettextMergePotFile"] = env.Builder(
 		action=Action(
-			"xgettext " + "--omit-header --no-location " + XGETTEXT_COMMON_ARGS, "Generating pot file $TARGET"
+			"xgettext " + "--omit-header --no-location " + XGETTEXT_COMMON_ARGS,
+			"Generating pot file $TARGET",
 		),
 		suffix=".pot",
 	)

@@ -110,7 +110,7 @@ class Markdown:
         self.tab_length: int = kwargs.get('tab_length', 4)
 
         self.ESCAPED_CHARS: list[str] = [
-            '\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '>', '#', '+', '-', '.', '!'
+            '\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '>', '#', '+', '-', '.', '!',
         ]
         """ List of characters which get the backslash escape treatment. """
 
@@ -124,8 +124,10 @@ class Markdown:
 
         self.references: dict[str, tuple[str, str]] = {}
         self.htmlStash: util.HtmlStash = util.HtmlStash()
-        self.registerExtensions(extensions=kwargs.get('extensions', []),
-                                configs=kwargs.get('extension_configs', {}))
+        self.registerExtensions(
+            extensions=kwargs.get('extensions', []),
+            configs=kwargs.get('extension_configs', {}),
+        )
         self.set_output_format(kwargs.get('output_format', 'xhtml'))
         self.reset()
 
@@ -160,7 +162,7 @@ class Markdown:
     def registerExtensions(
         self,
         extensions: Sequence[Extension | str],
-        configs: Mapping[str, dict[str, Any]]
+        configs: Mapping[str, dict[str, Any]],
     ) -> Markdown:
         """
         Load a list of extensions into an instance of the `Markdown` class.
@@ -182,14 +184,14 @@ class Markdown:
                 ext.extendMarkdown(self)
                 logger.debug(
                     'Successfully loaded extension "%s.%s".'
-                    % (ext.__class__.__module__, ext.__class__.__name__)
+                    % (ext.__class__.__module__, ext.__class__.__name__),
                 )
             elif ext is not None:
                 raise TypeError(
                     'Extension "{}.{}" must be of type: "{}.{}"'.format(
                         ext.__class__.__module__, ext.__class__.__name__,
-                        Extension.__module__, Extension.__name__
-                    )
+                        Extension.__module__, Extension.__name__,
+                    ),
                 )
         return self
 
@@ -225,7 +227,7 @@ class Markdown:
         try:
             module = importlib.import_module(ext_name)
             logger.debug(
-                'Successfully imported extension module "%s".' % ext_name
+                'Successfully imported extension module "%s".' % ext_name,
             )
         except ImportError as e:
             message = 'Failed loading extension "%s".' % ext_name
@@ -292,8 +294,10 @@ class Markdown:
             valid_formats = list(self.output_formats.keys())
             valid_formats.sort()
             message = 'Invalid Output Format: "%s". Use one of %s.' \
-                % (self.output_format,
-                   '"' + '", "'.join(valid_formats) + '"')
+                % (
+                    self.output_format,
+                    '"' + '", "'.join(valid_formats) + '"',
+                )
             e.args = (message,) + e.args[1:]
             raise
         return self
@@ -368,7 +372,8 @@ class Markdown:
         if self.stripTopLevelTags:
             try:
                 start = output.index(
-                    '<%s>' % self.doc_tag) + len(self.doc_tag) + 2
+                    '<%s>' % self.doc_tag,
+                ) + len(self.doc_tag) + 2
                 end = output.rindex('</%s>' % self.doc_tag)
                 output = output[start:end].strip()
             except ValueError as e:  # pragma: no cover
@@ -377,8 +382,10 @@ class Markdown:
                     output = ''
                 else:
                     # We have a serious problem
-                    raise ValueError('Markdown failed to strip top-level '
-                                     'tags. Document=%r' % output.strip()) from e
+                    raise ValueError(
+                        'Markdown failed to strip top-level '
+                        'tags. Document=%r' % output.strip(),
+                    ) from e
 
         # Run the text post-processors
         for pp in self.postprocessors:
@@ -434,9 +441,11 @@ class Markdown:
         # Write to file or stdout
         if output:
             if isinstance(output, str):
-                output_file = codecs.open(output, "w",
-                                          encoding=encoding,
-                                          errors="xmlcharrefreplace")
+                output_file = codecs.open(
+                    output, "w",
+                    encoding=encoding,
+                    errors="xmlcharrefreplace",
+                )
                 output_file.write(html)
                 output_file.close()
             else:
@@ -499,6 +508,8 @@ def markdownFromFile(**kwargs: Any):
 
     """
     md = Markdown(**kwargs)
-    md.convertFile(kwargs.get('input', None),
-                   kwargs.get('output', None),
-                   kwargs.get('encoding', None))
+    md.convertFile(
+        kwargs.get('input', None),
+        kwargs.get('output', None),
+        kwargs.get('encoding', None),
+    )

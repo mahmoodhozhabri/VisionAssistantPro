@@ -56,11 +56,11 @@ def _make_output(
         pylogging_level=None,
         pylogging_name=None,
         default=None,
-        ):
+):
     '''
     Returns a stream that writes to a specified destination, which can be a
     file descriptor, a file, an existing stream or Python's `logging' system.
-    
+
     Args:
         text: text specification of destination.
             fd:<int> - write to file descriptor.
@@ -71,7 +71,7 @@ def _make_output(
                     level=<int>
                     name=<str>.
                 Other names are ignored.
-        
+
         fd: an int file descriptor.
         stream: something with methods .write(text) and .flush().
             If specified we simply return <stream>.
@@ -82,7 +82,7 @@ def _make_output(
         pylogging*:
             if any of these args is not None, we return a stream that writes to
             Python's `logging` module.
-            
+
             pylogging:
                 Unused other than to activate use of logging module.
             pylogging_logger:
@@ -121,7 +121,7 @@ def _make_output(
             pylogging_name = items_d.get('name', 'pymupdf')
         else:
             assert 0, f'Expected prefix `fd:`, `path:`. `path+:` or `logging:` in {text=}.'
-    
+
     if fd is not None:
         ret = io.open(fd, mode='w', closefd=False)
     elif stream is not None:
@@ -132,12 +132,13 @@ def _make_output(
         ret = io.open(path, 'w')
     elif path_append is not None:
         ret = io.open(path_append, 'a')
-    elif (0
-            or pylogging is not None
-            or pylogging_logger is not None
-            or pylogging_level is not None
-            or pylogging_name is not None
-            ):
+    elif (
+        0
+        or pylogging is not None
+        or pylogging_logger is not None
+        or pylogging_level is not None
+        or pylogging_name is not None
+    ):
         import logging
         if pylogging_logger is None:
             if pylogging_name is None:
@@ -177,7 +178,7 @@ def _log_items():
 def _log_items_active(active):
     global _g_log_items_active
     _g_log_items_active = active
-        
+
 def _log_items_clear():
     del _g_log_items[:]
 
@@ -193,7 +194,7 @@ def set_messages(
         pylogging_logger=None,
         pylogging_level=None,
         pylogging_name=None,
-        ):
+):
     '''
     Sets destination of PyMuPDF messages. See _make_output() for details.
     '''
@@ -209,7 +210,7 @@ def set_messages(
             pylogging_level=pylogging_level,
             pylogging_name=pylogging_name,
             default=_g_out_message,
-            )
+    )
 
 def set_log(
         *,
@@ -222,7 +223,7 @@ def set_log(
         pylogging_logger=None,
         pylogging_level=None,
         pylogging_name=None,
-        ):
+):
     '''
     Sets destination of PyMuPDF development/debugging logging. See
     _make_output() for details.
@@ -239,7 +240,7 @@ def set_log(
             pylogging_level=pylogging_level,
             pylogging_name=pylogging_name,
             default=_g_out_log,
-            )
+    )
 
 def log( text='', caller=1):
     '''
@@ -384,8 +385,8 @@ if mupdf_cppyy is not None:
         import importlib
         mupdf_cppyy = importlib.machinery.SourceFileLoader(
                 'mupdf_cppyy',
-                mupdf_cppyy
-                ).load_module()
+                mupdf_cppyy,
+        ).load_module()
     mupdf = mupdf_cppyy.cppyy.gbl.mupdf
 else:
     # Use MuPDF Python SWIG bindings. We allow import from either our own
@@ -462,7 +463,7 @@ def _format_g(value, *, fmt='%g'):
         return ret
     else:
         return mupdf.fz_format_double(fmt, value)
-        
+
 format_g = _format_g
 
 # ByteString is gone from typing in 3.14.
@@ -589,7 +590,7 @@ class Annot:
     def __init__(self, annot):
         assert isinstance( annot, mupdf.PdfAnnot)
         self.this = annot
-    
+
     def __bool__(self):
         return bool(self.this)
 
@@ -699,8 +700,8 @@ class Annot:
                     mupdf.PDF_ANNOT_CIRCLE,
                     mupdf.PDF_ANNOT_LINE,
                     mupdf.PDF_ANNOT_POLY_LINE,
-                    mupdf.PDF_ANNOT_POLYGON
-                    ):
+                    mupdf.PDF_ANNOT_POLYGON,
+            ):
                 mupdf.pdf_dict_del( annot_obj, PDF_NAME('IC'))
             elif nfcol > 0:
                 mupdf.pdf_set_annot_interior_color( annot, fcol[:nfcol])
@@ -718,7 +719,7 @@ class Annot:
                     mupdf.PDF_ANNOT_SQUARE,
                     mupdf.PDF_ANNOT_STAMP,
                     mupdf.PDF_ANNOT_TEXT,
-                    ):
+            ):
                 insert_rot = 0
 
             if insert_rot:
@@ -741,7 +742,7 @@ class Annot:
                 exception_info()
             message( f'cannot update annot: {e}')
             raise
-        
+
         if (opacity < 0 or opacity >= 1) and not blend_mode:    # no opacity, no blend_mode
             return True
 
@@ -749,15 +750,15 @@ class Annot:
             ap = mupdf.pdf_dict_getl(
                     mupdf.pdf_annot_obj(annot),
                     PDF_NAME('AP'),
-                    PDF_NAME('N')
-                    )
+                    PDF_NAME('N'),
+            )
             if not ap.m_internal:   # should never happen
                 raise RuntimeError( MSG_BAD_APN)
 
             resources = mupdf.pdf_dict_get( ap, PDF_NAME('Resources'))
             if not resources.m_internal:    # no Resources yet: make one
                 resources = mupdf.pdf_dict_put_dict( ap, PDF_NAME('Resources'), 2)
-            
+
             alp0 = mupdf.pdf_new_dict( page.doc(), 3)
             if opacity >= 0 and opacity < 1:
                 mupdf.pdf_dict_put_real( alp0, PDF_NAME('CA'), opacity)
@@ -808,8 +809,8 @@ class Annot:
             ap = mupdf.pdf_dict_getl(
                     mupdf.pdf_annot_obj(annot),
                     mupdf.PDF_ENUM_NAME_AP,
-                    mupdf.PDF_ENUM_NAME_N
-                    )
+                    mupdf.PDF_ENUM_NAME_N,
+            )
             if not ap.m_internal:
                 return JM_py_from_matrix(mupdf.FzMatrix())
             mat = mupdf.pdf_dict_get_matrix(ap, mupdf.PDF_ENUM_NAME_Matrix)
@@ -840,7 +841,7 @@ class Annot:
                 PDF_NAME('N'),
                 PDF_NAME('Resources'),
                 PDF_NAME('ExtGState'),
-                )
+        )
         if mupdf.pdf_is_dict(obj):
             n = mupdf.pdf_dict_len(obj)
             for i in range(n):
@@ -867,7 +868,7 @@ class Annot:
                 mupdf.PDF_ANNOT_POLY_LINE,
                 mupdf.PDF_ANNOT_POLYGON,
                 mupdf.PDF_ANNOT_SQUARE,
-                ):
+        ):
             return dict()
         ao = mupdf.pdf_annot_obj(self.this)
         ret = JM_annot_border(ao)
@@ -938,7 +939,7 @@ class Annot:
                 PDF_NAME('FS'),
                 PDF_NAME('EF'),
                 PDF_NAME('F'),
-                )
+        )
         if not stream.m_internal:
             RAISEPY( "bad PDF: file entry not found", JM_Exc_FileDataError)
 
@@ -1071,7 +1072,7 @@ class Annot:
         stream = JM_BinFromBuffer(buf)
         res['stream'] = stream
         return res
-    
+
     def get_text(self, *args, **kwargs):
         return utils.get_text(self, *args, **kwargs)
 
@@ -1229,10 +1230,10 @@ class Annot:
             #log(f'{rect=}')
         val = JM_py_from_rect(rect)
         #log(f'{val=}')
-        
+
         val = Rect(val) * self.get_parent().transformation_matrix
         val *= self.get_parent().derotation_matrix
-        
+
         return val
 
     @property
@@ -1255,7 +1256,7 @@ class Annot:
         else:
             val = mupdf.pdf_bound_annot(self.this)
         val = Rect(val)
-        
+
         # Caching self.parent_() reduces 1000x from 0.07 to 0.04.
         #
         p = self.get_parent()
@@ -1280,7 +1281,7 @@ class Annot:
                     mupdf.pdf_to_real( mupdf.pdf_array_get( arr, 1)),
                     -mupdf.pdf_to_real( mupdf.pdf_array_get( arr, 2)),
                     -mupdf.pdf_to_real( mupdf.pdf_array_get( arr, 3)),
-                    )
+            )
 
     @property
     def rotation(self):
@@ -1341,7 +1342,7 @@ class Annot:
                 mupdf.PDF_ANNOT_POLY_LINE,
                 mupdf.PDF_ANNOT_POLYGON,
                 mupdf.PDF_ANNOT_SQUARE,
-                ):
+        ):
             message(f"Cannot set border for '{atname}'.")
             return None
         if atype not in (
@@ -1349,7 +1350,7 @@ class Annot:
                 mupdf.PDF_ANNOT_FREE_TEXT,
                 mupdf.PDF_ANNOT_POLYGON,
                 mupdf.PDF_ANNOT_SQUARE,
-                ):
+        ):
             if clouds > 0:
                 message(f"Cannot set cloudy border for '{atname}'.")
                 clouds = -1  # do not set border effect
@@ -1389,8 +1390,10 @@ class Annot:
         fill = colors.get("fill")
         stroke = colors.get("stroke")
 
-        fill_annots = (mupdf.PDF_ANNOT_CIRCLE, mupdf.PDF_ANNOT_SQUARE, mupdf.PDF_ANNOT_LINE, mupdf.PDF_ANNOT_POLY_LINE, mupdf.PDF_ANNOT_POLYGON,
-                       mupdf.PDF_ANNOT_REDACT,)
+        fill_annots = (
+            mupdf.PDF_ANNOT_CIRCLE, mupdf.PDF_ANNOT_SQUARE, mupdf.PDF_ANNOT_LINE, mupdf.PDF_ANNOT_POLY_LINE, mupdf.PDF_ANNOT_POLYGON,
+            mupdf.PDF_ANNOT_REDACT,
+        )
 
         if stroke in ([], ()):
             doc.xref_set_key(self.xref, "C", "[]")
@@ -1536,7 +1539,7 @@ class Annot:
         """Set annotation rectangle."""
         CheckParent(self)
         annot = self.this
-        
+
         pdfpage = _pdf_annot_page(annot)
         rot = JM_rotate_page_matrix(pdfpage)
         r = mupdf.fz_transform_rect(JM_rect_from_py(rect), rot)
@@ -1551,7 +1554,7 @@ class Annot:
     def set_rotation(self, rotate=0):
         """Set annotation rotation."""
         CheckParent(self)
-        
+
         annot = self.this
         type = mupdf.pdf_annot_type(annot)
         if type not in (
@@ -1566,7 +1569,7 @@ class Annot:
                 mupdf.PDF_ANNOT_SQUARE,
                 mupdf.PDF_ANNOT_STAMP,
                 mupdf.PDF_ANNOT_TEXT,
-                ):
+        ):
             return
         rot = rotate
         while rot < 0:
@@ -1592,17 +1595,18 @@ class Annot:
         it = mupdf.pdf_to_name(o)
         return (type_, c, it)
 
-    def update(self,
-            blend_mode: OptStr =None,
-            opacity: OptFloat =None,
-            fontsize: float =0,
-            fontname: OptStr =None,
-            text_color: OptSeq =None,
-            border_color: OptSeq =None,
-            fill_color: OptSeq =None,
-            cross_out: bool =True,
-            rotate: int =-1,
-            ):
+    def update(
+        self,
+        blend_mode: OptStr =None,
+        opacity: OptFloat =None,
+        fontsize: float =0,
+        fontname: OptStr =None,
+        text_color: OptSeq =None,
+        border_color: OptSeq =None,
+        fill_color: OptSeq =None,
+        cross_out: bool =True,
+        rotate: int =-1,
+    ):
         """Update annot appearance.
 
         Notes:
@@ -1621,7 +1625,7 @@ class Annot:
             rotate: set rotation, 'FreeText' and some others.
         """
         annot_obj = mupdf.pdf_annot_obj(self.this)
-        
+
         if border_color:
             is_rich_text = mupdf.pdf_dict_get(annot_obj, PDF_NAME("RC"))
             if not is_rich_text:
@@ -1781,11 +1785,13 @@ class Annot:
         #----------------------------------------------------------------------
         if line_end_le + line_end_ri > 0 and annot_type in (mupdf.PDF_ANNOT_POLYGON, mupdf.PDF_ANNOT_POLY_LINE):
 
-            le_funcs = (None, TOOLS._le_square, TOOLS._le_circle,
-                        TOOLS._le_diamond, TOOLS._le_openarrow,
-                        TOOLS._le_closedarrow, TOOLS._le_butt,
-                        TOOLS._le_ropenarrow, TOOLS._le_rclosedarrow,
-                        TOOLS._le_slash)
+            le_funcs = (
+                None, TOOLS._le_square, TOOLS._le_circle,
+                TOOLS._le_diamond, TOOLS._le_openarrow,
+                TOOLS._le_closedarrow, TOOLS._le_butt,
+                TOOLS._le_ropenarrow, TOOLS._le_rclosedarrow,
+                TOOLS._le_slash,
+            )
             le_funcs_range = range(1, len(le_funcs))
             d = 2 * max(1, self.border["width"])
             rect = self.rect + (-d, -d, d, d)
@@ -1823,7 +1829,7 @@ class Annot:
                 mupdf.PDF_ANNOT_SQUARE,
                 mupdf.PDF_ANNOT_STAMP,
                 mupdf.PDF_ANNOT_TEXT,
-                ):
+        ):
             return
 
         rot = self.rotation  # get value from annot object
@@ -1894,7 +1900,7 @@ class Annot:
         for i in range( 30*1000):
             total += i
         return total
-    
+
     @property
     def vertices(self):
         """annotation vertex points"""
@@ -1919,7 +1925,7 @@ class Annot:
         if not o.m_internal:    o = mupdf.pdf_dict_get(annot_obj, PDF_NAME('L'))
         if not o.m_internal:    o = mupdf.pdf_dict_get(annot_obj, PDF_NAME('QuadPoints'))
         if not o.m_internal:    o = mupdf.pdf_dict_gets(annot_obj, 'CL')
-        
+
         if o.m_internal:
             # handle lists with 1-level depth
             # weiter
@@ -1931,7 +1937,7 @@ class Annot:
                 point = mupdf.fz_transform_point(point, page_ctm)
                 res.append( (point.x, point.y))
             return res
-            
+
         o = mupdf.pdf_dict_gets(annot_obj, 'InkList')
         if o.m_internal:
             # InkList has 2-level lists
@@ -1970,30 +1976,30 @@ class Archive:
         self.this = mupdf.fz_new_multi_archive()
         if args:
             self.add( *args)
-    
+
     def __repr__( self):
         return f'Archive, sub-archives: {len(self._subarchives)}'
 
     def _add_arch( self, subarch, path=None):
         mupdf.fz_mount_multi_archive( self.this, subarch, path)
-    
+
     def _add_dir( self, folder, path=None):
         sub = mupdf.fz_open_directory( folder)
         mupdf.fz_mount_multi_archive( self.this, sub, path)
-    
+
     def _add_treeitem( self, memory, name, path=None):
         buff = JM_BufferFromBytes( memory)
         sub = mupdf.fz_new_tree_archive( mupdf.FzTree())
         mupdf.fz_tree_archive_add_buffer( sub, name, buff)
         mupdf.fz_mount_multi_archive( self.this, sub, path)
-    
+
     def _add_ziptarfile( self, filepath, type_, path=None):
         if type_ == 1:
             sub = mupdf.fz_open_zip_archive( filepath)
         else:
             sub = mupdf.fz_open_tar_archive( filepath)
         mupdf.fz_mount_multi_archive( self.this, sub, path)
-    
+
     def _add_ziptarmemory( self, memory, type_, path=None):
         buff = JM_BufferFromBytes( memory)
         stream = mupdf.fz_open_buffer( buff)
@@ -2002,7 +2008,7 @@ class Archive:
         else:
             sub = mupdf.fz_open_tar_archive_with_stream( stream)
         mupdf.fz_mount_multi_archive( self.this, sub, path)
-    
+
     def add( self, content, path=None):
         '''
         Add a sub-archive.
@@ -2038,7 +2044,7 @@ class Archive:
 
         if isinstance(content, pathlib.Path):
             content = str(content)
-        
+
         if isinstance(content, str):
             if os.path.isdir(content):
                 self._add_dir(content, path)
@@ -2082,7 +2088,7 @@ class Archive:
         elif isinstance(content, Archive):
             self._add_arch(content, path)
             return make_subarch([], path, 'multi')
-        
+
         if isinstance(content, tuple) and len(content) == 2:
             # covers the tree item plus path
             data, name = content
@@ -2097,13 +2103,13 @@ class Archive:
             else:
                 assert 0, f'Unexpected {type(data)=}.'
             return make_subarch([name], path, 'tree')
-        
+
         elif hasattr(content, '__getitem__'):
             # Deal with sequence of disparate items.
             for item in content:
                 self.add(item, path)
             return
-        
+
         else:
             raise TypeError(f'Unrecognised type {type(content)}.')
         assert 0
@@ -2114,10 +2120,10 @@ class Archive:
         List of sub archives.
         '''
         return self._subarchives
-    
+
     def has_entry( self, name):
         return mupdf.fz_has_archive_entry( self.this, name)
-    
+
     def read_entry( self, name):
         buff = mupdf.fz_read_archive_entry( self.this, name)
         return JM_BinFromBuffer( buff)
@@ -2139,7 +2145,7 @@ class Xml:
             self.this = mupdf.fz_parse_xml_from_html5(buff)
         else:
             assert 0, f'Unsupported type for rhs: {type(rhs)}'
-    
+
     def _get_node_tree( self):
         def show_node(node, items, shift):
             while node is not None:
@@ -2161,7 +2167,7 @@ class Xml:
         items = []
         items = show_node(self, items, shift)
         return items
-    
+
     def add_bullet_list(self):
         """Add bulleted list ("ul" tag)"""
         child = self.create_element("ul")
@@ -2340,7 +2346,7 @@ class Xml:
 
     def append_child( self, child):
         mupdf.fz_dom_append_child( self.this, child.this)
-    
+
     def append_styled_span(self, style):
         span = self.create_element("span")
         span.add_style(style)
@@ -2352,11 +2358,11 @@ class Xml:
 
     def bodytag( self):
         return Xml( mupdf.fz_dom_body( self.this))
-    
+
     def clone( self):
         ret = mupdf.fz_dom_clone( self.this)
         return Xml( ret)
-    
+
     @staticmethod
     def color_text(color):
         if type(color) is str:
@@ -2369,10 +2375,10 @@ class Xml:
 
     def create_element( self, tag):
         return Xml( mupdf.fz_dom_create_element( self.this, tag))
-    
+
     def create_text_node( self, text):
         return Xml( mupdf.fz_dom_create_text_node( self.this, text))
-    
+
     def debug(self):
         """Print a list of the node tree below self."""
         items = self._get_node_tree()
@@ -2383,12 +2389,12 @@ class Xml:
         ret = mupdf.fz_dom_find( self.this, tag, att, match)
         if ret.m_internal:
             return Xml( ret)
-    
+
     def find_next( self, tag, att, match):
         ret = mupdf.fz_dom_find_next( self.this, tag, att, match)
         if ret.m_internal:
             return Xml( ret)
-    
+
     @property
     def first_child( self):
         if mupdf.fz_xml_text( self.this):
@@ -2397,11 +2403,11 @@ class Xml:
         ret = mupdf.fz_dom_first_child( self)
         if ret.m_internal:
             return Xml( ret)
-    
+
     def get_attribute_value( self, key):
         assert key
         return mupdf.fz_dom_attribute( self.this, key)
-    
+
     def get_attributes( self):
         if mupdf.fz_xml_text( self.this):
             # text node, has no attributes.
@@ -2415,13 +2421,13 @@ class Xml:
             result[ key] = val
             i += 1
         return result
-    
+
     def insert_after( self, node):
         mupdf.fz_dom_insert_after( self.this, node.this)
-    
+
     def insert_before( self, node):
         mupdf.fz_dom_insert_before( self.this, node.this)
-    
+
     def insert_text(self, text):
         lines = text.splitlines()
         line_count = len(lines)
@@ -2453,30 +2459,30 @@ class Xml:
         ret = mupdf.fz_dom_next( self.this)
         if ret.m_internal:
             return Xml( ret)
-            
+
     @property
     def parent( self):
         ret = mupdf.fz_dom_parent( self.this)
         if ret.m_internal:
             return Xml( ret)
-    
+
     @property
     def previous( self):
         ret = mupdf.fz_dom_previous( self.this)
         if ret.m_internal:
             return Xml( ret)
-    
+
     def remove( self):
         mupdf.fz_dom_remove( self.this)
-    
+
     def remove_attribute( self, key):
         assert key
         mupdf.fz_dom_remove_attribute( self.this, key)
-    
+
     @property
     def root( self):
         return Xml( mupdf.fz_xml_root( self.this))
-    
+
     def set_align(self, align):
         """Set text alignment via CSS style"""
         if isinstance( align, str):
@@ -2497,7 +2503,7 @@ class Xml:
     def set_attribute( self, key, value):
         assert key
         mupdf.fz_dom_add_attribute( self.this, key, value)
-    
+
     def set_bgcolor(self, color):
         """Set background color via CSS style"""
         self.add_style(f'background-color: {self.color_text(color)}')  # does not work on span level
@@ -2610,7 +2616,7 @@ class Xml:
             word_spacing=None,
             unqid=None,
             cls=None,
-            ):
+    ):
         """Set any or all properties of a node.
 
         To be used for existing nodes preferably.
@@ -2708,11 +2714,11 @@ class Xml:
     @property
     def tagname( self):
         return mupdf.fz_xml_tag( self.this)
-    
+
     @property
     def text( self):
         return mupdf.fz_xml_text( self.this)
-    
+
     add_var = add_code
     add_samp = add_code
     add_kbd = add_code
@@ -2817,7 +2823,7 @@ class DisplayList:
                 JM_matrix_from_py(m),
                 JM_rect_from_py(area),
                 mupdf.FzCookie(),
-                )
+        )
 
 if g_use_extra:
     extra_FzDocument_insert_pdf = extra.FzDocument_insert_pdf
@@ -2833,17 +2839,19 @@ class Document:
         if type(loc) not in (tuple, list) or len(loc) != 2:
             return False
         chapter, pno = loc
-        if (0
-                or not isinstance(chapter, int)
-                or chapter < 0
-                or chapter >= self.chapter_count
-                ):
+        if (
+            0
+            or not isinstance(chapter, int)
+            or chapter < 0
+            or chapter >= self.chapter_count
+        ):
             return False
-        if (0
-                or not isinstance(pno, int)
-                or pno < 0
-                or pno >= self.chapter_page_count(chapter)
-                ):
+        if (
+            0
+            or not isinstance(pno, int)
+            or pno < 0
+            or pno >= self.chapter_page_count(chapter)
+        ):
             return False
         return True
 
@@ -2879,16 +2887,16 @@ class Document:
     @typing.overload
     def __getitem__(self, i: int = 0) -> Page:
         ...
-    
+
     if sys.version_info >= (3, 9):
         @typing.overload
         def __getitem__(self, i: slice) -> list[Page]:
             ...
-        
+
         @typing.overload
         def __getitem__(self, i: tuple[int, int]) -> Page:
             ...
-    
+
     def __getitem__(self, i=0):
         if isinstance(i, slice):
             return [self[j] for j in range(*i.indices(len(self)))]
@@ -2918,7 +2926,7 @@ class Document:
         global JM_mupdf_show_errors
         JM_mupdf_show_errors_old = JM_mupdf_show_errors
         JM_mupdf_show_errors = 0
-        
+
         try:
             self.is_closed    = False
             self.is_encrypted = False
@@ -2934,7 +2942,7 @@ class Document:
                 self.this = pdf_document
                 self.this_is_pdf = True
                 return
-        
+
             w = width
             h = height
             r = JM_rect_from_py(rect)
@@ -2944,7 +2952,7 @@ class Document:
 
             self._name = filename
             self.stream = stream
-            
+
             if stream is not None:
                 if filename is not None and filetype is None:
                     # 2025-05-06: Use <filename> as the filetype. This is
@@ -2960,21 +2968,21 @@ class Document:
                 else:
                     raise TypeError(f"bad stream: {type(stream)=}.")
                 self.stream = stream
-                
+
                 assert isinstance(stream, (bytes, memoryview))
                 if len(stream) == 0:
                     # MuPDF raise an exception for this but also generates
                     # warnings, which is not very helpful for us. So instead we
                     # raise a specific exception.
                     raise EmptyFileError('Cannot open empty stream.')
-                    
+
                 stream2 = mupdf.fz_open_memory(mupdf.python_buffer_data(stream), len(stream))
                 try:
                     doc = mupdf.fz_open_document_with_stream(filetype if filetype else '', stream2)
                 except Exception as e:
                     if g_exceptions_verbose > 1:    exception_info()
                     raise FileDataError('Failed to open stream') from e
-            
+
             elif filename:
                 assert not stream
                 if isinstance(filename, str):
@@ -2986,7 +2994,7 @@ class Document:
                 else:
                     raise TypeError(f"bad filename: {type(filename)=} {filename=}.")
                 self._name = filename
-                
+
                 # Generate our own specific exceptions. This avoids MuPDF
                 # generating warnings etc.
                 if not os.path.exists(filename):
@@ -2995,7 +3003,7 @@ class Document:
                     raise FileDataError(f"'{filename}' is no file")
                 elif os.path.getsize(filename) == 0:
                     raise EmptyFileError(f'Cannot open empty file: {filename=}.')
-                
+
                 if filetype:
                     # Override the type implied by <filename>. MuPDF does not
                     # have a way to do this directly so we open via a stream.
@@ -3015,7 +3023,7 @@ class Document:
             else:
                 pdf = mupdf.PdfDocument()
                 doc = mupdf.FzDocument(pdf)
-            
+
             if w > 0 and h > 0:
                 mupdf.fz_layout_document(doc, w, h, fontsize)
             elif mupdf.fz_is_document_reflowable(doc):
@@ -3050,7 +3058,7 @@ class Document:
                     self.page_count2 = extra.page_count_fz
         finally:
             JM_mupdf_show_errors = JM_mupdf_show_errors_old
-    
+
     def __len__(self) -> int:
         return self.page_count
 
@@ -3075,7 +3083,7 @@ class Document:
                 PDF_NAME('AcroForm'),
                 PDF_NAME('DR'),
                 PDF_NAME('Font'),
-                )
+        )
         if not fonts.m_internal or not mupdf.pdf_is_dict( fonts):
             raise RuntimeError( "PDF has no form fonts yet")
         k = mupdf.pdf_new_name( name)
@@ -3085,7 +3093,7 @@ class Document:
     def del_toc_item(
             self,
             idx: int,
-            ) -> None:
+    ) -> None:
         """Delete TOC / bookmark item by index."""
         xref = self.get_outline_xrefs()[idx]
         self._remove_toc_item(xref)
@@ -3141,7 +3149,7 @@ class Document:
             from_page: int = -1,
             to_page: int = -1,
             start_at: int = -1,
-            ) -> None:
+    ) -> None:
         """Insert links contained in copied page range into destination PDF.
 
         Parameter values **must** equal those of method insert_pdf(), which must
@@ -3245,7 +3253,7 @@ class Document:
                 page_src = None
                 continue
             page_dst = doc1[pno_dst[i]]  # load destination page
-            
+
             # In our call above to page_src.get_links(), we end up in
             # fz_load_links(). This extracts the raw rects (encoded as strings
             # such as `/Rect[10 782 40 822]`) and multiplies them by page_ctm
@@ -3277,7 +3285,7 @@ class Document:
             to_page: int = -1,
             start_at: int = -1,
             join_duplicates=0,
-            ) -> None:
+    ) -> None:
         """Insert widgets of copied page range into target PDF.
 
         Parameter values **must** equal those of method insert_pdf() which
@@ -3558,7 +3566,7 @@ class Document:
             tar_annots = mupdf.pdf_dict_get(tar_page_pdf.obj(), PDF_NAME("Annots"))
             if not mupdf.pdf_is_array(tar_annots):
                 tar_annots = mupdf.pdf_dict_put_array(
-                    tar_page_pdf.obj(), PDF_NAME("Annots"), 5
+                    tar_page_pdf.obj(), PDF_NAME("Annots"), 5,
                 )
 
             for xref in w_xrefs:
@@ -3569,7 +3577,7 @@ class Document:
 
                 # check if parent of widget already in target
                 parent_xref = mupdf.pdf_to_num(
-                    w_obj.pdf_dict_get(PDF_NAME("Parent"))
+                    w_obj.pdf_dict_get(PDF_NAME("Parent")),
                 )
                 if parent_xref == 0:  # parent not in target yet
                     try:
@@ -3603,7 +3611,7 @@ class Document:
                 PDF_NAME('Names'),
                 PDF_NAME('EmbeddedFiles'),
                 PDF_NAME('Names'),
-                )
+        )
         entry = mupdf.pdf_array_get(names, 2*idx+1)
         filespec = mupdf.pdf_dict_getl(entry, PDF_NAME('EF'), PDF_NAME('F'))
         buf = mupdf.pdf_load_stream(filespec)
@@ -3632,7 +3640,7 @@ class Document:
                 PDF_NAME('Names'),
                 PDF_NAME('EmbeddedFiles'),
                 PDF_NAME('Names'),
-                )
+        )
         if not mupdf.pdf_is_array(names):
             root = mupdf.pdf_dict_get(mupdf.pdf_trailer(pdf), PDF_NAME('Root'))
             names = mupdf.pdf_new_array(pdf, 6)    # an even number!
@@ -3642,11 +3650,11 @@ class Document:
                     PDF_NAME('Names'),
                     PDF_NAME('EmbeddedFiles'),
                     PDF_NAME('Names'),
-                    )
+            )
         fileentry = JM_embed_file(pdf, data, filename, ufilename, desc, 1)
         xref = mupdf.pdf_to_num(
-                mupdf.pdf_dict_getl(fileentry, PDF_NAME('EF'), PDF_NAME('F'))
-                )
+                mupdf.pdf_dict_getl(fileentry, PDF_NAME('EF'), PDF_NAME('F')),
+        )
         mupdf.pdf_array_push(names, mupdf.pdf_new_text_string(name))
         mupdf.pdf_array_push(names, fileentry)
         return xref
@@ -3659,7 +3667,7 @@ class Document:
                 PDF_NAME('Names'),
                 PDF_NAME('EmbeddedFiles'),
                 PDF_NAME('Names'),
-                )
+        )
         mupdf.pdf_array_delete(names, idx + 1)
         mupdf.pdf_array_delete(names, idx)
 
@@ -3676,7 +3684,7 @@ class Document:
                 PDF_NAME('Names'),
                 PDF_NAME('EmbeddedFiles'),
                 PDF_NAME('Names'),
-                )
+        )
         o = mupdf.pdf_array_get(names, 2*idx+1)
         ci = mupdf.pdf_dict_get(o, PDF_NAME('CI'))
         if ci.m_internal:
@@ -3719,15 +3727,15 @@ class Document:
                 PDF_NAME('Names'),
                 PDF_NAME('EmbeddedFiles'),
                 PDF_NAME('Names'),
-                )
+        )
         if mupdf.pdf_is_array(names):
             n = mupdf.pdf_array_len(names)
             for i in range(0, n, 2):
                 val = JM_EscapeStrFromStr(
                         mupdf.pdf_to_text_string(
-                            mupdf.pdf_array_get(names, i)
-                            )
-                        )
+                            mupdf.pdf_array_get(names, i),
+                        ),
+                )
                 namelist.append(val)
 
     def _embfile_upd(self, idx, buffer_=None, filename=None, ufilename=None, desc=None):
@@ -3739,7 +3747,7 @@ class Document:
                 PDF_NAME('Names'),
                 PDF_NAME('EmbeddedFiles'),
                 PDF_NAME('Names'),
-                )
+        )
         entry = mupdf.pdf_array_get(names, 2*idx+1)
 
         filespec = mupdf.pdf_dict_getl(entry, PDF_NAME('EF'), PDF_NAME('F'))
@@ -3824,7 +3832,7 @@ class Document:
                         mupdf.pdf_to_real(mupdf.pdf_array_get(col, 0)),
                         mupdf.pdf_to_real(mupdf.pdf_array_get(col, 1)),
                         mupdf.pdf_to_real(mupdf.pdf_array_get(col, 2)),
-                        )
+                )
                 itemdict[dictkey_color] = color
             z=0
             obj = mupdf.pdf_dict_get(bm, PDF_NAME('Dest'))
@@ -3900,8 +3908,8 @@ class Document:
                     mupdf.pdf_dict_get(
                         mupdf.pdf_array_get(kids, i),
                         PDF_NAME('Nums'),
-                        )
-                    )
+                    ),
+            )
             JM_get_page_labels(rc, nums)
         return rc
 
@@ -4151,7 +4159,7 @@ class Document:
                 PDF_NAME('AcroForm'),
                 PDF_NAME('DR'),
                 PDF_NAME('Font'),
-                )
+        )
         liste = list()
         if fonts.m_internal and mupdf.pdf_is_dict(fonts):   # fonts exist
             n = mupdf.pdf_dict_len(fonts)
@@ -4346,7 +4354,7 @@ class Document:
         if (
                 pno not in range(page_count)
                 or to not in range(-1, page_count)
-                ):
+        ):
             raise ValueError("bad page number(s)")
         before = 1
         copy = 1
@@ -4439,13 +4447,14 @@ class Document:
 
         self._reset_page_refs()
 
-    def embfile_add(self,
-            name: str,
-            buffer_: ByteString,
-            filename: OptStr =None,
-            ufilename: OptStr =None,
-            desc: OptStr =None,
-            ) -> None:
+    def embfile_add(
+        self,
+        name: str,
+        buffer_: ByteString,
+        filename: OptStr =None,
+        ufilename: OptStr =None,
+        desc: OptStr =None,
+    ) -> None:
         """Add an item to the EmbeddedFiles array.
 
         Args:
@@ -4470,7 +4479,7 @@ class Document:
                 filename=filename,
                 ufilename=ufilename,
                 desc=desc,
-                )
+        )
         date = get_pdf_now()
         self.xref_set_key(xref, "Type", "/EmbeddedFile")
         self.xref_set_key(xref, "Params/CreationDate", get_pdf_str(date))
@@ -4535,13 +4544,14 @@ class Document:
         self._embfile_names(filenames)
         return filenames
 
-    def embfile_upd(self,
-            item: typing.Union[int, str],
-            buffer_: OptBytes =None,
-            filename: OptStr =None,
-            ufilename: OptStr =None,
-            desc: OptStr =None,
-            ) -> None:
+    def embfile_upd(
+        self,
+        item: typing.Union[int, str],
+        buffer_: OptBytes =None,
+        filename: OptStr =None,
+        ufilename: OptStr =None,
+        desc: OptStr =None,
+    ) -> None:
         """Change an item of the EmbeddedFiles array.
 
         Notes:
@@ -4561,7 +4571,7 @@ class Document:
                 filename=filename,
                 ufilename=ufilename,
                 desc=desc,
-                )
+        )
         date = get_pdf_now()
         self.xref_set_key(xref, "Params/ModDate", get_pdf_str(date))
         return xref
@@ -4575,9 +4585,10 @@ class Document:
         obj = mupdf.pdf_load_object(pdf, xref)
         type_ = mupdf.pdf_dict_get(obj, PDF_NAME('Type'))
         subtype = mupdf.pdf_dict_get(obj, PDF_NAME('Subtype'))
-        if (mupdf.pdf_name_eq(type_, PDF_NAME('Font'))
-                and not mupdf.pdf_to_name( subtype).startswith('CIDFontType')
-                ):
+        if (
+            mupdf.pdf_name_eq(type_, PDF_NAME('Font'))
+            and not mupdf.pdf_to_name( subtype).startswith('CIDFontType')
+        ):
             basefont = mupdf.pdf_dict_get(obj, PDF_NAME('BaseFont'))
             if not basefont.m_internal or mupdf.pdf_is_null(basefont):
                 bname = mupdf.pdf_dict_get(obj, PDF_NAME('Name'))
@@ -4595,14 +4606,14 @@ class Document:
                         JM_UnicodeFromStr(ext),
                         JM_UnicodeFromStr(mupdf.pdf_to_name(subtype)),
                         bytes_,
-                        )
+                )
             else:
                 rc = {
                         dictkey_name: JM_EscapeStrFromStr(mupdf.pdf_to_name(bname)),
                         dictkey_ext: JM_UnicodeFromStr(ext),
                         dictkey_type: JM_UnicodeFromStr(mupdf.pdf_to_name(subtype)),
                         dictkey_content: bytes_,
-                        }
+                }
         else:
             if not named:
                 rc = '', '', '', b''
@@ -4612,7 +4623,7 @@ class Document:
                         dictkey_ext: '',
                         dictkey_type: '',
                         dictkey_content: b'',
-                        }
+                }
         return rc
 
     def extract_image(self, xref):
@@ -4667,7 +4678,7 @@ class Document:
             use_objstms=1,
             compression_effort=0,
             raise_on_repair=False,
-            ):
+    ):
         '''
         Save PDF using some different defaults
         '''
@@ -4692,7 +4703,7 @@ class Document:
                 use_objstms=use_objstms,
                 compression_effort=compression_effort,
                 raise_on_repair=raise_on_repair,
-                )
+        )
 
     def find_bookmark(self, bm):
         """Find new location after layouting a document."""
@@ -4706,9 +4717,10 @@ class Document:
         pdf = _as_pdf_document(self)
         page_count = mupdf.pdf_count_pages( pdf)
         try:
-            if (not _INRANGE(pno, 0, page_count - 1)
-                    or not _INRANGE(to, -1, page_count - 1)
-                    ):
+            if (
+                not _INRANGE(pno, 0, page_count - 1)
+                or not _INRANGE(to, -1, page_count - 1)
+            ):
                 raise ValueError( MSG_BAD_PAGENO)
 
             page1 = mupdf.pdf_resolve_indirect( mupdf.pdf_lookup_page_obj( pdf, pno))
@@ -4763,7 +4775,7 @@ class Document:
             limit: int = 256,
             idx: int = 0,
             fontdict: OptDict = None,
-            ) -> list:
+    ) -> list:
         """Get list of glyph information of a font.
 
         Notes:
@@ -4847,7 +4859,7 @@ class Document:
 
         if ordering < 0:  # not a CJK font
             glyphs = doc._get_char_widths(
-                xref, fontdict["name"], fontdict["ext"], fontdict["ordering"], mylimit, idx
+                xref, fontdict["name"], fontdict["ext"], fontdict["ordering"], mylimit, idx,
             )
         else:  # CJK fonts use char codes and width = 1
             glyphs = None
@@ -4865,7 +4877,7 @@ class Document:
                 mupdf.pdf_trailer( pdf),
                 PDF_NAME('Root'),
                 PDF_NAME('OCProperties'),
-                )
+        )
         if not ocp.m_internal:
             return
         if config == -1:
@@ -4874,7 +4886,7 @@ class Document:
             obj = mupdf.pdf_array_get(
                     mupdf.pdf_dict_get( ocp, PDF_NAME('Configs')),
                     config,
-                    )
+            )
         if not obj.m_internal:
             raise ValueError( MSG_BAD_OC_CONFIG)
         rc = JM_get_ocg_arrays( obj)
@@ -4890,7 +4902,7 @@ class Document:
                     PDF_NAME('Root'),
                     PDF_NAME('OCProperties'),
                     PDF_NAME('Configs'),
-                    )
+            )
             if not mupdf.pdf_is_array( obj):
                 n = 0
         rc = []
@@ -4901,7 +4913,7 @@ class Document:
                     "number": i,
                     "name": info.name,
                     "creator": info.creator,
-                    }
+            }
             rc.append( item)
         return rc
 
@@ -4931,7 +4943,7 @@ class Document:
             return 0
         rc = int(oc.replace("0 R", ""))
         return rc
-    
+
     def get_ocgs(self):
         """Show existing optional content groups."""
         ci = mupdf.pdf_new_name( "CreatorInfo")
@@ -4940,7 +4952,7 @@ class Document:
                 mupdf.pdf_dict_get( mupdf.pdf_trailer( pdf), PDF_NAME('Root')),
                 PDF_NAME('OCProperties'),
                 PDF_NAME('OCGs'),
-                )
+        )
         rc = dict()
         if not mupdf.pdf_is_array( ocgs):
             return rc
@@ -4974,7 +4986,7 @@ class Document:
                     "intent": intents,
                     "on": not hidden,
                     "usage": usage,
-                    }
+            }
             temp = xref
             rc[ temp] = item
         return rc
@@ -5129,7 +5141,7 @@ class Document:
                 if only_one:
                     break
         return numbers
-    
+
     def get_page_pixmap(
             doc: 'Document',
             pno: int,
@@ -5140,7 +5152,7 @@ class Document:
             clip: rect_like = None,
             alpha: bool = False,
             annots: bool = True,
-            ) -> 'Pixmap':
+    ) -> 'Pixmap':
         """Create pixmap of document page by page number.
 
         Notes:
@@ -5162,9 +5174,9 @@ class Document:
                 dpi=dpi, colorspace=colorspace,
                 clip=clip,
                 alpha=alpha,
-                annots=annots
-                )
-    
+                annots=annots,
+        )
+
     def get_page_text(
             doc: 'Document',
             pno: int,
@@ -5173,7 +5185,7 @@ class Document:
             flags: OptInt = None,
             textpage: 'TextPage' = None,
             sort: bool = False,
-            ) -> typing.Any:
+    ) -> typing.Any:
         """Extract a document page's text by page number.
 
         Notes:
@@ -5185,7 +5197,7 @@ class Document:
             output from page.TextPage().
         """
         return doc[pno].get_text(option, clip=clip, flags=flags, sort=sort)
-    
+
     def get_page_xobjects(self, pno: int) -> list:
         """Retrieve a list of XObjects used on a page.
         """
@@ -5206,7 +5218,7 @@ class Document:
                 PDF_NAME('Root'),
                 PDF_NAME('AcroForm'),
                 PDF_NAME('SigFlags'),
-                )
+        )
         sigflag = -1
         if sigflags.m_internal:
             sigflag = mupdf.pdf_to_int(sigflags)
@@ -5215,7 +5227,7 @@ class Document:
     def get_toc(
             doc: 'Document',
             simple: bool = True,
-            ) -> list:
+    ) -> list:
         """Create a table of contents.
 
         Args:
@@ -5265,7 +5277,7 @@ class Document:
         if doc.is_pdf and not simple:
             doc._extend_toc_items(toc)
         return toc
-    
+
     def get_xml_metadata(self):
         """Get document XML metadata."""
         xml = None
@@ -5275,7 +5287,7 @@ class Document:
                     mupdf.pdf_trailer(pdf),
                     PDF_NAME('Root'),
                     PDF_NAME('Metadata'),
-                    )
+            )
         if xml is not None and xml.m_internal:
             buff = mupdf.pdf_load_stream(xml)
             rc = JM_UnicodeFromBuffer(buff)
@@ -5295,7 +5307,7 @@ class Document:
                 if not (item[1] == mupdf.PDF_ANNOT_LINK or item[1] == mupdf.PDF_ANNOT_WIDGET):  # pylint: disable=no-member
                     return True
         return False
-    
+
     def has_links(doc: 'Document') -> bool:
         """Check whether there are links on any page."""
         if doc.is_closed:
@@ -5307,7 +5319,7 @@ class Document:
                 if item[1] == mupdf.PDF_ANNOT_LINK:  # pylint: disable=no-member
                     return True
         return False
-    
+
     def init_doc(self):
         if self.is_encrypted:
             raise ValueError("cannot initialize - document still encrypted")
@@ -5324,23 +5336,24 @@ class Document:
                             'producer':'info:Producer',
                             'creationDate':'info:CreationDate',
                             'modDate':'info:ModDate',
-                            'trapped':'info:Trapped'
-                            }.items()
-                    ]
-                )
+                            'trapped':'info:Trapped',
+                        }.items()
+                    ],
+        )
         self.metadata['encryption'] = None if self._getMetadata('encryption')=='None' else self._getMetadata('encryption')
 
-    def insert_file(self,
-            infile,
-            from_page=-1,
-            to_page=-1,
-            start_at=-1,
-            rotate=-1,
-            links=True,
-            annots=True,
-            show_progress=0,
-            final=1,
-            ):
+    def insert_file(
+        self,
+        infile,
+        from_page=-1,
+        to_page=-1,
+        start_at=-1,
+        rotate=-1,
+        links=True,
+        annots=True,
+        show_progress=0,
+        final=1,
+    ):
         '''
         Insert an arbitrary supported document to an existing PDF.
 
@@ -5371,7 +5384,7 @@ class Document:
                 annots=annots,
                 show_progress=show_progress,
                 final=final,
-                )
+        )
 
     def insert_page(
             doc: 'Document',
@@ -5383,7 +5396,7 @@ class Document:
             fontname: str = "helv",
             fontfile: OptStr = None,
             color: OptSeq = (0,),
-            ) -> int:
+    ) -> int:
         """Create a new PDF page and insert some text.
 
         Notes:
@@ -5402,7 +5415,7 @@ class Document:
             color=color,
         )
         return rc
-    
+
     def insert_pdf(
             self,
             docsrc,
@@ -5418,7 +5431,7 @@ class Document:
             show_progress=0,
             final=1,
             _gmap=None,
-            ):
+    ):
         """Insert a page range from another PDF.
 
         Args:
@@ -5500,7 +5513,7 @@ class Document:
                     show_progress,
                     final,
                     _gmap,
-                    )
+            )
             #log( 'insert_pdf(): extra_FzDocument_insert_pdf() returned.')
         else:
             pdfout = _as_pdf_document(self)
@@ -5510,7 +5523,7 @@ class Document:
                 raise TypeError( "source or target not a PDF")
             ENSURE_OPERATION(pdfout)
             JM_merge_range(pdfout, pdfsrc, fp, tp, sa, rotate, links, annots, show_progress, _gmap)
-        
+
         #log( 'insert_pdf(): calling self._reset_page_refs()')
         self._reset_page_refs()
         if links:
@@ -5553,7 +5566,7 @@ class Document:
                     mupdf.PDF_ENUM_NAME_Root,
                     mupdf.PDF_ENUM_NAME_AcroForm,
                     mupdf.PDF_ENUM_NAME_Fields,
-                    )
+            )
             if mupdf.pdf_is_array(fields):
                 count = mupdf.pdf_array_len(fields)
         except Exception:
@@ -5740,7 +5753,7 @@ class Document:
                     "type": type_,
                     "on": info.selected,
                     "locked": info.locked,
-                    }
+            }
             rc.append(item)
         return rc
 
@@ -5869,20 +5882,20 @@ class Document:
     @property
     def name(self):
         return self._name
-    
+
     def need_appearances(self, value=None):
         """Get/set the NeedAppearances value."""
         if not self.is_form_pdf:
             return None
-        
+
         pdf = _as_pdf_document(self)
         oldval = -1
         appkey = "NeedAppearances"
-        
+
         form = mupdf.pdf_dict_getp(
                 mupdf.pdf_trailer(pdf),
                 "Root/AcroForm",
-                )
+        )
         app = mupdf.pdf_dict_gets(form, appkey)
         if mupdf.pdf_is_bool(app):
             oldval = mupdf.pdf_to_bool(app)
@@ -5908,7 +5921,7 @@ class Document:
             pno: int = -1,
             width: float = 595,
             height: float = 842,
-            ) -> Page:
+    ) -> Page:
         """Create and return a new page object.
 
         Args:
@@ -5920,7 +5933,7 @@ class Document:
         """
         doc._newPage(pno, width=width, height=height)
         return doc[pno]
-    
+
     def next_location(self, page_id):
         """Get (chapter, page) of next page."""
         if self.is_closed or self.is_encrypted:
@@ -5945,7 +5958,7 @@ class Document:
     def page_annot_xrefs(self, n):
         if g_use_extra:
             return extra.page_annot_xrefs( self.this, n)
-        
+
         if isinstance(self.this, mupdf.PdfDocument):
             page_count = mupdf.pdf_count_pages(self.this)
             pdf_document = self.this
@@ -6141,7 +6154,7 @@ class Document:
         pno = page.number  # save the page number
         for k, v in page._annot_refs.items():  # save the annot dictionary
             old_annots[k] = v
-        
+
         # When we call `self.load_page()` below, it will end up in
         # fz_load_chapter_page(), which will return any matching page in the
         # document's list of non-ref-counted loaded pages, instead of actually
@@ -6165,10 +6178,10 @@ class Document:
         # `fz_page*` - the original was not freed, so a new `fz_page` cannot
         # reuse the same block of memory.
         #
-        
+
         refs_old = page.this.m_internal.refs
         m_internal_old = page.this.m_internal_value()
-        
+
         page.this = None
         page._erase()  # remove the page
         page = None
@@ -6201,7 +6214,7 @@ class Document:
         pdf = _as_pdf_document(self, required=False)
         if pdf.m_internal:
             mupdf.pdf_check_document(pdf)
-    
+
     def resolve_link(self, uri=None, chapters=0):
         """Calculate internal link destination.
 
@@ -6482,7 +6495,7 @@ class Document:
             use_objstms=0,
             compression_effort=0,
             raise_on_repair=False,
-            ):
+    ):
         # From %pythonprepend save
         #
         is_repaired_pre = self.is_repaired
@@ -6508,7 +6521,7 @@ class Document:
                 raise ValueError("incremental needs original file")
         if user_pw and len(user_pw) > 40 or owner_pw and len(owner_pw) > 40:
             raise ValueError("password length must not exceed 40")
-        
+
         pdf = _as_pdf_document(self)
         opts = mupdf.PdfWriteOptions()
         opts.do_incremental = incremental
@@ -6593,8 +6606,8 @@ class Document:
             reset_responses: bool = True,
             thumbnails: bool = True,
             xml_metadata: bool = True,
-            ) -> None:
-        
+    ) -> None:
+
         def remove_hidden(cont_lines):
             """Remove hidden text from a PDF page.
 
@@ -6732,7 +6745,7 @@ class Document:
 
             if doc.xref_get_key(xref, "Metadata")[0] != "null":
                 doc.xref_set_key(xref, "Metadata", "null")
-    
+
     def search_page_for(
             doc: 'Document',
             pno: int,
@@ -6741,7 +6754,7 @@ class Document:
             clip: rect_like = None,
             flags: int = None,
             textpage: 'TextPage' = None,
-            ) -> list:
+    ) -> list:
         """Search for a string on a page.
 
         Args:
@@ -6755,12 +6768,13 @@ class Document:
             a list of rectangles or quads, each containing an occurrence.
         """
         if flags is None:
-            flags = (0
-                    | TEXT_DEHYPHENATE
-                    | TEXT_PRESERVE_LIGATURES
-                    | TEXT_PRESERVE_WHITESPACE
-                    | TEXT_MEDIABOX_CLIP
-                    )
+            flags = (
+                0
+                | TEXT_DEHYPHENATE
+                | TEXT_PRESERVE_LIGATURES
+                | TEXT_PRESERVE_WHITESPACE
+                | TEXT_MEDIABOX_CLIP
+            )
         return doc[pno].search_for(
             text,
             quads=quads,
@@ -6768,7 +6782,7 @@ class Document:
             flags=flags,
             textpage=textpage,
         )
-    
+
     def select(self, pyliste):
         """Build sub-pdf with page numbers in the list."""
         if self.is_closed or self.is_encrypted:
@@ -6779,9 +6793,10 @@ class Document:
             raise ValueError("sequence required")
 
         valid_range = range(len(self))
-        if (len(pyliste) == 0
-            or min(pyliste) not in valid_range
-            or max(pyliste) not in valid_range
+        if (
+            len(pyliste) == 0
+                or min(pyliste) not in valid_range
+                or max(pyliste) not in valid_range
         ):
             raise ValueError("bad page number(s)")
 
@@ -6855,7 +6870,7 @@ class Document:
                 mupdf.pdf_trailer( pdf),
                 PDF_NAME('Root'),
                 PDF_NAME('OCProperties'),
-                )
+        )
         if not ocp.m_internal:
             return
         if config == -1:
@@ -6864,7 +6879,7 @@ class Document:
             obj = mupdf.pdf_array_get(
                     mupdf.pdf_dict_get( ocp, PDF_NAME('Configs')),
                     config,
-                    )
+            )
         if not obj.m_internal:
             raise ValueError( MSG_BAD_OC_CONFIG)
         JM_set_ocg_arrays( obj, basestate, on, off, rbgroups, locked)
@@ -6999,7 +7014,7 @@ class Document:
             ocgs: typing.Union[list, None] = None,
             policy: OptStr = None,
             ve: typing.Union[list, None] = None,
-            ) -> int:
+    ) -> int:
         """Create or update an OCMD object in a PDF document.
 
         Args:
@@ -7146,7 +7161,7 @@ class Document:
             doc: 'Document',
             toc: list,
             collapse: int = 1,
-            ) -> int:
+    ) -> int:
         """Create new outline tree (table of contents, TOC).
 
         Args:
@@ -7344,7 +7359,7 @@ class Document:
             to: point_like = None,
             filename: OptStr = None,
             zoom: float = 0,
-            ) -> None:
+    ) -> None:
         """Update TOC item by index.
 
         It allows changing the item's title and link destination.
@@ -7529,7 +7544,7 @@ class Document:
             else:
                 doc.xref_set_key(df_xref, "W", widths)
             if (type(dwidths) is not str or not dwidths) and doc.xref_get_key(
-                df_xref, "DW"
+                df_xref, "DW",
             )[0] != "null":
                 doc.xref_set_key(df_xref, "DW", "null")
             else:
@@ -7691,7 +7706,7 @@ class Document:
                     fontbuffer = extr[-1]
                     names = get_fontnames(doc, f)
                     name_set, xref_set, subsets = font_buffers.get(
-                        fontbuffer, (set(), set(), (set(), set()))
+                        fontbuffer, (set(), set(), (set(), set())),
                     )
                     xref_set.add(font_xref)
                     for name in names:
@@ -7778,8 +7793,8 @@ class Document:
                 mupdf.pdf_trailer( pdf),
                 PDF_NAME('Root'),
                 PDF_NAME('OCProperties'),
-                PDF_NAME('Configs')
-                )
+                PDF_NAME('Configs'),
+        )
         if not mupdf.pdf_is_array( cfgs) or not mupdf.pdf_array_len( cfgs):
             if config < 1:
                 return
@@ -7883,7 +7898,7 @@ class Document:
                 raise_on_repair=raise_on_repair,
         )
         return bio.getvalue()
-    
+
     def tobytes(self, *args, **kwargs):
         return self.write(*args, **kwargs)
 
@@ -7927,7 +7942,7 @@ class Document:
         for key in doc.xref_get_keys(source):
             item = doc.xref_get_key(source, key)
             doc.xref_set_key(target, key, item[1])
-    
+
     def xref_get_key(self, xref, key):
         """Get PDF dict key value of object at 'xref'."""
         pdf = _as_pdf_document(self)
@@ -8091,7 +8106,7 @@ class Document:
                         obj,
                         mupdf.pdf_dict_get_key(new_obj, i),
                         mupdf.pdf_dict_get_val(new_obj, i),
-                        )
+                )
 
     def xref_stream(self, xref):
         """Get decompressed xref stream."""
@@ -8140,9 +8155,9 @@ class Document:
         if xml.m_internal:
             xref = mupdf.pdf_to_num( xml)
         return xref
-    
+
     __slots__ = ('this', 'page_count2', 'this_is_pdf', '__dict__')
-    
+
     outline = property(lambda self: self._outline)
     is_stream = xref_is_stream
 
@@ -8179,16 +8194,16 @@ class DocumentWriter:
             self.this = mupdf.FzDocumentWriter( out, options, mupdf.FzDocumentWriter.OutputType_PDF)
             assert out.m_internal_value() == 0
             assert hasattr( self.this, '_out')
-    
+
     def begin_page( self, mediabox):
         mediabox2 = JM_rect_from_py(mediabox)
         device = mupdf.fz_begin_page( self.this, mediabox2)
         device_wrapper = DeviceWrapper( device)
         return device_wrapper
-    
+
     def close( self):
         mupdf.fz_close_document_writer( self.this)
-        
+
     def end_page( self):
         mupdf.fz_end_page( self.this)
 
@@ -8211,8 +8226,8 @@ class Font:
             is_italic=0,
             is_serif=0,
             embed=1,
-            ):
-        
+    ):
+
         if fontbuffer:
             if hasattr(fontbuffer, "getvalue"):
                 fontbuffer = fontbuffer.getvalue()
@@ -8220,7 +8235,7 @@ class Font:
                 fontbuffer = bytes(fontbuffer)
             if not isinstance(fontbuffer, bytes):
                 raise ValueError("bad type: 'fontbuffer'")
-        
+
         if isinstance(fontname, str):
             fname_lower = fontname.lower()
             if "/" in fname_lower or "\\" in fname_lower or "." in fname_lower:
@@ -8245,9 +8260,11 @@ class Font:
                 fontname = Base14_fontdict.get(fontname, fontname)
 
         lang = mupdf.fz_text_language_from_string(language)
-        font = JM_get_font(fontname, fontfile,
-                   fontbuffer, script, lang, ordering,
-                   is_bold, is_italic, is_serif, embed)
+        font = JM_get_font(
+            fontname, fontfile,
+            fontbuffer, script, lang, ordering,
+            is_bold, is_italic, is_serif, embed,
+        )
         self.this = font
 
     def __repr__(self):
@@ -8261,7 +8278,7 @@ class Font:
     @property
     def bbox(self):
         return self.this.fz_font_bbox()
-    
+
     @property
     def buffer(self):
         buffer_ = mupdf.FzBuffer( mupdf.ll_fz_keep_buffer( self.this.m_internal.buffer))
@@ -8329,7 +8346,7 @@ class Font:
                 'cjk-lang':     cjk_lang if mupdf_cppyy else f.cjk_lang,
                 'embed':        embed if mupdf_cppyy else f.embed,
                 'never-embed':  never_embed if mupdf_cppyy else f.never_embed,
-                }
+        }
 
     def glyph_advance(self, chr_, language=None, script=0, wmode=0, small_caps=0):
         """Return the glyph width of a unicode (font size 1)."""
@@ -8400,11 +8417,11 @@ class Font:
             ft_substitute = cppyy.gbl.mupdf_mfz_font_flags_ft_substitute( flags)
         else:
             ft_substitute = flags.ft_substitute
-        
+
         if ( mupdf.ll_fz_font_t3_procs(font.m_internal)
                 or ft_substitute
                 or not mupdf.pdf_font_writing_supported(font)
-                ):
+        ):
             return False
         return True
 
@@ -8511,7 +8528,7 @@ class Link:
             return
         b = JM_annot_set_border(border, pdf, link_obj)
         return b
-        
+
     @property
     def border(self):
         return self._border(self.parent.parent.this, self.xref)
@@ -8652,12 +8669,16 @@ class Matrix:
 
     def __add__(self, m):
         if hasattr(m, "__float__"):
-            return Matrix(self.a + m, self.b + m, self.c + m,
-                          self.d + m, self.e + m, self.f + m)
+            return Matrix(
+                self.a + m, self.b + m, self.c + m,
+                self.d + m, self.e + m, self.f + m,
+            )
         if len(m) != 6:
             raise ValueError("Matrix: bad seq len")
-        return Matrix(self.a + m[0], self.b + m[1], self.c + m[2],
-                          self.d + m[3], self.e + m[4], self.f + m[5])
+        return Matrix(
+            self.a + m[0], self.b + m[1], self.c + m[2],
+            self.d + m[3], self.e + m[4], self.f + m[5],
+        )
 
     def __bool__(self):
         return not (max(self) == min(self) == 0)
@@ -8680,7 +8701,7 @@ class Matrix:
         Matrix(Matrix) - new copy
         Matrix(sequence) - from 'sequence'
         Matrix(mupdf.FzMatrix) - from MuPDF class wrapper for fz_matrix.
-        
+
         Explicit keyword args a, b, c, d, e, f override any earlier settings if
         not None.
         """
@@ -8716,7 +8737,7 @@ class Matrix:
                 float(args[1]), float(args[0]), 1.0, 0.0, 0.0
         else:
             raise ValueError("Matrix: bad args")
-        
+
         # Override with explicit args if specified.
         if a is not None:   self.a = a
         if b is not None:   self.b = b
@@ -8736,8 +8757,10 @@ class Matrix:
 
     def __mul__(self, m):
         if hasattr(m, "__float__"):
-            return Matrix(self.a * m, self.b * m, self.c * m,
-                          self.d * m, self.e * m, self.f * m)
+            return Matrix(
+                self.a * m, self.b * m, self.c * m,
+                self.d * m, self.e * m, self.f * m,
+            )
         m1 = Matrix(1,1)
         return m1.concat(self, m)
 
@@ -8767,17 +8790,23 @@ class Matrix:
 
     def __sub__(self, m):
         if hasattr(m, "__float__"):
-            return Matrix(self.a - m, self.b - m, self.c - m,
-                          self.d - m, self.e - m, self.f - m)
+            return Matrix(
+                self.a - m, self.b - m, self.c - m,
+                self.d - m, self.e - m, self.f - m,
+            )
         if len(m) != 6:
             raise ValueError("Matrix: bad seq len")
-        return Matrix(self.a - m[0], self.b - m[1], self.c - m[2],
-                          self.d - m[3], self.e - m[4], self.f - m[5])
+        return Matrix(
+            self.a - m[0], self.b - m[1], self.c - m[2],
+            self.d - m[3], self.e - m[4], self.f - m[5],
+        )
 
     def __truediv__(self, m):
         if hasattr(m, "__float__"):
-            return Matrix(self.a * 1./m, self.b * 1./m, self.c * 1./m,
-                          self.d * 1./m, self.e * 1./m, self.f * 1./m)
+            return Matrix(
+                self.a * 1./m, self.b * 1./m, self.c * 1./m,
+                self.d * 1./m, self.e * 1./m, self.f * 1./m,
+            )
         m1 = util_invert_matrix(m)[1]
         if not m1:
             raise ZeroDivisionError("matrix not invertible")
@@ -8931,7 +8960,7 @@ class linkDest:
         self.page = obj.page
         self.rb = Point(0, 0)
         self.uri = obj.uri
-        
+
         def uri_to_dict(uri):
             items = self.uri[1:].split('&')
             ret = dict()
@@ -8953,7 +8982,7 @@ class linkDest:
                 newname += chr(int(piece, base=16))
                 newname += item[2:]
             return newname
-        
+
         if rlink and not self.uri.startswith("#"):
             self.uri = f"#page={rlink[0] + 1}&zoom=0,{_format_g(rlink[1])},{_format_g(rlink[2])}"
         if obj.is_external:
@@ -9130,9 +9159,10 @@ class Widget:
     def _validate(self):
         """Validate the class entries.
         """
-        if (self.rect.is_infinite
-            or self.rect.is_empty
-           ):
+        if (
+            self.rect.is_infinite
+             or self.rect.is_empty
+        ):
             raise ValueError("bad rect")
 
         if not self.field_name:
@@ -9159,7 +9189,7 @@ class Widget:
                 mupdf.PDF_WIDGET_TYPE_BUTTON,
                 mupdf.PDF_WIDGET_TYPE_CHECKBOX,
                 mupdf.PDF_WIDGET_TYPE_RADIOBUTTON,
-                )
+        )
         if not self.script:
             self.script = None
         elif type(self.script) is not str:
@@ -9298,7 +9328,7 @@ class Widget:
 
     def on_state(self):
         """Return the "On" value for button widgets.
-        
+
         This is useful for radio buttons mainly. Checkboxes will always return
         "Yes". Radio buttons will return the string that is unequal to "Off"
         as returned by method button_states().
@@ -9336,8 +9366,10 @@ class Widget:
             fmt = "{:g} g /{f:s} {s:g} Tf" + self._text_da
         elif len(self.text_color) == 4:
             fmt = "{:g} {:g} {:g} {:g} k /{f:s} {s:g} Tf" + self._text_da
-        self._text_da = fmt.format(*self.text_color, f=self.text_font,
-                                    s=self.text_fontsize)
+        self._text_da = fmt.format(
+            *self.text_color, f=self.text_font,
+            s=self.text_fontsize,
+        )
         # finally update the widget
 
         # if widget has a '/AA/C' script, make sure it is in the '/CO'
@@ -9372,7 +9404,7 @@ class Outline:
         kind=LINK_NAMED.
         '''
         return linkDest(self, None, document)
-        
+
     @property
     def down(self):
         ol = self.this
@@ -9445,7 +9477,7 @@ def _make_PdfFilterOptions(
         no_update=0,
         sanitize=0,
         sopts=None,
-        ):
+):
     '''
     Returns a mupdf.PdfFilterOptions instance.
     '''
@@ -9454,7 +9486,7 @@ def _make_PdfFilterOptions(
     filter_.recurse = recurse
     filter_.instance_forms = instance_forms
     filter_.ascii = ascii
-    
+
     filter_.no_update = no_update
     if sanitize:
         # We want to use a PdfFilterFactory whose `.filter` fn pointer is
@@ -9492,7 +9524,7 @@ def _make_PdfFilterOptions(
                         transform,
                         options,
                         self.sopts.internal(),
-                        )
+                )
 
         factory = Factory()
         filter_.add_factory(factory.internal())
@@ -9599,7 +9631,7 @@ class Page:
             rotate=0,
             richtext=False,
             style=None,
-            ):
+    ):
         rc = f"""<?xml version="1.0"?>
             <body xmlns="http://www.w3.org/1999/xtml"
             xmlns:xfa="http://www.xfa.org/schema/xfa-data/1.0/"
@@ -9741,7 +9773,7 @@ class Page:
                     mupdf.pdf_annot_obj(annot),
                     "OverlayText",
                     mupdf.pdf_new_text_string(text),
-                    )
+            )
             mupdf.pdf_dict_put_text_string(mupdf.pdf_annot_obj(annot), PDF_NAME('DA'), da_str)
             mupdf.pdf_dict_put_int(mupdf.pdf_annot_obj(annot), PDF_NAME('Q'), align)
         mupdf.pdf_update_annot(annot)
@@ -9783,7 +9815,7 @@ class Page:
                 "Sold",
                 "TopSecret",
                 "Draft",
-                ]
+        ]
         n = len(stamp_id)
         buf = None
         name = None
@@ -10003,11 +10035,12 @@ class Page:
         mupdf.fz_close_device(dev)
         return tpage
 
-    def _insert_image(self,
-            filename=None, pixmap=None, stream=None, imask=None, clip=None,
-            overlay=1, rotate=0, keep_proportion=1, oc=0, width=0, height=0,
-            xref=0, alpha=-1, _imgname=None, digests=None
-            ):
+    def _insert_image(
+        self,
+        filename=None, pixmap=None, stream=None, imask=None, clip=None,
+        overlay=1, rotate=0, keep_proportion=1, oc=0, width=0, height=0,
+        xref=0, alpha=-1, _imgname=None, digests=None,
+    ):
         maskbuf = mupdf.FzBuffer()
         page = self._pdf_page()
         # This will create an empty PdfDocument with a call to
@@ -10074,7 +10107,7 @@ class Page:
                             mupdf.FzDefaultColorspaces(None),
                             mupdf.FzColorParams(),
                             1,
-                            )
+                    )
                     pm.alpha = 0
                     pm.colorspace = None
                     mask = mupdf.fz_new_image_from_pixmap(pm, mupdf.FzImage())
@@ -10143,8 +10176,8 @@ class Page:
                     list(), # colorkey
                     cbuf1,
                     mask,
-                    )
-            
+            )
+
         if do_have_image:
             #log( 'do_have_image')
             ref = mupdf.pdf_add_image(pdf, image)
@@ -10373,18 +10406,19 @@ class Page:
             filename: str,
             ufilename: OptStr =None,
             desc: OptStr =None,
-            icon: OptStr =None
-            ) -> Annot:
+            icon: OptStr =None,
+    ) -> Annot:
         """Add a 'FileAttachment' annotation."""
         old_rotation = annot_preprocess(self)
         try:
-            annot = self._add_file_annot(point,
-                    buffer_,
-                    filename,
-                    ufilename=ufilename,
-                    desc=desc,
-                    icon=icon,
-                    )
+            annot = self._add_file_annot(
+                point,
+                buffer_,
+                filename,
+                ufilename=ufilename,
+                desc=desc,
+                icon=icon,
+            )
         finally:
             if old_rotation != 0:
                 self.set_rotation(old_rotation)
@@ -10410,7 +10444,7 @@ class Page:
             rotate: int =0,
             richtext=False,
             style=None,
-            ) -> Annot:
+    ) -> Annot:
         """Add a 'FreeText' annotation."""
 
         old_rotation = annot_preprocess(self)
@@ -10432,15 +10466,17 @@ class Page:
                     rotate=rotate,
                     richtext=richtext,
                     style=style,
-                    )
+            )
         finally:
             if old_rotation != 0:
                 self.set_rotation(old_rotation)
         annot_postprocess(self, annot)
         return annot
 
-    def add_highlight_annot(self, quads=None, start=None,
-                          stop=None, clip=None) -> Annot:
+    def add_highlight_annot(
+        self, quads=None, start=None,
+        stop=None, clip=None,
+    ) -> Annot:
         """Add a 'Highlight' annotation."""
         if quads is None:
             q = get_highlight_selection(self, start=start, stop=stop, clip=clip)
@@ -10517,7 +10553,7 @@ class Page:
             fill: OptSeq =None,
             text_color: OptSeq =None,
             cross_out: bool =True,
-            ) -> Annot:
+    ) -> Annot:
         """Add a 'Redact' annotation."""
         da_str = None
         if text and not set(string.whitespace).issuperset(text):
@@ -10547,8 +10583,10 @@ class Page:
 
         old_rotation = annot_preprocess(self)
         try:
-            annot = self._add_redact_annot(quad, text=text, da_str=da_str,
-                       align=align, fill=fill)
+            annot = self._add_redact_annot(
+                quad, text=text, da_str=da_str,
+                align=align, fill=fill,
+            )
         finally:
             if old_rotation != 0:
                 self.set_rotation(old_rotation)
@@ -10575,7 +10613,7 @@ class Page:
             start=None,
             stop=None,
             clip=None,
-            ) -> Annot:
+    ) -> Annot:
         """Add a 'Squiggly' annotation."""
         if quads is None:
             q = get_highlight_selection(self, start=start, stop=stop, clip=clip)
@@ -10655,7 +10693,7 @@ class Page:
         List of xref numbers of annotations, fields and links.
         '''
         return JM_get_annot_xref_list2(self)
-    
+
     def annots(self, types=None):
         """ Generator over the annotations of a page.
 
@@ -10681,7 +10719,7 @@ class Page:
             images: int = 2,
             graphics: int = 1,
             text: int = 0,
-            ) -> bool:
+    ) -> bool:
         """Apply the redaction annotations of the page.
 
         Args:
@@ -10743,7 +10781,7 @@ class Page:
 
         redact_annots = []  # storage of annot values
         for annot in page.annots(
-            types=(mupdf.PDF_ANNOT_REDACT,)  # pylint: disable=no-member
+            types=(mupdf.PDF_ANNOT_REDACT,),  # pylint: disable=no-member
         ):
             # loop redactions
             redact_annots.append(annot._get_redact_values())  # save annot values
@@ -10789,7 +10827,7 @@ class Page:
 
     def recolor(self, components=1):
         """Convert colorspaces of objects on the page.
-        
+
         Valid values are 1, 3 and 4.
         """
         if components not in (1, 3, 4):
@@ -10849,7 +10887,7 @@ class Page:
         page = _as_fz_page(self.this)
         val = mupdf.fz_bound_page(page)
         val = Rect(val)
-        
+
         if val.is_infinite and self.parent.is_pdf:
             cb = self.cropbox
             w, h = cb.width, cb.height
@@ -10858,7 +10896,7 @@ class Page:
             val = Rect(0, 0, w, h)
             msg = TOOLS.mupdf_warnings(reset=False).splitlines()[-1]
             message(msg)
-        
+
         return val
 
     def clean_contents(self, sanitize=1):
@@ -10869,7 +10907,7 @@ class Page:
             return
         filter_ = _make_PdfFilterOptions(recurse=1, sanitize=sanitize)
         mupdf.pdf_filter_page_contents( page.doc(), page, filter_)
-    
+
     @property
     def cropbox(self):
         """The CropBox."""
@@ -11009,7 +11047,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw a general cubic Bezier curve from p1 to p4 using control points p2 and p3."""
         img = page.new_shape()
         Q = img.draw_bezier(Point(p1), Point(p2), Point(p3), Point(p4))
@@ -11025,7 +11063,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return Q
@@ -11045,7 +11083,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw a circle given its center and radius."""
         img = page.new_shape()
         Q = img.draw_circle(Point(center), radius)
@@ -11060,7 +11098,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
         return Q
 
@@ -11081,7 +11119,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw a special Bezier curve from p1 to p3, generating control points on lines p1 to p2 and p2 to p3."""
         img = page.new_shape()
         Q = img.draw_curve(Point(p1), Point(p2), Point(p3))
@@ -11097,7 +11135,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return Q
@@ -11116,7 +11154,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc=0,
-            ) -> Point:
+    ) -> Point:
         """Draw a line from point p1 to point p2."""
         img = page.new_shape()
         p = img.draw_line(Point(p1), Point(p2))
@@ -11131,7 +11169,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return p
@@ -11150,7 +11188,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw an oval given its containing rectangle or quad."""
         img = page.new_shape()
         Q = img.draw_oval(rect)
@@ -11165,7 +11203,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return Q
@@ -11185,7 +11223,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw multiple connected line segments."""
         img = page.new_shape()
         Q = img.draw_polyline(points)
@@ -11201,7 +11239,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return Q
@@ -11220,7 +11258,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw a quadrilateral."""
         img = page.new_shape()
         Q = img.draw_quad(Quad(quad))
@@ -11235,7 +11273,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return Q
@@ -11255,7 +11293,7 @@ class Page:
             fill_opacity: float = 1,
             oc: int = 0,
             radius=None,
-            ) -> Point:
+    ) -> Point:
         '''
         Draw a rectangle. See Shape class method for details.
         '''
@@ -11272,7 +11310,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return Q
@@ -11295,7 +11333,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw a circle sector given circle center, one arc end point and the angle of the arc.
 
         Parameters:
@@ -11318,7 +11356,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return Q
@@ -11338,7 +11376,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw a squiggly line from point p1 to point p2."""
         img = page.new_shape()
         p = img.draw_squiggle(Point(p1), Point(p2), breadth=breadth)
@@ -11353,7 +11391,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return p
@@ -11373,7 +11411,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ) -> Point:
+    ) -> Point:
         """Draw a zigzag line from point p1 to point p2."""
         img = page.new_shape()
         p = img.draw_zigzag(Point(p1), Point(p2), breadth=breadth)
@@ -11388,7 +11426,7 @@ class Page:
                 stroke_opacity=stroke_opacity,
                 fill_opacity=fill_opacity,
                 oc=oc,
-                )
+        )
         img.commit(overlay)
 
         return p
@@ -11406,7 +11444,7 @@ class Page:
 
     def find_tables(self, **kwargs):
         return table.find_tables(self, **kwargs)
-    
+
     @property
     def first_annot(self):
         """First annotation."""
@@ -11547,7 +11585,7 @@ class Page:
                 'stroke_opacity',
                 'fill_opacity',
                 'even_odd',
-                )
+        )
         val = self.get_cdrawings(extended=extended)
         for i in range(len(val)):
             npath = val[i]
@@ -11580,7 +11618,7 @@ class Page:
             """Reflects a path dictionary from get_cdrawings()."""
             def __init__(self, **args):
                 self.__dict__.update(args)
-        
+
         class Drawpathlist(object):
             """List of Path objects representing get_cdrawings() output."""
             def __getitem__(self, item):
@@ -11630,8 +11668,8 @@ class Page:
                             p
                             for p in self.paths[:i]
                             if p.type == "clip" and p.level < lvl
-                        ]
-                    )
+                        ],
+                    ),
                 )
                 if clips == []:  # none found: empty list
                     return []
@@ -11660,8 +11698,8 @@ class Page:
                             p
                             for p in self.paths[:i]
                             if p.type == "group" and p.level < lvl
-                        ]
-                    )
+                        ],
+                    ),
                 )
                 if groups == []:  # none found: empty list
                     return []
@@ -11704,7 +11742,7 @@ class Page:
                             item = tuple([cmd] + [Point(i) for i in rest])
                         newitems.append(item)
                     npath.items = newitems
-                
+
                 if npath.type == "f":
                     npath.stroke_opacity = None
                     npath.dashes = None
@@ -11721,8 +11759,8 @@ class Page:
     def get_image_info(
             page: 'Page',
             hashes: bool = False,
-            xrefs: bool = False
-            ) -> list:
+            xrefs: bool = False,
+    ) -> list:
         """Extract image information only from a pymupdf.TextPage.
 
         Args:
@@ -11826,11 +11864,12 @@ class Page:
             links.append(nl)
             ln = ln.next
         if links != [] and page.parent.is_pdf:
-            linkxrefs = [x for x in
-                    #page.annot_xrefs()
-                    JM_get_annot_xref_list2(page)
-                    if x[1] == mupdf.PDF_ANNOT_LINK  # pylint: disable=no-member
-                    ]
+            linkxrefs = [
+                x for x in
+                #page.annot_xrefs()
+                JM_get_annot_xref_list2(page)
+                if x[1] == mupdf.PDF_ANNOT_LINK  # pylint: disable=no-member
+            ]
             if len(linkxrefs) == len(links):
                 for i in range(len(linkxrefs)):
                     links[i]["xref"] = linkxrefs[i][0]
@@ -11846,7 +11885,7 @@ class Page:
                 clip: rect_like=None,
                 alpha: bool=False,
                 annots: bool=True,
-                ) -> 'Pixmap':
+    ) -> 'Pixmap':
         """Create pixmap of page.
 
         Keyword args:
@@ -12143,7 +12182,7 @@ class Page:
                 tbounds.y1-tbounds.y0,  # height
                 text_option,
                 1,
-                )
+        )
         mupdf.fz_run_page(self.this, dev, ctm, mupdf.FzCookie())
         mupdf.fz_close_device(dev)
         out.fz_close_output()
@@ -12154,7 +12193,7 @@ class Page:
             page: Page,
             rect: rect_like,
             textpage=None,  #: TextPage = None,
-            ) -> str:
+    ) -> str:
         tp = textpage
         if tp is None:
             tp = page.get_textpage()
@@ -12170,16 +12209,16 @@ class Page:
 
     def get_text_blocks(self, *args, **kwargs):
         return utils.get_text_blocks(self, *args, **kwargs)
-    
+
     def get_text_selection(self, *args, **kwargs):
         return utils.get_text_selection(self, *args, **kwargs)
-    
+
     def get_text_words(self, *args, **kwargs):
         return utils.get_text_words(self, *args, **kwargs)
-    
+
     def get_textpage_ocr(self, *args, **kwargs):
         return utils.get_textpage_ocr(self, *args, **kwargs)
-    
+
     def get_textpage(self, clip: rect_like = None, flags: int = 0, matrix=None) -> "TextPage":
         CheckParent(self)
         if matrix is None:
@@ -12222,8 +12261,10 @@ class Page:
         CheckParent(self)
         return self.parent.get_page_xobjects(self.number)
 
-    def insert_font(self, fontname="helv", fontfile=None, fontbuffer=None,
-                   set_simple=False, wmode=0, encoding=0):
+    def insert_font(
+        self, fontname="helv", fontfile=None, fontbuffer=None,
+        set_simple=False, wmode=0, encoding=0,
+    ):
         doc = self.parent
         if doc is None:
             raise ValueError("orphaned object: parent is None")
@@ -12289,8 +12330,10 @@ class Page:
                 raise ValueError("bad fontfile")
         else:
             fontfile_str = None
-        val = self._insertFont(fontname, bfname, fontfile_str, fontbuffer, set_simple, idx,
-                               wmode, serif, encoding, CJK_number)
+        val = self._insertFont(
+            fontname, bfname, fontfile_str, fontbuffer, set_simple, idx,
+            wmode, serif, encoding, CJK_number,
+        )
 
         if not val:                   # did not work, error return
             return val
@@ -12376,7 +12419,7 @@ class Page:
             story = text
         else:
             raise ValueError("'text' must be a string or a Story")
-        
+
         # ----------------------------------------------------------------
         # Find a scaling factor that lets our story fit in. Instead of scaling
         # the text smaller, we instead look at how much bigger the rect needs
@@ -12391,8 +12434,8 @@ class Page:
                 scale_max=rect_scale_max,
                 flags=mupdf.FZ_PLACE_STORY_FLAG_NO_OVERFLOW if _scale_word_width else 0,
                 verbose=_verbose,
-                )
-        
+        )
+
         if not fit.big_enough:  # there was no fit
             scale = 1 / fit.parameter
             return (-1, scale)
@@ -12402,10 +12445,10 @@ class Page:
         fit.filled = Rect(fit.filled)
         assert (fit.rect.x0, fit.rect.y0) == (0, 0)
         assert (fit.filled.x0, fit.filled.y0) == (0, 0)
-        
+
         scale = 1 / fit.parameter
         assert scale >= scale_low, f'{scale_low=} {scale=}'
-        
+
         spare_height = max((fit.rect.y1 - fit.filled.y1) * scale, 0)
 
         def rect_function(*args):
@@ -12468,7 +12511,7 @@ class Page:
             stream=None,
             width=0,
             xref=0,
-            ):
+    ):
         """Insert an image for display in a rectangle.
 
         Args:
@@ -12606,7 +12649,7 @@ class Page:
             stroke_opacity: float = 1,
             fill_opacity: float = 1,
             oc: int = 0,
-            ):
+    ):
 
         img = page.new_shape()
         rc = img.insert_text(
@@ -12657,7 +12700,7 @@ class Page:
             rotate: int = 0,
             set_simple: int = 0,
             stroke_opacity: float = 1,
-            ) -> float:
+    ) -> float:
         """Insert text into a given rectangle.
 
         Notes:
@@ -12846,7 +12889,7 @@ class Page:
             filename=None,
             pixmap=None,
             stream=None,
-            ):
+    ):
         """Replace the image referred to by xref.
 
         Replace the image by changing the object definition stored under xref. This
@@ -12868,7 +12911,7 @@ class Page:
         if bool(filename) + bool(stream) + bool(pixmap) != 1:
             raise ValueError("Exactly one of filename/stream/pixmap must be given")
         new_xref = page.insert_image(
-            page.rect, filename=filename, stream=stream, pixmap=pixmap
+            page.rect, filename=filename, stream=stream, pixmap=pixmap,
         )
         doc.xref_copy(new_xref, xref)  # copy over new to old
         last_contents_xref = page.get_contents()[-1]
@@ -12906,7 +12949,7 @@ class Page:
             quads=False,
             flags=None,
             textpage=None,
-            ) -> list:
+    ) -> list:
         """Search for a string on a page.
 
         Args:
@@ -12919,12 +12962,13 @@ class Page:
             a list of rectangles or quads, each containing one occurrence.
         """
         if flags is None:
-            flags=(0
+            flags=(
+                0
                 | TEXT_DEHYPHENATE
                 | TEXT_PRESERVE_WHITESPACE
                 | TEXT_PRESERVE_LIGATURES
                 | TEXT_MEDIABOX_CLIP
-                )
+            )
         if clip is not None:
             clip = Rect(clip)
 
@@ -12977,17 +13021,18 @@ class Page:
             mupdf.pdf_dict_put_text_string(
                     pdfpage.obj,
                     PDF_NAME('Lang'),
-                    mupdf.fz_string_from_text_language2(lang)
-                    )
+                    mupdf.fz_string_from_text_language2(lang),
+            )
 
     def set_mediabox(self, rect):
         """Set the MediaBox."""
         CheckParent(self)
         page = self._pdf_page()
         mediabox = JM_rect_from_py(rect)
-        if (mupdf.fz_is_empty_rect(mediabox)
-                or mupdf.fz_is_infinite_rect(mediabox)
-                ):
+        if (
+            mupdf.fz_is_empty_rect(mediabox)
+            or mupdf.fz_is_infinite_rect(mediabox)
+        ):
             raise ValueError( MSG_BAD_RECT)
         mupdf.pdf_dict_put_rect( page.obj(), PDF_NAME('MediaBox'), mediabox)
         mupdf.pdf_dict_del( page.obj(), PDF_NAME('CropBox'))
@@ -13016,7 +13061,7 @@ class Page:
             oc=0,
             rotate=0,
             clip=None,
-            ) -> int:
+    ) -> int:
         """Show page number 'pno' of PDF 'docsrc' in rectangle 'rect'.
 
         Args:
@@ -13204,7 +13249,7 @@ class Page:
             keep_proportion=True,
             rotate=0,
             oc=0,
-            ) -> None:
+    ) -> None:
         """Write the text of one or more pymupdf.TextWriter objects.
 
         Args:
@@ -13279,25 +13324,27 @@ class Pixmap:
         # data.  Doesn't seem to make much difference to Pixmap.set_pixel() so
         # not currently used.
         self._memory_view = None
-        
+
         if 0:
             pass
 
-        elif args_match(args,
-                (Colorspace, mupdf.FzColorspace),
-                (mupdf.FzRect, mupdf.FzIrect, IRect, Rect, tuple)
-                ):
+        elif args_match(
+            args,
+            (Colorspace, mupdf.FzColorspace),
+            (mupdf.FzRect, mupdf.FzIrect, IRect, Rect, tuple),
+        ):
             # create empty pixmap with colorspace and IRect
             cs, rect = args
             alpha = 0
             pm = mupdf.fz_new_pixmap_with_bbox(cs, JM_irect_from_py(rect), mupdf.FzSeparations(0), alpha)
             self.this = pm
 
-        elif args_match(args,
-                (Colorspace, mupdf.FzColorspace),
-                (mupdf.FzRect, mupdf.FzIrect, IRect, Rect, tuple),
-                (int, bool)
-                ):
+        elif args_match(
+            args,
+            (Colorspace, mupdf.FzColorspace),
+            (mupdf.FzRect, mupdf.FzIrect, IRect, Rect, tuple),
+            (int, bool),
+        ):
             # create empty pixmap with colorspace and IRect
             cs, rect, alpha = args
             pm = mupdf.fz_new_pixmap_with_bbox(cs, JM_irect_from_py(rect), mupdf.FzSeparations(0), alpha)
@@ -13314,7 +13361,7 @@ class Pixmap:
                 spix = spix.this
             if not mupdf.fz_pixmap_colorspace(spix).m_internal:
                 raise ValueError( "source colorspace must not be None")
-            
+
             if cs.m_internal:
                 self.this = mupdf.fz_convert_pixmap(
                         spix,
@@ -13322,8 +13369,8 @@ class Pixmap:
                         mupdf.FzColorspace(),
                         mupdf.FzDefaultColorspaces(None),
                         mupdf.FzColorParams(),
-                        1
-                        )
+                        1,
+                )
             else:
                 self.this = mupdf.fz_new_pixmap_from_alpha_channel( spix)
                 if not self.this.m_internal:
@@ -13346,8 +13393,10 @@ class Pixmap:
                 dst = mupdf.fz_new_pixmap_from_color_and_mask(spm, mpm)
             self.this = dst
 
-        elif (args_match(args, (Pixmap, mupdf.FzPixmap), (float, int), (float, int), None) or
-             args_match(args, (Pixmap, mupdf.FzPixmap), (float, int), (float, int))):
+        elif (
+            args_match(args, (Pixmap, mupdf.FzPixmap), (float, int), (float, int), None) or
+            args_match(args, (Pixmap, mupdf.FzPixmap), (float, int), (float, int))
+        ):
             # create pixmap as scaled copy of another one
             if len(args) == 3:
                 spix, w, h = args
@@ -13355,7 +13404,7 @@ class Pixmap:
             else:
                 spix, w, h, clip = args
                 bbox = JM_irect_from_py(clip)
-        
+
             src_pix = spix.this if isinstance(spix, Pixmap) else spix
             if not mupdf.fz_is_infinite_irect(bbox):
                 pm = mupdf.fz_scale_pixmap(src_pix, src_pix.x(), src_pix.y(), w, h, bbox)
@@ -13502,7 +13551,7 @@ class Pixmap:
                     img,
                     mupdf.FzIrect(FZ_MIN_INF_RECT, FZ_MIN_INF_RECT, FZ_MAX_INF_RECT, FZ_MAX_INF_RECT),
                     mupdf.FzMatrix( img.w(), 0, 0, img.h(), 0, 0),
-                    )
+            )
             xres, yres = mupdf.fz_image_resolution(img)
             pm.m_internal.xres = xres
             pm.m_internal.yres = yres
@@ -13517,10 +13566,11 @@ class Pixmap:
                 raise ValueError( MSG_BAD_XREF)
             ref = mupdf.pdf_new_indirect(pdf, xref, 0)
             type_ = mupdf.pdf_dict_get(ref, PDF_NAME('Subtype'))
-            if (not mupdf.pdf_name_eq(type_, PDF_NAME('Image'))
-                    and not mupdf.pdf_name_eq(type_, PDF_NAME('Alpha'))
-                    and not mupdf.pdf_name_eq(type_, PDF_NAME('Luminosity'))
-                    ):
+            if (
+                not mupdf.pdf_name_eq(type_, PDF_NAME('Image'))
+                and not mupdf.pdf_name_eq(type_, PDF_NAME('Alpha'))
+                and not mupdf.pdf_name_eq(type_, PDF_NAME('Luminosity'))
+            ):
                 raise ValueError( MSG_IS_NO_IMAGE)
             img = mupdf.pdf_load_image(pdf, ref)
             # Original code passed null for subarea and ctm, but that's not
@@ -13530,7 +13580,7 @@ class Pixmap:
                     img,
                     mupdf.FzIrect(FZ_MIN_INF_RECT, FZ_MIN_INF_RECT, FZ_MAX_INF_RECT, FZ_MAX_INF_RECT),
                     mupdf.FzMatrix(img.w(), 0, 0, img.h(), 0, 0),
-                    )
+            )
             self.this = pix
 
         else:
@@ -13817,12 +13867,13 @@ class Pixmap:
         Last item is the alpha if Pixmap.alpha is true."""
         if g_use_extra:
             return extra.pixmap_pixel(self.this.m_internal, x, y)
-        if (0
-                or x < 0
-                or x >= self.this.m_internal.w
-                or y < 0
-                or y >= self.this.m_internal.h
-                ):
+        if (
+            0
+            or x < 0
+            or x >= self.this.m_internal.w
+            or y < 0
+            or y >= self.this.m_internal.h
+        ):
             RAISEPY(MSG_PIXEL_OUTSIDE, PyExc_ValueError)
         n = self.this.m_internal.n
         stride = self.this.m_internal.stride
@@ -13847,7 +13898,7 @@ class Pixmap:
         if self._samples_mv is None:
             self._samples_mv = mupdf.fz_pixmap_samples_memoryview(self.this)
         return self._samples_mv
-    
+
     def _samples_mv_release(self):
         if self._samples_mv:
             self._samples_mv.release()
@@ -13874,8 +13925,8 @@ class Pixmap:
                 "ps": 6,
                 "jpg": 7,
                 "jpeg": 7,
-                }
-        
+        }
+
         if type(filename) is str:
             pass
         elif hasattr(filename, "absolute"):
@@ -13957,7 +14008,7 @@ class Pixmap:
                     bground,
                     colors,
                     bgcolor,
-                    )
+            )
         else:
             i = k = j = 0
             data_fix = 255
@@ -14009,7 +14060,7 @@ class Pixmap:
                 "ps": 6,
                 'jpg': 7,
                 'jpeg': 7,
-                }
+        }
         idx = valid_formats.get(output.lower(), None)
         if idx is None:
             raise ValueError(f"Image format {output} not in {tuple(valid_formats.keys())}")
@@ -14106,7 +14157,7 @@ class Pixmap:
     def w(self):
         """The width."""
         return mupdf.fz_pixmap_width(self.this)
-    
+
     def warp(self, quad, width, height):
         """Return pixmap from a warped quad."""
         if not quad.is_convex: raise ValueError("quad must be convex")
@@ -14137,7 +14188,7 @@ class Pixmap:
 
     width  = w
     height = h
-    
+
     def __del__(self):
         if self._samples_mv:
             self._samples_mv.release()
@@ -14277,8 +14328,10 @@ class Point:
             unit = args[1]
         else:
             unit = "px"
-        u = {"px": (1.,1.), "in": (1.,72.), "cm": (2.54, 72.),
-             "mm": (25.4, 72.)}
+        u = {
+            "px": (1.,1.), "in": (1.,72.), "cm": (2.54, 72.),
+            "mm": (25.4, 72.),
+        }
         f = u[unit][0] / u[unit][1]
 
         if type(x) is Point:
@@ -14393,7 +14446,7 @@ class Quad:
 
         Explicit keyword args ul, ur, ll, lr override earlier settings if not
         None.
-    
+
         '''
         if not args:
             self.ul = self.ur = self.ll = self.lr = Point()
@@ -14563,7 +14616,7 @@ class Quad:
 
 
 class Rect:
-    
+
     def __abs__(self):
         if self.is_empty or self.is_infinite:
             return 0.0
@@ -14600,8 +14653,10 @@ class Rect:
             except Exception:
                 if g_exceptions_verbose > 1:    exception_info()
                 r = Quad(x).rect
-            return (self.x0 <= r.x0 <= r.x1 <= self.x1 and
-                    self.y0 <= r.y0 <= r.y1 <= self.y1)
+            return (
+                self.x0 <= r.x0 <= r.x1 <= self.x1 and
+                self.y0 <= r.y0 <= r.y1 <= self.y1
+            )
         return False
 
     def __eq__(self, rect):
@@ -14624,7 +14679,7 @@ class Rect:
         Rect(top-left, bottom-right)
         Rect(Rect or IRect) - new copy
         Rect(sequence) - from 'sequence'
-    
+
         Explicit keyword args p0, p1, x0, y0, x1, y1 override earlier settings
         if not None.
         """
@@ -14757,16 +14812,17 @@ class Rect:
     def intersects(self, x):
         """Check if intersection with rectangle x is not empty."""
         rect2 = Rect(x)
-        return (1
-                and not self.is_empty
-                and not self.is_infinite
-                and not rect2.is_empty
-                and not rect2.is_infinite
-                and self.x0 < rect2.x1
-                and rect2.x0 < self.x1
-                and self.y0 < rect2.y1
-                and rect2.y0 < self.y1
-               )
+        return (
+            1
+             and not self.is_empty
+             and not self.is_infinite
+             and not rect2.is_empty
+             and not rect2.is_infinite
+             and self.x0 < rect2.x1
+             and rect2.x0 < self.x1
+             and self.y0 < rect2.y1
+             and rect2.y0 < self.y1
+        )
 
     @property
     def is_empty(self):
@@ -14820,7 +14876,7 @@ class Rect:
     def top_right(self):
         """Top-right corner."""
         return Point(self.x1, self.y0)
-    
+
     def torect(self, r):
         """Return matrix that converts to target rect."""
 
@@ -15058,9 +15114,11 @@ class Shape:
             kappa = kappah * abs(P - Q)
             cp1 = P + (R - P) * kappa  # control point 1
             cp2 = Q + (R - Q) * kappa  # control point 2
-            self.draw_cont += l4(*JM_TUPLE(
-                list(cp1 * self.ipctm) + list(cp2 * self.ipctm) + list(Q * self.ipctm)
-            ))
+            self.draw_cont += l4(
+                *JM_TUPLE(
+                    list(cp1 * self.ipctm) + list(cp2 * self.ipctm) + list(Q * self.ipctm),
+                ),
+            )
 
             betar -= w90  # reduce param angle by 90 deg
             alfa += w90  # advance start angle by 90 deg
@@ -15079,9 +15137,11 @@ class Shape:
             kappa = kappah * abs(P - Q) / (1 - math.cos(betar))
             cp1 = P + (R - P) * kappa  # control point 1
             cp2 = Q + (R - Q) * kappa  # control point 2
-            self.draw_cont += l4(*JM_TUPLE(
-                list(cp1 * self.ipctm) + list(cp2 * self.ipctm) + list(Q * self.ipctm)
-            ))
+            self.draw_cont += l4(
+                *JM_TUPLE(
+                    list(cp1 * self.ipctm) + list(cp2 * self.ipctm) + list(Q * self.ipctm),
+                ),
+            )
         if fullSector:
             self.draw_cont += l3(*JM_TUPLE(point * self.ipctm))
             self.draw_cont += l5(*JM_TUPLE(center * self.ipctm))
@@ -15102,9 +15162,11 @@ class Shape:
         """
         r = Rect(rect)
         if radius is None:  # standard rectangle
-            self.draw_cont += _format_g(JM_TUPLE(
-                list(r.bl * self.ipctm) + [r.width, r.height]
-            )) + " re\n"
+            self.draw_cont += _format_g(
+                JM_TUPLE(
+                    list(r.bl * self.ipctm) + [r.width, r.height],
+                ),
+            ) + " re\n"
             self.updateRect(r)
             self.last_point = r.tl
             return self.last_point
@@ -15262,7 +15324,7 @@ class Shape:
             fname = fname[1:]
 
         xref = self.page.insert_font(
-            fontname=fname, fontfile=fontfile, encoding=encoding, set_simple=set_simple
+            fontname=fname, fontfile=fontfile, encoding=encoding, set_simple=set_simple,
         )
         fontinfo = CheckFontInfo(self.doc, xref)
 
@@ -15493,7 +15555,7 @@ class Shape:
             fname = fname[1:]
 
         xref = self.page.insert_font(
-            fontname=fname, fontfile=fontfile, encoding=encoding, set_simple=set_simple
+            fontname=fname, fontfile=fontfile, encoding=encoding, set_simple=set_simple,
         )
         fontinfo = CheckFontInfo(self.doc, xref)
 
@@ -15553,7 +15615,7 @@ class Shape:
 
         if CheckMorph(morph):
             m1 = Matrix(
-                1, 0, 0, 1, morph[0].x + self.x, self.height - morph[0].y - self.y
+                1, 0, 0, 1, morph[0].x + self.x, self.height - morph[0].y - self.y,
             )
             mat = ~m1 * morph[1] * m1
             cm = _format_g(JM_TUPLE(mat)) + " cm\n"
@@ -15808,7 +15870,7 @@ class Shape:
         self.draw_cont += emc
         if CheckMorph(morph):
             m1 = Matrix(
-                1, 0, 0, 1, morph[0].x + self.x, self.height - morph[0].y - self.y
+                1, 0, 0, 1, morph[0].x + self.x, self.height - morph[0].y - self.y,
             )
             mat = ~m1 * morph[1] * m1
             self.draw_cont = _format_g(JM_TUPLE(mat)) + " cm\n" + self.draw_cont
@@ -15854,7 +15916,7 @@ class Story:
             self.this = mupdf.FzStoryS( buffer_, user_css, em, arch)
         else:
             self.this = mupdf.FzStory( buffer_, user_css, em, arch)
-    
+
     def add_header_ids(self):
         '''
         Look for `<h1..6>` items in `self` and adds unique `id`
@@ -15916,13 +15978,13 @@ class Story:
         # Insert links for all positions that have an `href`.
         #
         for position_from in positions:
-        
+
             if (position_from.open_close & 1) and position_from.href:
-            
+
                 #log(f"add_pdf_links(): position with href: {position}")
                 link = dict()
                 link['from'] = Rect(position_from.rect)
-                
+
                 if position_from.href.startswith("#"):
                     #`<a href="#...">...</a>` internal link.
                     target_id = position_from.href[1:]
@@ -15944,7 +16006,7 @@ class Story:
                     # to make destination point top-left of window.
                     link["to"] = Point(x0, y0)
                     link["page"] = position_to.page_num - 1
-                    
+
                 else:
                     # `<a href="...">...</a>` external link.
                     if position_from.href.startswith('name:'):
@@ -15953,17 +16015,17 @@ class Story:
                     else:
                         link['kind'] = LINK_URI
                         link['uri'] = position_from.href
-                
+
                 #log(f'Adding link: {position_from.page_num=} {link=}.')
                 document[position_from.page_num - 1].insert_link(link)
-        
+
         return document
 
     @property
     def body(self):
         dom = self.document()
         return dom.bodytag()
-        
+
     def document( self):
         dom = mupdf.fz_story_document( self.this)
         return Xml( dom)
@@ -15985,7 +16047,7 @@ class Story:
             args = {}
         if not callable(function) or function.__code__.co_argcount != 1:
             raise ValueError("callback 'function' must be a callable with exactly one argument")
-        
+
         def function2( position):
             class Position2:
                 pass
@@ -16015,7 +16077,7 @@ class Story:
 
     def reset( self):
         mupdf.fz_reset_story( self.this)
-    
+
     def write(self, writer, rectfn, positionfn=None, pagefn=None):
         dev = None
         page_num = 0
@@ -16083,7 +16145,7 @@ class Story:
                     rectfn,
                     positionfn2,
                     pagefn,
-                    )
+            )
             if stable:
                 break
 
@@ -16121,9 +16183,9 @@ class Story:
     class FitResult:
         '''
         The result from a `Story.fit*()` method.
-        
+
         Members:
-        
+
         `big_enough`:
             `True` if the fit succeeded.
         `filled`:
@@ -16146,7 +16208,7 @@ class Story:
             self.numcalls = numcalls
             self.parameter = parameter
             self.rect = rect
-        
+
         def __repr__(self):
             return (
                     f' big_enough={self.big_enough}'
@@ -16155,17 +16217,17 @@ class Story:
                     f' numcalls={self.numcalls}'
                     f' parameter={self.parameter}'
                     f' rect={self.rect}'
-                    )
+            )
 
     def fit(self, fn, pmin=None, pmax=None, delta=0.001, verbose=False, flags=0):
         '''
         Finds optimal rect that contains the story `self`.
-        
+
         Returns a `Story.FitResult` instance.
-            
+
         On success, the last call to `self.place()` will have been with the
         returned rectangle, so `self.draw()` can be used directly.
-        
+
         Args:
         :arg fn:
             A callable taking a floating point `parameter` and returning a
@@ -16191,10 +16253,10 @@ class Story:
         def log(text):
             assert verbose
             message(f'fit(): {text}')
-        
+
         assert isinstance(pmin, (int, float)) or pmin is None
         assert isinstance(pmax, (int, float)) or pmax is None
-        
+
         class State:
             def __init__(self):
                 self.pmin = pmin
@@ -16207,10 +16269,10 @@ class Story:
                     self.pmin0 = pmin
                     self.pmax0 = pmax
         state = State()
-        
+
         if verbose:
             log(f'starting. {state.pmin=} {state.pmax=}.')
-        
+
         self.reset()
 
         def ret():
@@ -16226,7 +16288,7 @@ class Story:
             if verbose:
                 log(f'finished. {state.pmin0=} {state.pmax0=} {state.pmax=}: returning {result=}')
             return result
-        
+
         def update(parameter):
             '''
             Evaluates `more, _ = self.place(fn(parameter))`. If `more` is
@@ -16252,7 +16314,7 @@ class Story:
                         parameter=parameter,
                         rect=rect,
                         big_enough=big_enough,
-                        )
+                )
                 if verbose:
                     log(f'update(): called self.place(): {state.numcalls:>2d}: {more=} {parameter=} {rect=}.')
             if big_enough:
@@ -16274,7 +16336,7 @@ class Story:
             if direction * p > 0:
                 return 2 * p
             return -p
-            
+
         if state.pmin is None:
             # Find an initial finite pmin value.
             if verbose: log(f'finding pmin.')
@@ -16287,7 +16349,7 @@ class Story:
             if update(state.pmin):
                 if verbose: log(f'{state.pmin=} is big enough.')
                 return ret()
-        
+
         if state.pmax is None:
             # Find an initial finite pmax value.
             if verbose: log(f'finding pmax.')
@@ -16302,7 +16364,7 @@ class Story:
                 state.pmax = None
                 if verbose: log(f'No solution possible {state.pmax=}.')
                 return ret()
-        
+
         # Do binary search in pmin..pmax.
         if verbose: log(f'doing binary search with {state.pmin=} {state.pmax=}.')
         while 1:
@@ -16461,9 +16523,10 @@ class TextPage:
                     linerect = mupdf.FzRect(mupdf.FzRect.Fixed_EMPTY)
                     for ch in line:
                         cbbox = JM_char_bbox(line, ch)
-                        if (not JM_rects_overlap(tp_rect, cbbox)
-                                and not mupdf.fz_is_infinite_rect(tp_rect)
-                                ):
+                        if (
+                            not JM_rects_overlap(tp_rect, cbbox)
+                            and not mupdf.fz_is_infinite_rect(tp_rect)
+                        ):
                             continue
                         JM_append_rune(res, ch.m_internal.c)
                         last_char = ch.m_internal.c
@@ -16472,9 +16535,10 @@ class TextPage:
                         mupdf.fz_append_byte(res, 10)
                     blockrect = mupdf.fz_union_rect(blockrect, linerect)
                 text = JM_EscapeStrFromBuffer(res)
-            elif (JM_rects_overlap(tp_rect, block.m_internal.bbox)
-                    or mupdf.fz_is_infinite_rect(tp_rect)
-                    ):
+            elif (
+                JM_rects_overlap(tp_rect, block.m_internal.bbox)
+                or mupdf.fz_is_infinite_rect(tp_rect)
+            ):
                 img = block.i_image()
                 cs = img.colorspace()
                 text = f"<image: {mupdf.fz_colorspace_name(cs)}, width: {img.w()}, height: {img.h()}, bpc: {img.bpc()}>"
@@ -16488,7 +16552,7 @@ class TextPage:
                         text,
                         block_n,
                         block.m_internal.type,
-                        )
+                )
                 lines.append(litem)
         return lines
 
@@ -16574,7 +16638,7 @@ class TextPage:
             blocks = val["blocks"]
             blocks.sort(key=lambda b: (b["bbox"][3], b["bbox"][0]))
             val["blocks"] = blocks
-        
+
         val = json.dumps(val, separators=(",", ":"), cls=b64encode, indent=1)
         return val
 
@@ -16659,9 +16723,10 @@ class TextPage:
                 buflen = 0                  # reset char counter
                 for ch in line:
                     cbbox = JM_char_bbox(line, ch)
-                    if (not JM_rects_overlap(tp_rect, cbbox)
-                            and not mupdf.fz_is_infinite_rect(tp_rect)
-                            ):
+                    if (
+                        not JM_rects_overlap(tp_rect, cbbox)
+                        and not mupdf.fz_is_infinite_rect(tp_rect)
+                    ):
                         continue
 
                     if buflen == 0 and ch.m_internal.c == 0x200d:
@@ -16758,7 +16823,7 @@ class TextWriter:
         self.last_point = Point()
         self.last_point.__doc__ = "Position following last text insertion."
         self.text_rect = Rect()
-        
+
         self.text_rect.__doc__ = "Accumulated area of text spans."
         self.used_fonts = set()
         self.thisown = True
@@ -16816,8 +16881,10 @@ class TextWriter:
     def appendv(self, pos, text, font=None, fontsize=11, language=None, small_caps=False):
         lheight = fontsize * 1.2
         for c in text:
-            self.append(pos, c, font=font, fontsize=fontsize,
-                language=language, small_caps=small_caps)
+            self.append(
+                pos, c, font=font, fontsize=fontsize,
+                language=language, small_caps=small_caps,
+            )
             pos.y += lheight
         return self.text_rect, self.last_point
 
@@ -16857,7 +16924,7 @@ class TextWriter:
             elif idx[i] > idx2[-1] + 1:  # large gap to last?
                 if len(idx2) > 1:  # at least two consecutives?
                     words[idx2[0] : idx2[-1] + 1] = reversed(
-                        words[idx2[0] : idx2[-1] + 1]
+                        words[idx2[0] : idx2[-1] + 1],
                     )  # revert their sequence
                 idx2 = [idx[i]]  # re-initialize
 
@@ -16879,7 +16946,7 @@ class TextWriter:
             warn: bool = None,
             right_to_left: bool = False,
             small_caps: bool = False,
-            ) -> tuple:
+    ) -> tuple:
         """Fill a rectangle with text.
 
         Args:
@@ -16903,7 +16970,7 @@ class TextWriter:
         def textlen(x):
             """Return length of a string."""
             return font.text_length(
-                x, fontsize=fontsize, small_caps=small_caps
+                x, fontsize=fontsize, small_caps=small_caps,
             )  # abbreviation
 
         def char_lengths(x):
@@ -16912,8 +16979,8 @@ class TextWriter:
 
         def append_this(pos, text):
             ret = writer.append(
-                    pos, text, font=font, fontsize=fontsize, small_caps=small_caps
-                    )
+                    pos, text, font=font, fontsize=fontsize, small_caps=small_caps,
+            )
             return ret
 
         tolerance = fontsize * 0.2  # extra distance to left border
@@ -17109,10 +17176,11 @@ class TextWriter:
         if abs(self.rect - page.rect) > 1e-3:
             raise ValueError("incompatible page rect")
         if morph is not None:
-            if (type(morph) not in (tuple, list)
-                    or type(morph[0]) is not Point
-                    or type(morph[1]) is not Matrix
-                    ):
+            if (
+                type(morph) not in (tuple, list)
+                or type(morph[0]) is not Point
+                or type(morph[1]) is not Matrix
+            ):
                 raise ValueError("morph must be (Point, Matrix) or None")
         if matrix is not None and morph is not None:
             raise ValueError("only one of matrix, morph is allowed")
@@ -17149,7 +17217,7 @@ class TextWriter:
                     dev_color,
                     alpha,
                     mupdf.FzColorParams(mupdf.fz_default_color_params),
-                    )
+            )
             mupdf.fz_close_device( dev)
 
             # copy generated resources into the one of the page
@@ -17396,7 +17464,7 @@ class IRect:
                 Matrix(1, 0, 0, 1, -self.x0, -self.y0)
                 * Matrix(r.width / self.width, r.height / self.height)
                 * Matrix(1, 0, 0, 1, r.x0, r.y0)
-                )
+        )
 
     def transform(self, m):
         return Rect.transform(self, m).round()
@@ -17439,23 +17507,24 @@ if 1:
                     #log(f'importing {name}')
                     setattr(_self, _name, _value)
                     #log(f'{getattr( self, name, None)=}')
-    
+
     # This is a macro so not preserved in mupdf C++/Python bindings.
     #
-    PDF_SIGNATURE_DEFAULT_APPEARANCE = (0
-            | mupdf.PDF_SIGNATURE_SHOW_LABELS
-            | mupdf.PDF_SIGNATURE_SHOW_DN
-            | mupdf.PDF_SIGNATURE_SHOW_DATE
-            | mupdf.PDF_SIGNATURE_SHOW_TEXT_NAME
-            | mupdf.PDF_SIGNATURE_SHOW_GRAPHIC_NAME
-            | mupdf.PDF_SIGNATURE_SHOW_LOGO
-            )
+    PDF_SIGNATURE_DEFAULT_APPEARANCE = (
+        0
+        | mupdf.PDF_SIGNATURE_SHOW_LABELS
+        | mupdf.PDF_SIGNATURE_SHOW_DN
+        | mupdf.PDF_SIGNATURE_SHOW_DATE
+        | mupdf.PDF_SIGNATURE_SHOW_TEXT_NAME
+        | mupdf.PDF_SIGNATURE_SHOW_GRAPHIC_NAME
+        | mupdf.PDF_SIGNATURE_SHOW_LOGO
+    )
 
     #UCDN_SCRIPT_ADLAM = mupdf.UCDN_SCRIPT_ADLAM
     #setattr(self, 'UCDN_SCRIPT_ADLAM', mupdf.UCDN_SCRIPT_ADLAM)
-    
+
     assert mupdf.UCDN_EAST_ASIAN_H == 1
-    
+
     # Flake8 incorrectly fails next two lines because we've dynamically added
     # items to self.
     assert PDF_TX_FIELD_IS_MULTILINE == mupdf.PDF_TX_FIELD_IS_MULTILINE # noqa: F821
@@ -17479,7 +17548,7 @@ Base14_fontnames = (
     "Times-BoldItalic",
     "Symbol",
     "ZapfDingbats",
-    )
+)
 
 Base14_fontdict = {}
 for f in Base14_fontnames:
@@ -17615,66 +17684,74 @@ TEXT_ACCURATE_SIDE_BEARINGS = mupdf.FZ_STEXT_ACCURATE_SIDE_BEARINGS
 TEXT_STEXT_SEGMENT = TEXT_SEGMENT
 TEXT_CID_FOR_UNKNOWN_UNICODE = TEXT_USE_CID_FOR_UNKNOWN_UNICODE
 
-TEXTFLAGS_WORDS = (0
-        | TEXT_PRESERVE_LIGATURES
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_WORDS = (
+    0
+    | TEXT_PRESERVE_LIGATURES
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
-TEXTFLAGS_BLOCKS = (0
-        | TEXT_PRESERVE_LIGATURES
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_BLOCKS = (
+    0
+    | TEXT_PRESERVE_LIGATURES
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
-TEXTFLAGS_DICT = (0
-        | TEXT_PRESERVE_LIGATURES
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_PRESERVE_IMAGES
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_DICT = (
+    0
+    | TEXT_PRESERVE_LIGATURES
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_PRESERVE_IMAGES
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
 TEXTFLAGS_RAWDICT = TEXTFLAGS_DICT
 
-TEXTFLAGS_SEARCH = (0
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_DEHYPHENATE
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_SEARCH = (
+    0
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_DEHYPHENATE
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
-TEXTFLAGS_HTML = (0
-        | TEXT_PRESERVE_LIGATURES
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_PRESERVE_IMAGES
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_HTML = (
+    0
+    | TEXT_PRESERVE_LIGATURES
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_PRESERVE_IMAGES
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
-TEXTFLAGS_XHTML = (0
-        | TEXT_PRESERVE_LIGATURES
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_PRESERVE_IMAGES
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_XHTML = (
+    0
+    | TEXT_PRESERVE_LIGATURES
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_PRESERVE_IMAGES
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
-TEXTFLAGS_XML = (0
-        | TEXT_PRESERVE_LIGATURES
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_XML = (
+    0
+    | TEXT_PRESERVE_LIGATURES
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
-TEXTFLAGS_TEXT = (0
-        | TEXT_PRESERVE_LIGATURES
-        | TEXT_PRESERVE_WHITESPACE
-        | TEXT_MEDIABOX_CLIP
-        | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
-        )
+TEXTFLAGS_TEXT = (
+    0
+    | TEXT_PRESERVE_LIGATURES
+    | TEXT_PRESERVE_WHITESPACE
+    | TEXT_MEDIABOX_CLIP
+    | TEXT_USE_CID_FOR_UNKNOWN_UNICODE
+)
 
 # Simple text encoding options
 TEXT_ENCODING_LATIN = 0
@@ -17715,7 +17792,7 @@ annot_skel = {
         "launch": lambda a, b, c: f"<</A<</S/Launch/F<</F({a})/UF({b})/Type/Filespec>>>>/Rect[{c}]/BS<</W 0>>/Subtype/Link>>",
         "uri": lambda a, b: f"<</A<</S/URI/URI({a})>>/Rect[{b}]/BS<</W 0>>/Subtype/Link>>",
         "named": lambda a, b: f"<</A<</S/GoTo/D({a})/Type/Action>>/Rect[{b}]/BS<</W 0>>/Subtype/Link>>",
-        }
+}
 
 class FileDataError(RuntimeError):
     """Raised for documents with file structure issues."""
@@ -17731,7 +17808,7 @@ class EmptyFileError(FileDataError):
 
 # propagate exception class to C-level code
 #_set_FileDataError(FileDataError)
- 
+
 csRGB = Colorspace(CS_RGB)
 csGRAY = Colorspace(CS_GRAY)
 csCMYK = Colorspace(CS_CMYK)
@@ -18061,7 +18138,7 @@ symbol_glyphs = (   # Glyph list for the built-in font 'Symbol'
         (253, 0.494),
         (254, 0.494),
         (183, 0.46),
-        )
+)
 
 
 zapf_glyphs = ( # Glyph list for the built-in font 'ZapfDingbats'
@@ -18321,7 +18398,7 @@ zapf_glyphs = ( # Glyph list for the built-in font 'ZapfDingbats'
         (253, 0.97),
         (183, 0.788),
         (183, 0.788),
-        )
+)
 
 
 # Functions
@@ -18498,7 +18575,7 @@ def JM_pixmap_from_page(doc, page, ctm, cs, alpha, annots, clip):
     SPOTS_NONE = 0
     SPOTS_OVERPRINT_SIM = 1
     SPOTS_FULL = 2
-    
+
     FZ_ENABLE_SPOT_RENDERING = True # fixme: this is a build-time setting in MuPDF's config.h.
     if FZ_ENABLE_SPOT_RENDERING:
         spots = SPOTS_OVERPRINT_SIM
@@ -18507,7 +18584,7 @@ def JM_pixmap_from_page(doc, page, ctm, cs, alpha, annots, clip):
 
     seps = None
     colorspace = cs
-    
+
     matrix = JM_matrix_from_py(ctm)
     rect = mupdf.fz_bound_page(page)
     rclip = JM_rect_from_py(clip)
@@ -18612,9 +18689,10 @@ def JM_add_oc_object(pdf, ref, xref):
     if not mupdf.pdf_is_dict(indobj):
         RAISEPY(MSG_BAD_OC_REF, PyExc_ValueError)
     type_ = mupdf.pdf_dict_get(indobj, PDF_NAME('Type'))
-    if (mupdf.pdf_objcmp(type_, PDF_NAME('OCG')) == 0
-            or mupdf.pdf_objcmp(type_, PDF_NAME('OCMD')) == 0
-            ):
+    if (
+        mupdf.pdf_objcmp(type_, PDF_NAME('OCG')) == 0
+        or mupdf.pdf_objcmp(type_, PDF_NAME('OCMD')) == 0
+    ):
         mupdf.pdf_dict_put(ref, PDF_NAME('OC'), indobj)
     else:
         RAISEPY(MSG_BAD_OC_REF, PyExc_ValueError)
@@ -18722,7 +18800,7 @@ def JM_annot_set_border( border, doc, annot_obj):
             mupdf.pdf_new_real( nwidth),
             PDF_NAME('BS'),
             PDF_NAME('W'),
-            )
+    )
 
     if dashlen == 0:
         obj = JM_get_border_style( nstyle)
@@ -18771,7 +18849,7 @@ def JM_append_word(lines, buff, wbbox, block_n, line_n, word_n):
             block_n,
             line_n,
             word_n,
-            )
+    )
     lines.append(litem)
     return word_n + 1, mupdf.FzRect(mupdf.FzRect.Fixed_EMPTY)   # word counter
 
@@ -18838,7 +18916,7 @@ def JM_char_quad(line, ch):
         # This reduces time taken to extract text from PyMuPDF.pdf from 20s to
         # 15s.
         return mupdf.FzQuad(extra.JM_char_quad( line.m_internal, ch.m_internal))
-        
+
     assert isinstance(line, mupdf.FzStextLine)
     assert isinstance(ch, mupdf.FzStextChar)
     if _globals.skip_quad_corrections:   # no special handling
@@ -18863,14 +18941,14 @@ def JM_char_quad(line, ch):
         dsc = -0.1
         asc = 0.9
         asc_dsc = 1.0
-    
+
     if _globals.small_glyph_heights or asc_dsc < 1:
         dsc = dsc / asc_dsc
         asc = asc / asc_dsc
     asc_dsc = asc - dsc
     asc = asc * fsize / asc_dsc
     dsc = dsc * fsize / asc_dsc
-    
+
     # Re-compute quad with the adjusted ascender / descender values:
     # Move ch->origin to (0,0) and de-rotate quad, then adjust the corners,
     # re-rotate and move back to ch->origin location.
@@ -18886,7 +18964,7 @@ def JM_char_quad(line, ch):
 
     quad = mupdf.fz_transform_quad(mupdf.FzQuad(ch.m_internal.quad), xlate1)    # move origin to (0,0)
     quad = mupdf.fz_transform_quad(quad, trm1) # de-rotate corners
-    
+
     # adjust vertical coordinates
     if c == 1 and quad.ul.y > 0:    # up-down flip
         quad.ul.y = asc
@@ -18905,7 +18983,7 @@ def JM_char_quad(line, ch):
     if quad.ll.x < 0:
         quad.ll.x = 0
         quad.ul.x = 0
-    
+
     cwidth = quad.lr.x - quad.ll.x
     if cwidth < FLT_EPSILON:
         glyph = mupdf.fz_encode_character( font, ch.m_internal.c)
@@ -18924,7 +19002,7 @@ def JM_choice_options(annot):
     return list of choices for list or combo boxes
     '''
     annot_obj = mupdf.pdf_annot_obj( annot.this)
-    
+
     opts = mupdf.pdf_choice_widget_options2( annot, 0)
     n = len( opts)
     if n == 0:
@@ -18939,7 +19017,7 @@ def JM_choice_options(annot):
             val = (
                     mupdf.pdf_to_text_string( mupdf.pdf_array_get( mupdf.pdf_array_get( optarr, i), 0)),
                     mupdf.pdf_to_text_string( mupdf.pdf_array_get( mupdf.pdf_array_get( optarr, i), 1)),
-                    )
+            )
             liste.append( val)
         else:
             val = mupdf.pdf_to_text_string( mupdf.pdf_array_get( optarr, i))
@@ -19003,16 +19081,16 @@ def JM_clear_pixmap_rect_with_value(dest, value, b):
 
 
 def JM_color_FromSequence(color):
-    
+
     if isinstance(color, (int, float)):    # maybe just a single float
         color = [color]
-    
+
     if not isinstance( color, (list, tuple)):
         return -1, []
-    
+
     if len(color) not in (0, 1, 3, 4):
         return -1, []
-    
+
     ret = color[:]
     for i in range(len(ret)):
         if ret[i] < 0 or ret[i] > 1:
@@ -19023,7 +19101,7 @@ def JM_color_FromSequence(color):
 def JM_color_count( pm, clip):
     if 1 or g_use_extra:
         return extra.ll_JM_color_count(pm.m_internal, clip)
-    
+
     rc = dict()
     cnt = 0
     irect = mupdf.fz_pixmap_bbox( pm)
@@ -19067,7 +19145,7 @@ def JM_compress_buffer(inbuffer):
     data, compressed_length = mupdf.fz_new_deflated_data_from_buffer(
             inbuffer,
             mupdf.FZ_DEFLATE_BEST,
-            )
+    )
     #log(f'{data compressed_length=}')
     if not data or compressed_length == 0:
         return None
@@ -19172,7 +19250,7 @@ def JM_create_widget(doc, page, type, fieldname):
                     PDF_NAME('Root'),
                     PDF_NAME('AcroForm'),
                     PDF_NAME('SigFlags'),
-                    )
+            )
         # pdf_create_annot will have linked the new widget into the page's
         # annot array. We also need it linked into the document's form
         form = mupdf.pdf_dict_getp(mupdf.pdf_trailer(doc), "Root/AcroForm/Fields")
@@ -19184,7 +19262,7 @@ def JM_create_widget(doc, page, type, fieldname):
                     PDF_NAME('Root'),
                     PDF_NAME('AcroForm'),
                     PDF_NAME('Fields'),
-                    )
+            )
         mupdf.pdf_array_push(form, annot_obj)  # Cleanup relies on this statement being last
     except Exception:
         if g_exceptions_verbose:    exception_info()
@@ -19197,7 +19275,7 @@ def JM_create_widget(doc, page, type, fieldname):
                     PDF_NAME('Root'),
                     PDF_NAME('AcroForm'),
                     PDF_NAME('SigFlags'),
-                    )
+            )
         raise
     return annot
 
@@ -19208,11 +19286,11 @@ def JM_cropbox(page_obj):
     '''
     if g_use_extra:
         return extra.JM_cropbox(page_obj)
-    
+
     mediabox = JM_mediabox(page_obj)
     cropbox = mupdf.pdf_to_rect(
-                mupdf.pdf_dict_get_inheritable(page_obj, PDF_NAME('CropBox'))
-                )
+                mupdf.pdf_dict_get_inheritable(page_obj, PDF_NAME('CropBox')),
+    )
     if mupdf.fz_is_infinite_rect(cropbox) or mupdf.fz_is_empty_rect(cropbox):
         cropbox = mediabox
     y0 = mediabox.y1 - cropbox.y1
@@ -19245,7 +19323,7 @@ def JM_embed_file(
         ufilename,
         desc,
         compress,
-        ):
+):
     '''
     embed a new file in a PDF (not only /EmbeddedFiles entries)
     '''
@@ -19264,7 +19342,7 @@ def JM_embed_file(
             mupdf.fz_new_buffer_from_copied_data(bs),
             mupdf.PdfObj(),
             0,
-            )
+    )
     mupdf.pdf_dict_put(ef, PDF_NAME('F'), f)
     JM_update_stream(pdf, f, buf, compress)
     len_, _ = mupdf.fz_buffer_storage(buf)
@@ -19294,7 +19372,7 @@ def JM_embedded_clean(pdf):
             PDF_NAME('Names'),
             PDF_NAME('EmbeddedFiles'),
             PDF_NAME('Names'),
-            )
+    )
     if efiles.m_internal:
         mupdf.pdf_dict_put_name(root, PDF_NAME('PageMode'), "UseAttachments")
 
@@ -19452,10 +19530,11 @@ def JM_font_descender(font):
 def JM_is_word_delimiter(ch, delimiters):
     """Check if ch is an extra word delimiting character.
     """
-    if (0
-        or ch <= 32
-        or ch == 160
-        or 0x202a <= ch <= 0x202e
+    if (
+        0
+            or ch <= 32
+            or ch == 160
+            or 0x202a <= ch <= 0x202e
     ):
         # covers any whitespace plus unicodes that switch between
         # right-to-left and left-to-right languages
@@ -19467,7 +19546,7 @@ def JM_is_word_delimiter(ch, delimiters):
         if d == char:
             return True
     return False
-    
+
 
 def JM_is_rtl_char(ch):
     if ch < 0x590 or ch > 0x900:
@@ -19516,7 +19595,7 @@ def JM_gather_fonts(pdf, dict_, fontlist, stream_xref):
                 mupdf.pdf_to_name(refname),
                 mupdf.pdf_to_name(encoding),
                 stream_xref,
-                )
+        )
         fontlist.append(entry)
     return rc
 
@@ -19556,7 +19635,7 @@ def JM_gather_forms(doc, dict_: mupdf.PdfObj, imagelist, stream_xref: int):
                 mupdf.pdf_to_name( refname),
                 stream_xref,
                 JM_py_from_rect(bbox),
-                )
+        )
         imagelist.append(entry)
     return rc
 
@@ -19593,9 +19672,10 @@ def JM_gather_images(doc: mupdf.PdfDocument, dict_: mupdf.PdfObj, imagelist, str
         if mupdf.pdf_is_array(cs):
             cses = cs
             cs = mupdf.pdf_array_get(cses, 0)
-            if (mupdf.pdf_name_eq(cs, PDF_NAME('DeviceN'))
-                    or mupdf.pdf_name_eq(cs, PDF_NAME('Separation'))
-                    ):
+            if (
+                mupdf.pdf_name_eq(cs, PDF_NAME('DeviceN'))
+                or mupdf.pdf_name_eq(cs, PDF_NAME('Separation'))
+            ):
                 altcs = mupdf.pdf_array_get(cses, 2)
                 if mupdf.pdf_is_array(altcs):
                     altcs = mupdf.pdf_array_get(altcs, 0)
@@ -19614,7 +19694,7 @@ def JM_gather_images(doc: mupdf.PdfDocument, dict_: mupdf.PdfObj, imagelist, str
                 JM_EscapeStrFromStr(mupdf.pdf_to_name(refname)),
                 JM_EscapeStrFromStr(mupdf.pdf_to_name(filter_)),
                 stream_xref,
-                )
+        )
         imagelist.append(entry)
     return rc
 
@@ -19673,8 +19753,8 @@ def JM_get_annot_id_list(page):
         name = mupdf.pdf_dict_gets(annot_obj, "NM")
         if name.m_internal:
             names.append(
-                mupdf.pdf_to_text_string(name)
-                )
+                mupdf.pdf_to_text_string(name),
+            )
     return names
 
 def JM_get_annot_xref_list( page_obj):
@@ -19684,7 +19764,7 @@ def JM_get_annot_xref_list( page_obj):
     if g_use_extra:
         names = extra.JM_get_annot_xref_list( page_obj)
         return names
-    
+
     names = []
     annots = mupdf.pdf_dict_get( page_obj, PDF_NAME('Annots'))
     n = mupdf.pdf_array_len( annots)
@@ -19736,7 +19816,7 @@ def JM_get_font(
         is_italic,
         is_serif,
         embed,
-        ):
+):
     '''
     return a fz_font from a number of parameters
     '''
@@ -19747,7 +19827,7 @@ def JM_get_font(
         if not font.m_internal.flags.never_embed:
             mupdf.fz_set_font_embedding(font, embed)
         return font
-    
+
     index = 0
     font = None
     if fontfile:
@@ -19774,7 +19854,7 @@ def JM_get_font(
             return fertig(font)
         font = mupdf.fz_new_builtin_font(fontname, is_bold, is_italic)
         return fertig(font)
-    
+
     # Check for NOTO font
     #have_noto:;
     data, size, index = mupdf.fz_lookup_noto_font( script, lang)
@@ -19785,7 +19865,7 @@ def JM_get_font(
         return fertig(font)
     font = mupdf.fz_load_fallback_font( script, lang, is_serif, is_bold, is_italic)
     return fertig(font)
-    
+
 
 def JM_get_fontbuffer(doc, xref):
     '''
@@ -19944,7 +20024,7 @@ def JM_get_widget_properties(annot, Widget):
             if halfbeat == 0:
                 slow = mupdf.pdf_dict_get(slow, PDF_NAME('Parent'))
                 halfbeat = 2
-    
+
     # In order to address #3950, we use our modified pdf_dict_get_inheritable()
     # to ignore empty-string child values.
     label = pdf_dict_get_inheritable_nonempty_label(annot_obj, PDF_NAME('TU'))
@@ -20017,29 +20097,35 @@ def JM_get_widget_properties(annot, Widget):
     ss = JM_get_script(s)
     SETATTR_DROP(Widget, "script", ss)
 
-    SETATTR_DROP(Widget, "script_stroke",
-            JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('K')))
-            )
+    SETATTR_DROP(
+        Widget, "script_stroke",
+        JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('K'))),
+    )
 
-    SETATTR_DROP(Widget, "script_format",
-            JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('F')))
-            )
+    SETATTR_DROP(
+        Widget, "script_format",
+        JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('F'))),
+    )
 
-    SETATTR_DROP(Widget, "script_change",
-            JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('V')))
-            )
+    SETATTR_DROP(
+        Widget, "script_change",
+        JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('V'))),
+    )
 
-    SETATTR_DROP(Widget, "script_calc",
-            JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('C')))
-            )
+    SETATTR_DROP(
+        Widget, "script_calc",
+        JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), PDF_NAME('C'))),
+    )
 
-    SETATTR_DROP(Widget, "script_blur",
-            JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), mupdf.pdf_new_name('Bl')))
-            )
+    SETATTR_DROP(
+        Widget, "script_blur",
+        JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), mupdf.pdf_new_name('Bl'))),
+    )
 
-    SETATTR_DROP(Widget, "script_focus",
-            JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), mupdf.pdf_new_name('Fo')))
-            )
+    SETATTR_DROP(
+        Widget, "script_focus",
+        JM_get_script(mupdf.pdf_dict_getl(annot_obj, PDF_NAME('AA'), mupdf.pdf_new_name('Fo'))),
+    )
 
 
 def JM_get_fontextension(doc, xref):
@@ -20230,7 +20316,7 @@ def JM_image_profile( imagedata, keep_image):
     '''
     if not imagedata:
         return None # nothing given
-    
+
     len_ = len( imagedata)
     if len_ < 8:
         message( "bad image data")
@@ -20289,7 +20375,7 @@ def JM_image_reporter(page):
             no_update=1,
             sanitize=1,
             sopts=sanitize_filter_options,
-            )
+    )
 
     global g_img_info
     g_img_info = []
@@ -20311,7 +20397,7 @@ def JM_fitz_config():
     have_TOFU_HISTORIC  = not hasattr(mupdf, 'TOFU_HISTORIC')
     have_TOFU_SIL       = not hasattr(mupdf, 'TOFU_SIL')
     have_TOFU_SYMBOL    = not hasattr(mupdf, 'TOFU_SYMBOL')
-    
+
     ret = dict()
     ret["base14"]           = have_TOFU_BASE14
     ret["cbz"]              = bool(mupdf.FZ_ENABLE_CBZ)
@@ -20444,7 +20530,7 @@ def JM_insert_font(pdf, bfname, fontfile, fontbuffer, set_simple, idx, wmode, se
                 "ascender": asc,
                 "descender": dsc,
             },
-            ]
+    ]
     return value
 
 def JM_irect_from_py(r):
@@ -20563,9 +20649,10 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
     for ch in line:
         # start-trace
         r = JM_char_bbox(line, ch)
-        if (not JM_rects_overlap(tp_rect, r)
-                and not mupdf.fz_is_infinite_rect(tp_rect)
-                ):
+        if (
+            not JM_rects_overlap(tp_rect, r)
+            and not mupdf.fz_is_infinite_rect(tp_rect)
+        ):
             continue
 
         # Info from:
@@ -20574,7 +20661,7 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
         # fz_font_is_serif()
         # fz_font_is_monospaced()
         # fz_font_is_bold()
-        
+
         flags = JM_char_font_flags(mupdf.FzFont(mupdf.ll_fz_keep_font(ch.m_internal.font)), line, ch)
         origin = mupdf.FzPoint(ch.m_internal.origin)
         style.size = ch.m_internal.size
@@ -20587,13 +20674,14 @@ def JM_make_spanlist(line_dict, line, raw, buff, tp_rect):
         style.desc = JM_font_descender(mupdf.FzFont(mupdf.ll_fz_keep_font(ch.m_internal.font)))
         style.bidi = ch.m_internal.bidi
 
-        if (style.size != old_style.size
-                or style.flags != old_style.flags
-                or (style.char_flags != old_style.char_flags)
-                or style.argb != old_style.argb
-                or style.font != old_style.font
-                or style.bidi != old_style.bidi
-                ):
+        if (
+            style.size != old_style.size
+            or style.flags != old_style.flags
+            or (style.char_flags != old_style.char_flags)
+            or style.argb != old_style.argb
+            or style.font != old_style.font
+            or style.bidi != old_style.bidi
+        ):
             if old_style.size >= 0:
                 # not first one, output previous
                 if raw:
@@ -20682,21 +20770,23 @@ def _make_image_dict(img, img_dict):
     # compressed image buffer if present, else None
     ll_cbuf = mupdf.ll_fz_compressed_image_buffer(img.m_internal)
 
-    if (0
-        or not ll_cbuf
-        or img_type in (mupdf.FZ_IMAGE_JBIG2, mupdf.FZ_IMAGE_UNKNOWN)
-        or img_type < mupdf.FZ_IMAGE_BMP
+    if (
+        0
+            or not ll_cbuf
+            or img_type in (mupdf.FZ_IMAGE_JBIG2, mupdf.FZ_IMAGE_UNKNOWN)
+            or img_type < mupdf.FZ_IMAGE_BMP
     ):
         # not an image with a compressed buffer: convert to PNG
         res = mupdf.fz_new_buffer_from_image_as_png(
                     img,
                     mupdf.FzColorParams(mupdf.fz_default_color_params),
-              )
+        )
         ext = "png"
     elif ext == "jpeg" and img.n() == 4:
         # JPEG with CMYK: invert colors
         res = mupdf.fz_new_buffer_from_image_as_jpeg(
-                    img, mupdf.FzColorParams(mupdf.fz_default_color_params), 95, 1)
+                    img, mupdf.FzColorParams(mupdf.fz_default_color_params), 95, 1,
+        )
     else:
         # copy the compressed buffer
         res = mupdf.FzBuffer(mupdf.ll_fz_keep_buffer(ll_cbuf.buffer))
@@ -20733,9 +20823,10 @@ def JM_make_text_block(block, block_dict, raw, buff, tp_rect):
     #log(f'{block=}')
     for line in block:
         #log(f'{line=}')
-        if (mupdf.fz_is_empty_rect(mupdf.fz_intersect_rect(tp_rect, mupdf.FzRect(line.m_internal.bbox)))
-                and not mupdf.fz_is_infinite_rect(tp_rect)
-                ):
+        if (
+            mupdf.fz_is_empty_rect(mupdf.fz_intersect_rect(tp_rect, mupdf.FzRect(line.m_internal.bbox)))
+            and not mupdf.fz_is_infinite_rect(tp_rect)
+        ):
             continue
         line_dict = dict()
         line_rect = JM_make_spanlist(line_dict, line, raw, buff, tp_rect)
@@ -20758,14 +20849,16 @@ def JM_make_textpage_dict(tp, page_dict, raw):
     #log(f'JM_make_textpage_dict {=tp}')
     for block in tp:
         block_n += 1
-        if (not mupdf.fz_contains_rect(tp_rect, mupdf.FzRect(block.m_internal.bbox))
-                and not mupdf.fz_is_infinite_rect(tp_rect)
-                and block.m_internal.type == mupdf.FZ_STEXT_BLOCK_IMAGE
-                ):
+        if (
+            not mupdf.fz_contains_rect(tp_rect, mupdf.FzRect(block.m_internal.bbox))
+            and not mupdf.fz_is_infinite_rect(tp_rect)
+            and block.m_internal.type == mupdf.FZ_STEXT_BLOCK_IMAGE
+        ):
             continue
-        if (not mupdf.fz_is_infinite_rect(tp_rect)
-                and mupdf.fz_is_empty_rect(mupdf.fz_intersect_rect(tp_rect, mupdf.FzRect(block.m_internal.bbox)))
-                ):
+        if (
+            not mupdf.fz_is_infinite_rect(tp_rect)
+            and mupdf.fz_is_empty_rect(mupdf.fz_intersect_rect(tp_rect, mupdf.FzRect(block.m_internal.bbox)))
+        ):
             continue
 
         block_dict = dict()
@@ -20802,8 +20895,8 @@ def JM_mediabox(page_obj):
     '''
     page_mediabox = mupdf.FzRect(mupdf.FzRect.Fixed_UNIT)
     mediabox = mupdf.pdf_to_rect(
-            mupdf.pdf_dict_get_inheritable(page_obj, PDF_NAME('MediaBox'))
-            )
+            mupdf.pdf_dict_get_inheritable(page_obj, PDF_NAME('MediaBox')),
+    )
     if mupdf.fz_is_empty_rect(mediabox) or mupdf.fz_is_infinite_rect(mediabox):
         mediabox.x0 = 0
         mediabox.y0 = 0
@@ -20815,11 +20908,12 @@ def JM_mediabox(page_obj):
             mupdf.fz_min(mediabox.y0, mediabox.y1),
             mupdf.fz_max(mediabox.x0, mediabox.x1),
             mupdf.fz_max(mediabox.y0, mediabox.y1),
-            )
+    )
 
-    if (page_mediabox.x1 - page_mediabox.x0 < 1
-            or page_mediabox.y1 - page_mediabox.y0 < 1
-            ):
+    if (
+        page_mediabox.x1 - page_mediabox.x0 < 1
+        or page_mediabox.y1 - page_mediabox.y0 < 1
+    ):
         page_mediabox = mupdf.FzRect(mupdf.FzRect.Fixed_UNIT)
 
     return page_mediabox
@@ -20836,7 +20930,7 @@ def JM_merge_range(
         annots,
         show_progress,
         graft_map,
-        ):
+):
     '''
     Copy a range of pages (spage, epage) from a source PDF to a specified
     location (apage) of the target PDF.
@@ -20854,7 +20948,7 @@ def JM_merge_range(
                 annots,
                 show_progress,
                 graft_map,
-                )
+        )
     afterpage = apage
     counter = 0  # copied pages counter
     total = mupdf.fz_absi(epage - spage) + 1   # total pages to copy
@@ -20976,9 +21070,10 @@ def JM_new_buffer_from_stext_page(page):
         if block.m_internal.type == mupdf.FZ_STEXT_BLOCK_TEXT:
             for line in block:
                 for ch in line:
-                    if (not JM_rects_overlap(rect, JM_char_bbox(line, ch))
-                            and not mupdf.fz_is_infinite_rect(rect)
-                            ):
+                    if (
+                        not JM_rects_overlap(rect, JM_char_bbox(line, ch))
+                        and not mupdf.fz_is_infinite_rect(rect)
+                    ):
                         continue
                     mupdf.fz_append_rune(buf, ch.m_internal.c)
                 mupdf.fz_append_byte(buf, ord('\n'))
@@ -21092,7 +21187,7 @@ def JM_pixmap_from_display_list(
         alpha,
         clip,
         seps,
-        ):
+):
     '''
     Version of fz_new_pixmap_from_display_list (util.c) to also support
     rendering of only the 'clip' part of the displaylist rectangle
@@ -21140,7 +21235,7 @@ def JM_point_from_py(p):
         return mupdf.FzPoint(p.x, p.y)
     if g_use_extra:
         return extra.JM_point_from_py( p)
-    
+
     p0 = mupdf.FzPoint(0, 0)
     x = JM_FLOAT_ITEM(p, 0)
     y = JM_FLOAT_ITEM(p, 1)
@@ -21161,7 +21256,7 @@ def JM_print_stext_page_as_text(res, page):
     '''
     if 1 and g_use_extra:
         return extra.JM_print_stext_page_as_text(res, page)
-    
+
     assert isinstance(res, mupdf.FzBuffer)
     assert isinstance(page, mupdf.FzStextPage)
     rect = mupdf.FzRect(page.m_internal.mediabox)
@@ -21178,16 +21273,17 @@ def JM_print_stext_page_as_text(res, page):
                 n_chars += n_chars2
             n_lines += n_lines2
         n_blocks += n_blocks2
-    
+
     for block in page:
         if block.m_internal.type == mupdf.FZ_STEXT_BLOCK_TEXT:
             for line in block:
                 last_char = 0
                 for ch in line:
                     chbbox = JM_char_bbox(line, ch)
-                    if (mupdf.fz_is_infinite_rect(rect)
-                            or JM_rects_overlap(rect, chbbox)
-                            ):
+                    if (
+                        mupdf.fz_is_infinite_rect(rect)
+                        or JM_rects_overlap(rect, chbbox)
+                    ):
                         #raw += chr(ch.m_internal.c)
                         last_char = ch.m_internal.c
                         #log(f'{=last_char!r utf!r}')
@@ -21250,7 +21346,7 @@ def JM_py_from_quad(q):
             (q.ur.x, q.ur.y),
             (q.ll.x, q.ll.y),
             (q.lr.x, q.lr.y),
-            )
+    )
 
 
 def JM_py_from_rect(r):
@@ -21271,7 +21367,7 @@ def JM_quad_from_py(r):
                 r.ur.x, r.ur.y,
                 r.ll.x, r.ll.y,
                 r.lr.x, r.lr.y,
-                )
+        )
     q = mupdf.fz_make_quad(0, 0, 0, 0, 0, 0, 0, 0)
     p = [0,0,0,0]
     if not r or not isinstance(r, (tuple, list)) or len(r) != 4:
@@ -21348,12 +21444,13 @@ def JM_rect_from_py(r):
 
 
 def JM_rects_overlap(a, b):
-    if (0
-            or a.x0 >= b.x1
-            or a.y0 >= b.y1
-            or a.x1 <= b.x0
-            or a.y1 <= b.y0
-            ):
+    if (
+        0
+        or a.x0 >= b.x1
+        or a.y0 >= b.y1
+        or a.x1 <= b.x0
+        or a.y1 <= b.y0
+    ):
         return 0
     return 1
 
@@ -21402,7 +21499,7 @@ def JM_rotate_page_matrix(page):
 def JM_search_stext_page(page, needle):
     if 1 or g_use_extra:
         return extra.JM_search_stext_page(page.m_internal, needle)
-    
+
     rect = mupdf.FzRect(page.m_internal.mediabox)
     if not needle:
         return
@@ -21792,7 +21889,7 @@ def JM_set_widget_properties(annot, Widget):
             mupdf.pdf_new_real(border_width),
             PDF_NAME('BS'),
             PDF_NAME('W'),
-            )
+    )
 
     # /DA string -------------------------------------------------------------
     value = GETATTR("_text_da")
@@ -21892,7 +21989,7 @@ def JM_show_string_cs(
         bidi_level,
         markup_dir,
         language,
-        ):
+):
     i = 0
     while i < len(s):
         l, ucs = mupdf.fz_chartorune(s[i:])
@@ -21944,10 +22041,10 @@ def JM_update_stream(doc, obj, buffer_, compress):
                             obj,
                             mupdf.PDF_ENUM_NAME_Filter,
                             mupdf.PDF_ENUM_NAME_FlateDecode,
-                            )
+                    )
                     mupdf.pdf_update_stream(doc, obj, buffer_compressed, 1)
                     return
-    
+
     mupdf.pdf_update_stream(doc, obj, buffer_, 0)
 
 
@@ -22263,7 +22360,7 @@ def calc_image_matrix(width, height, tr, rotate, keep):
     tmp = mupdf.fz_make_point(
             (trect.x0 + trect.x1) / 2,
             (trect.y0 + trect.y1) / 2,
-            )
+    )
     mat = mupdf.fz_make_matrix(1, 0, 0, 1, -0.5, -0.5)
     mat = mupdf.fz_concat(mat, rot)
     mat = mupdf.fz_concat(mat, mupdf.fz_scale(w, h))
@@ -22308,7 +22405,7 @@ def getTJstr(text: str, glyphs: typing.Union[list, tuple, None], simple: bool, o
             otxt = "".join([f"{ord(c):02x}" if ord(c) < 256 else "b7" for c in text])
         else:  # Symbol or ZapfDingbats: use glyphs
             otxt = "".join(
-                [f"{glyphs[ord(c)][0]:02x}" if ord(c) < 256 else "b7" for c in text]
+                [f"{glyphs[ord(c)][0]:02x}" if ord(c) < 256 else "b7" for c in text],
             )
         return "[<" + otxt + ">]"
 
@@ -22382,9 +22479,9 @@ def get_tessdata(tessdata=None):
     TESSDATA_PREFIX.
 
     * If <tessdata> is set we return it directly.
-    
+
     * Otherwise we return `os.environ['TESSDATA_PREFIX']` if set.
-    
+
     * Otherwise we search for a Tesseract installation and return its language
       support folder.
 
@@ -22397,16 +22494,16 @@ def get_tessdata(tessdata=None):
         return tessdata
 
     # Try to locate the tesseract-ocr installation.
-    
+
     import subprocess
-    
+
     cp = subprocess.run('tesseract --list-langs', shell=1, capture_output=1, check=0, text=True)
     if cp.returncode == 0:
         m = re.search('List of available languages in "(.+)"', cp.stdout)
         if m:
             tessdata = m.group(1)
             return tessdata
-    
+
     # Windows systems:
     if sys.platform == "win32":
         cp = subprocess.run("where tesseract", shell=1, capture_output=1, check=0, text=True)
@@ -22445,7 +22542,7 @@ def get_tessdata(tessdata=None):
 
 
 def css_for_pymupdf_font(
-    fontcode: str, *, CSS: OptStr = None, archive: AnyType = None, name: OptStr = None
+    fontcode: str, *, CSS: OptStr = None, archive: AnyType = None, name: OptStr = None,
 ) -> str:
     """Create @font-face items for the given fontcode of pymupdf-fonts.
 
@@ -22537,7 +22634,7 @@ def get_text_length(text: str, fontname: str ="helv", fontsize: float =11, encod
 
     if fontname in Base14_fontdict.keys():
         return util_measure_string(
-            text, Base14_fontdict[fontname], fontsize, encoding
+            text, Base14_fontdict[fontname], fontsize, encoding,
         )
 
     if fontname in (
@@ -22589,7 +22686,7 @@ def jm_append_merge(dev):
     #log(f'{getattr(dev, "pathdict", None)=}')
     assert isinstance(dev.out, list)
     #log( f'{dev.out=}')
-    
+
     if callable(dev.method) or dev.method:  # function or method
         # callback.
         if dev.method is None:
@@ -22603,7 +22700,7 @@ def jm_append_merge(dev):
             message("calling cdrawings callback function/method failed!")
         dev.pathdict = None
         return
-    
+
     def append():
         #log(f'jm_append_merge(): clearing dev.pathdict')
         dev.out.append(dev.pathdict.copy())
@@ -22629,7 +22726,7 @@ def jm_append_merge(dev):
     thisitems = dev.pathdict[ dictkey_items]
     if previtems != thisitems:
         return append()
-    
+
     #rc = PyDict_Merge(prev, dev.pathdict, 0);  // merge with no override
     try:
         for k, v in dev.pathdict.items():
@@ -22737,17 +22834,17 @@ def jm_checkquad(dev):
         # not a polygon!
         #dev.linecount -= 1
         return 0
-    
+
     # we have detected a quad
     dev.linecount = 0   # reset this
     # a quad item is ("qu", (ul, ur, ll, lr)), where the tuple items
     # are pairs of floats representing a quad corner each.
-    
+
     # relationship of float array to quad points:
     # (0, 1) = ul, (2, 3) = ll, (6, 7) = ur, (4, 5) = lr
     q = mupdf.fz_make_quad(f[0], f[1], f[6], f[7], f[2], f[3], f[4], f[5])
     rect = ('qu', JM_py_from_quad(q))
-    
+
     items[ len_ - 4] = rect  # replace item -4 by rect
     del items[ len_ - 3 : len_]  # delete remaining 3 items
     return 1
@@ -22779,15 +22876,16 @@ def jm_checkrect(dev):
     # First line: (ll, lr), third line: (ul, ur).
     # If 1st line is below 3rd line, we record anti-clockwise (+1), else
     # clockwise (-1) orientation.
-    
-    if (0
-            or ll.y != lr.y
-            or ll.x != ul.x
-            or ur.y != ul.y
-            or ur.x != lr.x
-            ):
+
+    if (
+        0
+        or ll.y != lr.y
+        or ll.x != ul.x
+        or ur.y != ul.y
+        or ur.x != lr.x
+    ):
         return 0 # not a rectangle
-    
+
     # we have a rect, replace last 3 "l" items by one "re" item.
     if ul.y < lr.y:
         r = mupdf.fz_make_rect(ul.x, ul.y, lr.x, lr.y)
@@ -22795,7 +22893,7 @@ def jm_checkrect(dev):
     else:
         r = mupdf.fz_make_rect(ll.x, ll.y, ur.x, ur.y)
         orientation = -1
-    
+
     rect = ( 're', JM_py_from_rect(r), orientation)
     items[ len_ - 3] = rect # replace item -3 by rect
     del items[ len_ - 2 : len_] # delete remaining 2 items
@@ -22823,7 +22921,7 @@ def jm_trace_text_span(dev, span, type_, ctm, colorspace, color, alpha, seqno):
     fontname = JM_font_name( span.font())
     #float rgb[3];
     #PyObject *chars = PyTuple_New(span->len);
-    
+
     mat = mupdf.fz_concat(span.trm(), ctm)  # text transformation matrix
     dir = mupdf.fz_transform_vector(mupdf.fz_make_point(1, 0), mat) # writing direction
     fsize = math.sqrt(dir.x * dir.x + dir.y * dir.y)  # font size
@@ -22875,7 +22973,7 @@ def jm_trace_text_span(dev, span, type_, ctm, colorspace, color, alpha, seqno):
                 (mat.d > 0 and (dir.x == 1 or dir.x == -1))
                 or
                 (mat.b != 0 and mat.b == -mat.c)
-                ):  # up-down flip
+        ):  # up-down flip
             y0 = char_orig.y + dscsize
             y1 = char_orig.y + ascsize
         else:
@@ -22897,14 +22995,14 @@ def jm_trace_text_span(dev, span, type_, ctm, colorspace, color, alpha, seqno):
                         char_bbox.x1,
                         char_bbox.y1,
                     ),
-                )
-                )
+                ),
+        )
         if i > 0:
             span_bbox = mupdf.fz_union_rect(span_bbox, char_bbox)
         else:
             span_bbox = char_bbox
     chars = tuple(chars)
-    
+
     if not space_adv:
         if not (fflags & TEXT_FONT_MONOSPACED):
             c, out_font = mupdf.fz_encode_character_with_fallback( span.font(), 32, 0, 0)
@@ -22912,7 +23010,7 @@ def jm_trace_text_span(dev, span, type_, ctm, colorspace, color, alpha, seqno):
                     span.font(),
                     c,
                     span.m_internal.wmode,
-                    )
+            )
             space_adv *= fsize
             if not space_adv:
                 space_adv = last_adv
@@ -22930,7 +23028,7 @@ def jm_trace_text_span(dev, span, type_, ctm, colorspace, color, alpha, seqno):
     span_dict[ 'ascender'] = asc
     span_dict[ 'descender'] = dsc
     span_dict[ 'colorspace'] = 3
-    
+
     if colorspace:
         rgb = mupdf.fz_convert_color(
                 mupdf.FzColorspace( mupdf.ll_fz_keep_colorspace( colorspace)),
@@ -22938,17 +23036,17 @@ def jm_trace_text_span(dev, span, type_, ctm, colorspace, color, alpha, seqno):
                 mupdf.fz_device_rgb(),
                 mupdf.FzColorspace(),
                 mupdf.FzColorParams(),
-                )
+        )
         rgb = rgb[:3]   # mupdf.fz_convert_color() always returns 4 items.
     else:
         rgb = (0, 0, 0)
-    
+
     if dev.linewidth > 0:   # width of character border
         linewidth = dev.linewidth
     else:
         linewidth = fsize * 0.05    # default: 5% of font size
     #log(f'{dev.linewidth=:.4f} {fsize=:.4f} {linewidth=:.4f}')
-    
+
     span_dict[ 'color'] = rgb
     span_dict[ 'size'] = fsize
     span_dict[ "opacity"] = alpha
@@ -22983,7 +23081,7 @@ def jm_lineart_color(colorspace, color):
                     cs.m_internal,
                     None,
                     cp.internal(),
-                    )
+            )
         except Exception:
             if g_exceptions_verbose:    exception_info()
             raise
@@ -22995,8 +23093,8 @@ def jm_lineart_drop_device(dev, ctx):
     if isinstance(dev.out, list):
         dev.out = []
     dev.scissors = []
- 
- 
+
+
 def jm_lineart_fill_path( dev, ctx, path, even_odd, ctm, colorspace, color, alpha, color_params):
     #log(f'{getattr(dev, "pathdict", None)=}')
     #log(f'jm_lineart_fill_path(): {dev.seqno=}')
@@ -23077,8 +23175,10 @@ class Walker(mupdf.FzPathWalker2):
 
             if self.dev.havemove:
                 if self.dev.lastpoint != self.dev.firstpoint:
-                    item = ("l", JM_py_from_point(self.dev.lastpoint),
-                                 JM_py_from_point(self.dev.firstpoint))
+                    item = (
+                        "l", JM_py_from_point(self.dev.lastpoint),
+                        JM_py_from_point(self.dev.firstpoint),
+                    )
                     self.dev.pathdict[dictkey_items].append(item)
                     self.dev.lastpoint = self.dev.firstpoint
                 self.dev.pathdict["closePath"] = False
@@ -23114,7 +23214,7 @@ class Walker(mupdf.FzPathWalker2):
                     JM_py_from_point(p1),
                     JM_py_from_point(p2),
                     JM_py_from_point(p3),
-                    )
+            )
             self.dev.lastpoint = p3
             self.dev.pathdict[ dictkey_items].append( list_)
         except Exception:
@@ -23130,7 +23230,7 @@ class Walker(mupdf.FzPathWalker2):
                     'l',
                     JM_py_from_point( self.dev.lastpoint),
                     JM_py_from_point(p1),
-                    )
+            )
             self.dev.lastpoint = p1
             items = self.dev.pathdict[ dictkey_items]
             items.append( list_)
@@ -23155,14 +23255,14 @@ class Walker(mupdf.FzPathWalker2):
             self.dev.lastpoint = mupdf.fz_transform_point(
                     mupdf.fz_make_point(x, y),
                     self.dev.ctm,
-                    )
+            )
             if mupdf.fz_is_infinite_rect( self.dev.pathrect):
                 self.dev.pathrect = mupdf.fz_make_rect(
                         self.dev.lastpoint.x,
                         self.dev.lastpoint.y,
                         self.dev.lastpoint.x,
                         self.dev.lastpoint.y,
-                        )
+                )
             self.dev.firstpoint = self.dev.lastpoint
             self.dev.havemove = 1
             self.dev.linecount = 0  # reset # of consec. lines
@@ -23187,7 +23287,7 @@ def jm_lineart_path(dev, ctx, path):
         dev.lastpoint = mupdf.FzPoint( 0, 0)
         dev.pathdict = dict()
         dev.pathdict[ dictkey_items] = []
-        
+
         # First time we create a Walker instance is slow, e.g. 0.3s, then later
         # times run in around 0.01ms. If Walker is defined locally instead of
         # globally, each time takes 0.3s.
@@ -23226,7 +23326,7 @@ def jm_lineart_stroke_path( dev, ctx, path, stroke, ctm, colorspace, color, alph
                 stroke.start_cap,
                 stroke.dash_cap,
                 stroke.end_cap,
-                )
+        )
         dev.pathdict[ 'lineJoin'] = float(stroke.linejoin)
         if 'closePath' not in dev.pathdict:
             #log('setting dev.pathdict["closePath"] to false')
@@ -23252,7 +23352,7 @@ def jm_lineart_stroke_path( dev, ctx, path, stroke, ctm, colorspace, color, alph
             dev.pathdict[ 'level'] = dev.depth
         jm_append_merge(dev)
         dev.seqno += 1
-    
+
     except Exception:
         if g_exceptions_verbose:    exception_info()
         raise
@@ -23271,7 +23371,7 @@ def jm_lineart_clip_path(dev, ctx, path, even_odd, ctm, scissor):
     if 'closePath' not in dev.pathdict:
         #log(f'setting dev.pathdict["closePath"] to False')
         dev.pathdict['closePath'] = False
-   
+
     dev.pathdict['scissor'] = JM_py_from_rect(compute_scissor(dev))
     dev.pathdict['level'] = dev.depth
     dev.pathdict['layer'] = dev.layer_name
@@ -23318,7 +23418,7 @@ def jm_lineart_clip_image_mask( dev, ctx, image, ctm, scissor):
         return
     compute_scissor(dev)
     dev.depth += 1
- 
+
 
 def jm_lineart_pop_clip(dev, ctx):
     if not dev.clips or not dev.scissors:
@@ -23353,8 +23453,8 @@ def jm_lineart_begin_group(dev, ctx, bbox, cs, isolated, knockout, blendmode, al
             "blendmode": mupdf.fz_blendmode_name(blendmode),
             "opacity": alpha,
             "level": dev.depth,
-            "layer": dev.layer_name
-            }
+            "layer": dev.layer_name,
+    }
     jm_append_merge(dev)
     dev.depth += 1
 
@@ -23428,13 +23528,13 @@ class JM_new_bbox_device_Device(mupdf.FzDevice2):
         self.use_virtual_fill_shade()
         self.use_virtual_fill_image()
         self.use_virtual_fill_image_mask()
-        
+
         self.use_virtual_begin_layer()
         self.use_virtual_end_layer()
 
     begin_layer = jm_lineart_begin_layer
     end_layer = jm_lineart_end_layer
-    
+
     fill_path = jm_bbox_fill_path
     stroke_path = jm_bbox_stroke_path
     fill_text = jm_bbox_fill_text
@@ -23443,7 +23543,7 @@ class JM_new_bbox_device_Device(mupdf.FzDevice2):
     fill_shade = jm_bbox_fill_shade
     fill_image = jm_bbox_fill_image
     fill_image_mask = jm_bbox_fill_image_mask
-    
+
 
 class JM_new_output_fileptr_Output(mupdf.FzOutput2):
     def __init__(self, bio):
@@ -23453,17 +23553,17 @@ class JM_new_output_fileptr_Output(mupdf.FzOutput2):
         self.use_virtual_seek()
         self.use_virtual_tell()
         self.use_virtual_truncate()
-    
+
     def seek( self, ctx, offset, whence):
         return self.bio.seek( offset, whence)
-    
+
     def tell( self, ctx):
         ret = self.bio.tell()
         return ret
-    
+
     def truncate( self, ctx):
         return self.bio.truncate()
-    
+
     def write(self, ctx, data_raw, data_length):
         data = mupdf.raw_to_python_bytes(data_raw, data_length)
         return self.bio.write(data)
@@ -23504,33 +23604,33 @@ class JM_new_lineart_device_Device(mupdf.FzDevice2):
         self.use_virtual_clip_stroke_path()
         self.use_virtual_clip_stroke_text()
         self.use_virtual_clip_text()
-        
+
         self.use_virtual_fill_text
         self.use_virtual_stroke_text
         self.use_virtual_ignore_text
-        
+
         self.use_virtual_fill_shade()
         self.use_virtual_fill_image()
         self.use_virtual_fill_image_mask()
-        
+
         self.use_virtual_pop_clip()
-        
+
         self.use_virtual_begin_group()
         self.use_virtual_end_group()
-        
+
         self.use_virtual_begin_layer()
         self.use_virtual_end_layer()
-        
+
         self.out = out
         self.seqno = 0
         self.depth = 0
         self.clips = clips
         self.method = method
-        
+
         self.scissors = None
         self.layer_name = ""  # optional content name
         self.pathrect = None
-        
+
         self.linewidth = 0
         self.ptm = mupdf.FzMatrix()
         self.ctm = mupdf.FzMatrix()
@@ -23542,9 +23642,9 @@ class JM_new_lineart_device_Device(mupdf.FzDevice2):
         self.pathfactor = 0
         self.linecount = 0
         self.path_type = 0
-    
+
     #drop_device = jm_lineart_drop_device
-    
+
     fill_path           = jm_lineart_fill_path
     stroke_path         = jm_lineart_stroke_path
     clip_image_mask     = jm_lineart_clip_image_mask
@@ -23552,23 +23652,23 @@ class JM_new_lineart_device_Device(mupdf.FzDevice2):
     clip_stroke_path    = jm_lineart_clip_stroke_path
     clip_text           = jm_lineart_clip_text
     clip_stroke_text    = jm_lineart_clip_stroke_text
-    
+
     fill_text           = jm_increase_seqno
     stroke_text         = jm_increase_seqno
     ignore_text         = jm_increase_seqno
-    
+
     fill_shade          = jm_increase_seqno
     fill_image          = jm_increase_seqno
     fill_image_mask     = jm_increase_seqno
-    
+
     pop_clip            = jm_lineart_pop_clip
-    
+
     begin_group         = jm_lineart_begin_group
     end_group           = jm_lineart_end_group
-    
+
     begin_layer         = jm_lineart_begin_layer
     end_layer           = jm_lineart_end_layer
-    
+
 
 class JM_new_texttrace_device(mupdf.FzDevice2):
     '''
@@ -23585,17 +23685,17 @@ class JM_new_texttrace_device(mupdf.FzDevice2):
         self.use_virtual_fill_shade()
         self.use_virtual_fill_image()
         self.use_virtual_fill_image_mask()
-        
+
         self.use_virtual_begin_layer()
         self.use_virtual_end_layer()
-        
+
         self.out = out
-        
+
         self.seqno = 0
         self.depth = 0
         self.clips = 0
         self.method = None
-        
+
         self.seqno = 0
 
         self.pathdict = dict()
@@ -23610,7 +23710,7 @@ class JM_new_texttrace_device(mupdf.FzDevice2):
         self.linecount = 0
         self.path_type = 0
         self.layer_name = ""
-    
+
     fill_path = jm_increase_seqno
     stroke_path = jm_dev_linewidth
     fill_text = jm_lineart_fill_text
@@ -23619,7 +23719,7 @@ class JM_new_texttrace_device(mupdf.FzDevice2):
     fill_shade = jm_increase_seqno
     fill_image = jm_increase_seqno
     fill_image_mask = jm_increase_seqno
-    
+
     begin_layer = jm_lineart_begin_layer
     end_layer = jm_lineart_end_layer
 
@@ -23750,13 +23850,13 @@ def dest_is_valid(o, page_count, page_object_nums, names_list):
     if (
             mupdf.pdf_name_eq(
                 mupdf.pdf_dict_get( p, PDF_NAME('S')),
-                PDF_NAME('GoTo')
-                )
+                PDF_NAME('GoTo'),
+            )
             and not string_in_names_list(
                 mupdf.pdf_dict_get( p, PDF_NAME('D')),
-                names_list
-                )
-            ):
+                names_list,
+            )
+    ):
         return 0
 
     p = mupdf.pdf_dict_get( o, PDF_NAME('Dest'))
@@ -23768,7 +23868,7 @@ def dest_is_valid(o, page_count, page_object_nums, names_list):
             mupdf.pdf_array_get( p, 0),
             page_object_nums,
             page_count,
-            ):
+    ):
         return 0
     return 1
 
@@ -23822,7 +23922,7 @@ class ElementPosition(object):
 def make_story_elpos():
     return ElementPosition()
 
- 
+
 def get_highlight_selection(page, start: point_like =None, stop: point_like =None, clip: rect_like =None) -> list:
     """Return rectangles of text lines between two points.
 
@@ -23966,7 +24066,7 @@ def util_ensure_widget_calc(annot):
             mupdf.pdf_trailer(pdf),
             PDF_NAME('Root'),
             PDF_NAME('AcroForm'),
-            )
+    )
 
     CO = mupdf.pdf_dict_get(acro, PDFNAME_CO)  # = AcroForm/CO
     if not mupdf.pdf_is_array(CO):
@@ -23986,7 +24086,7 @@ def util_ensure_widget_calc(annot):
 def util_make_rect( *args, p0=None, p1=None, x0=None, y0=None, x1=None, y1=None):
     '''
     Helper for initialising rectangle classes.
-    
+
     2022-09-02: This is quite different from PyMuPDF's util_make_rect(), which
     uses `goto` in ways that don't easily translate to Python.
 
@@ -24096,23 +24196,23 @@ def util_intersect_rect( r1, r2):
             mupdf.fz_intersect_rect(
                 JM_rect_from_py(r1),
                 JM_rect_from_py(r2),
-                )
-            )
+            ),
+    )
 
 
 def util_is_point_in_rect( p, r):
     return mupdf.fz_is_point_inside_rect(
                 JM_point_from_py(p),
                 JM_rect_from_py(r),
-                )
+    )
 
 def util_include_point_in_rect( r, p):
     return JM_py_from_rect(
             mupdf.fz_include_point_in_rect(
                 JM_rect_from_py(r),
                 JM_point_from_py(p),
-                )
-            )
+            ),
+    )
 
 
 def util_point_in_quad( P, Q):
@@ -24126,8 +24226,8 @@ def util_transform_point( point, matrix):
             mupdf.fz_transform_point(
                 JM_point_from_py(point),
                 JM_matrix_from_py(matrix),
-                )
-            )
+            ),
+    )
 
 
 def util_union_rect( r1, r2):
@@ -24135,8 +24235,8 @@ def util_union_rect( r1, r2):
             mupdf.fz_union_rect(
                 JM_rect_from_py(r1),
                 JM_rect_from_py(r2),
-                )
-            )
+            ),
+    )
 
 
 def util_concat_matrix( m1, m2):
@@ -24144,8 +24244,8 @@ def util_concat_matrix( m1, m2):
             mupdf.fz_concat(
                 JM_matrix_from_py(m1),
                 JM_matrix_from_py(m2),
-                )
-            )
+            ),
+    )
 
 
 def util_invert_matrix(matrix):
@@ -24159,12 +24259,13 @@ def util_invert_matrix(matrix):
             matrix = mupdf.FzMatrix( matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f)
         assert isinstance( matrix, mupdf.FzMatrix), f'{type(matrix)=}: {matrix}'
         ret = mupdf.fz_invert_matrix( matrix)
-        if ret == matrix and (0
-                or abs( matrix.a - 1) >= sys.float_info.epsilon
-                or abs( matrix.b - 0) >= sys.float_info.epsilon
-                or abs( matrix.c - 0) >= sys.float_info.epsilon
-                or abs( matrix.d - 1) >= sys.float_info.epsilon
-                ):
+        if ret == matrix and (
+            0
+            or abs( matrix.a - 1) >= sys.float_info.epsilon
+            or abs( matrix.b - 0) >= sys.float_info.epsilon
+            or abs( matrix.c - 0) >= sys.float_info.epsilon
+            or abs( matrix.d - 1) >= sys.float_info.epsilon
+        ):
             # Inversion not possible.
             return 1, ()
         return 0, (ret.a, ret.b, ret.c, ret.d, ret.e, ret.f)
@@ -24230,10 +24331,10 @@ def util_hor_matrix(C, P):
     '''
     c = JM_point_from_py(C)
     p = JM_point_from_py(P)
-    
+
     # compute (cosine, sine) of vector P-C with double precision:
     s = mupdf.fz_normalize_vector(mupdf.fz_make_point(p.x - c.x, p.y - c.y))
-    
+
     m1 = mupdf.fz_make_matrix(1, 0, 0, 1, -c.x, -c.y)
     m2 = mupdf.fz_make_matrix(s.x, -s.y, s.y, s.x, 0, 0)
     return JM_py_from_matrix(mupdf.fz_concat(m1, m2))
@@ -24286,7 +24387,7 @@ def on_highlight_char(hits, line, ch):
                 and vdist(line.m_internal.dir, end.lr, ch_quad.ll) < vfuzz
                 and hdist(line.m_internal.dir, end.ur, ch_quad.ul) < hfuzz
                 and vdist(line.m_internal.dir, end.ur, ch_quad.ul) < vfuzz
-                ):
+        ):
             end.ur = ch_quad.ur
             end.lr = ch_quad.lr
             assert hits.quads[-1] == end
@@ -24304,7 +24405,7 @@ def page_merge(doc_des, doc_src, page_from, page_to, rotate, links, copy_annots,
     if g_use_extra:
         #log( 'Calling C++ extra.page_merge()')
         return extra.page_merge( doc_des, doc_src, page_from, page_to, rotate, links, copy_annots, graft_map)
-    
+
     # list of object types (per page) we want to copy
     known_page_objs = [
         PDF_NAME('Contents'),
@@ -24316,7 +24417,7 @@ def page_merge(doc_des, doc_src, page_from, page_to, rotate, links, copy_annots,
         PDF_NAME('ArtBox'),
         PDF_NAME('Rotate'),
         PDF_NAME('UserUnit'),
-        ]
+    ]
     page_ref = mupdf.pdf_lookup_page_obj(doc_src, page_from)
 
     # make new page dict in dest doc
@@ -24447,7 +24548,7 @@ def paper_sizes():
         "letter": (612, 792),
         "monarch": (279, 540),
         "tabloid-extra": (864, 1296),
-        }
+    }
 
 def pdf_lookup_page_loc(doc, needle):
     return mupdf.pdf_lookup_page_loc(doc, needle)
@@ -24679,11 +24780,11 @@ def apply_pages(
         method='single',
         concurrency=None,
         _stats=False,
-        ):
+):
     '''
     Returns list of results from `pagefn()`, optionally using concurrency for
     speed.
-    
+
     Args:
         path:
             Path of document.
@@ -24717,14 +24818,14 @@ def apply_pages(
         _stats:
             Internal, may change or be removed. If true, we output simple
             timing diagnostics.
-    
+
     Note: We require a file path rather than a Document, because Document
     instances do not work properly after a fork - internal file descriptor
     offsets are shared between the parent and child processes.
     '''
     if _stats:
         t0 = time.time()
-    
+
     if method == 'single':
         if initfn:
             initfn(*initfn_args, **initfn_kwargs)
@@ -24736,12 +24837,12 @@ def apply_pages(
             page = document[pno]
             r = pagefn(page, *pagefn_args, **initfn_kwargs)
             ret.append(r)
-    
+
     else:
         # Use concurrency.
         #
         from . import _apply_pages
-    
+
         if pages is None:
             if _stats:
                 t = time.time()
@@ -24751,10 +24852,10 @@ def apply_pages(
             if _stats:
                 t = time.time() - t
                 log(f'{t:.2f}s: count pages.')
-    
+
         if _stats:
             t = time.time()
-        
+
         if method == 'mp':
             ret = _apply_pages._multiprocessing(
                     path,
@@ -24767,8 +24868,8 @@ def apply_pages(
                     initfn_kwargs,
                     concurrency,
                     _stats,
-                    )
-    
+            )
+
         elif method == 'fork':
             ret = _apply_pages._fork(
                     path,
@@ -24781,11 +24882,11 @@ def apply_pages(
                     initfn_kwargs,
                     concurrency,
                     _stats,
-                    )
-        
+            )
+
         else:
             assert 0, f'Unrecognised {method=}.'
-        
+
         if _stats:
             t = time.time() - t
             log(f'{t:.2f}s: work.')
@@ -24802,20 +24903,20 @@ def get_text(
         pages=None,
         method='single',
         concurrency=None,
-        
+
         option='text',
         clip=None,
         flags=None,
         textpage=None,
         sort=False,
         delimiters=None,
-        
+
         _stats=False,
-        ):
+):
     '''
     Returns list of results from `Page.get_text()`, optionally using
     concurrency for speed.
-    
+
     Args:
         path:
             Path of document.
@@ -24847,8 +24948,8 @@ def get_text(
             textpage=textpage,
             sort=sort,
             delimiters=delimiters,
-            )
-    
+    )
+
     return apply_pages(
             path,
             Page.get_text,
@@ -24857,7 +24958,7 @@ def get_text(
             method=method,
             concurrency=concurrency,
             _stats=_stats,
-            )
+    )
 
 
 class TOOLS:
@@ -25162,11 +25263,12 @@ class TOOLS:
                     da = mupdf.pdf_dict_get_inheritable( this_annot_obj, PDF_NAME('DA'))
                     if not da.m_internal:
                         trailer = mupdf.pdf_trailer(pdf)
-                        da = mupdf.pdf_dict_getl(trailer,
-                                PDF_NAME('Root'),
-                                PDF_NAME('AcroForm'),
-                                PDF_NAME('DA'),
-                                )
+                        da = mupdf.pdf_dict_getl(
+                            trailer,
+                            PDF_NAME('Root'),
+                            PDF_NAME('AcroForm'),
+                            PDF_NAME('DA'),
+                        )
                     da_str = mupdf.pdf_to_text_string(da)
                 except Exception:
                     if g_exceptions_verbose:    exception_info()
@@ -25234,7 +25336,7 @@ class TOOLS:
                 if g_exceptions_verbose:    exception_info()
                 return
             return
-    
+
     @staticmethod
     def gen_id():
         global TOOLS_JM_UNIQUE_ID
@@ -25254,7 +25356,7 @@ class TOOLS:
         Metadata of an image binary stream.
         '''
         return JM_image_profile(stream, keep_image)
-    
+
     @staticmethod
     def mupdf_display_errors(on=None):
         '''
@@ -25296,14 +25398,14 @@ class TOOLS:
     def reset_mupdf_warnings():
         global JM_mupdf_warnings_store
         JM_mupdf_warnings_store = list()
-        
+
     @staticmethod
     def set_aa_level(level):
         '''
         Set anti-aliasing level.
         '''
         mupdf.fz_set_aa_level(level)
-    
+
     @staticmethod
     def set_annot_stem( stem=None):
         global JM_annot_id_stem
@@ -25350,7 +25452,7 @@ class TOOLS:
                 RAISEPY( "MuPDF built w/o ICC support",PyExc_ValueError)
         elif mupdf.FZ_ENABLE_ICC:
             mupdf.fz_disable_icc()
- 
+
     @staticmethod
     def set_low_memory( on=None):
         """Set / unset MuPDF device caching."""
@@ -25366,7 +25468,7 @@ class TOOLS:
             if g_use_extra:
                 extra.set_small_glyph_heights(_globals.small_glyph_heights)
         return _globals.small_glyph_heights
-    
+
     @staticmethod
     def set_subset_fontnames(on=None):
         '''
@@ -25377,7 +25479,7 @@ class TOOLS:
             if g_use_extra:
                 extra.set_subset_fontnames(_globals.subset_fontnames)
         return _globals.subset_fontnames
-    
+
     @staticmethod
     def show_aa_level():
         '''
@@ -25387,7 +25489,7 @@ class TOOLS:
                 graphics = mupdf.fz_graphics_aa_level(),
                 text = mupdf.fz_text_aa_level(),
                 graphics_min_line_width = mupdf.fz_graphics_min_line_width(),
-                )
+        )
 
     @staticmethod
     def store_maxsize():
@@ -25408,7 +25510,7 @@ class TOOLS:
         if percent > 0:
             mupdf.fz_shrink_store( 100 - percent)
         # fixme: return gctx->store->size.
-    
+
     @staticmethod
     def store_size():
         '''
@@ -25416,7 +25518,7 @@ class TOOLS:
         '''
         # fixme: return gctx->store->size.
         return None
-    
+
     @staticmethod
     def unset_quad_corrections(on=None):
         '''
@@ -25505,7 +25607,7 @@ def _mupdf_devel(make_links=True):
     '''
     Allows PyMuPDF installation to be used to compile and link programmes that
     use the MuPDF C/C++ API.
-    
+
     Args:
         make_links:
             If true, then on non-windows we also create softlinks to any shared
@@ -25517,7 +25619,7 @@ def _mupdf_devel(make_links=True):
             site-packages/pymupdf/
                 libmupdf.so -> libmupdf.so.26.7
                 libmupdfcpp.so -> libmupdfcpp.so.26.7
-    
+
     Returns: (mupdf_include, mupdf_lib).
         mupdf_include:
             Path of MuPDF include directory within PyMuPDF install.
@@ -25525,13 +25627,13 @@ def _mupdf_devel(make_links=True):
             Path of MuPDF library directory within PyMuPDF install.
     '''
     import platform
-    
+
     log(f'{mupdf_version=}')
-    
+
     p = os.path.normpath(f'{__file__}/..')
 
     mupdf_include = f'{p}/mupdf-devel/include'
-    
+
     if platform.system() == 'Windows':
         # Separate .lib files are used at build time.
         mupdf_lib = f'{p}/mupdf-devel/lib'
@@ -25573,7 +25675,7 @@ def _mupdf_devel(make_links=True):
                     os.remove(pfrom)
                 log(f'Creating symlink: {pfrom} -> {leaf}')
                 os.symlink(leaf, pfrom)
-    
+
     return mupdf_include, mupdf_lib
 
 
@@ -25644,13 +25746,13 @@ def restore_aliases():
                 warnings.warn(
                         f'"{legacy_name=}" removed from {class_} after v1.19.0 - use "{new_name}".',
                         category=FitzDeprecation,
-                        )
+                )
                 return new_object( *args, **kwargs)
             setattr( class_, legacy_name, deprecated_function)
             deprecated_function.__doc__ = (
                     f'*** Deprecated and removed in version after v1.19.0 - use "{new_name}". ***\n'
                     f'{new_object.__doc__}'
-                    )
+            )
         else:
             setattr( class_, legacy_name, new_object)
 
@@ -25883,4 +25985,4 @@ __version__ = VersionBind
 __doc__ = (
         f'PyMuPDF {VersionBind}: Python bindings for the MuPDF {VersionFitz} library.\n'
         f'Python {sys.version_info[0]}.{sys.version_info[1]} running on {sys.platform} ({64 if sys.maxsize > 2**32 else 32}-bit).\n'
-        )
+)

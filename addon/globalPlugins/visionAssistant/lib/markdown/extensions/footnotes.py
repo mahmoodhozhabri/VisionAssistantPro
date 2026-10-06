@@ -45,30 +45,30 @@ class FootnoteExtension(Extension):
 
         self.config = {
             'PLACE_MARKER': [
-                '///Footnotes Go Here///', 'The text string that marks where the footnotes go'
+                '///Footnotes Go Here///', 'The text string that marks where the footnotes go',
             ],
             'UNIQUE_IDS': [
-                False, 'Avoid name collisions across multiple calls to `reset()`.'
+                False, 'Avoid name collisions across multiple calls to `reset()`.',
             ],
             'BACKLINK_TEXT': [
-                '&#8617;', "The text string that links from the footnote to the reader's place."
+                '&#8617;', "The text string that links from the footnote to the reader's place.",
             ],
             'SUPERSCRIPT_TEXT': [
-                '{}', "The text string that links from the reader's place to the footnote."
+                '{}', "The text string that links from the reader's place to the footnote.",
             ],
             'BACKLINK_TITLE': [
                 'Jump back to footnote %d in the text',
                 'The text string used for the title HTML attribute of the backlink. '
-                '%d will be replaced by the footnote number.'
+                '%d will be replaced by the footnote number.',
             ],
             'SEPARATOR': [
-                ':', 'Footnote separator.'
+                ':', 'Footnote separator.',
             ],
             'USE_DEFINITION_ORDER': [
                 True,
                 'Order footnote labels by definition order (True) or by document order (False). '
-                'Default: True.'
-            ]
+                'Default: True.',
+            ],
         }
         """ Default configuration options. """
         super().__init__(**kwargs)
@@ -144,7 +144,7 @@ class FootnoteExtension(Extension):
         return reference
 
     def findFootnotesPlaceholder(
-        self, root: etree.Element
+        self, root: etree.Element,
     ) -> tuple[etree.Element, etree.Element, bool] | None:
         """ Return ElementTree Element that contains Footnote placeholder. """
         def finder(element):
@@ -217,7 +217,7 @@ class FootnoteExtension(Extension):
             backlink.set("class", "footnote-backref")
             backlink.set(
                 "title",
-                self.getConfig('BACKLINK_TITLE').format(index)
+                self.getConfig('BACKLINK_TITLE').format(index),
             )
             backlink.text = FN_BACKLINK_TEXT
 
@@ -473,7 +473,7 @@ class FootnotePostprocessor(Postprocessor):
 
     def run(self, text: str) -> str:
         text = text.replace(
-            FN_BACKLINK_TEXT, self.footnotes.getConfig("BACKLINK_TEXT")
+            FN_BACKLINK_TEXT, self.footnotes.getConfig("BACKLINK_TEXT"),
         )
         return text.replace(NBSP_PLACEHOLDER, "&#160;")
 

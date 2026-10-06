@@ -42,7 +42,7 @@ def validateVersionNumber(key: str, val: str, _):
 
 
 def expandGlobs(patterns: Iterable[str], rootdir: Path = Path(".")) -> list[FS.Entry]:
-	return [env.Entry(e) for pattern in patterns for e in rootdir.glob(pattern.lstrip('/'))]
+	return [env.Entry(e) for pattern in patterns for e in rootdir.glob(pattern.lstrip("/"))]
 
 
 addonDir: Final = Path("addon/")
@@ -61,12 +61,13 @@ env.Append(
 	addon_info=buildVars.addon_info,
 	brailleTables=buildVars.brailleTables,
 	symbolDictionaries=buildVars.symbolDictionaries,
+	speechDictionaries=buildVars.speechDictionaries,
 )
 
 if env["dev"]:
 	from datetime import date
 
-	versionTimestamp = date.today().strftime('%Y%m%d')
+	versionTimestamp = date.today().strftime("%Y%m%d")
 	version = f"{versionTimestamp}.0.0"
 	env["addon_info"]["addon_version"] = version
 	env["versionNumber"] = version
@@ -83,7 +84,7 @@ env.Append(**env["addon_info"])
 addonFile = env.File("${addon_name}-${addon_version}.nvda-addon")
 addon = env.NVDAAddon(addonFile, env.Dir(addonDir), excludePatterns=buildVars.excludedFiles)
 
-langDirs: list[FS.Dir] = [env.Dir(d) for d in env.Glob(localeDir/"*/") if d.isdir()]
+langDirs: list[FS.Dir] = [env.Dir(d) for d in env.Glob(localeDir / "*/") if d.isdir()]
 
 # Allow all NVDA's gettext po files to be compiled in source/locale, and manifest files to be generated
 moByLang: dict[str, FS.File] = {}
@@ -115,7 +116,7 @@ if (readmeFile := Path("readme.md")).is_file():
 	readmeTarget = env.Command(str(readmePath), str(readmeFile), Copy("$TARGET", "$SOURCE"))
 	env.Depends(addon, readmeTarget)
 
-for mdFile in env.Glob(docsDir/"*/*.md"):
+for mdFile in env.Glob(docsDir / "*/*.md"):
 	# the title of the html file is translated based on the contents of something in the moFile for a language.
 	# Thus, we find the moFile for this language and depend on it if it exists.
 	lang = mdFile.dir.name
@@ -142,7 +143,7 @@ env.Alias("mergePot", mergePot)
 env.Depends(mergePot, i18nFiles)
 
 # Generate Manifest path
-manifest = env.NVDAManifest(env.File(addonDir/"manifest.ini"), "manifest.ini.tpl")
+manifest = env.NVDAManifest(env.File(addonDir / "manifest.ini"), "manifest.ini.tpl")
 # Ensure manifest is rebuilt if buildVars is updated.
 env.Depends(manifest, "buildVars.py")
 

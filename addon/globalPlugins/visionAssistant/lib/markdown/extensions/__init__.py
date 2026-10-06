@@ -142,5 +142,5 @@ class Extension:
         """
         raise NotImplementedError(
             'Extension "%s.%s" must define an "extendMarkdown"'
-            'method.' % (self.__class__.__module__, self.__class__.__name__)
+            'method.' % (self.__class__.__module__, self.__class__.__name__),
         )

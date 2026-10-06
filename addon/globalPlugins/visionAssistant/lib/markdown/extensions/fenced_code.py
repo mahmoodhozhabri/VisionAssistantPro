@@ -39,7 +39,7 @@ if TYPE_CHECKING:  # pragma: no cover
 class FencedCodeExtension(Extension):
     def __init__(self, **kwargs):
         self.config = {
-            'lang_prefix': ['language-', 'Prefix prepended to the language. Default: "language-"']
+            'lang_prefix': ['language-', 'Prefix prepended to the language. Default: "language-"'],
         }
         """ Default configuration options. """
         super().__init__(**kwargs)
@@ -64,7 +64,7 @@ class FencedBlockPreprocessor(Preprocessor):
             (?P<code>.*?)(?<=\n)                                     # the code block
             (?P=fence)[ ]*$                                          # closing fence
         '''),
-        re.MULTILINE | re.DOTALL | re.VERBOSE
+        re.MULTILINE | re.DOTALL | re.VERBOSE,
     )
 
     def __init__(self, md: Markdown, config: dict[str, Any]):
@@ -78,7 +78,7 @@ class FencedBlockPreprocessor(Preprocessor):
             'linenums',
             'guess_lang',
             'noclasses',
-            'use_pygments'
+            'use_pygments',
         ]
 
     def run(self, lines: list[str]) -> list[str]:
@@ -126,13 +126,13 @@ class FencedBlockPreprocessor(Preprocessor):
                     if classes:
                         local_config['css_class'] = '{} {}'.format(
                             ' '.join(classes),
-                            local_config['css_class']
+                            local_config['css_class'],
                         )
                     highliter = CodeHilite(
                         m.group('code'),
                         lang=lang,
                         style=local_config.pop('pygments_style', 'default'),
-                        **local_config
+                        **local_config,
                     )
 
                     code = highliter.hilite(shebang=False)

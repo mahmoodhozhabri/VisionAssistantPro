@@ -13,6 +13,7 @@ The following environment variables are required to create the manifest:
 - addon_info: .typing.AddonInfo
 - brailleTables: .typings.BrailleTables
 - symbolDictionaries: .typings.SymbolDictionaries
+- speechDictionaries: .typings.SpeechDictionaries
 
 The following environment variables are required to build the HTML:
 
@@ -29,24 +30,27 @@ from .manifests import generateManifest, generateTranslatedManifest
 from .docs import md2html
 
 
-
 def generate(env: Environment):
 	env.SetDefault(excludePatterns=tuple())
 
 	addonAction = env.Action(
 		lambda target, source, env: createAddonBundleFromPath(
-			source[0].abspath, target[0].abspath, env["excludePatterns"]
-		) and None,
+			source[0].abspath,
+			target[0].abspath,
+			env["excludePatterns"],
+		)
+		and None,
 		lambda target, source, env: f"Generating Addon {target[0]}",
 	)
 	env["BUILDERS"]["NVDAAddon"] = Builder(
 		action=addonAction,
 		suffix=".nvda-addon",
-		src_suffix="/"
+		src_suffix="/",
 	)
 
 	env.SetDefault(brailleTables={})
 	env.SetDefault(symbolDictionaries={})
+	env.SetDefault(speechDictionaries={})
 
 	manifestAction = env.Action(
 		lambda target, source, env: generateManifest(
@@ -55,13 +59,15 @@ def generate(env: Environment):
 			addon_info=env["addon_info"],
 			brailleTables=env["brailleTables"],
 			symbolDictionaries=env["symbolDictionaries"],
-		) and None,
+			speechDictionaries=env["speechDictionaries"],
+		)
+		and None,
 		lambda target, source, env: f"Generating manifest {target[0]}",
 	)
 	env["BUILDERS"]["NVDAManifest"] = Builder(
 		action=manifestAction,
 		suffix=".ini",
-		src_siffix=".ini.tpl"
+		src_siffix=".ini.tpl",
 	)
 
 	translatedManifestAction = env.Action(
@@ -72,17 +78,19 @@ def generate(env: Environment):
 			addon_info=env["addon_info"],
 			brailleTables=env["brailleTables"],
 			symbolDictionaries=env["symbolDictionaries"],
-		) and None,
+			speechDictionaries=env["speechDictionaries"],
+		)
+		and None,
 		lambda target, source, env: f"Generating translated manifest {target[0]}",
 	)
 
 	env["BUILDERS"]["NVDATranslatedManifest"] = Builder(
 		action=translatedManifestAction,
 		suffix=".ini",
-		src_siffix=".ini.tpl"
+		src_siffix=".ini.tpl",
 	)
 
-	env.SetDefault(mdExtensions = {})
+	env.SetDefault(mdExtensions={})
 
 	mdAction = env.Action(
 		lambda target, source, env: md2html(
@@ -91,7 +99,8 @@ def generate(env: Environment):
 			moFile=env["moFile"].path if env["moFile"] else None,
 			mdExtensions=env["mdExtensions"],
 			addon_info=env["addon_info"],
-		) and None,
+		)
+		and None,
 		lambda target, source, env: f"Generating {target[0]}",
 	)
 	env["BUILDERS"]["md2html"] = env.Builder(

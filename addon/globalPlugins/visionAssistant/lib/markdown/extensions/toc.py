@@ -223,8 +223,10 @@ def nest_toc_tokens(toc_list):
             # Level is the same, so append to
             # the current parent (if available)
             if current_level == levels[-1]:
-                (parents[-1]['children'] if parents
-                 else ordered_list).append(t)
+                (
+                    parents[-1]['children'] if parents
+                    else ordered_list
+                ).append(t)
 
             # Current level is > last item's level,
             # So make last item a parent and append current as child
@@ -318,9 +320,11 @@ class TocTreeprocessor(Treeprocessor):
 
     def add_permalink(self, c: etree.Element, elem_id: str) -> None:
         permalink = etree.Element("a")
-        permalink.text = ("%spara;" % AMP_SUBSTITUTE
-                          if self.use_permalinks is True
-                          else self.use_permalinks)
+        permalink.text = (
+            "%spara;" % AMP_SUBSTITUTE
+            if self.use_permalinks is True
+            else self.use_permalinks
+        )
         permalink.attrib["href"] = "#" + elem_id
         permalink.attrib["class"] = self.permalink_class
         if self.permalink_title:
@@ -395,7 +399,7 @@ class TocTreeprocessor(Treeprocessor):
                         'id': unescape(el.attrib["id"]),
                         'name': name,
                         'html': innerhtml,
-                        'data-toc-label': data_toc_label
+                        'data-toc-label': data_toc_label,
                     })
 
                 if self.use_anchors:
@@ -425,39 +429,39 @@ class TocExtension(Extension):
             'marker': [
                 '[TOC]',
                 'Text to find and replace with Table of Contents. Set to an empty string to disable. '
-                'Default: `[TOC]`.'
+                'Default: `[TOC]`.',
             ],
             'title': [
-                '', 'Title to insert into TOC `<div>`. Default: an empty string.'
+                '', 'Title to insert into TOC `<div>`. Default: an empty string.',
             ],
             'title_class': [
-                'toctitle', 'CSS class used for the title. Default: `toctitle`.'
+                'toctitle', 'CSS class used for the title. Default: `toctitle`.',
             ],
             'toc_class': [
-                'toc', 'CSS class(es) used for the link. Default: `toclink`.'
+                'toc', 'CSS class(es) used for the link. Default: `toclink`.',
             ],
             'anchorlink': [
-                False, 'True if header should be a self link. Default: `False`.'
+                False, 'True if header should be a self link. Default: `False`.',
             ],
             'anchorlink_class': [
-                'toclink', 'CSS class(es) used for the link. Defaults: `toclink`.'
+                'toclink', 'CSS class(es) used for the link. Defaults: `toclink`.',
             ],
             'permalink': [
-                0, 'True or link text if a Sphinx-style permalink should be added. Default: `False`.'
+                0, 'True or link text if a Sphinx-style permalink should be added. Default: `False`.',
             ],
             'permalink_class': [
-                'headerlink', 'CSS class(es) used for the link. Default: `headerlink`.'
+                'headerlink', 'CSS class(es) used for the link. Default: `headerlink`.',
             ],
             'permalink_title': [
-                'Permanent link', 'Title attribute of the permalink. Default: `Permanent link`.'
+                'Permanent link', 'Title attribute of the permalink. Default: `Permanent link`.',
             ],
             'permalink_leading': [
                 False,
-                'True if permalinks should be placed at start of the header, rather than end. Default: False.'
+                'True if permalinks should be placed at start of the header, rather than end. Default: False.',
             ],
             'baselevel': ['1', 'Base level for headers. Default: `1`.'],
             'slugify': [
-                slugify, 'Function to generate anchors based on header text. Default: `slugify`.'
+                slugify, 'Function to generate anchors based on header text. Default: `slugify`.',
             ],
             'separator': ['-', 'Word separator. Default: `-`.'],
             'toc_depth': [
@@ -465,7 +469,7 @@ class TocExtension(Extension):
                 'Define the range of section levels to include in the Table of Contents. A single integer '
                 '(b) defines the bottom section level (<h1>..<hb>) only. A string consisting of two digits '
                 'separated by a hyphen in between (`2-5`) defines the top (t) and the bottom (b) (<ht>..<hb>). '
-                'Default: `6` (bottom).'
+                'Default: `6` (bottom).',
             ],
         }
         """ Default configuration options. """

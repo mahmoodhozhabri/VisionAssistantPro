@@ -1,20 +1,19 @@
-
 import codecs
 import gettext
 from functools import partial
 
-from .typings import AddonInfo, BrailleTables, SymbolDictionaries
+from .typings import AddonInfo, BrailleTables, SymbolDictionaries, SpeechDictionaries
 from .utils import format_nested_section
 
 
-
 def generateManifest(
-		source: str,
-		dest: str,
-		addon_info: AddonInfo,
-		brailleTables: BrailleTables,
-		symbolDictionaries: SymbolDictionaries,
-	):
+	source: str,
+	dest: str,
+	addon_info: AddonInfo,
+	brailleTables: BrailleTables,
+	symbolDictionaries: SymbolDictionaries,
+	speechDictionaries: SpeechDictionaries,
+):
 	# Prepare the root manifest section
 	with codecs.open(source, "r", "utf-8") as f:
 		manifest_template = f.read()
@@ -28,19 +27,24 @@ def generateManifest(
 	if symbolDictionaries:
 		manifest += format_nested_section("symbolDictionaries", symbolDictionaries)
 
+	# Custom speech pronunciation dictionaries
+	if speechDictionaries:
+		manifest += format_nested_section("speechDictionaries", speechDictionaries)
+
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(manifest)
 
 
 def generateTranslatedManifest(
-		source: str,
-		dest: str,
-		*,
-		mo: str,
-		addon_info: AddonInfo,
-		brailleTables: BrailleTables,
-		symbolDictionaries: SymbolDictionaries,
-	):
+	source: str,
+	dest: str,
+	*,
+	mo: str,
+	addon_info: AddonInfo,
+	brailleTables: BrailleTables,
+	symbolDictionaries: SymbolDictionaries,
+	speechDictionaries: SpeechDictionaries,
+):
 	with open(mo, "rb") as f:
 		_ = gettext.GNUTranslations(f).gettext
 	vars: dict[str, str] = {}
@@ -52,8 +56,8 @@ def generateTranslatedManifest(
 
 	_format_section_only_with_displayName = partial(
 		format_nested_section,
-		include_only_keys = ("displayName",),
-		_ = _,
+		include_only_keys=("displayName",),
+		_=_,
 	)
 
 	# Add additional manifest sections such as custom braile tables
@@ -64,6 +68,10 @@ def generateTranslatedManifest(
 	# Custom speech symbol dictionaries
 	if symbolDictionaries:
 		manifest += _format_section_only_with_displayName("symbolDictionaries", symbolDictionaries)
+
+	# Custom speech pronunciation dictionaries
+	if speechDictionaries:
+		manifest += _format_section_only_with_displayName("speechDictionaries", speechDictionaries)
 
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(manifest)

@@ -58,7 +58,8 @@ htmlparser.entityref = re.compile(r'&([a-zA-Z][-.a-zA-Z0-9]*);')
 # and the two regex are the same, then incomplete will simply never match and we avoid the logic within.
 htmlparser.incomplete = htmlparser.entityref
 # Monkeypatch `HTMLParser` to not accept a backtick in a tag name, attribute name, or bare value.
-htmlparser.locatestarttagend_tolerant = re.compile(r"""
+htmlparser.locatestarttagend_tolerant = re.compile(
+    r"""
   <[a-zA-Z][^`\t\n\r\f />\x00]*       # tag name <= added backtick here
   (?:[\s/]*                           # optional whitespace before attribute name
     (?:(?<=['"\s/])[^`\s/>][^\s/=>]*  # attribute name <= added backtick here
@@ -72,8 +73,10 @@ htmlparser.locatestarttagend_tolerant = re.compile(r"""
      )*
    )?
   \s*                                 # trailing whitespace
-""", re.VERBOSE)
-htmlparser.locatetagend = re.compile(r"""
+""", re.VERBOSE,
+)
+htmlparser.locatetagend = re.compile(
+    r"""
   [a-zA-Z][^`\t\n\r\f />]*           # tag name
   [\t\n\r\f /]*                     # optional whitespace before attribute name
   (?:(?<=['"\t\n\r\f /])[^`\t\n\r\f />][^\t\n\r\f /=>]*  # attribute name
@@ -86,7 +89,8 @@ htmlparser.locatetagend = re.compile(r"""
     [\t\n\r\f /]*                   # possibly followed by a space
    )*
    >?
-""", re.VERBOSE)
+""", re.VERBOSE,
+)
 
 # Match a blank line at the start of a block of text (two newlines).
 # The newlines may be preceded by additional whitespace.

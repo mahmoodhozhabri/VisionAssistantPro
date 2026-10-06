@@ -174,7 +174,7 @@ def show(args):
             flag,
             meta["format"],
             meta["encryption"],
-        )
+        ),
     )
     n = doc.is_form_pdf
     if n > 0:
@@ -222,7 +222,7 @@ def clean(args):
     doc = open_file(args.input, args.password, pdf=True)
     encryption = args.encryption
     encrypt = ("keep", "none", "rc4-40", "rc4-128", "aes-128", "aes-256").index(
-        encryption
+        encryption,
     )
 
     if not args.pages:  # simple cleaning
@@ -391,7 +391,7 @@ def embedded_add(args):
     else:
         desc = args.desc
     doc.embfile_add(
-        args.name, stream, filename=filename, ufilename=ufilename, desc=desc
+        args.name, stream, filename=filename, ufilename=ufilename, desc=desc,
     )
     if not args.output or args.output == args.input:
         doc.saveIncr()
@@ -441,7 +441,7 @@ def embedded_upd(args):
         desc = None
 
     doc.embfile_upd(
-        args.name, stream, filename=filename, ufilename=ufilename, desc=desc
+        args.name, stream, filename=filename, ufilename=ufilename, desc=desc,
     )
     if args.output is None or args.output == args.input:
         doc.saveIncr()
@@ -519,7 +519,7 @@ def extract_objects(args):
                     if ext == "n/a" or not buffer:
                         continue
                     outname = os.path.join(
-                        out_dir, f"{fontname.replace(' ', '-')}-{xref}.{ext}"
+                        out_dir, f"{fontname.replace(' ', '-')}-{xref}.{ext}",
                     )
                     with open(outname, "wb") as outfile:
                         outfile.write(buffer)
@@ -848,7 +848,7 @@ def main():
         description=mycenter("Basic PyMuPDF Functions"),
     )
     subps = parser.add_subparsers(
-        title="Subcommands", help="Enter 'command -h' for subcommand specific help"
+        title="Subcommands", help="Enter 'command -h' for subcommand specific help",
     )
 
     # -------------------------------------------------------------------------
@@ -861,10 +861,10 @@ def main():
     ps_show.add_argument("-trailer", action="store_true", help="show PDF trailer")
     ps_show.add_argument("-metadata", action="store_true", help="show PDF metadata")
     ps_show.add_argument(
-        "-xrefs", type=str, help="show selected objects, format: 1,5-7,N"
+        "-xrefs", type=str, help="show selected objects, format: 1,5-7,N",
     )
     ps_show.add_argument(
-        "-pages", type=str, help="show selected pages, format: 1,5-7,50-N"
+        "-pages", type=str, help="show selected pages, format: 1,5-7,50-N",
     )
     ps_show.set_defaults(func=show)
 
@@ -872,7 +872,7 @@ def main():
     # 'clean' command
     # -------------------------------------------------------------------------
     ps_clean = subps.add_parser(
-        "clean", description=mycenter("optimize PDF, or create sub-PDF if pages given")
+        "clean", description=mycenter("optimize PDF, or create sub-PDF if pages given"),
     )
     ps_clean.add_argument("input", type=str, help="PDF filename")
     ps_clean.add_argument("output", type=str, help="output PDF filename")
@@ -904,7 +904,7 @@ def main():
     )
 
     ps_clean.add_argument(
-        "-ascii", action="store_true", default=False, help="ASCII encode binary data"
+        "-ascii", action="store_true", default=False, help="ASCII encode binary data",
     )
 
     ps_clean.add_argument(
@@ -915,7 +915,7 @@ def main():
     )
 
     ps_clean.add_argument(
-        "-permission", type=int, default=-1, help="integer with permission levels"
+        "-permission", type=int, default=-1, help="integer with permission levels",
     )
 
     ps_clean.add_argument(
@@ -925,10 +925,10 @@ def main():
         help="sanitize / clean contents",
     )
     ps_clean.add_argument(
-        "-pretty", action="store_true", default=False, help="prettify PDF structure"
+        "-pretty", action="store_true", default=False, help="prettify PDF structure",
     )
     ps_clean.add_argument(
-        "-pages", help="output selected pages pages, format: 1,5-7,50-N"
+        "-pages", help="output selected pages pages, format: 1,5-7,50-N",
     )
     ps_clean.set_defaults(func=clean)
 
@@ -948,17 +948,17 @@ def main():
     # 'extract' command
     # -------------------------------------------------------------------------
     ps_extract = subps.add_parser(
-        "extract", description=mycenter("extract images and fonts to disk")
+        "extract", description=mycenter("extract images and fonts to disk"),
     )
     ps_extract.add_argument("input", type=str, help="PDF filename")
     ps_extract.add_argument("-images", action="store_true", help="extract images")
     ps_extract.add_argument("-fonts", action="store_true", help="extract fonts")
     ps_extract.add_argument(
-        "-output", help="folder to receive output, defaults to current"
+        "-output", help="folder to receive output, defaults to current",
     )
     ps_extract.add_argument("-password", help="password")
     ps_extract.add_argument(
-        "-pages", type=str, help="consider these pages only, format: 1,5-7,50-N"
+        "-pages", type=str, help="consider these pages only, format: 1,5-7,50-N",
     )
     ps_extract.set_defaults(func=extract_objects)
 
@@ -966,7 +966,7 @@ def main():
     # 'embed-info'
     # -------------------------------------------------------------------------
     ps_show = subps.add_parser(
-        "embed-info", description=mycenter("list embedded files")
+        "embed-info", description=mycenter("list embedded files"),
     )
     ps_show.add_argument("input", help="PDF filename")
     ps_show.add_argument("-name", help="if given, report only this one")
@@ -978,12 +978,12 @@ def main():
     # 'embed-add' command
     # -------------------------------------------------------------------------
     ps_embed_add = subps.add_parser(
-        "embed-add", description=mycenter("add embedded file")
+        "embed-add", description=mycenter("add embedded file"),
     )
     ps_embed_add.add_argument("input", help="PDF filename")
     ps_embed_add.add_argument("-password", help="password")
     ps_embed_add.add_argument(
-        "-output", help="output PDF filename, incremental save if none"
+        "-output", help="output PDF filename, incremental save if none",
     )
     ps_embed_add.add_argument("-name", required=True, help="name of new entry")
     ps_embed_add.add_argument("-path", required=True, help="path to data for new entry")
@@ -994,12 +994,12 @@ def main():
     # 'embed-del' command
     # -------------------------------------------------------------------------
     ps_embed_del = subps.add_parser(
-        "embed-del", description=mycenter("delete embedded file")
+        "embed-del", description=mycenter("delete embedded file"),
     )
     ps_embed_del.add_argument("input", help="PDF filename")
     ps_embed_del.add_argument("-password", help="password")
     ps_embed_del.add_argument(
-        "-output", help="output PDF filename, incremental save if none"
+        "-output", help="output PDF filename, incremental save if none",
     )
     ps_embed_del.add_argument("-name", required=True, help="name of entry to delete")
     ps_embed_del.set_defaults(func=embedded_del)
@@ -1016,12 +1016,12 @@ def main():
     ps_embed_upd.add_argument("-name", required=True, help="name of entry")
     ps_embed_upd.add_argument("-password", help="password")
     ps_embed_upd.add_argument(
-        "-output", help="Output PDF filename, incremental save if none"
+        "-output", help="Output PDF filename, incremental save if none",
     )
     ps_embed_upd.add_argument("-path", help="path to new data for entry")
     ps_embed_upd.add_argument("-filename", help="new filename to store in entry")
     ps_embed_upd.add_argument(
-        "-ufilename", help="new unicode filename to store in entry"
+        "-ufilename", help="new unicode filename to store in entry",
     )
     ps_embed_upd.add_argument("-desc", help="new description to store in entry")
     ps_embed_upd.set_defaults(func=embedded_upd)
@@ -1030,16 +1030,17 @@ def main():
     # 'embed-extract' command
     # -------------------------------------------------------------------------
     ps_embed_extract = subps.add_parser(
-        "embed-extract", description=mycenter("extract embedded file to disk")
+        "embed-extract", description=mycenter("extract embedded file to disk"),
     )
     ps_embed_extract.add_argument("input", type=str, help="PDF filename")
     ps_embed_extract.add_argument("-name", required=True, help="name of entry")
     ps_embed_extract.add_argument("-password", help="password")
-    ps_embed_extract.add_argument("-unsafe", default=False, action="store_true",
-        help="allow write to stored name even if an existing file or outside current directory"
+    ps_embed_extract.add_argument(
+        "-unsafe", default=False, action="store_true",
+            help="allow write to stored name even if an existing file or outside current directory",
     )
     ps_embed_extract.add_argument(
-        "-output", help="output filename, default is stored name"
+        "-output", help="output filename, default is stored name",
     )
     ps_embed_extract.set_defaults(func=embedded_get)
 
@@ -1047,19 +1048,19 @@ def main():
     # 'embed-copy' command
     # -------------------------------------------------------------------------
     ps_embed_copy = subps.add_parser(
-        "embed-copy", description=mycenter("copy embedded files between PDFs")
+        "embed-copy", description=mycenter("copy embedded files between PDFs"),
     )
     ps_embed_copy.add_argument("input", type=str, help="PDF to receive embedded files")
     ps_embed_copy.add_argument("-password", help="password of input")
     ps_embed_copy.add_argument(
-        "-output", help="output PDF, incremental save to 'input' if omitted"
+        "-output", help="output PDF, incremental save to 'input' if omitted",
     )
     ps_embed_copy.add_argument(
-        "-source", required=True, help="copy embedded files from here"
+        "-source", required=True, help="copy embedded files from here",
     )
     ps_embed_copy.add_argument("-pwdsource", help="password of 'source' PDF")
     ps_embed_copy.add_argument(
-        "-name", nargs="*", help="restrict copy to these entries"
+        "-name", nargs="*", help="restrict copy to these entries",
     )
     ps_embed_copy.set_defaults(func=embedded_copy)
 
@@ -1067,7 +1068,7 @@ def main():
     # 'textlayout' command
     # -------------------------------------------------------------------------
     ps_gettext = subps.add_parser(
-        "gettext", description=mycenter("extract text in various formatting modes")
+        "gettext", description=mycenter("extract text in various formatting modes"),
     )
     ps_gettext.add_argument("input", type=str, help="input document filename")
     ps_gettext.add_argument("-password", help="password for input document")
@@ -1136,7 +1137,7 @@ def main():
     # '_internal' command
     # -------------------------------------------------------------------------
     ps_internal = subps.add_parser(
-        "internal", description=mycenter("internal testing")
+        "internal", description=mycenter("internal testing"),
     )
     ps_internal.set_defaults(func=_internal)
 

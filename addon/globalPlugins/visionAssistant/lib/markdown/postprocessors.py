@@ -88,7 +88,7 @@ class RawHtmlPostprocessor(Postprocessor):
 
         if self.md.htmlStash.html_counter:
             base_placeholder = util.HTML_PLACEHOLDER % r'([0-9]+)'
-            pattern = re.compile(f'<p>{ base_placeholder }</p>|{ base_placeholder }')
+            pattern = re.compile(f'<p>{ base_placeholder}</p>|{ base_placeholder}')
             return pattern.sub(substitute_match, text)
         else:
             return text
@@ -118,7 +118,7 @@ class AndSubstitutePostprocessor(Postprocessor):
 
 @util.deprecated(
     "This class is deprecated and will be removed in the future; "
-    "use [`UnescapeTreeprocessor`][markdown.treeprocessors.UnescapeTreeprocessor] instead."
+    "use [`UnescapeTreeprocessor`][markdown.treeprocessors.UnescapeTreeprocessor] instead.",
 )
 class UnescapePostprocessor(Postprocessor):
     """ Restore escaped chars. """

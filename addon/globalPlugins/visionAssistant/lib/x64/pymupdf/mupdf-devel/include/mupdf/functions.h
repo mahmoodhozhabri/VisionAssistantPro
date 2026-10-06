@@ -7363,7 +7363,7 @@ FZ_FUNCTION int ll_fz_page_uses_overprint(::fz_page *page);
 /** Low-level wrapper for `::fz_paint_shade()`.
 
 This function has out-params. Python/C# wrappers look like:
-	`ll_fz_paint_shade(::fz_shade *shade, ::fz_colorspace *override_cs, ::fz_matrix ctm, ::fz_pixmap *dest, ::fz_color_params color_params, ::fz_irect bbox, const ::fz_overprint *eop, ::fz_shade_color_cache **cache)` => 
+	`ll_fz_paint_shade(::fz_shade *shade, ::fz_colorspace *override_cs, ::fz_matrix ctm, ::fz_pixmap *dest, ::fz_color_params color_params, ::fz_irect bbox, const ::fz_overprint *eop, ::fz_shade_color_cache **cache)` =>
 */
 /**
 	Render a shade to a given pixmap.
@@ -11699,7 +11699,7 @@ FZ_FUNCTION ::fz_point ll_pdf_dict_get_point(::pdf_obj *dict, ::pdf_obj *key);
 /** Low-level wrapper for `::pdf_dict_get_put_drop()`.
 
 This function has out-params. Python/C# wrappers look like:
-	`ll_pdf_dict_get_put_drop(::pdf_obj *dict, ::pdf_obj *key, ::pdf_obj *val, ::pdf_obj **old_val)` => 
+	`ll_pdf_dict_get_put_drop(::pdf_obj *dict, ::pdf_obj *key, ::pdf_obj *val, ::pdf_obj **old_val)` =>
 */
 FZ_FUNCTION void ll_pdf_dict_get_put_drop(::pdf_obj *dict, ::pdf_obj *key, ::pdf_obj *val, ::pdf_obj **old_val);
 
@@ -12975,7 +12975,7 @@ FZ_FUNCTION void ll_pdf_process_annot(::pdf_processor *proc, ::pdf_annot *annot,
 /** Low-level wrapper for `::pdf_process_contents()`.
 
 This function has out-params. Python/C# wrappers look like:
-	`ll_pdf_process_contents(::pdf_processor *proc, ::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm, ::fz_cookie *cookie, ::pdf_obj **out_res)` => 
+	`ll_pdf_process_contents(::pdf_processor *proc, ::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm, ::fz_cookie *cookie, ::pdf_obj **out_res)` =>
 */
 FZ_FUNCTION void ll_pdf_process_contents(::pdf_processor *proc, ::pdf_document *doc, ::pdf_obj *res, ::pdf_obj *stm, ::fz_cookie *cookie, ::pdf_obj **out_res);
 

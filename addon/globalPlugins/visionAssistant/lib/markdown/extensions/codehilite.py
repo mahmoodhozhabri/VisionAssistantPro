@@ -189,7 +189,7 @@ class CodeHilite:
             return '<pre class="{}"><code{}>{}\n</code></pre>\n'.format(
                 self.options['cssclass'],
                 class_str,
-                txt
+                txt,
             )
 
     def _parseHeader(self) -> None:
@@ -217,14 +217,16 @@ class CodeHilite:
         # pull first line to examine
         fl = lines.pop(0)
 
-        c = re.compile(r'''
+        c = re.compile(
+            r'''
             (?:(?:^::+)|(?P<shebang>^[#]!)) # Shebang or 2 or more colons
             (?P<path>(?:/\w+)*[/ ])?        # Zero or 1 path
             (?P<lang>[\w#.+-]*)             # The language
             \s*                             # Arbitrary whitespace
             # Optional highlight lines, single- or double-quote-delimited
             (hl_lines=(?P<quot>"|')(?P<hl_lines>.*?)(?P=quot))?
-            ''',  re.VERBOSE)
+            ''',  re.VERBOSE,
+        )
         # search first line for shebang
         m = c.search(fl)
         if m:
@@ -278,7 +280,7 @@ class HiliteTreeprocessor(Treeprocessor):
                     self.code_unescape(text),
                     tab_length=self.md.tab_length,
                     style=local_config.pop('pygments_style', 'default'),
-                    **local_config
+                    **local_config,
                 )
                 placeholder = self.md.htmlStash.store(code.hilite())
                 # Clear code block in `etree` instance
@@ -296,28 +298,28 @@ class CodeHiliteExtension(Extension):
         # define default configs
         self.config = {
             'linenums': [
-                None, "Use lines numbers. True|table|inline=yes, False=no, None=auto. Default: `None`."
+                None, "Use lines numbers. True|table|inline=yes, False=no, None=auto. Default: `None`.",
             ],
             'guess_lang': [
-                True, "Automatic language detection - Default: `True`."
+                True, "Automatic language detection - Default: `True`.",
             ],
             'css_class': [
-                "codehilite", "Set class name for wrapper <div> - Default: `codehilite`."
+                "codehilite", "Set class name for wrapper <div> - Default: `codehilite`.",
             ],
             'pygments_style': [
-                'default', 'Pygments HTML Formatter Style (Colorscheme). Default: `default`.'
+                'default', 'Pygments HTML Formatter Style (Colorscheme). Default: `default`.',
             ],
             'noclasses': [
-                False, 'Use inline styles instead of CSS classes - Default `False`.'
+                False, 'Use inline styles instead of CSS classes - Default `False`.',
             ],
             'use_pygments': [
-                True, 'Highlight code blocks with pygments. Disable if using a JavaScript library. Default: `True`.'
+                True, 'Highlight code blocks with pygments. Disable if using a JavaScript library. Default: `True`.',
             ],
             'lang_prefix': [
-                'language-', 'Prefix prepended to the language when `use_pygments` is false. Default: `language-`.'
+                'language-', 'Prefix prepended to the language when `use_pygments` is false. Default: `language-`.',
             ],
             'pygments_formatter': [
-                'html', 'Use a specific formatter for Pygments highlighting. Default: `html`.'
+                'html', 'Use a specific formatter for Pygments highlighting. Default: `html`.',
             ],
         }
         """ Default configuration options. """

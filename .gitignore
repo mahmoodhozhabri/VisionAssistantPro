@@ -9,5 +9,9 @@ manifest.ini
 *.nvda-addon
 .sconsign.dblite
 /[0-9]*.[0-9]*.[0-9]*.json
-.vibe/
-*.po~
+*.egg-info
+
+# uv / tool caches
+.venv/
+.ruff_cache/
+

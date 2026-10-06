@@ -209,7 +209,7 @@ def make_table_from_bbox(textpage, word_rects, rect):
         row_box = pymupdf.Rect(bbox.x0, nypos[i], bbox.x1, nypos[i + 1])
         # Sub-select words in this row and sort them by left coordinate
         row_words = sorted(
-            [r for r in word_rects if rect_in_rect(r, row_box)], key=lambda r: r.x0
+            [r for r in word_rects if rect_in_rect(r, row_box)], key=lambda r: r.x0,
         )
         # Sub-select x values that do not cut through words
         this_xpos = [x for x in nxpos if not any(r.x0 < x < r.x1 for r in row_words)]
@@ -494,7 +494,7 @@ class WordMap:
             if layout_width_chars:
                 if layout_width:
                     raise ValueError(
-                        "`layout_width` and `layout_width_chars` cannot both be set."
+                        "`layout_width` and `layout_width_chars` cannot both be set.",
                     )
             else:
                 layout_width_chars = int(round(layout_width / x_density))
@@ -502,7 +502,7 @@ class WordMap:
             if layout_height_chars:
                 if layout_height:
                     raise ValueError(
-                        "`layout_height` and `layout_height_chars` cannot both be set."
+                        "`layout_height` and `layout_height_chars` cannot both be set.",
                     )
             else:
                 layout_height_chars = int(round(layout_height / y_density))
@@ -524,8 +524,8 @@ class WordMap:
 
         for i, ws in enumerate(
             cluster_objects(
-                words_sorted_doctop, lambda x: float(x[0]["doctop"]), y_tolerance
-            )
+                words_sorted_doctop, lambda x: float(x[0]["doctop"]), y_tolerance,
+            ),
         ):
             y_dist = (
                 (ws[0][0]["doctop"] - (doctop_start + y_shift)) / y_density
@@ -724,7 +724,7 @@ class WordExtractor:
             (cx < ax)
             or (cx > bx + x)
             # Interline test
-            or (cy > ay + y)
+            or (cy > ay + y),
         )
 
     def iter_chars_to_words(self, ordered_chars):
@@ -768,7 +768,7 @@ class WordExtractor:
 
             # Cluster by line
             subclusters = cluster_objects(
-                upright_cluster, itemgetter(cluster_key), self.y_tolerance
+                upright_cluster, itemgetter(cluster_key), self.y_tolerance,
             )
 
             for sc in subclusters:
@@ -812,11 +812,11 @@ def chars_to_textmap(chars: list, **kwargs) -> TextMap:
     kwargs.update({"presorted": True})
 
     extractor = WordExtractor(
-        **{k: kwargs[k] for k in WORD_EXTRACTOR_KWARGS if k in kwargs}
+        **{k: kwargs[k] for k in WORD_EXTRACTOR_KWARGS if k in kwargs},
     )
     wordmap = extractor.extract_wordmap(chars)
     textmap = wordmap.to_textmap(
-        **{k: kwargs[k] for k in TEXTMAP_KWARGS if k in kwargs}
+        **{k: kwargs[k] for k in TEXTMAP_KWARGS if k in kwargs},
     )
 
     return textmap
@@ -832,7 +832,7 @@ def extract_text(chars: list, **kwargs) -> str:
     else:
         y_tolerance = kwargs.get("y_tolerance", DEFAULT_Y_TOLERANCE)
         extractor = WordExtractor(
-            **{k: kwargs[k] for k in WORD_EXTRACTOR_KWARGS if k in kwargs}
+            **{k: kwargs[k] for k in WORD_EXTRACTOR_KWARGS if k in kwargs},
         )
         words = extractor.extract_words(chars)
         if words:
@@ -881,10 +881,10 @@ def dedupe_chars(chars: list, tolerance=1) -> list:
         sorted_chars = sorted(chars, key=key)
         for grp, grp_chars in itertools.groupby(sorted_chars, key=key):
             for y_cluster in cluster_objects(
-                list(grp_chars), itemgetter("doctop"), tolerance
+                list(grp_chars), itemgetter("doctop"), tolerance,
             ):
                 for x_cluster in cluster_objects(
-                    y_cluster, itemgetter("x0"), tolerance
+                    y_cluster, itemgetter("x0"), tolerance,
                 ):
                     yield sorted(x_cluster, key=pos_key)[0]
 
@@ -907,7 +907,7 @@ def rect_to_edges(rect) -> list:
             "y0": rect["y1"],
             "bottom": rect["top"],
             "orientation": "h",
-        }
+        },
     )
     bottom.update(
         {
@@ -917,7 +917,7 @@ def rect_to_edges(rect) -> list:
             "top": rect["top"] + rect["height"],
             "doctop": rect["doctop"] + rect["height"],
             "orientation": "h",
-        }
+        },
     )
     left.update(
         {
@@ -925,7 +925,7 @@ def rect_to_edges(rect) -> list:
             "width": 0,
             "x1": rect["x0"],
             "orientation": "v",
-        }
+        },
     )
     right.update(
         {
@@ -933,7 +933,7 @@ def rect_to_edges(rect) -> list:
             "width": 0,
             "x0": rect["x1"],
             "orientation": "v",
-        }
+        },
     )
     return [top, bottom, left, right]
 
@@ -1161,7 +1161,7 @@ def merge_edges(
     edge_groups = itertools.groupby(_sorted, key=get_group)
     edge_gen = (
         join_edge_group(
-            items, k[0], (join_x_tolerance if k[0] == "h" else join_y_tolerance)
+            items, k[0], (join_x_tolerance if k[0] == "h" else join_y_tolerance),
         )
         for k, items in edge_groups
     )
@@ -1316,7 +1316,7 @@ def words_to_edges_v(words, word_threshold: int = DEFAULT_MIN_WORDS_VERTICAL):
             "bottom": max_bottom,
             "height": max_bottom - min_top,
             "orientation": "v",
-        }
+        },
     ]
 
 
@@ -1368,14 +1368,14 @@ def intersections_to_cells(intersections):
 
         if p1[0] == p2[0]:
             common = edges_to_set(intersections[p1]["v"]).intersection(
-                edges_to_set(intersections[p2]["v"])
+                edges_to_set(intersections[p2]["v"]),
             )
             if len(common):
                 return True
 
         if p1[1] == p2[1]:
             common = edges_to_set(intersections[p1]["h"]).intersection(
-                edges_to_set(intersections[p2]["h"])
+                edges_to_set(intersections[p2]["h"]),
             )
             if len(common):
                 return True
@@ -1485,7 +1485,7 @@ def cells_to_tables(page, cells) -> list:
                 page.get_textbox(
                     r,
                     textpage=TEXTPAGE,
-                )
+                ),
             )
         ):
             del tables[i]
@@ -1566,7 +1566,7 @@ class Table:
             h_mid = (char["x0"] + char["x1"]) / 2
             x0, top, x1, bottom = bbox
             return bool(
-                (h_mid >= x0) and (h_mid < x1) and (v_mid >= top) and (v_mid < bottom)
+                (h_mid >= x0) and (h_mid < x1) and (v_mid >= top) and (v_mid < bottom),
             )
 
         for row in self.rows:
@@ -1617,7 +1617,7 @@ class Table:
             for j, cell in enumerate(row):
                 if cell is not None:
                     cells[i][j] = extract_cells(
-                        self.textpage, cell_boxes[i][j], markdown=True
+                        self.textpage, cell_boxes[i][j], markdown=True,
                     )
 
         if fill_empty:  # fill "None" cells where possible
@@ -1975,7 +1975,7 @@ class TableSettings:
             if strategy not in TABLE_STRATEGIES:
                 raise ValueError(
                     f"{orientation}_strategy must be one of"
-                    f'{{{",".join(TABLE_STRATEGIES)}}}'
+                    f'{{{",".join(TABLE_STRATEGIES)}}}',
                 )
 
         if self.text_settings is None:
@@ -2062,7 +2062,7 @@ class TableFinder:
                         f"If {orientation}_strategy == 'explicit', "
                         f"explicit_{orientation}_lines "
                         f"must be specified as a list/tuple of two or more "
-                        f"floats/ints."
+                        f"floats/ints.",
                     )
 
         v_strat = settings.vertical_strategy
@@ -2088,7 +2088,7 @@ class TableFinder:
                         "bottom": self.page.rect[3],
                         "height": self.page.rect[3] - self.page.rect[1],
                         "orientation": "v",
-                    }
+                    },
                 )
 
         if v_strat == "lines":
@@ -2119,7 +2119,7 @@ class TableFinder:
                         "top": desc,
                         "bottom": desc,
                         "orientation": "h",
-                    }
+                    },
                 )
 
         if h_strat == "lines":
@@ -2128,7 +2128,7 @@ class TableFinder:
             h_base = filter_edges(EDGES, "h", edge_type="line")
         elif h_strat == "text":
             h_base = words_to_edges_h(
-                words, word_threshold=settings.min_words_horizontal
+                words, word_threshold=settings.min_words_horizontal,
             )
         elif h_strat == "explicit":
             h_base = []
@@ -2200,7 +2200,7 @@ def make_chars(page, clip=None):
                 fontname = span["font"]
                 fontsize = span["size"]
                 span_bold = bool(
-                    span["flags"] & pymupdf.TEXT_FONT_BOLD or span["char_flags"] & 8
+                    span["flags"] & pymupdf.TEXT_FONT_BOLD or span["char_flags"] & 8,
                 )
                 color = pymupdf.sRGB_to_pdf(span["color"])
                 for char in sorted(span["chars"], key=lambda c: c["bbox"][0]):

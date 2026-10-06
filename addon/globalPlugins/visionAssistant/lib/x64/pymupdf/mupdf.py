@@ -22,7 +22,7 @@ def _swig_repr(self):
         strthis = "proxy of " + self.this.__repr__()
     except __builtin__.Exception:
         strthis = ""
-    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
+    return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis)
 
 
 def _swig_setattr_nondynamic_instance_variable(set):
@@ -25255,7 +25255,7 @@ class FzDevice2(FzDevice):
             _self = None
         else:
             _self = self
-        _mupdf.FzDevice2_swiginit(self, _mupdf.new_FzDevice2(_self, ))
+        _mupdf.FzDevice2_swiginit(self, _mupdf.new_FzDevice2(_self))
     __swig_destroy__ = _mupdf.delete_FzDevice2
 
     def use_virtual_close_device(self, use=True):
@@ -28398,7 +28398,7 @@ class FzInstallLoadSystemFontFuncsArgs2(FzInstallLoadSystemFontFuncsArgs):
             _self = None
         else:
             _self = self
-        _mupdf.FzInstallLoadSystemFontFuncsArgs2_swiginit(self, _mupdf.new_FzInstallLoadSystemFontFuncsArgs2(_self, ))
+        _mupdf.FzInstallLoadSystemFontFuncsArgs2_swiginit(self, _mupdf.new_FzInstallLoadSystemFontFuncsArgs2(_self))
     __swig_destroy__ = _mupdf.delete_FzInstallLoadSystemFontFuncsArgs2
 
     def use_virtual_f(self, use=True):
@@ -30833,7 +30833,7 @@ class FzOutput2(FzOutput):
             _self = None
         else:
             _self = self
-        _mupdf.FzOutput2_swiginit(self, _mupdf.new_FzOutput2(_self, ))
+        _mupdf.FzOutput2_swiginit(self, _mupdf.new_FzOutput2(_self))
     __swig_destroy__ = _mupdf.delete_FzOutput2
 
     def use_virtual_write(self, use=True):
@@ -31636,7 +31636,7 @@ class FzPathWalker2(FzPathWalker):
             _self = None
         else:
             _self = self
-        _mupdf.FzPathWalker2_swiginit(self, _mupdf.new_FzPathWalker2(_self, ))
+        _mupdf.FzPathWalker2_swiginit(self, _mupdf.new_FzPathWalker2(_self))
     __swig_destroy__ = _mupdf.delete_FzPathWalker2
 
     def use_virtual_moveto(self, use=True):
@@ -40531,7 +40531,7 @@ class PdfFilterFactory2(PdfFilterFactory):
             _self = None
         else:
             _self = self
-        _mupdf.PdfFilterFactory2_swiginit(self, _mupdf.new_PdfFilterFactory2(_self, ))
+        _mupdf.PdfFilterFactory2_swiginit(self, _mupdf.new_PdfFilterFactory2(_self))
     __swig_destroy__ = _mupdf.delete_PdfFilterFactory2
 
     def use_virtual_filter(self, use=True):
@@ -40627,7 +40627,7 @@ class PdfFilterOptions2(PdfFilterOptions):
             _self = None
         else:
             _self = self
-        _mupdf.PdfFilterOptions2_swiginit(self, _mupdf.new_PdfFilterOptions2(_self, ))
+        _mupdf.PdfFilterOptions2_swiginit(self, _mupdf.new_PdfFilterOptions2(_self))
     __swig_destroy__ = _mupdf.delete_PdfFilterOptions2
 
     def use_virtual_complete(self, use=True):
@@ -43181,7 +43181,7 @@ class PdfProcessor2(PdfProcessor):
             _self = None
         else:
             _self = self
-        _mupdf.PdfProcessor2_swiginit(self, _mupdf.new_PdfProcessor2(_self, ))
+        _mupdf.PdfProcessor2_swiginit(self, _mupdf.new_PdfProcessor2(_self))
     __swig_destroy__ = _mupdf.delete_PdfProcessor2
 
     def use_virtual_close_processor(self, use=True):
@@ -44013,7 +44013,7 @@ class PdfSanitizeFilterOptions2(PdfSanitizeFilterOptions):
             _self = None
         else:
             _self = self
-        _mupdf.PdfSanitizeFilterOptions2_swiginit(self, _mupdf.new_PdfSanitizeFilterOptions2(_self, ))
+        _mupdf.PdfSanitizeFilterOptions2_swiginit(self, _mupdf.new_PdfSanitizeFilterOptions2(_self))
     __swig_destroy__ = _mupdf.delete_PdfSanitizeFilterOptions2
 
     def use_virtual_image_filter(self, use=True):
@@ -58864,7 +58864,7 @@ class StoryPositionsCallback(object):
             _self = None
         else:
             _self = self
-        _mupdf.StoryPositionsCallback_swiginit(self, _mupdf.new_StoryPositionsCallback(_self, ))
+        _mupdf.StoryPositionsCallback_swiginit(self, _mupdf.new_StoryPositionsCallback(_self))
 
     def call(self, position):
         return _mupdf.StoryPositionsCallback_call(self, position)
@@ -61086,7 +61086,7 @@ def exception_info(
         outer=True,
         show_exception_type=True,
         _filelinefn=True,
-        ):
+):
     '''
     Shows an exception and/or backtrace.
 
@@ -61325,7 +61325,7 @@ def exception_info(
                 outer=False,
                 show_exception_type=show_exception_type,
                 _filelinefn=_filelinefn,
-                )
+        )
 
     if exception and chain and chain != 'because' and chain != 'because-compact':
 # Output current exception first.
@@ -64854,7 +64854,7 @@ def fz_fill_text(dev, text, ctm, colorspace, color, alpha, color_params):
             color,
             alpha,
             color_params.internal(),
-            )
+    )
 FzDevice.fz_fill_text = fz_fill_text
 
 # Override mupdf_convert_color() to return (rgb0, rgb1, rgb2, rgb3).
@@ -64965,7 +64965,7 @@ def ll_fz_pixmap_samples_memoryview( pixmap):
             ll_fz_pixmap_samples( pixmap),
             ll_fz_pixmap_stride( pixmap) * ll_fz_pixmap_height( pixmap),
             1, # writable
-            )
+    )
     return ret
 def fz_pixmap_samples_memoryview( pixmap):
     """
@@ -65109,7 +65109,7 @@ def fz_install_load_system_font_funcs(f=None, f_cjk=None, f_fallback=None):
             f,
             f_cjk,
             f_fallback,
-            )
+    )
     fz_install_load_system_font_funcs2(g_fz_install_load_system_font_funcs_args)
 
 Py_LIMITED_API = '0x030a0000'

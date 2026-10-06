@@ -46,7 +46,7 @@ class HTMLExtractorExtra(HTMLExtractor):
         self.block_level_tags = set(md.block_level_elements.copy())
         # Block-level tags in which the content only gets span level parsing
         self.span_tags = set(
-            ['address', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'legend', 'li', 'p', 'summary', 'td', 'th']
+            ['address', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'legend', 'li', 'p', 'summary', 'td', 'th'],
         )
         # Block-level tags which never get their content parsed.
         self.raw_tags = set(['canvas', 'math', 'option', 'pre', 'script', 'style', 'textarea'])
@@ -215,7 +215,8 @@ class HTMLExtractorExtra(HTMLExtractor):
                     self.state = []
                     # Check if element has a tail
                     if not blank_line_re.match(
-                            self.rawdata[self.line_offset + self.offset + len(self.get_endtag_text(tag)):]):
+                            self.rawdata[self.line_offset + self.offset + len(self.get_endtag_text(tag)):],
+                    ):
                         # More content exists after `endtag`.
                         self.intail = True
             else:
@@ -431,7 +432,7 @@ class MarkdownInHtmlExtension(Extension):
         md.preprocessors.register(HtmlBlockPreprocessor(md), 'html_block', 20)
         # Add `blockprocessor` which handles the placeholders for `etree` elements
         md.parser.blockprocessors.register(
-            MarkdownInHtmlProcessor(md.parser), 'markdown_block', 105
+            MarkdownInHtmlProcessor(md.parser), 'markdown_block', 105,
         )
         # Replace raw HTML postprocessor
         md.postprocessors.register(MarkdownInHTMLPostprocessor(md), 'raw_html', 30)
