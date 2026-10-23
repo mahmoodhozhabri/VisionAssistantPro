@@ -1,6 +1,5 @@
 {
-  "id": "1",
-  "title": "Vision Assistant",
-  "message": "Welcome to Vision Assistant version 2026.10.15!",
-  "url": "https://github.com/mahmoodhozhabri/VisionAssistantPro"
+  "id": "2",
+  "title": "Important Notice: Supporting the Project & Payment Updates",
+  "message": "Dear Vision Assistant Pro community,\n\nVision Assistant Pro is dedicated to delivering cutting-edge AI accessibility to over 80,000 blind and low-vision users worldwide, completely free and open-source. However, continuously developing new capabilities, maintaining cloud infrastructure, and running extensive multimodal AI tests involves substantial ongoing API expenses. If this tool brings value to your daily life, community contributions are vital to keeping the project fast, independent, and continuously evolving.\n\nNotice for Recent PayPal Senders:\nPlease note that visionassistantpro@proton.me is strictly an administrative contact email, NOT a registered PayPal account. Direct transfers sent to this address cannot be claimed and remain in 'Unclaimed' status. If you have recently sent funds directly to this email on PayPal, please log into your PayPal dashboard, locate the transaction, and click 'Cancel Payment' to have your funds returned to your balance or card immediately.\n\nHow to Contribute via PayPal or European Bank Transfer (IBAN / SEPA):\nDue to international banking logistics, active receiving accounts are generated on demand and remain valid for a 48-hour window.\n\n1. Send an email to visionassistantpro@proton.me specifying the exact amount and currency (EUR or USD) you wish to contribute.\n2. You will receive active, verified payment details (temporary PayPal address or European SEPA IBAN) valid for 48 hours to complete the transfer safely.\n\n(For all other contribution methods, please visit: NVDA Menu > Tools > Vision Assistant > Donate)\n\nThank you for standing with this mission and supporting the future of accessible AI!"
 }
